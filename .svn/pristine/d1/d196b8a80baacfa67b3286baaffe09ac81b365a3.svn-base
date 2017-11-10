@@ -1,0 +1,363 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/EcologyList/index')}">生态葬葬式列表</a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    
+    <form id="ecologyListForm" action="{:url('store/EcologyList/index')}">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <select name="type">
+                    <option value="0">选择葬式</option>
+                    {volist name="type" id="cname"}
+                        <option value="{$key}" {eq name="Think.get.type" value="$key"} selected="selected" {/eq}>{$cname}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-inline" style="margin-top:-57px;float:right;margin-right: 20px;">
+    <button class="layui-btn layui-btn-normal imageAdd">添加葬式</button>
+    </div>
+    <table class="layui-table" id="ecologyList">
+        <div class="layui-tab layui-tab-brief">
+                <thead>
+                    <tr> 
+                        <th width="10%">名称</th>
+                        <th width="10%">葬式类型</th>
+                        <th width="10%">文字介绍</th>
+                        <th width="10%">图片</th>
+                        <th width="5%">状态</th>
+                        <th width="20%">操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {volist name="list" id="vo"}
+                    <tr>
+                    	<td>{$vo.name}</td>
+                    	<td>{notempty name="vo['type']"}
+		                    	{$type[$vo.type]}
+		                    {/notempty}</td>
+                    	<td>
+                            <span title="{$vo.introduce}" class="layui-btn layui-btn-small layui-btn-normal lookremark" data-id="{$vo.id}" >查看</span>
+                        </td>
+                    	<td>
+                    	<img src='{$vo.bill_image}' width="50px">
+                    	<img width="23px" title="放大" src="/public/static/backstage/img/zoomIn.png" class="zoomIn"   data-image="{$vo.bill_image}">
+                   		 </td>
+                    	<td>  {if $vo.status == config('normal_status')}
+                                    正常
+                                {else/}
+                                    已删除
+                                {/if}</td>
+                    	<td>
+                        	<span class="layui-btn layui-btn-small layui-btn-danger del" data-id={$vo.id}  ><i class="layui-icon"></i>删除</span>
+                            <span class="layui-btn layui-btn-small layui-btn-normal edit" data-id={$vo.id}  ><i class="layui-icon"></i>编辑</span>
+                    	</td>
+                    </tr>	
+                	{/volist}
+                   
+                </tbody>
+        </div>
+    </table>
+    {$page}
+</div>
+{/block}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <div class="layui-form-item">
+               <textarea  disabled="disabled" class="layui-textarea closereason" name="reason"></textarea>
+        </div>
+    </form>
+</div>
+
+<!-- 添加合同图片弹框 -->
+<div id='form-imageAdd' style="display:none">
+    <form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>葬式类型</td>
+                    <td>  
+                        <select name="info[type]">
+                            <option value="0">选择葬式</option>
+                            {volist name="$Think.config.ecology_type" id="cname"}
+                                <option value="{$key}">{$cname}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>葬式名称</td>
+                    <td>  
+                        <input type="text" name="info[name]" placeholder="葬式名称" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>葬式介绍</td>
+                    <td >  
+                        <textarea name="info[introduce]"  style="width:500px;height:150px;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>上传图片</td>
+                    <td>
+                      <input type="file" class="default" name="image">
+                    </td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td>  
+                      <input type="text" name="info[sort]" placeholder="排序" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <button class="layui-btn" id='submitAdd' type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+
+<!-- 编辑葬式弹框 -->
+<div id='form-imageEdit' style="display:none">
+    <form id='edit-form' class="layui-form" method="post" enctype="multipart/form-data">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>葬式类型</td>
+                    <td>  
+                        <select name="info[type]">
+                            <option value="0">选择葬式</option>
+                            {volist name="$Think.config.ecology_type" id="cname"}
+                                <option value="{$key}">{$cname}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>葬式名称</td>
+                    <td>  
+                        <input type="text" name="info[name]" style="width:500px;height:30px;" placeholder="葬式名称" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>葬式介绍</td>
+                    <td >  
+                        <textarea name="info[introduce]"   style="width:500px;height:150px;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>葬式图片</td>
+                    <td>
+                        <img name='imageurl' src="" alt="" width="80px">
+                    </td>
+                </tr>
+                <tr>
+                    <td>上传图片</td>
+                    <td>
+                      <input type="file" class="default" name="image">
+                    </td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td>  
+                      <input type="text" name="info[sort]"   placeholder="排序" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">
+                        <input type="hidden" name="id" id="editid">  
+                        <button class="layui-btn" id='submitedit' type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+
+layui.use(['jquery', 'form'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+    //放大图片
+    $('.zoomIn').click(function(){
+        var src = $(this).attr('data-image');
+        layer.open({
+            closeBtn: 2,
+            type: 1, 
+            area: ['400px','260px'],
+            title:'查看图片',
+            content: "<img src="+src+" width='100%' height='100%'>"
+        });
+    });
+
+
+    //查看关闭订单原因
+    $(".lookremark").bind('click', function(){
+         var id = $(this).attr('data-id');
+         $.ajax({
+            url:"{:url('lookreason')}",
+            data:{'id':id},
+            type:'post',
+            success:function(d){
+                var result = eval("("+d+")");
+                if(result.flag==1){
+                   $('.closereason').html(result.data);
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '生态葬式介绍',
+                    content: $('#close_update_form')
+                 })
+            }
+
+         });   
+         
+    });
+
+     //摸态框
+    $('.imageAdd').click(function(){
+        document.getElementById("data-form").reset();
+        layer.open({
+            closeBtn: 2,
+            type: 1, 
+            area: '700px',
+            title:'添加葬式葬法',
+            content: $('#form-imageAdd')
+        }); 
+    });
+
+     //提交添加表单
+    $('#submitAdd').bind('click',function(){
+        layer.open({
+            type:3,
+            success: function(layero, index){  
+                var dataFrom = new FormData(document.getElementById("data-form"));
+                $.ajax({
+                    url:"{:url('store/EcologyList/infoAdd')}",
+                    type:'POST',
+                    data:dataFrom,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    success:function(result){
+                         if (result.flag == 1) {
+                            layer.closeAll(); //疯狂模式，关闭所有层
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                                  window.location.reload();//刷新当前页面.
+                              })
+                        } else {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                             })
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+      //摸态框
+    $('.edit').click(function(){
+        var id = $(this).attr('data-id');
+        $('#editid').val(id)
+        $.ajax({
+            url:"{:url('infoEdit')}",
+            type:'get',
+            data:{'id':id},
+            success:function(d){
+                var d = eval("("+d+")");
+                if(d.flag ==1){
+                    var  data = d.data;
+                    $("#form-imageEdit input[name='info[name]']").val(data.name);
+                    $('#form-imageEdit select[name="info[type]"]').val(data.type);
+                    $('#form-imageEdit img[name="imageurl"]').attr('src', data.bill_image);
+                    $("#form-imageEdit input[name='info[sort]']").val(data.sort);
+                    $("#form-imageEdit textarea[name='info[introduce]']").html(data.introduce);
+                    form.render();
+                    layer.open({
+                        closeBtn: 2,
+                        type: 1, 
+                        area: '700px',
+                        title:'编辑葬式葬法',
+                        content: $('#form-imageEdit')
+                    }); 
+                }
+            }
+
+        });
+       
+    });
+
+    //提交编辑表单
+    $('#submitedit').bind('click',function(){
+        layer.open({
+            type:3,
+            success: function(layero, index){  
+                var dataFrom = new FormData(document.getElementById("edit-form"));
+                $.ajax({
+                    url:"{:url('infoEdit')}",
+                    type:'POST',
+                    data:dataFrom,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    success:function(result){
+                         if (result.flag == 1) {
+                            layer.closeAll(); //疯狂模式，关闭所有层
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                                  window.location.reload();//刷新当前页面.
+                              })
+                        } else {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                             })
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $('.del').click(function(){
+        var id = $(this).attr('data-id');
+        $.ajax({
+            url:"{:url('store/EcologyList/delete')}",
+            type:'POST',
+            data:{'id':id},
+            success:function(d){
+                var result = eval("("+d+")");
+                if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                      })
+                } else {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                     })
+                }
+            }
+        });
+    });
+
+
+
+});
+</script>
+{/block}
+
+

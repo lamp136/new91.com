@@ -1,0 +1,130 @@
+<!-- 顶部 -->
+<div class="navbar_top">
+    <div class="contain">
+        <div class="greet">
+            <span>您好，欢迎来到91搜墓网</span>
+            <a class="login" href="{:url('login/Login/login')}">登录</a>
+            <i>|</i>
+            <a href="{:url('login/Login/register')}">免费注册</a>
+        </div>
+        <div class="nav_top">
+            <ul>
+                <li class="scan"><a href="#">我的订单<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                <li class="gwc"><a href="#">购物车<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                <li><a href="cemetery_orders.html">个人中心<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                <li><a href="{:url('help/Help/contactus')}">帮助中心</a>|</li>
+                <li><a href="{:url('intro/Sitemap/index')}">网站地图</a>|</li>
+                <li class="last"><a href="#">商家后台</a></li>
+            </ul>
+        </div>
+        <div style="clear:both;"></div>
+    </div>  
+</div><!-- navbar_top 顶部 End -->
+
+<!-- header -->
+<div class="header">
+    <div class="contain">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <a href="index.html"><img src="_WEB_/images/logo.png" alt="LOGO" /></a>
+        </div>
+        
+        <!-- 选择城市+搜索 -->
+        <div class="city_search">
+
+            <!-- 选择城市 -->
+            <div class="city">
+
+                <span class="sele">
+                    <i class="city_icon"></i>
+                    {$Think.cookie.ip_region_name}
+                    <i class="iconfont icon-iconfontdownjiantou"></i>
+                </span>
+
+                <!-- 城市列表 -->
+                <div class="city_list">
+                    {volist name="province" id="p"}
+                        <ul class="clearfix">
+                            <li>{$key}</li>
+                            {foreach name="p" item="v"}
+                                <li><a href="http://{$v.abbr}.{$Think.config.domain_name}">{$v.name}</a></li>
+                            {/foreach}
+                        </ul>
+                    {/volist}
+                </div>
+            </div><!-- city 选择城市 End -->
+
+            <!-- 搜索 -->
+            <div class="search">
+
+                <!-- 选择搜索内容 -->
+                <div class="search_sel_box">
+                    <span class="search_sel">陵园墓地<i class="iconfont icon-iconfontdownjiantou"></i></span>
+                    <div class="search_sel_list">
+                        <ul>
+                            <li><a href="#">陵园墓地</a></li>
+                            <li><a href="#">殡仪馆</a></li>
+                            <li><a href="#">殡仪公司</a></li>
+                            <li><a href="#">新闻</a></li>
+                        </ul>
+                    </div>
+                </div><!-- search_sel_box 选择搜索内容 End -->
+                
+                <!-- 搜索框 -->
+                <div class="search_input">
+                    <input id="gover_search_key" class="txt" type="text" value="" placeholder="我们帮您找陵园"/>
+                    <div class="search_suggest" id="gov_search_suggest">  
+                        <ul>
+                        </ul>
+                    </div>
+                </div><!-- search_input 搜索框 End -->
+                
+                <div style="clear:both;"></div>
+
+            </div><!-- search 搜索 End -->
+
+            <!-- 搜索按钮 -->
+            <div class="search_btn">
+                <button class="ssbtn"></button>
+            </div><!-- search_btn 搜索按钮 End -->
+            
+            <div style="clear:both;"></div>
+            
+            <!-- 搜索展示内容 -->
+            <div class="search_text clearfix">
+                <ul>
+                    <li><a href="#">天寿陵园</a></li>
+                    <li><a href="#">殡仪服务</a></li>
+                    <li><a href="#">树葬</a></li>
+                    <li><a href="#">海葬</a></li>
+                    <li><a href="#">风水</a></li>
+                </ul>
+            </div><!-- search_text 搜索展示内容 End -->
+
+        </div><!-- city_search 选择城市+搜索 End -->
+        
+        <!-- 电话 -->
+        <div class="telephone">
+            <img src="_WEB_/images/telephone.png" alt="电话" />
+        </div><!-- telephone 电话 End -->
+
+    </div><!-- contain End -->
+</div><!-- header End -->
+
+<!-- 导航 -->
+<div class="nav">
+    <div class="contain">
+        <ul>
+            <li {eq name="path" value="Index"} class="lineheight" {/eq}><a href="{:url('index/Index/index')}">首页</a></li>
+            <li {eq name="path" value="Cemetery"} class="lineheight" {/eq}><a href="{:url('cemetery/Cemetery/index')}">陵园墓地</a></li>
+            <li {eq name="path" value="Map"} class="lineheight" {/eq}><a href="{:url('cemetery/Map/index')}">地图看墓</a></li>
+            <li {eq name="path" value="Funeral"} class="lineheight" {/eq}><a href="{:url('funeral/Funeral/funeral')}">殡仪馆</a></li>
+            <li {eq name="path" value="Rite"} class="lineheight" {/eq}><a href="rite.html">殡葬礼仪</a></li>
+            <li {eq name="path" value=""} class="lineheight" {/eq}><a href="ecologicalburial.html">节地生态葬</a></li>
+            <li {eq name="path" value=""} class="lineheight" {/eq}><a href="{:url('article/Article/index')}">殡葬百科</a></li>
+            <li {eq name="path" value=""} class="lineheight" {/eq}><a href="#">91乐融</a></li>
+
+        </ul>
+    </div><!-- contain End -->
+</div><!-- nav 导航 End -->

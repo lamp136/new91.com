@@ -1,0 +1,29 @@
+<!-- 我要评价 -->
+<div class="tooltip_box"></div>
+<div class="tooltip tooltip_remark">
+    <h2>我的评价</h2>
+    <div class="pf clearfix">
+        <span class="title">评分：</span>
+         <ul>
+            <li>环境：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+            <li class="last">风水：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+            <li>交通：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+            <li class="last">服务：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+        </ul>
+    </div>
+    <div class="ms">
+        <span class="title">描述：</span>
+        <textarea class="ms_tarea" placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+    </div>
+    <div class="phone">
+        <span class="title">评分：</span>
+        <input class="phone_txt" type="text" value="" placeholder="请输入您正在使用的手机号" />
+    </div>
+    <div class="niname">
+        <span></span>匿名评价
+    </div>
+    <div class="remark_btn">
+        <a href="#">提交评价</a>
+    </div>
+    <div class="tooltip_remark_close"></div>
+</div><!-- tooltip_remark 我要评价 End -->

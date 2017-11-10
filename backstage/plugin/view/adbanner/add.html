@@ -1,0 +1,160 @@
+{extend name='extra@main' /}
+
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-bottom:10px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        <a href="{:url('plugin/Adbanner/index')}">广告列表</a>
+        <a><cite>添加广告</cite></a>
+    </span>
+</div>
+<form class="layui-form" action="{:url('plugin/Adbanner/add')}" method="post" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>广告位</label>
+        <div class="layui-input-inline">
+            <select name="info[ad_position_id]" lay-filter="ad_position_id" lay-verify="required" required>
+                <option value="">请选择</option>
+                {volist name="adpos" id="vo"}
+                    <option value="{$vo.id}-{$vo.advertising_width}-{$vo.advertising_height}">{$vo.position_name}</option>
+                {/volist}
+            </select>
+        </div>
+        <label class="layui-form-label"><span style="color:red;">*</span>广告位省份</label>
+        <div class="layui-input-inline">
+            <select name="info[province_id]" lay-filter="province_id" lay-verify="required" required>
+                <option value="">选择省份</option>
+                {volist name="province" id="ci"}
+                    <option value="{$key}">{$ci}</option>
+                {/volist}
+            </select>
+        </div>
+        <label class="layui-form-label"><span style="color:red;">*</span>广告位类别</label>
+        <div class="layui-input-inline">
+            <select name="info[banner_type]" lay-filter="banner_type" lay-verify="required" required>
+                <option value="">请选择</option>
+                {volist name="bannerType" id="ci"}
+                    <option value="{$key}">{$ci}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>名称</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[banner_name]" autocomplete="off" class="layui-input" placeholder="名称" lay-verify="required" required>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">链接地址</label>
+        <div class="layui-input-inline" style="width:48%">
+            <input type="text" name="info[banner_link]" autocomplete="off" class="layui-input" placeholder="链接地址">
+        </div>
+        <div class="layui-box layui-upload-button">
+            <input type="file" name="image" lay-type="images"  class="layui-upload-file" cat='type_one'/>
+            <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+        </div>
+        <img width="23px" title="查看图片" src="/public/static/backstage/img/zoomIn.png" class="zoomIn">
+     <div class="layui-form-mid layui-word-aux" id='size' style="margin-left:20px;display:none"></div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">在线时间</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="info[start_time]" placeholder="开始时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="info[end_time]" placeholder="结束时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">状态</label>
+            <input type="radio" name="info[status]" value="{$Think.config.normal_status}" title="正常" checked>
+            <input type="radio" name="info[status]" value="{$Think.config.delete_status}" title="下线" >
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">图片分享</label>
+            <input type="radio" name="info[share]" value="{$Think.config.default_status}" title="不共用" checked>
+            <input type="radio" name="info[share]" value="{$Think.config.normal_status}" title="公用" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[sort]" autocomplete="off" class="layui-input" placeholder="排序">
+        </div>
+    </div>
+    <div class="layui-form-item"  style="text-align: center;">
+        <button class="layui-btn" id='submit' lay-submit="" lay-filter="submit">提交</button>
+    </div>
+</form>
+{/block}
+{block name='layer'}
+    <img src="" alt="" style="display:none" id='image' width='100%' height="100%">
+{/block}
+{block name='optJS'}
+<script type="text/javascript">
+ layui.use(['jquery', 'form','layedit','laydate'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+    var layedit = layui.layedit;
+    var laydate = layui.laydate;
+    
+    var start = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday:true
+        ,choose: function(datas){
+          end.min = datas; //开始日选好后，重置结束日的最小日期
+          end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+  
+  var end = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday: true
+        ,choose: function(datas){
+          start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+
+    //上传图片前的预览
+    $(function() {
+        $(".layui-upload-file").change(function() {
+            var $file = $(this);
+            var fileObj = $file[0];
+
+            var windowURL = window.URL || window.webkitURL;
+            var dataURL;
+            var $img = $('#image');
+            
+            if(fileObj && fileObj.files && fileObj.files[0]){
+                dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                $img.attr('src',dataURL);
+            }
+        });
+    });
+
+     //查看图片
+    $('.zoomIn').click(function(){
+        layer.open({
+            closeBtn: 2,
+            type: 1, 
+            area: ['400px','400px'],
+            title:'查看图片',
+            content: $('#image'),
+        });
+    });
+    
+    form.on('select(ad_position_id)', function(data){
+        var value = data.value;
+        var strs= new Array(); //定义一数组 
+        strs=value.split("-"); //字符分割 
+        $('#size').html('图片尺寸'+strs[1]+'*'+strs[2]);
+        $('#size').show();
+    }); 
+
+});
+</script>
+{/block}

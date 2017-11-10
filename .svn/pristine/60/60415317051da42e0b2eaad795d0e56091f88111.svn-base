@@ -1,0 +1,139 @@
+{extend name='extra@main' /}
+{block name='body'}
+<!-- banner -->
+<div class="help_banner"></div>
+<div class="contain clearfix contain_pdsize">
+    
+    <!-- 帮助中心 nav -->
+    <div class="help_nav">
+        <div class="help_nav_main">
+            <!-- LOGO -->
+            <div class="help_nav_logo">
+                <img src="_WEB_/images/help_nav_logo.png" alt="LOGO" />
+            </div><!-- help_nav_logo End -->
+            <div id="help_nav_list" class="help_nav_list">
+                <h2 class="active"><span>91搜墓网<i class="down"></i></span></h2>
+                <ul class="show">
+                    <li><a href="{:url('help/Help/aboutus')}">关于我们</a></li>
+                    <li class="led"><a href="{:url('help/Help/serviceprocess')}">服务流程</a></li>
+                    <li><a href="{:url('help/Help/contactus')}">联系我们</a></li>
+                </ul>
+                <h2><span>购墓指南<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/tombnotes')}">购墓须知</a></li>
+                    <li><a href="#">购墓技巧</a></li>
+                    <li><a href="#">购墓流程</a></li>
+                </ul>
+                <h2><span>常见问题<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="#">墓型选择</a></li>
+                    <li><a href="{:url('help/Help/tombagelimit')}">公墓年限</a></li>
+                    <li><a href="#">鲜花祭品</a></li>
+                    <li><a href="{:url('help/Help/wasburied')}">落葬讲究</a></li>
+                    <li><a href="#">迁坟讲究</a></li>
+                </ul>
+                <h2><span>殡葬文化<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/bury')}">安葬吉日</a></li>
+                    <li><a href="#">墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}">碑文挽联</a></li>
+                    <li><a href="#">三大鬼节</a></li>
+                    <li><a href="#">殡葬礼仪</a></li>
+                </ul>
+                <h2><span>平台声明<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="#">版权声明</a></li>
+                    <li><a href="#">免责条款</a></li>
+                    <li><a href="#">法律声明</a></li>
+                    <li><a href="{:url('help/Help/privacy')}">隐私条款</a></li>
+                </ul>
+            </div><!-- help_nav_list End -->
+        </div><!-- help_nav_main End -->
+    </div><!-- help_nav 帮助中心 nav End -->
+    
+    <!-- 帮助中心右侧 -->
+    <div class="help_right help_serviceprocess">
+        
+        <!-- 服务流程 -->
+        <div class="help_serviceprocess_main">
+            <h2>91搜墓网服务流程图</h2>
+            <ul>
+                <li>
+                    <h3>选择服务</h3>
+                    <p>您可以登录我们网站-91搜墓网，浏览或选择您需要的服务和信息。您也可以直接搜索名称或者是关键词进行搜索。</p>
+                    <span class="help_serviceprocess_span1"></span>
+                </li>
+                <li class="liarrows"><img src="_WEB_/images/help_serviceprocess_liarrows.png"/></li>
+                <li>
+                    <h3>电话咨询</h3>
+                    <p>找到您想要的服务项目，您可以电话咨询我们的专业服务顾问为您提供1对1全程服务，帮您解决疑问并为您安排预约事宜。</p>
+                    <span class="help_serviceprocess_span2"></span>
+                </li>
+                <li class="liarrows"><img src="_WEB_/images/help_serviceprocess_liarrows.png"/></li>
+                <li>
+                    <h3>预约成功</h3>
+                    <p>服务顾问帮您预约成功后，会打电话向您及时反馈具体的考察时间和接送班车的相关事项。</p>
+                    <span class="help_serviceprocess_span3"></span>
+                </li>
+                <li class="liarrows"><img src="_WEB_/images/help_serviceprocess_liarrows.png"/></li>
+                <li>
+                    <h3>实地考察</h3>
+                    <p>陵园的工作人员会热情的接待，陪同您查看墓地，挑选墓型，并帮您解决问题。</p>
+                    <span class="help_serviceprocess_span4"></span>
+                </li>
+               <li class="right">
+                    <h3>电话回访</h3>
+                    <p>实地看墓之后，服务顾问会及时与您沟通，帮您解决顾虑和问题，或者帮您推荐其他陵园和服务商。</p>
+                    <span class="help_serviceprocess_span6"></span>
+                </li>
+                <li class="liarrows"><img src="_WEB_/images/help_serviceprocess_liarrows1.png"/></li>
+                <li>
+                    <h3>签订合同</h3>
+                    <p>您选好自己想要的墓型之后，确认购买后，您就可以和陵园签订购墓合同，并准备刻字等相关事宜。</p>
+                    <span class="help_serviceprocess_span5"></span>
+                    <i class="help_serviceprocess_liarrows2"></i>
+                </li>
+            </ul>
+            <div class="clear"></div>
+        </div><!-- help_serviceprocess_main 服务流程 End -->
+
+    </div><!-- help_right 帮助中心右侧 End -->
+
+</div><!-- contain End -->
+
+<!-- 优势 -->
+<div class="home_advantage aboutus_advantage">
+    <div class="contain">
+        <ul>
+            <li>
+                <img src="_WEB_/images/home_advantage_img1.png"/>
+                <h2>信息透明</h2>
+                <P>陵园信息全面，价格透明</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img2.png"/>
+                <h2>预约服务</h2>
+                <P>线上咨询，电话服务</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img3.png"/>
+                <h2>专业服务</h2>
+                <P>专业咨询团队，资深企业</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img4.png"/>
+                <h2>多重优惠</h2>
+                <P>多种礼品，享受独家优惠</P>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/home_advantage_img5.png"/>
+                <h2>诚信保障</h2>
+                <P>诚信商家，保障服务</P>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- 优势 home_advantage End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}

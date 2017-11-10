@@ -1,0 +1,11 @@
+<!-- 用户中心左侧导航 -->
+<div class="user_nav">
+    <h2><i></i>用户中心</h2>
+    <ul>
+        <li><a {if $action == 'cemeteryorders' || $action == 'orderseval'} class="user_led" {/if} href="{:url('/orders')}">陵园订单</a></li>
+        <li><a {if $action == 'etiquetteorders' || $action == 'etiqueeval'} class="user_led" {/if} href="{:url('/etique')}">礼仪服务订单</a></li>
+        <!-- <li><a href="#">领取返现</a></li> -->
+        <li><a {eq name="action" value="users"} class="user_led" {/eq} href="{:url('/user')}">个人资料</a></li>
+        <li><a {eq name="action" value="change"} class="user_led" {/eq} href="{:url('/upwd')}">修改密码</a></li>
+    </ul>
+</div><!-- user_nav用户中心左侧导航 End -->

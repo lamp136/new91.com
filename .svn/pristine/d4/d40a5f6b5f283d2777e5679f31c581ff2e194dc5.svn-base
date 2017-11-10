@@ -1,0 +1,736 @@
+{extend name='extra@main' /}
+{block name='body'}
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>2017年5月15日陆女士XX陵园订单详情</legend>
+</fieldset>
+<div class="layui-tab" lay-filter="items">
+    <ul class="layui-tab-title">
+        <li class="layui-this" lay-id="11">订单信息</li>
+        <li lay-id="22">回访跟踪</li>
+        <li lay-id="33">看墓记录</li>
+        <li lay-id="44">短信</li>
+        <li lay-id="55">车辆预约</li>
+        <li lay-id="66">填写看墓记录</li>
+        <li lay-id="77">赠品</li>
+    </ul>
+    <!--订单信息-->
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">  
+            <table class="layui-table">
+                <tr>
+                    <th>预约人</th><td>贤心</td>
+                    <th>手机</th><td>13366153402</td>
+                    <th>来源</th><td>400电话</td>
+                    <th>地区</th><td>北京/昌平</td>
+                </tr>
+                <tr>
+                    <th>订单类型</th><td>购墓</td>
+                    <th>座机</th><td></td>
+                    <th>微信</th><td></td>
+                    <th>QQ</th><td></td>
+                </tr>
+                <tr>
+                    <th>预约陵园</th><td colspan="3">陵园A、墓地B、园区C</td>
+                    <th>购买园区</th><td colspan="3">陵园A</td>
+                </tr>
+                <tr>
+                    <th>心里价位</th><td>10万左右</td>
+                    <th>下单时间</th><td>2017-05-12 10:00:00</td>
+                    <th>意向程度</th><td>高</td>
+                    <th>看墓时间</th><td>2017-05-12 10:00:00</td>
+                </tr>
+    
+                <tr>
+                    <th>安葬人名</th><td>贤心</td>
+                    <th>安葬人性别</th><td>女</td>
+                    <th>安葬人年龄</th><td>80</td>
+                    <th>安葬人状态</th><td>在世</td>
+                </tr>
+                <tr>
+                    <th>购买人</th><td>购买人</td>
+                    <th>手机</th><td>13366153402</td>
+                    <th>性别</th><td>男</td>
+                    <th>年龄</th><td>40</td>
+                </tr>
+                <tr>
+                    <th>座机</th><td></td>
+                    <th>微信</th><td></td>
+                    <th>QQ</th><td></td>
+                </tr>
+                <tr>
+                    <th>是否成交</th><td>是 <img src="http://www.baidu.com" title="凭证" style="width:20px;height:20px;"/></td>
+                    <th>车辆</th><td>91班车</td>
+                    <th>订单状态</th><td>待收佣金</td>
+                    <th>推送商家</th><td>是</td>
+                </tr>
+                
+                <tr>
+                    <th>墓价</th><td>15万</td>
+                    <th>成交价</th><td>12.8万</td>
+                    <th>园区折扣</th><td>0.3万</td>
+                    <th>91折扣</th><td>0.3万</td>
+                </tr>
+                 <tr>
+                    <th>佣金比例</th><td>10%</td>
+                    <th>应收</th><td>1000</td>
+                    <th>实收</th><td>900</td>
+                </tr>
+                <tr>
+                    <th>返现比例</th><td></td>
+                    <th>应返</th><td></td>
+                    <th>实返</th><td></td>
+                </tr>
+                <tr>
+                    <th>墓穴位置</th><td colspan="3">福禄园A区8排3号</td>
+                    <th>备注</th><td colspan="3">备注信息</td>
+                </tr>
+                <tr>
+                    <th>未成交原因</th><td colspan="3"></td>
+                    <th>解决方案</th><td colspan="3"></td>
+                </tr>
+                <tr>
+                    <th>需求描述</th><td colspan="7">
+                        <p>需求：</p>
+                        <p>讲解：</p>
+                        <p>结果：</p>
+                    </td>
+                </tr>
+            </table> 
+        </div>
+        <!--订单回访信息-->
+        <div class="layui-tab-item">
+            <p class="layui-elem-quote">2017-05-21 10:11:13 艾鑫 第三次回访，然后最后一项也可以点。</p> 
+            <p class="layui-elem-quote">2017-05-21 09:30:00 王园园 第二次回访，然后最后一项也可以点。</p>
+            <p class="layui-elem-quote">2017-05-21 15:30:00 艾鑫 第以次回访，然后最后一项也可以点。</p> 
+
+            <form class="layui-form layui-form-pane" action="">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">添加跟踪信息 </label>
+                    <div class="layui-input-block">
+                      <textarea placeholder="请输入跟踪信息" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                    </div>
+                </div>
+            </form>
+            <form class="layui-form" action="">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">需求讲解</label>
+                    <div class="layui-input-block" style="margin-left: 0">
+                        <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor">
+                            <p>需求：</p>
+                            <p>讲解：</p>
+                            <p>结果：</p>
+                        </textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--看墓信息-->
+        <div class="layui-tab-item">
+            <div class="layui-collapse">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title"><font color="#FF5722">第二趟</font>看墓信息</h2>
+                    <div class="layui-colla-content layui-show">
+                        <table class="layui-table">
+                            <tr>
+                                <th>交通工具</th><td>91班车</td>
+                                <th>乘车地址</th><td>北京海淀区中关村东路18号</td>
+                                <th>时间</th><td>2017-05-21 10:11:13</td>
+                            </tr>
+                            <tr>
+                                <th>联系人</th><td>91搜墓网</td>
+                                <th>电话</th><td>13377676789</td>
+                                <th>乘车人数</th><td> 3 人</td>
+                            </tr>
+                            <tr>
+                                <th>购墓顾问</th><td>王园园</td>
+                                <th>司机</th><td>宗华 13377676789</td>
+                                <th>车辆信息</th><td>京A100100</td>
+                            </tr>
+                            <tr>
+                                <th>接单时间</th><td>2017-05-21 13:10:13</td>
+                                <th>到家属地</th><td>2017-05-22 12:00:00</td>
+                                <th>结束时间</th><td>2017-05-22 18:00:00</td>
+                            </tr>
+                            <tr>
+                                <th>墓地</th><td colspan="5">陵园A、墓地</td>
+                            </tr>
+                            <tr>
+                                <th>备注</th><td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <th>详情</th>
+                                <td colspan="5">
+                                    <table>
+                                        <tr>
+                                            <th>陵园</th><td>陵园A</td>
+                                            <th>抵达时间</th><td>2017-05-21 13:10:13</td>
+                                            <th>离开时间</th><td>2017-05-21 13:10:13</td>
+                                            <th>园区接待</th><td>接待</td>
+                                        </tr>
+                                        <tr>
+                                            <th>购买人</th><td>AA</td>
+                                            <th>意向</th><td>一般</td>
+                                            <th>备注</th><td colspan="3"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>结果</th><td>成交</td>
+                                            <th>墓穴位置</th><td>福禄园A区8排3号</td>
+                                            <th>赠品</th><td></td>
+                                            <th>合同照片</th><td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>成交价</th><td>12.8万</td>
+                                            <th>墓价</th><td>15万</td>
+                                            <th>91折扣</th><td>0.3万</td>
+                                            <th>园区折扣</th><td>0.3万</td>
+                                        </tr>
+                                      </table>
+                                </td>
+                            </tr>
+                         
+                        </table>
+                    </div>
+                </div>
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">
+                        <font color="#FF5722">第一趟</font>看墓信息    
+                    </h2>
+                    <div class="layui-colla-content layui-show">
+                        <table class="layui-table">
+                            <tr>
+                                <th>交通工具</th><td>91班车</td>
+                                <th>乘车地址</th><td>北京海淀区中关村东路18号</td>
+                                <th>时间</th><td>2017-05-21 10:11:13</td>
+                            </tr>
+                            <tr>
+                                <th>联系人</th><td>91搜墓网</td>
+                                <th>电话</th><td>13377676789</td>
+                                <th>乘车人数</th><td> 3 人</td>
+                            </tr>
+                            <tr>
+                                <th>购墓顾问</th><td>王园园</td>
+                                <th>司机</th><td>宗华 13377676789</td>
+                                <th>车辆信息</th><td>京A100100</td>
+                            </tr>
+                            <tr>
+                                <th>接单时间</th><td>2017-05-21 13:10:13</td>
+                                <th>到家属地</th><td>2017-05-22 12:00:00</td>
+                                <th>结束时间</th><td>2017-05-22 18:00:00</td>
+                            </tr>
+                            <tr>
+                                <th>墓地</th><td colspan="5">陵园A、墓地</td>
+                            </tr>
+                            <tr>
+                                <th>备注</th><td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <th>详情</th>
+                                <td colspan="5">
+                                    <table>
+                                        <tr>
+                                            <th>陵园</th><td>墓地A</td>
+                                            <th>抵达时间</th><td>2017-05-21 13:10:13</td>
+                                            <th>离开时间</th><td>2017-05-21 13:10:13</td>
+                                            <th>园区接待</th><td>接待</td>
+                                        </tr>
+                                        <tr>
+                                            <th>购买人</th><td>AA</td>
+                                            <th>意向</th><td>一般</td>
+                                            <th>备注</th><td colspan="3"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>结果</th><td>成交</td>
+                                            <th>墓穴位置</th><td>福禄园A区8排3号</td>
+                                            <th>赠品</th><td></td>
+                                            <th>合同照片</th><td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>成交价</th><td>12.8万</td>
+                                            <th>墓价</th><td>15万</td>
+                                            <th>91折扣</th><td>0.3万</td>
+                                            <th>园区折扣</th><td>0.3万</td>
+                                        </tr>
+                                      </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--短信信息-->
+        <div class="layui-tab-item">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="80">
+                    <col width="80">
+                    <col width="100">
+                    <col width="300">
+                    <col width="60">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>对象</th>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>短信内容</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>商家</td>
+                        <td>陵园人</td>
+                        <td>13344567890</td>
+                        <td>尊敬的会员，您有一条来自91搜墓网的贵宾客户预约信息,客户:李先生,预约时间:2017-05-24 17:47:03,电话:13513405931,请及时关注.【91搜墓网】</td>
+                        <td>已发</td>
+                        <td>编辑  发送</td>
+                    </tr>
+                    <tr>
+                        <td>客户</td>
+                        <td>李先生</td>
+                        <td>13513405931</td>
+                        <td>贵宾您好,我们已经将您的需求信息告知陵园，陵园会有专人和您联系，如有任何问题请致电：400-8010-344.感谢您对91搜墓网的信任.【91搜墓网】</td>
+                        <td>未发</td>
+                        <td>编辑  发送</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--车辆预约信息-->
+        <div class="layui-tab-item">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="90">
+                    <col width="80">
+                    <col width="80">
+                    <col width="200">
+                    <col width="200">
+                    <col width="90">
+                    <col width="50">
+                    <col width="50">
+                    <col width="200">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>预约人</th>
+                        <th>电话</th>
+                        <th>出车时间</th>
+                        <th>地址</th>
+                        <th>目标陵园</th>
+                        <th>司机</th>
+                        <th>司机电话</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>购墓</td>
+                        <td>13344567890</td>
+                        <td>2017-05-21 07:00:00</td>
+                        <td>北京海淀区中关村东路18号</td>
+                        <td>北京天寿陵园、德陵公墓</td>
+                        <td>吉斯</td>
+                        <td>13312345678</td>
+                        <td>未接单</td>
+                        <td>
+                            <a href="{:url('orders/tomb/edit', 'id=1')}" title='修改信息'>
+                                <button class="layui-btn layui-btn-small  layui-btn-warm" ><i class="layui-icon">&#xe642;</i></button>
+                            </a>
+                            <a href="javascrip:;" id='closedorder'  title='删除'>
+                                <button class="layui-btn layui-btn-small layui-btn-danger"><i class="layui-icon">&#x1006;</i></button>
+                            </a>
+                            <a href="{:url('orders/tomb/detail', 'id=1')}#items=11"  title='填写看墓记录'>
+                                <button class="layui-btn layui-btn-small" ><i class="layui-icon">记</i></button>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>小家伙</td>
+                        <td>13344567890</td>
+                        <td>2017-05-18 07:00:00</td>
+                        <td>北京海淀区中关村东路18号</td>
+                        <td>北京天寿陵园、德陵公墓</td>
+                        <td>吉斯人</td>
+                        <td>13312345678</td>
+                        <td>完成</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--车辆预约表单-->
+            <div class="layui-form-item">
+                <form class="layui-form layui-form-pane1" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">交通工具</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="vehicle" value="91班车" title="91班车" checked="">
+                            <div class="layui-unselect layui-form-radio layui-form-radioed">
+                                <i class="layui-anim layui-icon"></i><span>91班车</span>
+                            </div>
+                            <input type="radio" name="vehicle" value="自驾" title="自驾">
+                            <div class="layui-unselect layui-form-radio">
+                                <i class="layui-anim layui-icon"></i><span>自驾</span>
+                            </div>
+                            <input type="radio" name="vehicle" value="陵园班车" title="陵园班车">
+                            <div class="layui-unselect layui-form-radio">
+                                <i class="layui-anim layui-icon"></i><span>陵园班车</span>
+                            </div>
+                            <input type="radio" name="vehicle" value="公交地铁" title="公交地铁">
+                            <div class="layui-unselect layui-form-radio">
+                                <i class="layui-anim layui-icon"></i><span>公交地铁</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">地址</label>
+                        <div class="layui-input-block">
+                            <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车地址">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车联系人">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">人数</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车人数">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车联系人手机号">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">看墓时间</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" pane="">
+                        <label class="layui-form-label">昌平</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="like1[write]" lay-skin="primary" title="陵园A" checked="">
+                            <input type="checkbox" name="like1[read]" lay-skin="primary" title="陵园B">
+                            <input type="checkbox" name="like1[game]" lay-skin="primary" title="陵园C">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" pane="">
+                        <label class="layui-form-label">通州</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="like1[write]" lay-skin="primary" title="陵园Q" checked="">
+                            <input type="checkbox" name="like1[read]" lay-skin="primary" title="陵园W">
+                            <input type="checkbox" name="like1[game]" lay-skin="primary" title="陵园E">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" pane="">
+                        <label class="layui-form-label">燕郊</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="like1[write]" lay-skin="primary" title="陵园H" checked="">
+                            <input type="checkbox" name="like1[read]" lay-skin="primary" title="陵园G">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">陪同顾问</label>
+                            <div class="layui-input-block">
+                                <select name="modules" lay-verify="required" lay-search="">
+                                    <option value="">选择陪同顾问</option>
+                                    <option value="1">周闻涛</option>
+                                    <option value="2">艾鑫</option>
+                                    <option value="3">王园园</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">陪同人员</label>
+                            <div class="layui-input-inline">
+                                <select name="modules" lay-verify="required" lay-search="">
+                                    <option value="">陪同人员</option>
+                                    <option value="1">刘鹏</option>
+                                    <option value="2">许晓磊</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">车辆</label>
+                        <div class="layui-input-block">
+                            <select name="modules" lay-verify="required" lay-search="">
+                                <option value="">选择车辆</option>
+                                <option value="1">京A68768-张三</option>
+                                <option value="2">京NY1168-李四</option>
+                                <option value="3">京G86N69-王五</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <input type="tel" name="contact" class="layui-input" value="备注信息" title="备注信息">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text" style="text-align:center">
+                        <button class="layui-btn layui-btn-big">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <form class="layui-form layui-form-pane1" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">交通工具</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="vehicle" value="91班车" title="91班车" checked="">
+                        <div class="layui-unselect layui-form-radio layui-form-radioed">
+                            <i class="layui-anim layui-icon"></i><span>91班车</span>
+                        </div>
+                        <input type="radio" name="vehicle" value="自驾" title="自驾">
+                        <div class="layui-unselect layui-form-radio">
+                            <i class="layui-anim layui-icon"></i><span>自驾</span>
+                        </div>
+                        <input type="radio" name="vehicle" value="陵园班车" title="陵园班车">
+                        <div class="layui-unselect layui-form-radio">
+                            <i class="layui-anim layui-icon"></i><span>陵园班车</span>
+                        </div>
+                        <input type="radio" name="vehicle" value="公交地铁" title="公交地铁">
+                        <div class="layui-unselect layui-form-radio">
+                            <i class="layui-anim layui-icon"></i><span>公交地铁</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址</label>
+                    <div class="layui-input-block">
+                        <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车地址" value="北京市海淀区中观中关村东路18号">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车联系人" value="张三">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">人数</label>
+                        <div class="layui-input-inline">
+                            <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车人数" value="2">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="乘车联系人手机号" value="13311234567">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">预约时间</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="2017-06-12 10:00:00">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陪同顾问</label>
+                        <div class="layui-input-block">
+                            <select name="modules" lay-verify="required" lay-search="">
+                                <option value="">选择陪同顾问</option>
+                                <option value="1" selected>周闻涛</option>
+                                <option value="2">艾鑫</option>
+                                <option value="3">王园园</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陪同人员</label>
+                        <div class="layui-input-inline">
+                            <select name="modules" lay-verify="required" lay-search="">
+                                <option value="">陪同人员</option>
+                                <option value="1" selected>刘鹏</option>
+                                <option value="2">许晓磊</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">车辆</label>
+                        <div class="layui-input-block">
+                            <select name="modules" lay-verify="required" lay-search="">
+                                <option value="">选择车辆</option>
+                                <option value="1" selected>京A68768-张三</option>
+                                <option value="2">京NY1168-李四</option>
+                                <option value="3">京G86N69-王五</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">到家属地时间</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="2017-06-12 10:00:00">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="tel" name="contact" class="layui-input" value="备注信息" title="备注信息">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园</label>
+                        <div class="layui-input-block">
+                            <select name="modules" lay-verify="required" lay-search="">
+                                    <option value="">选择陵园</option>
+                                    <option value="1" selected>北京天寿陵园</option>
+                                    <option value="2">北京德陵公墓</option>
+                                </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">抵达陵园时间</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="2017-06-12 10:00:00">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园接待</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="陵园接待人员" value="接待员">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">离开陵园时间</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="2017-06-12 10:00:00">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">购买人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="购买人" value="购买人">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">意向</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="购买意向" value="一般">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">墓穴位置</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="购买墓地的位置" value="福禄园A区8排3号">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">结果</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="成交" value="成交">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">墓价</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="墓位价格" value="15万">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">成交价</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="成交价格" value="12.8万">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">91折扣</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="平台折扣" value="0.3万">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园折扣</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="陵园折扣" value="0.3万">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">上传图片</label>
+                    <div class="layui-input-block">
+                        <input type="file" name="file" class="layui-upload-file"> 
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="tel" name="contact" class="layui-input" value="备注信息" title="备注信息">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text" style="text-align:center">
+                    <button class="layui-btn layui-btn-big">保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            等待开发
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+layui.use(['element', 'form', 'layedit', 'jquery'], function(){
+  var $ = layui.jquery,element = layui.element(),layedit = layui.layedit;
+  //创建一个编辑器
+  var editIndex = layedit.build('LAY_demo_editor');
+
+    var layid = location.hash.replace(/^#items=/, '');
+    element.tabChange('items', layid);
+  
+    element.on('tab(items)', function(elem){
+        location.hash = 'items='+ $(this).attr('lay-id');
+       //ajax 可以请求数据
+    });
+});
+
+</script>
+{/block}

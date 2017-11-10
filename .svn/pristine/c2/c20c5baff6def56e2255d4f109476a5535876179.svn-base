@@ -1,0 +1,165 @@
+{extend name='extra@main' /}
+
+{block name='body'} 
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;"> 
+
+<form  method="get"  autocomplete="off" action='{:url("index")}' style="float:left">
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <select name="province_id" lay-filter="province_id" >
+                <option value=" ">--选择省--</option>
+                {volist name='province' id='vo'}
+                    <option value="{$key}" {eq name='$key' value='$Think.get.province_id'} selected {/eq}>{$vo}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="advertising_position_id" lay-filter="advertising_position_id" >
+                <option value=" ">--选择广告位--</option>
+                {volist name='adpos' id='ci'}
+                    <option value="{$ci.id}" {eq name='$ci.id' value='$Think.get.advertising_position_id'} selected {/eq}>{$ci.position_name}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-normal">搜索</button>
+        </div>
+    </div>
+</form>
+    {php}
+        if(showHandle('plugin/Adbanner/add')){
+    {/php}
+        <div class="layui-inline">
+            <span class="layui-btn add">
+                <a href="{:url('Adbanner/add')}" style="color:white;"><i class="layui-icon">&#xe608;</i>添加</a>
+            </span>
+        </div>
+    {php}
+        }
+    {/php}
+<table class="layui-table">
+    <colgroup>
+        <col width="6%">
+        <col width="10%">
+        <col width="9%">
+        <col width="8%">
+        <col width="20%">
+        <col width="5%">
+        <col width="5%">
+        <col width="20">
+        <col>
+    </colgroup>
+    <thead>
+        <tr>
+            <th>省份</th>
+            <th>广告位置</th>
+            <th>广告名称</th>
+            <th>图片</th>
+            <th>链接地址</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>操作</th>
+        </tr> 
+    </thead>
+  <tbody>
+    {volist name='list' id='vo'}
+    <tr>
+        <td>{$province[$vo.province_id]}</td>
+        <td>
+            {volist name='adpos' id='ad'}
+                {eq name='ad.id' value='$vo.ad_position_id'}{$ad.position_name}{/eq}
+            {/volist}
+        </td>
+        <td>{$vo.banner_name}</td>
+        <td><img src="{$Think.config.public_path}{$vo.banner_url}" width='130px' alt="{$vo.banner_name}"></td>
+        <td>{$vo.banner_link}</td>
+        <td>
+            {notempty name='vo.start_time'}
+                {$vo.start_time|date="Y-m-d H:i:s",###}
+            {/notempty}
+        </td>
+        <td>
+            {notempty name='vo.end_time'}
+                {$vo.end_time|date="Y-m-d H:i:s",###}
+            {/notempty}
+        </td>
+        <td>
+            {php}
+                if(showHandle('plugin/Adbanner/edit')){
+            {/php}
+                <a href="{:url('Adbanner/edit',array('nowPage'=>$nowPage,'id'=>$vo['banner_id']))}" class="layui-btn layui-btn-small">编辑</a>
+            {php}
+                }
+                if(showHandle('plugin/Adbanner/delete')){
+            {/php}
+                {if condition='$vo.status neq $Think.config.delete_status'}
+                    <button href="javascript:;" banner_id="{$vo.banner_id}" class="layui-btn layui-btn-small layui-btn-danger del">删除</button>
+                {else/}
+                    <button href="javascript:;" banner_id="{$vo.banner_id}" class="layui-btn layui-btn-small layui-btn-normal  start">启用</button>
+                {/if}  
+            {php}
+                }
+            {/php}
+        </td>
+    </tr>
+    {/volist}
+  </tbody>
+</table>
+    {$page}
+</div>
+{/block}
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'form'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+
+    //删除广告
+    $('.del').click(function(){
+        var id = $(this).attr('banner_id');
+        layer.confirm('确定要删除？', {
+          btn: ['确定','取消'], //按钮
+          icon:3,
+          title:'提示'
+        }, function(){
+            $.ajax({
+                url:"{:url('delete')}",
+                type:'post',
+                data:{'id':id,'token':'del'},
+                dataType:'json',
+                success : function(e){
+                    if(e.flg ==1){
+                        layer.msg(e.msg,{icon:1});
+                    }else{
+                        layer.msg(e.msg,{icon:1});
+                    }
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+        }, function(){
+            layer.closeAll();
+        });
+    });
+
+    //启用广告
+    $('.start').click(function(){
+        var id = $(this).attr('banner_id');
+        $.ajax({
+            url:"{:url('delete')}",
+            type:'post',
+            data:{'id':id,'token':'start'},
+            dataType:'json',
+            success : function(e){
+                if(e.flg ==1){
+                    layer.msg(e.msg,{icon:1});
+                }else{
+                    layer.msg(e.msg);
+                }
+                window.location.reload();//刷新当前页面.
+            }
+        });
+    })
+
+});
+</script>
+{/block}

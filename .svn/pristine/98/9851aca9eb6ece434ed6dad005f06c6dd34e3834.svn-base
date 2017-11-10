@@ -1,0 +1,83 @@
+<?php
+namespace back\index\controller;
+use think\Controller;
+use think\Session;//session类
+use back\extra\controller\Base;
+use think\Db;
+
+class Index extends Base
+{   
+    //插件
+    public function index()
+    {	
+        return $this->fetch('index');
+    }
+
+    //后台首页
+    public function shouye(){
+        $login_name = session('login_name');
+        if($login_name){
+            $data = array('msg'=>'尊敬的'.$login_name.'欢迎你登陆后台', 'menu'=>'菜单');
+            $this->assign('data', $data);
+            return $this->fetch('shouye');
+        }else{
+            $this->redirect('/login/login/login');
+        }
+    }
+    /**
+     * 个人中心
+     * @param  input|void;
+     * @return  output|void;
+     */
+    public function personCenter()
+    {
+        $id = session('admin_id');
+        if(!empty($id)){
+            $adminWhere['id'] = $id;
+            $adminWhere['status'] = Config('normal_status');
+            $data= Db::name('Admin')->where($adminWhere)->find();
+            $this->assign('data',$data);
+            return $this->fetch();
+        }else{
+            $this->error('操作失败!');
+        }
+    }
+     /**
+     * 修改密码
+     * @param  input|void;
+     * @return  output|json(string);
+     */
+    public function editPassword()
+    {
+        $result = array('flag'=>0,'msg'=>'修改失败！');
+        $post = input('post.');
+        if(!empty($post)){
+            //dump($post);die;
+            $where['id'] = session('admin_id');
+            $where['status'] = Config('normal_status');
+            $where['pwd'] = encryptAdmin($post['oldPW']);
+            if(Db::name('Admin')->where($where)->count()){
+                $updateWhere['id'] = session('admin_id');
+                $data['updated_time'] = date('Y-m-d H:i:s');
+                $data['pwd'] = encryptAdmin($post['newPW']);
+                if(Db::name('Admin')->where($updateWhere)->update($data)){
+                    $result= array('flag'=>'1','msg'=>'修改成功！');
+                }
+            }else{
+                $result= array('flag'=>'2','msg'=>'原密码错误！');
+            }
+        }
+        echo json_encode($result);
+    }
+    
+    /**
+     * 我的工作
+     * @param  input|void;
+     * @return  output|void;
+     */
+    public function myWork()
+    {
+        return $this->fetch();
+    }
+
+}

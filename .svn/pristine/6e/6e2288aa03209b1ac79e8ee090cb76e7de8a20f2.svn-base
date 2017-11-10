@@ -1,0 +1,100 @@
+{extend name='extra@articlemain' /}
+{block name='body'}
+    <!-- 殡葬百科列表 -->
+    <div class="contain contain_pdsize">
+        
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="{:url('article/Article/index')}">91资讯</a></li>
+                <li class="jt">></li>
+                <li>{$title.name}</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+
+            <!-- 殡葬百科列表 -->
+            <div class="fe_list">
+                {volist name="data" id="vo"}
+                    <!-- 内容 -->
+                    <div class="fe_list_box">
+                        <div class="fe_list_main clearfix">
+                            <!-- 图片 -->
+                            <div class="fe_list_main_img">
+                                <a href="{:url('article/Article/detail',['id'=>$vo.id,'cid'=>$cid])}" title="{$vo.title}"><img src="{$vo.thumb_url}" alt="{$vo.title}"/></a>
+                            </div>
+                            <!-- 右侧内容 -->
+                            <div class="fe_list_main_text">
+                                <h2><a href="{:url('article/Article/detail',['id'=>$vo.id,'cid'=>$cid])}">{$vo.title}</a></h2>
+                                <p>{$vo.summary}</p>
+                                <p class="source">
+                                    {notempty name="vo.source"}
+                                        来源：{$vo.source}
+                                    {else /}
+                                        来源：91搜墓网
+                                    {/notempty}
+                                    <span class="time">
+                                        时间：{$vo.published_time|date='Y-m-d',###}
+                                        <span class="pageviews">
+                                            <i></i>{$vo.hits}
+                                        </span>
+                                    </span>
+                                </p>
+                            </div>
+                        </div><!-- cemetery_list_main End -->
+                    </div><!-- fe_list_box 内容 End -->
+                {/volist}
+                <!-- 分页 -->
+                <div class="paging">
+                    <ul>
+                        {$page}
+                    </ul>
+                </div><!-- paging 分页 End -->
+            </div><!-- cemetery_list 陵园列表 End -->
+        </div><!-- leftcontain End -->
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <!--广告位-->
+            <div class="advertising advborder cem_margin_bottom">
+                <img src="_WEB_/images/advertising_img2.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--最新资讯-->
+            <div class="new_message cem_margin_bottom">
+                <h2>最新资讯</h2>
+                <ul class="clearfix">
+                    {volist name="informationdata" id="vo"}
+                        <li class="clearfix">
+                            <a href="{:url('article/Article/detail',['id'=>$vo.id,'cid'=>$cid])}" title="{$vo.title}">
+                                <img src="{$vo.thumb_url}" alt="{$vo.title}"/>
+                                <div class="txt">
+                                    <h3>{$vo.title}</h3>
+                                </div>
+                            </a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- new_message 最新资讯 End-->
+
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <img src="_WEB_/images/advertising_img.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+
+            <!--热门文章-->
+            <div class="policies">
+                <h2>热门文章</h2>
+                <ul>
+                    {volist name="hotdata" id="vo"}
+                        <li><a href="{:url('article/Article/detail',['id'=>$vo.id,'cid'=>$cid])}" title="{$vo.title}">{$vo.title}</a></li>
+                    {/volist}
+                </ul>
+            </div><!-- policies 热门文章 End-->
+        </div><!-- leftcontain End -->
+        <div class="clear"></div>
+    </div><!-- contain 殡葬百科列表 End -->
+{/block}
+   

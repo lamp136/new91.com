@@ -1,0 +1,48 @@
+<?php
+namespace back\store\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Session;
+use think\Request;
+use think\Db;
+
+/**
+ * 生态葬
+ */
+class Ecology extends Base
+{
+    /**
+     * 列表
+     * @return void
+     */
+    public function index(){
+        $ecologyList = Db::name('EcologicalBurial');
+        $ecologyTombs = Db::name('category')->where('pid',config('ecology_tombs'))->select();
+        $this->assign([
+            'ecologyTombs' => $ecologyTombs
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 添加
+     */
+    public function add(){
+
+    }
+
+    /**
+     * 编辑
+     */
+    public function edit(){
+
+    }
+
+    /**
+     * 删除
+     * @return [type] [description]
+     */
+    public function delete(){
+
+    }
+}

@@ -1,0 +1,182 @@
+{extend name='extra@indexmain' /}
+
+{block name='body'}
+    
+    <!-- 邀请入驻banner -->
+    <div class="joinus_banner"></div>
+    
+    <!-- 面包屑 -->
+    <div class="contain">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li class="jt">></li>
+                <li>诚邀入驻</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+    </div><!-- contain End -->
+    
+    <!-- 了解我们 -->
+    <div class="contain">
+        <div class="joinus_know">
+            <h2>了解我们</h2>
+            <p>互联网已经融入我们生活的方方面面，悄然改变着我们的生活和工作方式。</p>
+            <p class="center">91搜墓网凭借互联网提供的的优势平台，整合行业优势资源，为殡葬企业提供集产品宣传推广、网络营销整合、大数据挖掘、服务资源再整合、售前咨询与售后服务于一体的整体营销解决方案，帮助殡葬企业提升企业形象，品牌知名度，传播文化理念，增强综合竞争力。</p>
+            <p>乘风破浪！91搜墓网与您一起共创行业发展未来！</p>
+        </div><!-- joinus_know 了解我们 End -->
+    </div><!-- contain End -->
+
+    <!-- 五大服务 -->
+    <div class="joinus_serve"></div>
+
+    <!-- 优势 -->
+    <div class="contain joinus_advantage">
+        <ul class="clearfix">
+            <li>
+                <img src="_WEB_/images/joinus_advantage_icon1.png" alt="ICON"/>
+                <h2>塑造企业品牌</h2>
+                <p>91平台别具一格的营销能力不遗余力塑造企业品牌；高瞻远瞩的决策能力为企业在现有资源基础上找到可以“倾倒”的突破口。</p>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/joinus_advantage_icon2.png" alt="ICON"/>
+                <h2>拓宽营销渠道</h2>
+                <p>依托91搜墓网平台的影响力与互联网的传播效应，帮助商家建立线上营销渠道，与线下相结合，带来新的利益增长点，提升企业的综合效益。</p>
+            </li>
+            <li>
+                <img src="_WEB_/images/joinus_advantage_icon3.png" alt="ICON"/>
+                <h2>获取潜在客户</h2>
+                <p>91平台与商家目标市场、业务策略、营销过程有效匹配，为商家提供多视角、多维度的展示方式，帮助陵园获得更多客户。</p>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/joinus_advantage_icon4.png" alt="ICON"/>
+                <h2>挖掘服务市场</h2>
+                <p>91平台通过对大量商家数据的分析和资源再整合，优化产品结构，形成新的产品体系，充分挖掘客户需求，帮助商家寻求新的服务市场，增强综合竞争力。</p>
+            </li>
+            <li class="bottom">
+                <img src="_WEB_/images/joinus_advantage_icon5.png" alt="ICON"/>
+                <h2>免费网络推广</h2>
+                <p>1平台通过互联网和新媒体免费为商家进行多维度信息展示，增强企业核心竞争力。</p>
+            </li>
+        </ul>
+    </div><!-- joinus_advantage 优势 End -->
+
+    <!-- 优势 -->
+    <div class="joinus_advantagetu"></div>
+
+    <!-- 合作陵园 -->
+    <div class="contain joinus_cem">
+        <h2>合作陵园</h2>
+        <ul>
+            <li>
+                <a href="#"><img src="_WEB_/images/joinus_cem_img1.png"/></a>
+                <a class="lea_cembtn" href="#">上海青浦福寿园</a>
+            </li>
+            <li>
+                <a href="#"><img src="_WEB_/images/joinus_cem_img2.png"/></a>
+                <a class="lea_cembtn" href="#">上海海湾寝园</a>
+            </li>
+            <li>
+                <a href="#"><img src="_WEB_/images/joinus_cem_img3.png"/></a>
+                <a class="lea_cembtn" href="#">苏州山陵文化</a>
+            </li>
+            <li>
+                <a href="#"><img src="_WEB_/images/joinus_cem_img4.png"/></a>
+                <a class="lea_cembtn" href="#">北京天寿陵园</a>
+            </li>
+            <li class="last">
+                <a href="#"><img src="_WEB_/images/joinus_cem_img5.png"/></a>
+                <a class="lea_cembtn" href="#">安徽淮北方山陵园</a>
+            </li>
+        </ul>
+    </div><!-- joinus_cem 合作陵园 End -->
+
+    <!-- 立即加入 -->
+    <div class="joinus_join">
+        <div class="contain">
+            <h2>欢迎入驻91搜墓网</h2>
+            <ul>
+                <li class="li_bg clearfix">
+                    <span class="name">陵园名称</span>
+                    <input class="leag_tex" type="text" id="cemetery_name" placeholder="请填写陵园名称"/>
+                </li>
+                <li class="li_bg clearfix">
+                    <span class="name">联 系 人</span>
+                    <input class="leag_tex" type="text" id="cemetery_linkman" placeholder="请填写联系人姓名"/>
+                </li>
+                <li class="li_bg clearfix">
+                    <span class="name">联系电话</span>
+                    <input class="leag_tex" type="text" id="cemetery_mobile" placeholder="请填写联系电话"/>
+                </li>
+                <li class="leag_validate"></li>
+                <li>
+                    <a class="leag_joinbtn" href="javascript:viod(0);" flag="false" url="{:url('help/Help/collaborate')}">立即加入</a>
+                </li>
+                <li class="lx">
+                    <p>我们非常希望能和您合作并且帮助到您，请联系我们的专业咨询顾问！</p>
+                    <p>咨询热线  <span>400-618-9191</span></p>
+                </li>
+            </ul>
+        </div>
+    </div><!-- joinus_join立即加入结束 -->
+{/block}
+{block name='js'}
+<script>
+    //去除字符串两边的空格函数
+    function trimStr(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+    //陵园合作申请
+    $('.leag_joinbtn').click(function () {
+        var cemetery_name = trimStr($('#cemetery_name').val());
+        var cemetery_linkman = trimStr($('#cemetery_linkman').val());
+        var cemetery_mobile = trimStr($('#cemetery_mobile').val());
+        var  url = $(this).attr('url');
+        //正则匹配mobile和中文
+        var pattern = /^1((3\d)|(47)|(5[0-35-9])|(7[01789])|(8\d))\d{8}$/;
+        var pattern_name = /^[\u4e00-\u9fa5]{0,}$/;
+        var flag = $(this).attr("flag");
+        if(flag == 'true'){
+            return false;
+        }else if (!(cemetery_name && cemetery_linkman)) {
+            $('.leag_validate').empty();
+            $('.leag_validate').append('<p>陵园名称或联系人不能为空！</p>');
+        } else if (!pattern_name.test(cemetery_name)) {
+            $('.leag_validate').empty();
+            $('.leag_validate').append('<p>请输入中文陵园名称！</p>');
+        } else if (!pattern_name.test(cemetery_linkman)) {
+            $('.leag_validate').empty();
+            $('.leag_validate').append('<p>请输入中文联系人！</p>');
+        } else if (!pattern.test(cemetery_mobile)) {
+            $('.leag_validate').empty();
+            $('.leag_validate').append('<p>请输入正确的手机号！</p>');
+        } else {
+            $(this).attr("flag",'true');
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {name: cemetery_name, linkman: cemetery_linkman, mobile: cemetery_mobile},
+                dataType: 'json',
+                success: function (res) {
+                    $('.leag_joinbtn').attr("flag",'false');
+                    //提示框
+                    alert(res['msg']);
+                    
+                    $('.leag_validate').empty();
+                    $('#cemetery_name').val('');
+                    $('#cemetery_linkman').val('');
+                    $('#cemetery_mobile').val('');
+                },
+                error: function () {
+                    $('.leag_joinbtn').attr("flag",'false');
+                    //提示框
+                    alert("申请失败,请重新申请!")
+                },
+            });
+        }
+        
+        return false;
+    });
+</script>
+{/block}

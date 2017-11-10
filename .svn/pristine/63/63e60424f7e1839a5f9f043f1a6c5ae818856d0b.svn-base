@@ -1,0 +1,385 @@
+{extend name='extra@indexmain' /}
+{block name='body'}
+    <!--banner部分-->
+    <div class="main_visual">
+        <div class="flicking_con">
+            <div class="flicking_inner">
+                {volist name="banner" id="vo"}
+                    <a href="javascript:;" title="轮播图"></a>
+                {/volist}
+            </div>
+        </div>
+        <div class="main_image clearfix">
+            <ul> 
+                {volist name="banner" id="vo"}
+                    <li><span style="background: url('{$vo.banner_url}') center top no-repeat;"></span></li>
+                {/volist}
+            </ul>
+        </div>
+        <a href="javascript:;" id="btn_prev"></a>
+        <a href="javascript:;" id="btn_next"></a>
+        
+        <!-- banner信息 -->
+        <div class="home_banner_info">
+            <ul class="clearfix">
+                <li>
+                    <a target='_blank' href="{:url('help/Help/aboutus')}" title='一站式贴心服务'>
+                        <img src="_WEB_/images/home_banner_info_img1.png" alt='一站式贴心服务'/>
+                        <div class="info_text">
+                            <h2>一站式贴心服务</h2>
+                            <p>免费咨询，看墓专班车，自驾补贴，多重优惠，专业服务。</p>
+                        </div>
+                        <div class="close"></div>
+                    </a>
+                </li>
+                <li class="home_banner_info_bglv">
+                    <a target='_blank' href="{:url('help/Help/serviceprocess')}" title='帮您操办白事'>
+                        <img src="_WEB_/images/home_banner_info_img2.png" alt='帮您操办白事'/>
+                        <div class="info_text">
+                            <h2>帮您操办白事</h2>
+                            <p>最专业的的团队，最贴心的服务,全程帮您规划</p>
+                        </div>
+                        <div class="close"></div>
+                    </a>                    
+                </li>
+                <li class="last">
+                    <a target='_blank' href="#" title='预约看墓'>
+                        <img src="_WEB_/images/home_banner_info_img3.png" alt='预约看墓'/>
+                        <div class="info_text">
+                            <h2>预约看墓</h2>
+                            <p>专车接送，一对一购墓指导，下单即享返利</p>
+                        </div>
+                        <div class="close"></div>
+                    </a>                   
+                </li>
+            </ul>
+        </div><!-- home_banner_info banner信息 End -->
+    </div><!-- main_visual banner部分 End -->
+    
+    <!-- 网站信息 -->
+    <div class="home_websiteinfo">
+        <div class="contain home_websiteinfo_contain clearfix">
+            <ul>
+                <li>
+                    <a target='_blank' href="{:url('help/Help/tombnotes')}" title='购墓指南'>
+                        <img src="_WEB_/images/home_websiteinfo_img1.png" alt='购墓指南'/>
+                        <p>购墓指南</p>
+                    </a>
+                </li>
+                <li>
+                    <a target='_blank' href="{:url('article/Article/listbox',['cid'=>$Think.config.article_fengshui_culture])}" title='墓地风水'>
+                        <img src="_WEB_/images/home_websiteinfo_img2.png" alt='墓地风水'/>
+                        <p>墓地风水</p>
+                    </a>
+                </li>
+                <li>
+                    <a target='_blank' href="{:url('help/Help/bury')}" title='安葬吉日'>
+                        <img src="_WEB_/images/home_websiteinfo_img3.png" alt='安葬吉日'/>
+                        <p>安葬吉日</p>
+                    </a>
+                </li>
+                <li>
+                    <a target='_blank' href="{:url('help/Help/epigraphic')}" title='碑文大全'>
+                        <img src="_WEB_/images/home_websiteinfo_img4.png" alt='碑文大全'/>
+                        <p>碑文大全</p>
+                    </a>
+                </li>
+                <li>
+                    <a target='_blank' href="{:url('help/Help/history')}" title='历史上的今天'>
+                        <img src="_WEB_/images/home_websiteinfo_img5.png"/>
+                        <p>历史上的今天</p>
+                    </a>
+                </li>
+                <li class="last">
+                    <a target='_blank' href="{:url('help/Help/joinus')}" title='欢迎入驻'>
+                        <img src="_WEB_/images/home_websiteinfo_img6.png" alt='欢迎入驻'/>
+                        <p>欢迎入驻</p>
+                    </a>
+                </li>
+            </ul>
+        </div><!-- contain End -->
+    </div><!-- home_websiteinfo 网站信息 End -->
+
+    <!-- 陵园内容-风景优美的陵园 -->
+    <div class="home_cemetery">
+
+        <div class="home_scenerycemetery_bg"></div>
+        <div class="home_scenerycemetery_bg_bottom"></div>
+
+        <!-- 陵园内容 -->
+        <div class="home_cemetery_box">
+            <!-- title -->
+            <div class="home_title">
+                <img src="_WEB_/images/home_cemetery_title_scenery.png" alt="风景优美的陵园" />
+                <h2>风景优美的陵园</h2>
+                <a target='_blank' href="{:url('cemetery/Cemetery/index')}" title='风景优美的陵园'>MORE</a>
+            </div>
+            <div class="home_cemetery_main">
+                <ul class="clearfix">
+                    {volist name="beautiful" id="vo"}
+                        <li>
+                            <div class="home_cemetery_main_img">
+                                <a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img src="{$vo.image}" alt="{$vo.name}"/></a>
+                                <div class="location">
+                                    <a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province_id}{$vo.city_id}</a>
+                                </div>
+                            </div>
+                            <div class="home_cemetery_main_text">
+                                <h2><a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'>{$vo.name}</a></h2>
+                                <p>参考价
+                                    <span>
+                                        <i>￥</i>
+                                        {eq name="vo.min_price" value="0.00"}-/--{else /}{$vo.min_price}{/eq}万<i>起</i>
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- home_cemetery_main -->
+        </div><!-- home_cemetery_box 陵园内容 End -->
+
+    </div><!-- home_cemetery 陵园内容-风景优美的陵园 End -->
+
+    <!-- 陵园内容-大家都在看的陵园 -->
+    <div class="home_cemetery">
+
+        <div class="home_lookcemetery_bg"></div>
+        <div class="home_lookcemetery_bg_bottom"></div>
+
+        <!-- 陵园内容 -->
+        <div class="home_cemetery_box">
+            <!-- title -->
+            <div class="home_title">
+                <img src="_WEB_/images/home_cemetery_title_look.png" alt="大家都在看的陵园" />
+                <h2>大家都在看的陵园</h2>
+                <a target='_blank' href="{:url('cemetery/Cemetery/index')}" title='大家都在看的陵园'>MORE</a>
+            </div>
+            <div class="home_cemetery_main">
+                <ul class="clearfix">
+                    {volist name="allview" id="vo"}
+                        <li>
+                            <div class="home_cemetery_main_img">
+                                <a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img src="{$vo.image}" alt="{$vo.name}"/></a>
+                                <div class="location">
+                                    <a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province_id}{$vo.city_id}</a>
+                                </div>
+                            </div>
+                            <div class="home_cemetery_main_text">
+                                <h2><a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'>{$vo.name}</a></h2>
+                                <p>参考价
+                                    <span>
+                                        <i>￥</i>
+                                        {eq name="vo.min_price" value="0.00"}-/--{else /}{$vo.min_price}{/eq}万<i>起</i>
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- home_cemetery_main -->
+        </div><!-- home_cemetery_box 陵园内容 End -->
+
+    </div><!-- home_cemetery 陵园内容-大家都在看的陵园 End -->
+
+    <!-- 陵园内容-风水优越的陵园 -->
+    <div class="home_cemetery">
+
+        <div class="home_geomancycemetery_bg"></div>
+        <div class="home_geomancycemetery_bg_bottom"></div>
+
+        <!-- 陵园内容 -->
+        <div class="home_cemetery_box">
+            <!-- title -->
+            <div class="home_title">
+                <img src="_WEB_/images/home_cemetery_title_geomancy.png" alt="风水优越的陵园" />
+                <h2>风水优越的陵园</h2>
+                <a target='_blank' href="{:url('cemetery/Cemetery/index')}" title='风水优越的陵园'>MORE</a>
+            </div>
+            <div class="home_cemetery_main">
+                <ul class="clearfix">
+                    {volist name="fengshui" id="vo"}
+                        <li>
+                            <div class="home_cemetery_main_img">
+                                <a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img src="{$vo.image}" alt="{$vo.name}"/></a>
+                                <div class="location">
+                                    <a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province_id}{$vo.city_id}</a>
+                                </div>
+                            </div>
+                            <div class="home_cemetery_main_text">
+                                <h2><a target='_blank' href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'>{$vo.name}</a></h2>
+                                <p>参考价
+                                    <span>
+                                        <i>￥</i>
+                                        {eq name="vo.min_price" value="0.00"}-/--{else /}{$vo.min_price}{/eq}万<i>起</i>
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- home_cemetery_main -->
+        </div><!-- home_cemetery_box 陵园内容 End -->
+
+    </div><!-- home_cemetery 陵园内容-风水优越的陵园 End -->
+    
+    <!-- 殡葬礼仪 -->
+    <div class="home_etiquette">
+
+        <div class="home_etiquette_bg"></div>
+        <div class="home_etiquette_bg_bottom"></div>
+        
+        <!-- 殡葬礼仪内容 -->
+        <div class="home_etiquette_box">
+            <!-- title -->
+            <div class="home_title home_title_a">
+                <img src="_WEB_/images/home_title_etiquette.png" alt="殡葬礼仪" />
+                <h2>殡葬礼仪</h2>
+                <a target='_blank' href="{:url('rite/Rite/lists')}" title='殡葬礼仪'>MORE</a>
+            </div>
+            <div class="home_etiquette_main clearfix">
+                {volist name="etiquette" id="vo"}
+                    <div class="home_etiquette_mainbox">
+                        <!-- 图片 -->
+                        <div class="home_etiquette_main_img">
+                            <a target='_blank' href="{:url('rite/Rite/detail',['id'=>$vo.id])}" title='{$vo.name}'><img src="{$vo.image}" alt="{$vo.name}"/></a>
+                            <div class="location">
+                                <a target='_blank' href="{:url('rite/Rite/detail',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province_id}{$vo.city_id}</a>
+                            </div>
+                        </div>
+                        <!-- 内容描述 -->
+                        <div class="home_etiquette_main_text">
+                            <h2><a target='_blank' href="{:url('rite/Rite/detail',['id'=>$vo.id])}" title='{$vo.name}' title='{$vo.name}'>{$vo.name}</a></h2>
+                            <!-- 预约量 浏览量 客户评价 -->
+                            <ul class="clearfix">
+                                <li><span class="ynum">{$vo.order_grave_count}</span>预约量</li>
+                                <li><span>{$vo.hits+$vo.actual_hits}</span>浏览量</li>
+                                <li class="last"><a target='_blank' href="{:url('rite/Rite/detail',['id'=>$vo.id])}" title='客户评价'><span>{$vo.comment_count}</span>客户评价</a></li>
+                            </ul>
+                            <!-- 预约 咨询 -->
+                            <div class="etiquette_btn">
+                                <a href="{:url('rite/Rite/reservation',['id'=>$vo.id,'type'=>1])}" title='立即预约' target='_blank'>立即预约</a>
+                                <a class="zxzx" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439" target='_blank' title='在线咨询'>在线咨询</a>
+                            </div>
+                        </div>
+                    </div><!-- home_etiquette_mainbox End -->
+                {/volist}
+            </div><!-- home_etiquette_main End -->
+        </div><!-- home_etiquette_box 殡葬礼仪内容 End -->
+    </div><!-- home_etiquette 殡葬礼仪 End -->
+    
+    <!-- 节地生态葬 -->
+    <div class="home_burial">
+        <div class="contain">
+
+            <!-- title -->
+            <div class="home_title home_title_a">
+                <img src="_WEB_/images/home_title_etiquette.png" alt="节地生态葬" />
+                <h2>节地生态葬</h2>
+                <a target='_blank' href="{:url('cemetery/Ecological/index')}" title='节地生态葬'>MORE</a>
+            </div>
+
+            <!-- 左右箭头 -->
+            <ul class="drama-slide">
+                <li class="prev"><a href="javascript:void(null)" title="上翻">上翻</a></li>
+                <li class="next"><a href="javascript:void(null)" title="下翻">下翻</a></li>
+            </ul>
+
+            <!-- 节地生态葬内容 -->
+            <div class="home_burial_main drama-poster clearfix">
+                <ul>
+                    {volist name="ecological" id="vo"}
+                        <li {eq name="i" value="1"}class="current"{/eq}>
+                            <img src="{$vo.bill_image}" alt="{$vo.name}" />
+                            <div class="home_burial_main_text">
+                                <h2>{$vo.name}</h2>
+                                <p>{$vo.introduce|msubstr=0,45}</p>
+                                <div class="burial_btn">
+                                    <a target='_blank' href="{:url('cemetery/Ecological/index')}" title="{$vo.name}">了解详情</a>
+                                    <a target='_blank' class="zxzx" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439"  title='在线咨询'>在线咨询</a>
+                                </div>
+                            </div>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- home_burial_main 节地生态葬内容 End -->
+
+        </div><!-- contain End -->
+    </div><!-- home_burial 节地生态葬 End -->
+    
+    <!-- 殡葬资讯 -->
+    <div class="home_information">
+        <div class="contain">
+            
+            <!-- title -->
+            <div class="home_title home_title_a">
+                <img src="_WEB_/images/home_title_information.png" alt="节地生态葬" />
+                <h2>殡葬资讯</h2>
+                <a href="{:url('article/Article/index')}" title='殡葬资讯' target='_blank'>MORE</a>
+            </div>
+            
+            <!-- 殡葬资讯内容 -->
+            <div class="home_information_main clearfix">
+                <div class="information">
+                    <h2>风水文化<a href="{:url('article/Article/listbox',['cid'=>$culture_category_id])}" title='风水文化' target='_blank'>更多></a></h2>
+                    <ul>
+                        {volist name="culture" id="vo"}
+                        <li><a href="{:url('article/Article/detail',['id'=>$vo.id])}" title='{$vo.title}' target='_blank'>{$vo.title}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="information cjwt">
+                    <h2>常见问题<a href="{:url('article/Article/listbox',['cid'=>$sense_category_id])}" title='常见问题' target='_blank'>更多></a></h2> 
+                    <ul>
+                        {volist name="sense" id="vo"}
+                            <li><a href="{:url('article/Article/detail',['id'=>$vo.id])}" title='{$vo.title}' target='_blank'>{$vo.title}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="information last">
+                    <h2>最新资讯<a href="{:url('article/Article/listbox',['cid'=>$news_category_id])}" title='最新资讯' target='_blank'>更多></a></h2>
+                    <ul>
+                        {volist name="news" id="vo"}
+                            <li><a href="{:url('article/Article/detail',['id'=>$vo.id])}" title='{$vo.title}' target='_blank'>{$vo.title}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div><!-- home_information_main 殡葬资讯内容 End -->
+
+        </div><!-- contain End -->
+    </div><!-- home_information 殡葬资讯 End -->
+
+    <!-- 优势 -->
+    <div class="home_advantage">
+        <div class="contain">
+            <ul>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img1.png" alt='信息透明' />
+                    <h2>信息透明</h2>
+                    <P>陵园信息全面，价格透明</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img2.png" alt='预约服务'/>
+                    <h2>预约服务</h2>
+                    <P>线上咨询，电话服务</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img3.png" alt='专业服务'/>
+                    <h2>专业服务</h2>
+                    <P>专业咨询团队，资深企业</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img4.png" alt='多重优惠'/>
+                    <h2>多重优惠</h2>
+                    <P>多种礼品，享受独家优惠</P>
+                </li>
+                <li class="last">
+                    <img src="_WEB_/images/home_advantage_img5.png" alt='诚信保障'/>
+                    <h2>诚信保障</h2>
+                    <P>诚信商家，保障服务</P>
+                </li>
+            </ul>
+        </div><!-- contain End -->
+    </div><!-- 优势 home_advantage End -->
+{/block}
+    

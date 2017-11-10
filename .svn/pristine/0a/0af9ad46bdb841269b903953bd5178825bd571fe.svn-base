@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="renderer" content="webkit"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link rel="shortcut icon" href="#" />
+        <title>91搜墓网管理系统</title>
+        <link rel="stylesheet" href="_BACKSTAGE_/layer/css/layui.css">
+        <link rel="stylesheet" href="_BACKSTAGE_/login/css/console.css?ver=170525">
+        <link rel="stylesheet" href="_BACKSTAGE_/login/css/animate.css?ver=170525">
+        <link rel="stylesheet" href="_BACKSTAGE_/login/css/login.css">
+    </head>
+    
+    <body>
+        
+<div class="login-container" style="height:100%">
+
+    <!-- 动态云层动画 开始 -->
+    <div class="clouds clouds-footer"></div>
+    <div class="clouds"></div>
+    <div class="clouds clouds-fast"></div>
+    <!-- 动态云层动画 结束 -->
+
+    <!-- 顶部导航条 开始 -->
+    <div class="header">
+        <span>欢迎登录91搜墓网后台管理界面平台</span>
+        <ul>
+            <li><a href="http://www.91soumu.com">回网站首页</a></li>
+        </ul>
+    </div>
+    <!-- 顶部导航条 结束 -->
+
+    <!-- 页面表单主体 开始 -->
+    <div class="container" style="top:50%;margin-top:-300px">
+
+        <form onsubmit="return false;" id="loginform" data-time="0.001" data-auto="true" method="post" class="content layui-form">
+            <div class="people">
+                <div class="tou"></div>
+                <div id="left-hander" class="initial_left_hand transition"></div>
+                <div id="right-hander" class="initial_right_hand transition"></div>
+            </div>
+            <ul>
+                <li>
+                    <input lay-verify="required" required="required"
+                           type="text"
+                           name="username"
+                           value=""
+                           autocomplete="off"
+                           autofocus="autofocus"
+                           class="login-input username"
+                           placeholder="请输入用户名/手机号码"/>
+                </li>
+                <li>
+                    <input lay-verify="required" required="required"
+                           type="password"
+                           name="password"
+                           value=""
+                           autocomplete="off"
+                           class="login-input password"
+                           placeholder="请输入密码"/>
+                </li>     
+                 <li class="text-center">
+                    <button type="submit" class="layui-btn">登陆</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <!-- 页面表单主体 结束 -->
+
+    <!-- 底部版权信息 开始 -->
+    <div class="footer">玖壹永升(北京)科技有限公司 @2017</div>
+    <!-- 底部版本信息 结束 -->
+</div>
+<script src="_BACKSTAGE_/layer/layui.js"></script>
+<script>
+    if (window.location.href.indexOf('#') > -1) {
+        window.location.href = window.location.href.split('#')[0];
+    }
+    layui.use(['layer','form','jquery'],function(){
+      var layer = layui.layer;
+      var $  = layui.jquery;
+      var form  =layui.form();
+      $('.layui-btn').click(function(){
+        var From =  $('#loginform').serialize();
+        $.ajax({
+          url: "{:url('login')}",
+                type: 'POST',
+                data: From,
+          success:function(d){
+             var result = eval("(" + d + ")");
+                if (result.flag == 3) {
+                    layer.msg(result.msg);
+                    window.location.href="{:url('login')}";
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+        });
+      });
+    });
+</script>
+</body>    
+</html>

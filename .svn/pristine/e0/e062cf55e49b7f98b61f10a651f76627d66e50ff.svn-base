@@ -1,0 +1,42 @@
+<?php
+namespace web\cemetery\controller;
+use think\Controller;
+use think\Db;
+use web\extra\controller\Base;
+use think\Cookie;//cookie类
+use web\extra\model\Store;
+
+class Ecological extends Base
+{
+    /*
+     * 生态葬
+     * @param   void;
+     * @return  void;
+     */
+    public function index(){
+        $province = Cookie::get('ip_region_id');
+        $where['province_id'] =  $province;
+        $where['recommend'] = config('normal_status');
+        $data = Db::name('EcologicalBurial')->where($where)->order('sort DESC')->field('type,store_id,store_sn')->select();
+        //初始化数据
+        foreach(config('ecology_tombs_type') as $v){
+            $dataid[$v] = '';
+        }
+        foreach($data as $v){
+            $dataid[$v['type']][$v['store_id']] = $v['store_id']; 
+        }
+        foreach($dataid as $k=>$v){
+            $storewhere['id'] = array('in',$v);
+            $lastdata[$k] = Store::with(['province','city'])->where($storewhere)->limit(3)->field('id,name,thumb_image,min_price,province_id,city_id')->select();
+        }
+        //SEO部分
+        $seo = array('seo_title'=>'','seo_keywords'=>'','seo_description'=>'');
+        $this->assign([
+            'lastdata'  => $lastdata,
+            'seo'       => $seo
+        ]);
+        return $this->fetch();
+    }
+
+    
+}

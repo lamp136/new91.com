@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="/public/favicon.ico" type="image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>91搜墓网</title>
+<link rel="stylesheet" href="_BACKSTAGE_/layer/css/layui.css">
+<style type="text/css">
+
+  .header-demo .logo {
+      left: 18px;
+  }
+  .logo {
+    position: absolute;
+    left: 0;
+    top: 16px;
+    font-size: 22px;
+    color: #fff;
+  }
+
+  .header .layui-nav {
+    position: absolute;
+    left: 202px;
+    top: 0;
+    padding: 0;
+  }
+</style>
+</head>
+{block name="layer"}{/block}
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header header header-demo">
+        <div class="layui-main">
+            {include file="extra@menu_top" /}
+        </div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll" id="sidebar">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file="extra@menu_left" /}
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        {block name="body"}{/block}
+    </div>
+    <!-- <div class="layui-footer"> -->
+      <!-- 底部固定区域 -->
+    <!-- </div> -->
+</div>
+<script src="_BACKSTAGE_/layer/layui.js"></script>
+<script>
+
+layui.use(['element','jquery','form',], function() {
+    var element = layui.element();
+    var $= layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+
+        //点击头部菜单，显示不同的按钮
+        $('.topmeuFather').on('click','.topmemu',function(){
+            var menuid = $(this).attr('data-menuid');
+            $('.has-sub').hide();
+            $('.child-menu'+menuid).show();
+            $('.child-menu'+menuid).eq(0).find(".sub").show();
+        });
+        
+        //左侧菜单点击
+        var handleMainMenu = function () {
+            $('#sidebar .has-sub > a').click(function () {
+                $('.sub').slideUp(200);
+                var last = $('.has-sub.open', $('#sidebar'));
+                last.removeClass("open");
+                $('.arrow', last).removeClass("open");
+                $('.sub', last).slideUp(200);
+                var sub = $(this).next();
+                if (sub.is(":visible")) {
+                    $('.arrow', $(this)).removeClass("open");
+                    $(this).parent().removeClass("open");
+                    sub.slideUp(200);
+                } else {
+                    $('.arrow', $(this)).addClass("open");
+                    $(this).parent().addClass("open");
+                    sub.slideDown(200);
+                }
+            });
+        };
+        handleMainMenu();
+
+         $(document).ready(function() { 
+                require()
+        }); 
+        function require() {
+            var url = "{:url('index/Index/checkNotify')}";
+            $.get(url,null,function(data) {
+                // 如果获得的数据不为空，则显示提醒
+                var result = eval('('+data+')');
+                   if (result.flag==1) {
+                        // 这里写提醒的方式 
+                        layer.confirm('您有新的任务,现在去处理吗?', {icon: 3, title:'提示'}, function(index){
+                            window.location.href="{:url('index/Index/myWork')}"
+                        });
+                   }else if(result.flag==2){
+                         return false;
+                   }else if(result.flag==0){
+                     // 每5分钟请求一次
+                        setTimeout(require,50000);
+                   }
+            });
+        }
+});
+
+
+</script>
+
+<!-- JavaScript代码区域 -->
+{block name="optJS"}
+
+{/block}
+</body>
+</html>

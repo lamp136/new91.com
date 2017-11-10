@@ -1,0 +1,403 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form action="{:url('index')}">
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width:20%;">
+                <input type="text" name="store_name" lay-verify="title" autocomplete="off" placeholder="请输入商家名称" value="{:input('get.store_name')}" class="layui-input">
+            </div>
+            <div class="layui-inline" style="width:15%;">
+                <select name="province" lay-filter="province">
+                    <option value="0">--省份--</option>
+                    {notempty name="province"}
+                        {volist name="province" id="p"}
+                            <option value="{$p.id}" {eq name=":input('get.province')" value="$p.id"} selected="selected" {/eq}>{$p.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline" style="width:15%;">
+                <select name="city" lay-filter="city">
+                    <option value="0">--市区--</option>
+                    {notempty name="city"}
+                        {volist name="city" id="c"}
+                            <option value="{$c.id}" {eq name=":input('get.city')" value="$c.id"} selected="selected" {/eq}>{$c.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline" style="width:10%;">
+                <select name="category_id" lay-filter="category_id">
+                    <option value="0">--商家类型--</option>
+                    {volist name=":config('business_type')" id="name"}
+                        <option value="{$key}" {eq name=":input('get.category_id')" value="$key"} selected="selected" {/eq}>{$name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline" style="width:10%;">
+                <select name="search_intention" lay-filter="search_intention">
+                    <option value="0">--意向类型--</option>
+                    {volist name=":config('intention_type')" id="type"}
+                        <option value="{$key}" {eq name=":input('get.search_intention')" value="$key"} selected="selected" {/eq}>{$type}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline" style="width:10%;">
+                <select name="search_is_system" lay-filter="search_is_system">
+                    <option value="0">--系统情况--</option>
+                    {volist name=":config('is_system')" id="sys"}
+                        <option value="{$key}" {eq name=":input('get.search_is_system')" value="$key"} selected="selected" {/eq}>{$sys}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline" style="width:10%;">
+                <select name="search_flow_man" lay-filter="search_flow_man">
+                    <option value="0">--跟踪人--</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-inline">
+        <span class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-small add_contact">添加联系人</span>
+    </div>
+    <div class="layui-inline">
+        <span class="layui-btn layui-btn-small add_contact">添加</span>
+        <span class="layui-btn layui-btn-small layui-btn-normal add_contact">导入</span>
+    </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="50">
+            <col width="200">
+            <col width="90">
+            <col width="120">
+            <col width="80">
+            <col width="80">
+            <col width="120">
+            <col width="100">
+            <col width="220">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th></th>
+                <th>商家名称</th>
+                <th>系统情况</th>
+                <th>所在地区</th>
+                <th>类型</th>
+                <th>意向</th>
+                <th>录入时间</th>
+                <th>跟踪人</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name="traceList" id="info"}
+                <tr>
+                    <td>
+                        <input type="checkbox" lay-filter="checkInfo" class="checkInfo" value="{$info.id}" lay-skin="primary">
+                    </td>
+                    <td>
+                        {$info.company}
+                        {if showHandle('store/Datatrace/preview')}
+                            <span data-id="{$info.id}" class="layui-btn layui-btn-normal layui-btn-mini preview">预览</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if array_key_exists($info.is_system,config('is_system'))}
+                            {:config('is_system')[$info.is_system]}
+                        {/if}
+                    </td>
+                    <td>
+                        {$info.province.name} / {$info.city.name}
+                    </td>
+                    <td>
+                        {if array_key_exists($info.category_id,config('business_type'))}
+                            {:config('business_type')[$info.category_id]}
+                        {/if}
+                    </td>
+                    <td>
+                        {if array_key_exists($info.intention,config('intention_type'))}
+                            {:config('intention_type')[$info.intention]}
+                        {/if}
+                    </td> 
+                    <td>{:date('Y-m-d',$info.input_time)}</td>
+                    <td>
+                        {if array_key_exists($info.flow_man,$business)}
+                            {$business[$info.flow_man]}
+                        {/if}
+                        {if showHandle('store/Datatrace/trackMsg')}
+                            <span class="layui-btn layui-btn-mini">查看</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if showHandle('store/Datatrace/edit')}
+                            <a class="layui-btn layui-btn-small" href="{:url('store/Datatrace/edit')}">修改</a>
+                        {/if}
+                        {if showHandle('store/Datatrace/delete')}
+                            {if $info.status == config('normal_status')}
+                                <span class="layui-btn layui-btn-small layui-btn-danger del_btn" data-id="{$info.id}" data-status="{:config('delete_status')}">禁用</span>
+                            {else/}
+                                <span class="layui-btn layui-btn-small enb_btn" data-id="{$info.id}" data-status="{:config('normal_status')}" style="background-color: #00e079;">启用</span>
+                            {/if}
+                        {/if}
+                        {if showHandle('store/Datatrace/addMsg')}
+                            <span class="layui-btn layui-btn-small layui-btn-normal addMsg">跟踪信息</span>
+                        {/if}
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+{block name='layer'}
+    <div id="previewBox" style="display: none;">
+        <div class="layui-form">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- 添加商家联系人 -->
+    <div id="addMsg" style="display: none;">
+        <form id="addMsgForm" style="margin-left: 25px;margin-top: 20px;" class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">信息</label>
+                <div class="layui-input-inline">
+                    <textarea name="message" style="width:406px;height:144px;" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">意向类型</label>
+                <div class="layui-input-inline">
+                    {volist name=":config('intention_type')" id="type"}
+                    <input type="text" name="mobile" class="layui-input"/>
+                    {/volist}
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 添加商家联系人结束 -->
+    <!-- 编辑商家联系人 -->
+    <div id="editContact" style="display: none;">
+        <form id="editContactForm" style="margin-left: 25px;margin-top: 20px;" class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contact_name" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="mobile" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">固话</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="tel" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">默认联系人</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="default_person" value="1" title="是"/>
+                    <input type="radio" name="default_person" value="0" title="否" checked />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="remark" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn submitEdit">立即提交</span>
+                    <input type="hidden" name="id"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 编辑商家联系人结束 -->
+    <!-- 编辑商家信息 -->
+    <div id="editStoreInfo" style="display: none;">
+        <form id="editStoreInfoForm" style="margin-left: 25px;margin-top: 10px;" class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">省市</label>
+                    <div class="layui-input-inline">
+                      <label class="layui-form-label province_city">省市</label>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员状态</label>
+                    <div class="layui-input-inline">
+                        <span class="layui-btn layui-btn-primary member_status"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" style="width: 403px;" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格区间</label>
+                <div class="layui-input-inline">
+                    <input type="number" step="0.01" name="min_price" required lay-verify="required" placeholder="最小值" autocomplete="off" class="layui-input" />
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline">
+                    <input type="number" step="0.01" name="max_price" required lay-verify="required" placeholder="最大值" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text" style="width: 513px">
+                <label class="layui-form-label">交通路线</label>
+                <div class="layui-input-block" style="width: 513px;">
+                    <textarea name="pick_up_address" id="pick_up_address"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">距市区距离</label>
+                <div class="layui-input-block">
+                    <input type="number" step="0.01" style="width: 50%" name="distance" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn submitInfo">立即提交</span>
+                    <input type="hidden" name="id"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 编辑商家信息结束 -->
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form'], function() {
+            var preview,
+                $ = layui.jquery,
+                layer = layui.layer,
+                form = layui.form(),
+                layedit = layui.layedit;
+            $('.layui-inline').css('margin-right',0);
+
+            form.on('select(province)', function(data) {
+                var provinceId = data['value'];
+                if (provinceId) {
+                    $.ajax({
+                        url: "{:url('getCityList')}",
+                        type: 'get',
+                        data: {
+                            pid: provinceId
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            var ci = '<option value="0">--市区--</option>';
+                            if (result) {
+                                if (result['code'] == 1) {
+                                    var cityData = result['data'];
+                                    $.each(cityData, function(key, val) {
+                                        ci += '<option value="' + key + '">' + val + '</option>';
+                                    });
+                                }
+                            }
+                            $('select[name="city"]').empty().append(ci);
+                            form.render();
+                        }
+                    })
+                }
+            });
+
+            $('.addMsg').on('click',function(){
+
+            });
+
+            $('.preview').on('click',function(){
+                var id = $(this).data('id');
+                if(id){
+                    $.ajax({
+                        url:"{:url('store/Datatrace/preview')}",
+                        type:'get',
+                        data:{
+                            id:id
+                        },
+                        dataType:'json',
+                        success:function(result){
+                            if(result){
+                                if(result.code == 1){
+                                    var data = result.data,
+                                        str,
+                                        region = '',
+                                        intention = '',
+                                        intentionType = {:json_encode(config('intention_type'))},
+                                        isSystem = {:json_encode(config('is_system'))},
+                                        system = '',
+                                        category = '',
+                                        flowMan = '',
+                                        business = result['business'],
+                                        decision = '',
+                                        affect = '';
+                                    if(data.intention != 0){
+                                        intention = intentionType[data['intention']];
+                                    }
+                                    if(data.is_system != 0){
+                                        system = isSystem[data['is_system']];
+                                    }
+                                    if(data.province_id != 0 && data.city_id != 0){
+                                        region = data['province']['name'] + '/' + data['city']['name'];
+                                    }
+                                    if(data.category_id != 0){
+                                        if(data.category_id == {:config('category_cemetery_id')}){
+                                            category = '陵园';
+                                        }else if(data.category_id == {:config('category_funeral_id')}){
+                                            category = '殡仪馆';
+                                        }
+                                    }
+                                    if(data.flow_man != 0){
+                                        if($.inArray(data.flow_man,business)){
+                                            flowMan = business[data['flow_man']];
+                                        }
+                                    }
+                                    if(data.decision_maker != '' || data.decision_position != '' || data.decision_phone != 0){
+                                        decision = '姓名：'+data.decision_maker+' | 职务：'+data.decision_position+' | 电话：'+data.decision_phone;
+                                    }
+                                    if(data.affect_maker != '' || data.affect_position != '' || data.affect_phone != 0){
+                                        affect = '姓名：'+data.affect_maker+' | 职务：'+data.affect_position+' | 电话：'+data.affect_phone;
+                                    }
+                                    str = '<tr><td>商家名称：</td><td>'+data.company+'</td><td>地区：</td><td>'+region+'</td></tr><tr><td>现状：</td><td>'+data.amount+'</td><td>系统情况：</td><td>'+system+'</td></tr><tr><td>类型：</td><td>'+category+'</td><td>意向类型：</td><td>'+intention+'</td></tr><tr><td>决策人：</td><td colspan="3">'+decision+'</td></tr><tr><td>决策影响人：</td><td colspan="3">'+affect+'</td></tr><tr><td>其他联系人：</td><td colspan="3">'+data.other_contacts+'</td></tr><tr><td>跟踪人：</td><td colspan="3">'+flowMan+'</td></tr>';
+                                    $('#previewBox tbody').empty().append(str);
+                                }
+                                preview = layer.open({
+                                    type: 1,
+                                    area: ['800px','380px'],
+                                    title: '预览',
+                                    content: $('#previewBox'),
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+{/block}

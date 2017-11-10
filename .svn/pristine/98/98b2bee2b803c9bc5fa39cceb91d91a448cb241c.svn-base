@@ -1,0 +1,232 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="changeFlowMan" style="display: none;">
+    <form style="margin-left: 25px;margin-top: 20px;height: 300px;" id="changeFlowManForm" class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <label class="layui-form-label">跟踪人</label>
+            <div class="layui-input-inline">
+                <select name="flow_man" lay-filter="flow_man">
+                    <option value="0">--选择跟踪人--</option>
+                    {volist name="businessMen" id="men"}
+                        <option value="{$key}">{$men}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <span class="layui-btn saveFlowMan">立即提交</span>
+                <input type="hidden" name="id"/>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form method="get" autocomplete="off" action='{:url("delegate")}'>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <select name="store_id" lay-search lay-filter="store_id">
+                        <option value=""></option>
+                        <option value="0">--选择陵园--</option>
+                        {volist name="stores" id="name"}
+                            <option value="{$key}" {eq name="key" value="$Think.get.store_id"} selected="selected" {/eq}>{$name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <input type="text" name="mobile" autocomplete="off" placeholder="手机号" class="layui-input" value="{$Think.get.mobile}"/>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+    <table class="layui-table">
+        <colgroup>
+            <col width="50">
+            <col width="100">
+            <col width="120">
+            <col width="110">
+            <col width="100">
+            <col width="180">
+            <col width="110">
+            <col width="110">
+            <col width="110">
+            <col width="100">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                {php}
+                    if(showHandle('orders/Tomb/saveFlowMan')){
+                {/php}
+                    <span class="layui-btn layui-btn-small all_change_flow_man">选择跟踪人</span>
+                {php}
+                    }
+                {/php}
+            </tr>
+            <tr>
+                <th>
+                    <input type="checkbox" name="checkAll" lay-skin="primary" lay-filter="checkAll">
+                </th>
+                <th>手机号</th>
+                <th>姓名</th>
+                <th>预约时间</th>
+                <th>客户返现</th>
+                <th>商家名称</th>
+                <th>下单时间</th>
+                <th>订单状态</th>
+                <th>跟踪人</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {notempty name="delegateList"}
+                {volist name="delegateList" id="list"}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="check" data-id="{$list.id}" lay-skin="primary"/>
+                        </td>
+                        <td>
+                            {empty name="list.mobile"}
+                                {$list.reservation_phone}
+                            {else/}
+                                {$list.mobile}
+                            {/empty}
+                        </td>
+                        <td>
+                            {empty name="list.buyer"}
+                                {$list.reservation_person}
+                            {else/}
+                                {$list.buyer}
+                            {/empty}
+                        </td>
+                        <td>
+                            {notempty name="list.appoint_time"}
+                                {$list.appoint_time|date="Y-m-d H:i:s",###}
+                            {/notempty}
+                        </td>
+                        <td>
+                            {if $list.apply_return_status == 1}
+                                是
+                            {else/}
+                                否
+                            {/if}
+                        </td>
+                        <td>
+                            {$list.store_name}
+                            {notempty name="list.store_status"}
+                                {volist name="storeMember" id="member"}
+                                    {eq name="list.store_status" value="$key"}
+                                    <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                                    {/eq}
+                                {/volist}
+                            {/notempty}
+                        </td>
+                        <td>
+                            {notempty name="list.created_time"}
+                                {$list.created_time|date="Y-m-d H:i:s",###}
+                            {/notempty}
+                        </td>
+                        <td>
+                            {notempty name="list.status"}
+                                {$orderStatus[$list.status]}
+                            {/notempty}
+                        </td>
+                        <td>
+                            {notempty name="list.order_flow_id"}
+                                {$list.flowman.name}
+                            {/notempty}
+                        </td>
+                        <td>
+                            {php}
+                                if(showHandle('orders/Tomb/saveFlowMan')){
+                            {/php}
+                                <span data-id="{$list.id}" class="layui-btn layui-btn-small layui-btn-normal alone_change_flow_man">跟踪人</span>
+                            {php}
+                                }
+                            {/php}
+                        </td>
+                    </tr>
+                {/volist}
+            {/notempty}
+        </tbody>
+    </table> 
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+{block name='optJS'}
+<script>
+layui.use(['jquery', 'layer', 'form'], function() {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        form = layui.form(),
+        changeFlowMan;
+    form.on('checkbox(checkAll)',function(a){
+        var childs = $('input[name="check"]');
+        childs.each(function(i,obj){
+            obj.checked = a.elem.checked;
+        });
+        form.render('checkbox');
+    });
+
+    $('.all_change_flow_man').on('click',function(){
+        var check = $('input[name="check"]:checked'),
+            ids = '';
+        check.each(function(index,item){
+            ids += ($(item).data('id') + ',');
+        });
+        ids = ids.substring(0, ids.lastIndexOf(','));
+        if(ids){
+            _changeFlowMan(ids);
+        }else{
+            layer.msg('没有选择');
+        }
+    });
+
+    $('.alone_change_flow_man').on('click',function(){
+        var id = $(this).data('id');
+        if(id){
+            _changeFlowMan(id);
+        }
+    });
+
+    var _changeFlowMan = function(idstring){
+        $('#changeFlowMan input[name="id"]').val(idstring);
+        changeFlowMan = layer.open({
+            type: 1,
+            area: '350px',
+            title: '更改跟踪人',
+            content: $('#changeFlowMan'),
+        });
+    }
+
+    $('#changeFlowMan .saveFlowMan').on('click',function(){
+        var formData = $('#changeFlowManForm').serialize();
+        $.ajax({
+            url:"{:url('orders/Tomb/saveFlowMan')}",
+            type:'post',
+            data:formData,
+            dataType:'json',
+            success:function(result){
+                if(result){
+                    layer.msg(result['msg']);
+                    if(result['code'] == 1){
+                        layer.close(changeFlowMan);
+                        window.location.reload();
+                    }
+                }
+            }
+        })
+    });
+});
+</script>
+{/block}
+

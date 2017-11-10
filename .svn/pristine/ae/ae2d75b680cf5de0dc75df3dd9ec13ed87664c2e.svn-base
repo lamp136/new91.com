@@ -1,0 +1,315 @@
+{extend name='extra@main' /}
+{block name="layer"}
+<div id="changeFlowMan" style="display: none;">
+    <form style="margin-left: 25px;margin-top: 20px;height: 300px;" id="changeFlowManForm" class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <label class="layui-form-label">跟踪人</label>
+            <div class="layui-input-inline">
+                <select name="flow_man" lay-filter="flow_man">
+                    <option value="0">--选择跟踪人--</option>
+                    {volist name="flow_man" id="men"}
+                        <option value="{$key}">{$men}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <span class="layui-btn saveFlowMan">立即提交</span>
+                <input type="hidden" name="id" id="subid"/>
+                <input type="hidden" name="id" id="flowid"/>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <div class="layui-form-item">
+               <textarea  disabled="disabled" class="layui-textarea closereason" name="reason"></textarea>
+        </div>
+    </form>
+</div>
+<!-- 失败模态框 -->
+<div id="fail_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_info_form">
+        <tr>
+            <td>
+                <textarea  class="layui-textarea failreason" name="remark"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' style="text-align: center;"> 
+                <input type="hidden" name="sign" class="sign">
+                <input type="hidden" name="id" class="fail_id">
+                <button class="layui-btn" id='failsubmit'   type='button'>立即提交</button>
+            </td>
+        </tr>  
+    </form>
+</div>
+{/block}
+{block name="body"}
+	<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        <a><cite>陵园合作列表</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <form  action="{:url('member/Handtohand/index')}" method="get">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+               <input type="text" name="mobile" autocomplete="off" class="layui-input" placeholder="请输入手机号或名字" value="{$Think.get.mobile}"/>
+            </div>
+            <div class="layui-inline">
+                <select name="flow_man" lay-filter="flow_man">
+                    <option value="0">--跟踪人--</option>
+                    {volist name="flow_man" id="all"}
+                        <option value="{$key}" {eq name="key" value="$Think.get.flow_man"} selected="selected" {/eq}>{$all}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="10%">
+            <col width="12%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="38%">
+        </colgroup>
+        <thead>
+          <tr> 
+            <th>陵园名称</th>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>IP地址</th>
+            <th>状态</th>
+            <th>时间</th>
+            <th>跟踪人</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+            {volist name="list" id="vo"}
+	        <tr>
+	        	<td>{$vo.cemetery}</td>
+	        	<td>{$vo.name}</td>
+	        	<td>{$vo.mobile}</td>
+	        	<td>{$vo.ip}</td>
+	        	<td>{switch name="vo.status" }
+                    {case value="-1"}<span style="color:red;">删除</span>
+                    {/case}
+                    {case value="0" }<span style="color:blue;">待处理</span>{/case}
+                    {case value="1" }<span style="color:green;">成功</span>
+                    {/case}
+                    {case value="2" }<span style="color:red;">失败</span>
+                    {/case}
+                    {default /}其他情况
+                {/switch}</td>
+                <td>{$vo.created_time|date='Y-m-d H:i:s',###}</td>
+                <td>
+                    {notempty name="vo.flow_man"}
+                                {$flow_man[$vo.flow_man]}
+                    {/notempty}    
+
+                </td>
+                <td>{notempty name="vo.remark"}
+                    <span title="{$vo.remark}" class="layui-btn layui-btn-small layui-btn-normal lookremark" data-id="{$vo.id}" >查看</span>
+                    {/notempty}</td>
+	        	<td>
+                     <a class="layui-btn layui-btn-small layui-btn-normal alone_change_flow_man" href="javascript:void(0)" data-flow="{$vo.flow_man}" data-id="{$vo.id}" ><i class="icon-pencil icon-white"></i>跟踪人</a>
+                    {if condition="$vo.status eq 0"}
+                             <a class="layui-btn layui-btn-small layui-btn-normal success"  href="javascript:void(0)" data-id="1" id-num="{$vo.id}"> 成功</a>
+                            <a class="layui-btn layui-btn-small layui-btn-danger fail"  href="javascript:void(0)" data-id="2" id-num="{$vo.id}"> 失败</a>
+                            <a class="layui-btn layui-btn-small layui-btn-danger delete"  href="javascript:void(0)" data-id="-1" id-num="{$vo.id}"> 删除</a>
+                        {elseif condition="$vo.status eq -1"/}
+                            <a href="javascript:void(0)" data-id="0" class="layui-btn layui-btn-small layui-btn-normal enable" id-num="{$vo.id}">
+                            启用</a>
+                        {elseif condition="$vo.status eq 1"/}
+
+                        {elseif condition="$vo.status eq 2"/}
+                        <a href="javascript:void(0)" data-id="0" class="layui-btn layui-btn-small layui-btn-normal enable" id-num="{$vo.id}">
+                            启用</a>
+                        {/if}
+                </td>
+	        </tr>
+            {/volist}
+        </tbody>
+       </table>
+       {$page}
+{/block}
+
+{block name="optJS"}
+<script>
+ layui.use(['jquery', 'form','laydate','laypage'],function(){
+    var $= layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    var laypage = layui.laypage;
+     $('.alone_change_flow_man').on('click',function(){
+        var id = $(this).attr('data-id');
+        var flow = $(this).attr('data-flow');
+        $('#subid').val(id)
+        $('#flowid').val(flow)
+           layer.open({
+            type: 1,
+            area: '350px',
+            title: '更改跟踪人',
+            content: $('#changeFlowMan'),
+        });
+    });
+
+  
+
+    $('#changeFlowMan .saveFlowMan').on('click',function(){
+        var formData = $('#changeFlowManForm').serialize();
+        $.ajax({
+            url:"{:url('member/Handtohand/editflowMan')}",
+            type:'post',
+            data:formData,
+            dataType:'json',
+            success:function(result){
+             if (result.flag == 1) {
+                layer.msg(result.msg,{icon:1,time:2000},function(){
+                      window.location.reload();//刷新当前页面.
+                      })
+                } else {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                     })
+                }
+            }
+        })
+    });
+    //查看关闭订单原因
+    $(".lookremark").bind('click', function(){
+         var id = $(this).attr('data-id');
+         $.ajax({
+            url:"{:url('lookreason')}",
+            data:{'id':id},
+            type:'post',
+            success:function(d){
+                var result = eval("("+d+")");
+                if(result.flag==1){
+                   $('.closereason').html(result.data);
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '备注信息',
+                    content: $('#close_update_form')
+                 })
+            }
+
+         });   
+         
+    });
+
+
+    //成功
+    $('.success').click(function(){
+        var sign = $(this).attr('data-id');
+        var id = $(this).attr('id-num');
+        var remark = '';
+
+        changstatus(sign,id,remark)
+    });
+
+    //删除
+    $('.delete').click(function(){
+        var sign = $(this).attr('data-id');
+        var id = $(this).attr('id-num');
+        $('.sign').val(sign)
+        $('.fail_id').val(id)
+         layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '填写删除原因',
+                    content: $('#fail_form')
+        })
+     
+    });
+
+    $('#failsubmit').click(function(){
+        var id = $('.fail_id').val();
+        var sign = $('.sign').val();
+        var remark = $('.failreason').val();
+       
+        changstatus(sign,id,remark)
+
+    });
+
+    //启用
+    $('.enable').click(function(){
+        var sign = $(this).attr('data-id');
+        var id = $(this).attr('id-num');
+        var remark = '';
+        changstatus(sign,id,remark)
+    });
+
+    //失败
+    $('.fail').click(function(){
+        var sign = $(this).attr('data-id');
+        var id = $(this).attr('id-num');
+        $('.sign').val(sign)
+        $('.fail_id').val(id)
+        layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '500px',
+            title: '填写删除原因',
+            content: $('#fail_form')
+        })
+    });
+
+    
+    //更改状态
+    function changstatus(sign,id,remark){
+        $.ajax({
+            url:"{:url('changstatus')}",
+            data:{'id':id,'sign':sign,'remark':remark},
+            type:'post',
+            success:function(d){
+                var result = eval("("+d+")");
+                if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+            }
+
+        });   
+    }
+		
+
+});
+
+</script>
+{/block}

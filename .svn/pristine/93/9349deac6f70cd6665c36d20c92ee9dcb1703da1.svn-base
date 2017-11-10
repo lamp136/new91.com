@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {include file="extra@head" /}
+    <script src="_WEB_/js/jquery.cookie.js"></script>
+</head>
+<body>
+    {include file="extra@topup" /}
+    {include file="extra@topdown" /}
+    <!-- 面包屑 -->
+    <div class="contain">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/" title="首页">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/cemetery')}" title="陵园">陵园</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/cemetery/detail/'.$store.id)}" title="{$store.name}">{$store.name}</a></li>
+                <li class="jt">></li>
+                <li>预约看墓</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+    </div><!-- contain End -->
+
+    <div class="subscribe_banner">
+         <div class="contain">
+            <div class="subscribe_box">
+                <h2>{$store.name}</h2>
+                <form id="subscribeForm">
+                    <ul class="subscribe_box_main">
+                        <li>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_name" name="name" type="text" placeholder="姓名" value="{notempty name="session_name"} {$session_name} {/notempty}"/>
+                        </li>
+                        <li>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_mobile" name="mobile" type="text" placeholder="手机号" value="{notempty name="session_mobile"}{$session_mobile}{/notempty}"/>
+                            <input type="hidden" name="store_id" value="{$store.id}"/>
+                            <span class="log_validate reg_mobile"></span>
+                        </li>
+                        
+                        <li class="getyzm" {notempty name="session_name"} style="display: none;" {/notempty}>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_code" name="code" type="text" placeholder="验证码"/>
+                            <input class="getcode_btn" type="button" id="getting" value="获取验证码">
+                            <span class="log_validate reg_msg"></span>
+                        </li>
+                        <li class="login_btn">
+                            <a class="sub_appoint_btn" href="javascript:void(0);" title="立即预约">立即预约</a>
+                        </li>
+                    </ul>
+                </form>
+             </div>
+         </div>
+    </div>
+    {include file="extra@appiontfootdown" /}
+<!-- 搜索提示 -->
+{include file="extra@publicjs"/}
+<script type="text/javascript" src="_WEB_/js/hit.js"></script>
+<script type="text/javascript">
+    //预约时间
+    $(".yutime_sel").click(function(event) {
+        event.stopPropagation();
+        $(".yutime_sel_list").css("display", "block");
+    })
+
+    $(".yutime_sel_list ul li").click(function() {
+        $(".yutime_sel_list").css("display", "none");
+    })
+    document.onclick = function() {
+        $(".yutime_sel_list").css("display", "none");
+    }
+
+    //获取验证码
+    $(function() {
+        /*仿刷新：检测是否存在cookie*/
+        if ($.cookie("captcha")) {
+            var count = $.cookie("captcha");
+            var btn = $('#getting');
+            btn.val(count + '秒后可重新获取').attr('disabled', true).css('cursor', 'not-allowed');
+            var resend = setInterval(function() {
+                count--;
+                if (count > 0) {
+                    btn.val(count + '秒后可重新获取').attr('disabled', true).css('cursor', 'not-allowed');
+                    $.cookie("captcha", count, {
+                        path: '/',
+                        expires: (1 / 86400) * count
+                    });
+                } else {
+                    clearInterval(resend);
+                    btn.val("获取验证码").removeClass('disabled').removeAttr('disabled style');
+                }
+            }, 1000);
+        }
+        /*点击改变按钮状态，已经简略掉ajax发送短信验证的代码*/
+
+        $('#getting').click(function() {
+            var btn = $(this),
+                count = 60,
+                subMobile = $('.subscribe_box_main .sub_mobile').val(),
+                reg = /^1((3\d)|(47)|(5[0-35-9])|(7[01789])|(8\d))\d{8}$/;
+            if (subMobile == '') {
+                $('.subscribe_box_main .reg_mobile').text('手机号码不能为空');
+            } else {
+                if (!reg.test(subMobile)) {
+                    $('.subscribe_box_main .reg_mobile').text('请输入正确的手机号码');
+                } else {
+                    $.ajax({
+                        url: "{:url('cemetery/Cemetery/verifyCode')}",
+                        type: 'post',
+                        data: {
+                            mobile: subMobile
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                if (result['code'] == 1) {
+                                    var resend = setInterval(function() {
+                                        count--;
+                                        if (count > 0) {
+                                            btn.val(count + "秒后可重新获取");
+                                            $.cookie("captcha", count, {
+                                                path: '/',
+                                                expires: (1 / 86400) * count
+                                            });
+                                        } else {
+                                            clearInterval(resend);
+                                            btn.val("获取验证码").removeAttr('disabled style');
+                                        }
+                                    }, 1000);
+                                    btn.attr('disabled', true).css('cursor', 'not-allowed');
+                                } else {
+                                    $('.subscribe_box_main .reg_msg').text(result['msg']);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    $('.sub_appoint_btn').one('click', function() {
+        var othis = $(this),
+            flag = true,
+            sessionMobile = {$session_mobile},
+            name = $('#subscribeForm .sub_name').val(),
+            mobile = trimStr($('#subscribeForm .sub_mobile').val()),
+            code = $('#subscribeForm .sub_code').val();
+        var datas = $('#subscribeForm').serialize();
+        if (name == '') {
+            $('.subscribe_box_main .reg_msg').text('名字不能为空');
+            flag = false;
+        }
+        if (mobile == '') {
+            $('.subscribe_box_main .reg_msg').text('手机号不能为空');
+            flag = false;
+        } else {
+            var reg = /^1((3\d)|(47)|(5[0-35-9])|(7[01789])|(8\d))\d{8}$/
+            if (!reg.test(mobile)) {
+                $('.subscribe_box_main .reg_msg').text('请输入正确的手机号码');
+                flag = false
+            }
+        }
+        if (sessionMobile == '') {
+            if (code == '') {
+                $('.subscribe_box_main .reg_msg').text('验证码不能为空');
+                flag = false;
+            }
+        }
+        console.log(flag);
+        if (flag) {
+            $.ajax({
+                url: "{:url('cemetery/Cemetery/putscribe')}",
+                type: 'post',
+                data: datas,
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        var reg = ' .reg_msg';
+                        if ($('.getyzm').is(':hidden')) {
+                            reg = ' .reg_mobile';
+                        }
+                        $('.subscribe_box_main' + reg).text(result['msg']);
+                        if (result['code'] == 1) {
+                            setTimeout(function() {
+                                window.location.href = '{:url("/orders")}';
+                            }, 2000);
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    $('.subscribe_box_main .sub_mobile').keyup(function() {
+        if (this.value.length == 1) {
+            this.value = this.value.replace(/[^1-9]/g, '')
+        } else {
+            this.value = this.value.replace(/\D/g, '')
+        }
+        var sessionMobile = {$session_mobile},
+            mobile = $(this).val(),
+            reg = /^1((3\d)|(47)|(5[0-35-9])|(7[01789])|(8\d))\d{8}$/;
+        if (mobile.length > 10) {
+            if (!reg.test(mobile)) {
+                $('.subscribe_box_main .reg_mobile').text('请输入正确的手机号码');
+            } else {
+                // if(sessionMobile != mobile){
+                //     $('.getyzm').show();
+                // }else{
+                //     $('.getyzm').hide();
+                // }
+            }
+        }
+    });
+
+    $('.subscribe_box_main .sub_name,.subscribe_box_main .sub_mobile,.subscribe_box_main .sub_code').focus(function() {
+        $('.subscribe_box_main .log_validate').text('');
+    });
+
+    //去除字符串两边的空格函数
+    function trimStr(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+</script>
+</body>
+</html>
+    

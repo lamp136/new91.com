@@ -1,0 +1,206 @@
+
+//添加评星
+    $("#hj").raty({
+        click: function(t, e) {
+            $("input[name='info[environment]']").val(t);
+        }
+    }),
+        $("#fs").raty({
+    click: function(t, e) {
+        $("input[name='info[price]']").val(t);
+    }
+}), $("#jt").raty({
+    click: function(t, e) {
+        $("input[name='info[traffic]']").val(t);
+    }
+}), $("#fw").raty({
+    click: function(t, e) {
+        $("input[name='info[service]']").val(t);
+    }
+});
+
+//提交评论
+$('#remark_sub').click(function(){
+    var url = $('.addCommentUrl').val();
+    var dataForm = new FormData(document.getElementById("form-data"));
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: dataForm,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(d) {
+            alert(d.msg);
+            window.location.reload();
+        }
+    });
+});
+
+//评分列表
+$('.pfl').each(function(){
+    var pfvalue = $(this).attr('data-value');
+    $(this).raty({readOnly: true, score: pfvalue});
+});
+
+ /*评论分页开始*/
+var totalPage = $('.comtCountPage').val();
+var storeId = $('.storeId').val();
+
+//点击分页调用
+$(".commentPage").createPage({
+    pageCount:totalPage,
+    current:1,
+    backFn:function(p){
+        commentHtml(p,storeId);
+        $(document).scrollTop(500);
+    }
+});
+//评论内容（HTML）
+function commentHtml(p,storeId){
+    var url = $('.selCommentUrl').val();
+    $.ajax({
+        url:url,
+        type:'post',
+        data:{pageNum:p,storeId:storeId},
+        success:function(d){
+            var result = eval("(" + d + ")");
+            var str = ' ';
+            if(result.flag==1 ){
+                var data = result.data;
+                $.each(data,function(index,item){
+                    str += "<div class='evaluate_main'><div class='evaluate_main_yh'>"+item['mobile']+"</div><div class='evaluate_main_pj'><p>"+item['content']+"</p></div><div class='evaluate_main_xing'><span class='pfl' data-value="+item['ave']+"></span><p>"+item['comment_time']+"</p></div><div class='clear'></div></div>";
+                });   
+            }else{
+                str = '施工中......';
+            }
+            $('#comment_div').empty().append(str);
+            //插入评价star
+            $('.pfl').each(function(){
+                var pfvalue = $(this).attr('data-value');
+                $(this).raty({readOnly: true, score: pfvalue});
+            });
+        }
+    });
+};
+/*评论分页结束*/
+
+/*套餐分页开始*/
+comboPage(true);
+
+//类型条件过滤
+$('#combo_type').find('li').click(function(){
+    var type = $(this).find('a').attr('combo_type');
+    var type_name = $(this).find('a').html();
+    $('#combo_type').find('.led').removeClass('led');
+    $(this).addClass('led');
+
+    var top_type = $('.criteria').find('#top_type');
+    if($(top_type).length==1){
+        $(top_type).remove();
+    }
+    if(type != ''){
+        $('.sif').next('li').after("<li class='if' id='top_type'>"+type_name+"<span></span></li>");
+    }
+    var price = $('#combo_price').find('.led').find('a').attr('combo_price');
+    comboHtml(1,storeId,type,price);
+    comboPage('false'); // false参数是为了防止分页的绑定事件重复创建,
+});
+
+//价格条件过滤
+$('#combo_price').find('li').click(function(){
+    var price = $(this).find('a').attr('combo_price');
+    var price_name = $(this).find('a').html();
+    $('#combo_price').find('.led').removeClass('led');
+    $(this).addClass('led');
+
+    var top_price = $('.criteria').find('#top_price');
+    if($(top_price).length==1){
+        $(top_price).remove();
+    }
+    if(price != ''){
+        $('.sif').siblings('.number').before("<li class='if' id='top_price'>"+price_name+"<span></span></li>");
+    }
+
+    var type = $('#combo_type').find('.led').find('a').attr('combo_type');
+    comboHtml(1,storeId,type,price);
+    comboPage('false'); // false参数是为了防止分页的绑定事件重复创建,
+});
+
+//顶部过滤
+$('.criteria').on('click','span',function(){
+    var category = $(this).parents('#top_type').attr('id');
+
+    if(category=='top_type'){
+        $('.criteria').find('#top_type').remove();
+        $('#combo_type').find('.led').removeClass('led');
+        var price = $('#combo_price').find('.led').find('a').attr('combo_price');
+        var type = '';
+    }else{
+        $('.criteria').find('#top_price').remove();
+        $('#combo_price').find('.led').removeClass('led');
+        var type = $('#combo_type').find('.led').find('a').attr('combo_type');
+        var price = '';
+    }
+    
+    comboHtml(1,storeId,type,price);
+    comboPage('false'); // false参数是为了防止分页的绑定事件重复创建,
+});
+
+//分页核心
+function comboPage(tag){ 
+    var comboTotalPage = $('.comboCountPage').val();
+    var storeId = $('.storeId').val();
+    
+    $(".comboPage").createPage({
+        pageCount:comboTotalPage,
+        current:1,
+        tag:tag,
+        backFn:function(p){
+            var comboprice = $('#combo_price').find('.led').find('a').attr('combo_price');
+
+            var combotype = $('#combo_type').find('.led').find('a').attr('combo_type');
+            comboHtml(p,storeId,combotype,comboprice);
+            $(document).scrollTop(500);
+        }
+    });
+}
+
+//渲染数据
+function comboHtml(p,storeId,type,price){
+    var url = $('.comboUrl').val();
+    $.ajax({
+        url:url,
+        type:'post',
+        async: false,
+        data:{pageNum:p,storeId:storeId,type:type,price:price},
+        success:function(d){
+            var result = eval("(" + d + ")");
+            var str = ' ';
+            if(result.flag==1 ){
+                var data = result.data;
+
+                $.each(data,function(index,item){
+                    str += "<li";
+                    if(((index+1)%3)==0){
+                        str +=' class=last';
+                    }
+
+                    str += "><a href='/public/rite/combo/"+item['id']+"'><img src="+item['thumb_image']+" alt="+item['combo_name']+"/></a><div class='txt'><h2><a href='/public/rite/combo/"+item['id']+"' title="+item['combo_name']+">"+item['combo_name']+"</a></h2><p>参考价：<strong>";
+                    //判断价格
+                    if(item['platform_price'] != '0.00'){
+                        str += item['platform_price'];
+                    }else{
+                        str += '--';
+                    }
+                    str +="</strong><span class='yuan'>元</span></p><div class='btn clearfix'><a href='/reservation.html?id="+item['id']+"&type=2'>立即预约</a><a class='zxzx' href='http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439'>在线咨询</a></div></div></li>";
+                });   
+            }else{
+                str = '施工中......';
+            }
+            $('#combo_content').empty().append(str);
+            $('.comboCountPage').val(result.countPage);
+            $('.number').find('span').html(result.comboNum);
+        }
+    });
+};

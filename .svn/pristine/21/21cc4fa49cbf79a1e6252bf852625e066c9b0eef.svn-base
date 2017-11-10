@@ -1,0 +1,114 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        <a href="{:url('orderanalysis')}">订单分析</a>
+        <a><cite>{$region.name}订单趋势图</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <!--筛选 start-->
+    <form  method="get"  autocomplete="off" action='{:url("ordertrend")}'>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" >年份:</label>
+                {volist name="allYear" id="vo"}
+                    <input name="nowYear" value="{$vo}" title="{$vo}" type="radio" {eq name="$vo" value="$nowYear"}checked=""{/eq}>
+                {/volist}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">月份:</label>
+                <div class="layui-input-block">
+                    {volist name="allMonth" id="vo"}
+                        <input name="nowMonth[]" value="{$key}" lay-skin="primary" title="{$vo}" {range name="key" value="$nowMonth" type="in"}checked{/range} type="checkbox">
+                    {/volist}
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="region" value="{$region.id}">
+                    <button class="layui-btn layui-btn-small" lay-submit="" >查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--筛选 end-->
+    <!-- ECharts start -->
+    <div id="allorder" style="width:100%;height:400px;"></div><!--总订单-->
+    <div id="finishorder" style="width:100%;height:400px;"></div><!--完成订单-->
+    <!-- ECharts end -->
+</div>
+{/block}
+{block name='optJS'}
+<script src="_BACKSTAGE_/echarts/echarts.common.min.js"></script>
+<script>
+    layui.use(['jquery', 'layer','form','laydate'], function(){
+        var time = {php}echo $time;{/php};
+        var ldall = {php}echo $ldall;{/php};
+        var ldsuccess = {php}echo $ldsuccess;{/php};
+        var regionName = {php}echo $regionName;{/php};
+        // 初始化echarts实例
+        var allorder = echarts.init(document.getElementById('allorder'));
+        var alloption = {
+            title: { text: regionName+'总订单折线图'},
+            tooltip: { trigger: 'axis'},
+            legend: {data:['总订单']},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: time
+            },
+            yAxis: {type:'value'},
+            series: ldall
+        };
+        // 使用刚指定的配置项和数据显示图表
+        allorder.setOption(alloption);
+    
+        // 初始化echarts实例
+        var finishorder = echarts.init(document.getElementById('finishorder'));
+        var finishoption = {
+            title: { text:regionName+'完成订单折线图'},
+            tooltip: { trigger: 'axis'},
+            legend: {data:['完成订单']},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: time
+            },
+            yAxis: {type:'value'},
+            series: ldsuccess
+        };
+        // 使用刚指定的配置项和数据显示图表
+        finishorder.setOption(finishoption);
+    });
+</script>
+{/block}
+

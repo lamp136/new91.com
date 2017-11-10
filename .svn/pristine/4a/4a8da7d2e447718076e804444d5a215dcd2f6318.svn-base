@@ -1,0 +1,14 @@
+<!-- 版权 -->
+<div class="copyright">
+    <ul>
+        <li><a href="{:url('help/Help/aboutus')}" target="_blank">关于我们</a></li>
+        <li><a href="{:url('help/Help/contactus')}" target="_blank">联系我们</a></li>
+        <li><a href="websitemap.html">网站地图</a></li>
+        <li><a href="#">加盟合作</a></li>
+        <li><a href="#">手机站</a></li>
+        <li>热线：<span>400-618-9191</span></li>
+    </ul>
+    <p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;91搜墓网版权所有</p>
+    <p>CopyRight (C)2015-2016 Huigeyuan Technology Allrights</p>
+</div><!-- copyright版权结束 -->
+{include file="extra@toolsbar" /}

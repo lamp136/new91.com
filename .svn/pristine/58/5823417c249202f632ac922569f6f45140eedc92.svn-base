@@ -1,0 +1,132 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- banner 日历 -->
+    <div class="history_banner">
+        <div class="contain">
+
+            <!-- 日历 -->
+            <div class="calendar">
+                <!-- 月份查询 -->
+                <div class="month">
+                    月份查询：
+                    <select class="month_sel">
+                         {volist name='$Think.config.month' id='vo'}
+                        <option value="{:url('help/Help/history',['month'=>$key,'day'=>01])}" {eq name='$month' value='$key'} selected="selected" {/eq} >{$vo}</option>
+                        {/volist}
+                    </select>
+                </div><!-- month 月份查询 End -->
+                
+                <!-- 日期 -->
+                <div class="date">
+                    <p>{$year}-{$month}-{$day}&nbsp;{$Think.config.week[$week]}</p>
+                    <h2>{$day}</h2>
+                    <p>丁酉鸡年&nbsp;五月十八</p>
+                </div>
+                
+                <!-- 日历内容 -->
+                <div class="calendar_main">
+                    <ul class="week clearfix">
+                        <li>日</li>
+                        <li>一</li>
+                        <li>二</li>
+                        <li>三</li>
+                        <li>四</li>
+                        <li>五</li>
+                        <li>六</li>
+                    </ul>
+
+                    <ul class="day clearfix">
+                        {if condition='$firstDay neq 0'}
+                            {for start='0' end='$firstDay'}
+                                <li><a href="javascript:void(0);"></a></li>
+                            {/for}
+                        {/if}
+                        {for start='1' end='$countDay'}
+                            <li><a href="{:url('help/Help/history',['month'=>$month,'day'=>$i])}" {eq name='$i' value='$day'} class='led' {/eq}>{if condition='$i lt 10' } 0{$i} {else/}{$i} {/if}</a></li>
+                        {/for}
+                    </ul>
+                </div><!-- calendar_main 日历内容 End -->
+
+            </div><!-- calendar 日历 End -->
+
+        </div><!-- contain End -->
+    </div><!-- history_banner banner 日历 End -->
+    
+    <!-- 历史上的今天 -->
+    <div class="contain help_history_detail contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/" title='91搜墓网'>首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('help/Help/history')}" title='历史上的今天'>历史上的今天</a></li>
+                <li class="jt">></li>
+                <li>{$data.title}</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+            
+            <!-- 殡葬百科详情 -->
+            <div class="fe_detail help_history_detail_fe_detail">
+                <h2>{$data.title}</h2>
+                <div class="fe_detail_main">
+                    {$data.content}
+                </div>
+
+            </div><!-- fe_detail 殡葬百科详情 End -->
+
+        </div><!-- leftcontain End -->
+
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <!--广告位-->
+            <div class="advertising advborder cem_margin_bottom">
+                <img src="_WEB_/images/advertising_img2.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--最新资讯-->
+            <div class="new_message cem_margin_bottom">
+                <h2>最新资讯</h2>
+                <ul class="clearfix">
+                {volist name='zx' id='vo'}
+                    <li class="clearfix">
+                        <a href="{:url('article/Article/detail',['id'=>$vo.id])}" title="{$vo.title}">
+                            <img src="{$vo.thumb_url}" alt="{$vo.title}"/>
+                            <div class="txt">
+                                <h3>{$vo.title|msubstr=0,22}</h3>
+                            </div>
+                        </a>
+                    </li>
+                {/volist}
+                </ul>
+            </div><!-- new_message 最新资讯 End-->
+
+            <!--热门文章-->
+            <div class="policies">
+                <h2>热门文章</h2>
+                <ul>
+                {volist name='hotNews' id='vo'}
+                    <li><a href="{:url('article/Article/detail',['id'=>$vo.id])}" title="{$vo.title}">{$vo.title|msubstr=0,21}</a></li>
+                {/volist}
+                </ul>
+            </div><!-- policies 热门文章 End-->
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+{block name='js'}
+<script>
+    //选择月跳转
+    $('.month_sel').change(function(){
+        var url = $(".month_sel option:selected").val();
+        window.location.href = url;
+    });
+</script>
+{/block}

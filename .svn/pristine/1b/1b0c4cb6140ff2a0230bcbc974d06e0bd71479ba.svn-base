@@ -1,0 +1,543 @@
+{extend name='extra@articlemain' /}
+{block name='body'}
+    <!-- 殡葬百科 -->
+    <div class="contain contain_pdsize fe_main">
+        
+        <!-- 热点聚焦 轮播 -->
+        <div class="fe_hot clearfix">
+
+            <!-- 热点聚焦 -->
+            <div class="fe_hot_left">
+                
+                <!-- title -->
+                <div class="fe_title">
+                    <h2>热点聚焦</h2>
+                    <div class="clear"></div>
+                    <span class="bg"></span>
+                </div><!-- title End -->
+                <ul>
+                    <li>
+                        <h3><a href="#">中国殡葬协会青年工作委员会2017年第一次会议召开</a></h3>
+                        <p>中国殡葬协会青年工作委员会于2017年2月14日在北京召开第一次副主任会议。</p>
+                    </li>
+                    <li>
+                        <h3><a href="#">中国殡葬协会青年工作委员会2017年第一次会议召开</a></h3>
+                        <p>中国殡葬协会青年工作委员会于2017年2月14日在北京召开第一次副主任会议。</p>
+                    </li>
+                    <li>
+                        <h3><a href="#">中国殡葬协会青年工作委员会2017年第一次会议召开</a></h3>
+                        <p>中国殡葬协会青年工作委员会于2017年2月14日在北京召开第一次副主任会议。</p>
+                    </li>
+                    <li class="last">
+                        <h3><a href="#">中国殡葬协会青年工作委员会2017年第一次会议召开</a></h3>
+                        <p>中国殡葬协会青年工作委员会于2017年2月14日在北京召开第一次副主任会议。</p>
+                    </li>
+                </ul>
+            </div><!-- fe_hot_left 热点聚焦 End -->
+
+            <!-- 轮播 -->
+            <div class="fe_hot_right">
+                <div id="fe_hot_flexslider" class="fe_hot_flexslider">
+                    <ul class="slides">
+                        <li>
+                            <div class="img">
+                                <a href="#">
+                                    <img src="_WEB_/images/fe_hot_img1.jpg" height="388" width="622" alt="" />
+                                    <h3>中国殡葬协会2017年第一次副主任会议在京召开</h3>
+                                </a>
+                            </div>
+                        </li>
+                         <li>
+                            <div class="img">
+                                <a href="#">
+                                    <img src="_WEB_/images/fe_hot_img1.jpg" height="388" width="622" alt="" />
+                                    <h3>中国殡葬协会2017年第一次副主任会议在京召开</h3>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="img">
+                                <a href="#">
+                                    <img src="_WEB_/images/fe_hot_img1.jpg" height="388" width="622" alt="" />
+                                    <h3>中国殡葬协会2017年第一次副主任会议在京召开</h3>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="img">
+                                <a href="#">
+                                    <img src="_WEB_/images/fe_hot_img1.jpg" height="388" width="622" alt="" />
+                                    <h3>中国殡葬协会2017年第一次副主任会议在京召开</h3>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="img">
+                                <a href="#">
+                                    <img src="_WEB_/images/fe_hot_img1.jpg" height="380" width="622" alt="" />
+                                    <h3>中国殡葬协会2017年第一次副主任会议在京召开</h3>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- fe_hot_flexslider 轮播 End -->
+            </div><!-- fe_hot_right 轮播 End -->
+
+        </div><!-- fe_hot 热点聚焦 轮播 End -->
+        
+        <!-- 91资讯 -->
+        <div class="fe_information clearfix">
+            
+            <!-- title -->
+            <div class="fe_title">
+                <h2>91资讯</h2>
+                <ul class="clearfix">
+                    <li><a href="#">91新闻</a></li>
+                    <li><a href="#">合作动态</a></li>
+                    <li><a href="#">企业软文</a></li>
+                </ul>
+                <div class="clear"></div>
+                <span class="bg"></span>
+            </div><!-- title End -->
+            
+            <!-- 左侧 -->
+            <div class="fe_information_left">
+                <div class="first">
+                    <img src="_WEB_/images/fe_information_img1.jpg" alt="新闻图片"/>
+                    <h3><a href="#">河北廊坊万桐公墓成功加入91搜墓网<i class="zx"></i></a></h3>
+                    <p><a href="#">河北廊坊市万桐公墓</a>有限公司是经河北省民政厅批准，由廊坊市民政局主管的唯一市级合法性公墓,由市政府批准，选址于廊坊市和平路北端，总占地面积348亩。</p>
+                </div>
+                <ul>
+                    <li><a href="#">2017年3月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                    <li><a href="#">2017年2月武进吴黄禅寺成功加入91搜墓网</a></li>
+                    <li><a href="#">2016年11月武进吴黄禅寺成功加入91搜墓网</a></li>
+                    <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                    <li><a href="#">2016年9月九华山清源禅寺祈莲福位成功加入91搜墓网</a></li>
+                </ul>
+            </div><!-- fe_information_left End -->
+            
+            <!-- 右侧 -->
+            <div class="fe_information_right">
+                <div class="fe_type_a clearfix">
+                    <ul>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_information_img2.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p class="time">时间：2017-05-16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;阅读量：3493</p>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_information_img3.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p class="time">时间：2017-05-16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;阅读量：3493</p>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_information_img4.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p class="time">时间：2017-05-16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;阅读量：3493</p>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_information_img5.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p class="time">时间：2017-05-16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;阅读量：3493</p>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_information_img5.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p class="time">时间：2017-05-16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;阅读量：3493</p>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- fe_type_a End -->
+            </div><!-- fe_information_right 右侧 End -->
+
+        </div><!-- fe_information 91资讯 End -->
+        
+        <!-- 业界动态 -->
+        <div class="fe_dynamic clearfix">
+
+            <!-- title -->
+            <div class="fe_title">
+                <h2>业界动态</h2>
+                <ul class="clearfix">
+                    <li><a href="#">行业新闻</a></li>
+                    <li><a href="#">政策法规</a></li>
+                </ul>
+                <div class="clear"></div>
+                <span class="bg"></span>
+            </div><!-- title End -->
+            
+            <!-- 左侧 -->
+            <div class="fe_dynamic_left">
+                <div class="fe_type_b">
+                    <ul>
+                        <li><a href="#">2017年5月河北廊坊万桐公墓万桐公墓成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年3月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年2月武进吴黄禅寺成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月武进吴黄禅寺成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年9月九华山清源禅寺清源禅寺祈莲福位成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月当涂县东阳山陵园入住91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="#">2017年5月河北廊坊万桐公墓万桐公墓成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年3月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年2月武进吴黄禅寺成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月武进吴黄禅寺成功清源禅寺清源禅寺清源禅寺加入91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年9月九华山清源禅寺清源禅寺祈莲福位成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月当涂县东阳山陵园入住91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                    </ul>
+                </div><!-- fe_type_b End -->
+            </div><!-- fe_dynamic_left 左侧 End -->
+
+            <!-- 右侧 -->
+            <div class="fe_dynamic_right">
+                <div class="fe_dynamic_img1">
+                    <a href="#">
+                        <img src="_WEB_/images/fe_dynamic_img1.jpg" alt="" />
+                        <h3>布赫同志遗体在京火化 习近平等到八宝山革命公墓送别</h3>
+                    </a>
+                </div>
+                <div class="fe_dynamic_imgbottom clearfix">
+                    <ul>
+                        <li class="first">
+                            <a href="#">
+                                <img src="_WEB_/images/fe_dynamic_img2.jpg" alt="" />
+                                <h3>公司招聘福利：花138万帮员工冷冻保存遗体</h3>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="_WEB_/images/fe_dynamic_img3.jpg" alt="" />
+                                <h3>北京墓地可以用多少年？北京墓地年限问题</h3>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- fe_dynamic_right 右侧 End -->
+
+        </div><!-- fe_dynamic 业界动态 End -->
+
+        <!-- 风水文化 白事常识 -->
+        <div class="fe_culture clearfix">
+
+            <!-- 风水文化 左侧 -->
+            <div class="fe_culture_left">
+
+                <!-- title -->
+                <div class="fe_title">
+                    <h2>风水文化</h2>
+                    <span class="more"><a href="#">更多></a></span>
+                    <div class="clear"></div>
+                    <span class="bg"></span>
+                </div><!-- title End -->
+                <div class="fe_type_c">
+                    <div class="img">
+                        <a href="#">
+                            <img src="_WEB_/images/fe_culture_img1.jpg" alt="风水文化" />
+                            <h3><a href="#">明朝皇帝朱元璋陵墓的风水传说</a></h3>
+                        </a>
+                    </div>
+                    <ul>
+                        <li><a href="#">盗墓风水师解说墓地风水知识</a></li>
+                        <li><a href="#">风水大师之风水学开山鼻祖黄石公</a></li>
+                        <li><a href="#">天津风水大师秦阳明：你们公司的鱼缸摆对了么？</a></li>
+                        <li><a href="#">办公室书柜摆放风水讲究</a></li>
+                        <li><a href="#">名人风水之鬼谷子风水学说</a></li>
+                        <li><a href="#">探秘死亡寂静之塔 男人女人小孩尸体围成三圈！</a></li>
+                        <li><a href="#">名人风水之鬼谷子风水学说</a></li>
+                    </ul>
+                </div><!-- fe_type_c End -->
+            </div><!-- fe_culture_left 风水文化 左侧 End -->
+            
+            <!-- 白事常识 右侧 -->
+            <div class="fe_culture_right">
+                <!-- title -->
+                <div class="fe_title">
+                    <h2>白事常识</h2>
+                    <span class="more"><a href="#">更多></a></span>
+                    <div class="clear"></div>
+                    <span class="bg"></span>
+                </div><!-- title End -->
+                <div class="fe_type_a clearfix">
+                    <ul>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img2.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img3.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img4.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img5.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img5.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- fe_type_a End -->
+            </div><!-- fe_culture_right 白事常识 右侧 End -->
+
+        </div><!-- fe_culture 风水文化 白事常识 End -->
+        
+        <!-- 民俗文化 -->
+        <div class="fe_folkways clearfix">
+
+            <!-- title -->
+            <div class="fe_title">
+                <h2>民俗文化</h2>
+                <ul class="clearfix">
+                    <li><a href="#">传统节日</a></li>
+                    <li><a href="#">祭祀习俗</a></li>
+                    <li><a href="#">丧葬习俗</a></li>
+                </ul>
+                <div class="clear"></div>
+                <span class="bg"></span>
+            </div><!-- title End -->
+
+            <!-- 左侧 -->
+            <div class="fe_folkways_left clearfix">
+                <div class="fe_type_b">
+                    <ul>
+                        <li><a href="#">2017年5月河北廊坊万桐公墓万桐公墓成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年3月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年2月武进吴黄禅寺成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月武进吴黄禅寺成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年9月九华山清源禅寺清源禅寺祈莲福位成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月当涂县东阳山陵园入住91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="#">2017年5月河北廊坊万桐公墓万桐公墓成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年3月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2017年2月武进吴黄禅寺成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月武进吴黄禅寺成功清源禅寺清源禅寺清源禅寺加入91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年9月九华山清源禅寺清源禅寺祈莲福位成功加入91搜墓网</a></li>
+                        <li><a href="#">2016年11月当涂县东阳山陵园入住91搜墓网</a></li>
+                        <li><a href="#">2016年10月海东福寿人文纪念园成功加入91搜墓网</a></li>
+                    </ul>
+                </div><!-- fe_type_b End -->
+            </div><!-- fe_folkways_left 左侧 End -->
+            
+            <!-- 右侧 -->
+            <div class="fe_folkways_right clearfix">
+                <div class="fe_folkways_right_main left">
+                    <div class="img">
+                        <a href="#">
+                            <img src="_WEB_/images/fe_folkways_img1.jpg" alt="" />
+                            <h3>清明扫墓孕妇可以参加吗</h3>
+                        </a>
+                    </div>
+                    <ul>
+                        <li><a href="#">冬至扫墓习俗以及祭祖的由来</a></li>
+                        <li><a href="#">新疆春节文化习俗</a></li>
+                        <li><a href="#">九九重阳：岁岁祭始祖 今秋情更浓</a></li>
+                        <li><a href="#">九九重阳：岁岁祭始祖 今秋情更浓</a></li>
+                        <li><a href="#">中秋之黄香温衾中了孝的毒</a></li>
+                        <li><a href="#">春节为什么有要吃饺子的习俗</a></li>
+                        <li><a href="#">春节祭祀：祭天、祭地、祭祖</a></li>
+                        <li><a href="#">春节祭祀应该注意六大礼仪</a></li>
+                        <li><a href="#">中秋之黄香温衾中了孝的毒</a></li>
+                        <li><a href="#">春节为什么有要吃饺子的习俗</a></li>
+                    </ul>
+                </div>
+                <div class="fe_folkways_right_main">
+                    <div class="img">
+                        <a href="#">
+                            <img src="_WEB_/images/fe_folkways_img2.jpg" alt="" />
+                            <h3>清明扫墓孕妇可以参加吗</h3>
+                        </a>
+                    </div>
+                    <ul>
+                        <li><a href="#">冬至扫墓习俗以及祭祖的由来</a></li>
+                        <li><a href="#">新疆春节文化习俗</a></li>
+                        <li><a href="#">九九重阳：岁岁祭始祖 今秋情更浓</a></li>
+                        <li><a href="#">九九重阳：岁岁祭始祖 今秋情更浓</a></li>
+                        <li><a href="#">中秋之黄香温衾中了孝的毒</a></li>
+                        <li><a href="#">春节为什么有要吃饺子的习俗</a></li>
+                        <li><a href="#">春节祭祀：祭天、祭地、祭祖</a></li>
+                        <li><a href="#">春节祭祀应该注意六大礼仪</a></li>
+                        <li><a href="#">中秋之黄香温衾中了孝的毒</a></li>
+                        <li><a href="#">春节为什么有要吃饺子的习俗</a></li>
+                    </ul>
+                </div>
+            </div><!-- fe_folkways_right 右侧 End -->
+
+        </div><!-- fe_folkways 民俗文化 End -->
+        
+        <!-- 生命礼赞 考古 -->
+        <div class="fe_life clrarfix">
+
+            <!-- 左侧 -->
+            <div class="fe_life_left">
+
+                <!-- title -->
+                <div class="fe_title">
+                    <h2>生命礼赞</h2>
+                    <ul class="clearfix">
+                        <li><a href="#">人生感悟</a></li>
+                        <li><a href="#">陵园故事</a></li>
+                        <li><a href="#">福地名人</a></li>
+                    </ul>
+                    <div class="clear"></div>
+                    <span class="bg"></span>
+                </div><!-- title End -->
+                <div class="fe_type_c">
+                    <div class="img">
+                        <a href="#">
+                            <img src="_WEB_/images/fe_culture_img1.jpg" alt="" />
+                            <h3><a href="#">明朝皇帝朱元璋陵墓的风水传说</a></h3>
+                        </a>
+                    </div>
+                    <ul>
+                        <li><a href="#">盗墓风水师解说墓地风水知识</a></li>
+                        <li><a href="#">风水大师之风水学开山鼻祖黄石公</a></li>
+                        <li><a href="#">天津风水大师秦阳明：你们公司的鱼缸摆对了么？</a></li>
+                        <li><a href="#">办公室书柜摆放风水讲究</a></li>
+                        <li><a href="#">名人风水之鬼谷子风水学说</a></li>
+                        <li><a href="#">探秘死亡寂静之塔 男人女人小孩尸体围成三圈！</a></li>
+                        <li><a href="#">名人风水之鬼谷子风水学说</a></li>
+                    </ul>
+                </div><!-- fe_type_c End -->
+
+            </div><!-- fe_life_left 左侧 End -->
+        
+            <!-- 右侧 -->
+            <div class="fe_life_right">
+
+                <!-- title -->
+                <div class="fe_title">
+                    <h2>考古</h2>
+                    <span class="more"><a href="#">更多></a></span>
+                    <div class="clear"></div>
+                    <span class="bg"></span>
+                </div><!-- title End -->
+                <div class="fe_type_a clearfix">
+                    <ul>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img2.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img3.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img4.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img5.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="fe_type_a_img">
+                                <a href="#"><img src="_WEB_/images/fe_culture_img5.jpg" alt="" /></a>
+                            </div>
+                            <div class="fe_type_a_text">
+                                <h3><a href="#">如何选墓地_买墓地的注意事项</a></h3>
+                                <p>一个风水好的墓地不仅能为故人提供一处歇息之地，还可庇佑子孙后代，现如今的公墓陵园选址一般都很注重风水环境.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- fe_type_a End -->
+            </div><!-- fe_life_right 右侧 End -->
+
+        </div><!-- fe_folkways 生命礼赞 End -->
+
+    </div><!-- contain 殡葬百科 End -->
+{/block}
+{block name="js"}
+    <script type="text/javascript">
+        $(function(){
+            //轮播
+            $('#fe_hot_flexslider').flexslider({
+                animation: "slide",
+                direction:"horizontal",
+                easing:"swing"
+            });
+        });
+    </script>
+{/block}
+  
+    

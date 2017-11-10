@@ -1,0 +1,75 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/user')}">个人资料</a></li>
+                <!-- <li class="jt">></li> -->
+                <!-- <li>个人资料</li> -->
+            </ul>
+        </div><!-- breadcrumb End -->
+
+       <!-- 用户中心左侧导航 -->
+        <div class="user_nav">
+            <h2><i></i>用户中心</h2>
+            <ul>
+                <!-- <li><a href="cemetery_orders.html">陵园订单</a></li> -->
+                <!-- <li><a href="etiquette_orders.html">礼仪服务订单</a></li> -->
+                <!-- <li><a href="#">领取返现</a></li> -->
+                <li><a class="user_led" href="{:url('/user')}">个人资料</a></li>
+                <li><a href="{:url('/upwd')}">修改密码</a></li>
+            </ul>
+        </div><!-- user_nav用户中心左侧导航 End -->
+        
+        <!-- 用户中心右侧 -->
+        <div class="user_right">
+            
+            <h1>个人资料</h1>
+            <!-- 个人资料 -->
+            <div class="personaldata">
+                <ul>
+                    <!-- 姓名 -->
+                    <li>
+                        <span class="pers_nam"><font>*</font>真实姓名：</span>
+                        <input class="pers_tex" type="text" value="{$member.name}"/>
+                    </li>
+                    <!-- 手机 -->
+                    <li>
+                        <span class="pers_nam"><font>*</font>手<span class="space"></span>机：</span>
+                        <input class="pers_tex" type="text" value="{$member.mobile}" />
+                    </li>
+                    <!-- 支付类型 -->
+                    <li>
+                        <span class="pers_nam"><font></font>支付类型：</span>
+                        <input class="pers_tex" type="text" value="{$member.bank_type}"/>
+                    </li>
+                    <!-- 银行账户 -->
+                    <li>
+                        <span class="pers_nam"><font></font>银行：</span>
+                        <select class="pers_sel ">
+                            <option>银行</option>
+                        </select>
+                        <span class="pers_validate">提示：您的账号输入错误</span>
+                    </li>
+                    <!-- 支付类型 -->
+                    <li>
+                        <psan class="pers_nam"><font></font>开&nbsp;户&nbsp;人：</psan>
+                        <input class="pers_tex pers_validate_tex" type="text"/>
+                    </li>
+                </ul>
+                <p>91搜墓网郑重承诺：<br/>我们将尊重您的个人隐私，您的个人信息不会被公开。</p>
+                <!-- 保存按钮 -->
+                <a class="pers_save" href="javascript:void(0);">保存</a>  
+            </div><!-- personaldata 个人资料 End -->
+
+        </div><!-- user_right 用户中心右侧 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}

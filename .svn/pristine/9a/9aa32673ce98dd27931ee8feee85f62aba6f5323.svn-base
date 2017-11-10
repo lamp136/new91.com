@@ -1,0 +1,190 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/Basestore/etiquette')}">礼仪公司列表</a>
+        <a href="{:url('store/Basestore/combo',['store_id' => $input['store_id'],'store_name' => $input['store_name']])}">{$Think.get.store_name}  礼仪套餐列表</a>
+        <a><cite>编辑礼仪套餐</cite></a>
+    </span>
+</div>
+
+<div class="site-text site-block" style="margin-top: 8px;">
+    <form class="layui-form" id="editComboForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">套餐类型<span style="color: red;">*</span></label>
+            <div class="layui-input-inline">
+                <select name="info[combo_type]" lay-filter="combo_type" required lay-verify="required">
+                    <option value="0">--选择套餐类型--</option>
+                        {volist name="type" id="vo"}
+                            <option value="{$key}" {eq name="key" value="$info.combo_type"} selected="selected" {/eq}>{$vo}</option>
+                        {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"><span style="color:red">*</span>套餐名称</label>
+                <div class="layui-input-inline">
+                    <input name="info[combo_name]" autocomplete="off" placeholder="套餐名称"  class="layui-input" lay-verify="required" required type="text" value="{$info.combo_name}"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">更改图片</label>
+                <div class="layui-box layui-upload-button layui-input-inline">
+                    <input type="file" name="image" lay-type="images" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+                </div>
+                <div class="layui-form-mid layui-word-aux">图片尺寸 {$Think.config.combo_image_size.original}</div>
+            </div>
+        </div>
+        {notempty name="info.image"}
+            {if is_file('.'.config('public_path').$info.image) || is_file('.'.config('public_path').$info.thumb_image)}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">套餐图片</label>
+                    <div class="layui-input-inline">
+                        <img width="130px" height="130px" src="{notempty name="info.thumb_image"} {$Think.config.public_path}{$info.thumb_image} {else/} {$Think.config.public_path}{$info.image} {/notempty}" alt="{$info.combo_name}"/>
+                    </div>
+                    <input type="hidden" name="img[image]" value="{$info.image}"/>
+                    <input type="hidden" name="img[thumb_image]" value="{$info.thumb_image}"/>
+                </div>
+            {/if}
+        {/notempty}
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">套餐价格</label>
+                <div class="layui-input-inline">
+                    <input name="info[combo_price]" autocomplete="off" placeholder="套餐价格"  class="layui-input" type="text" value="{$info.combo_price}"/>         
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">平台价格</label>
+                <div class="layui-input-inline">
+                    <input name="info[platform_price]" autocomplete="off" placeholder="平台价格"  class="layui-input" type="text" value="{$info.platform_price}"/>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否显示</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="info[status]" value="{$Think.config.normal_status}" title="显示" {eq name="Think.config.normal_status" value="$info.status"} checked {/eq}/>
+                    <input type="radio" name="info[status]" value="{$Think.config.delete_status}" title="不显示" {eq name="Think.config.delete_status" value="$info.status"} checked {/eq}/>
+                    <input type="radio" name="info[status]" value="{$Think.config.default_status}" title="已售完" {eq name="Think.config.default_status" value="$info.status"} checked {/eq}/>
+                </div>
+            </div> 
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-block">
+                <label class="layui-form-label">SEO标题<font color="red">*</font></label>
+                <div class="layui-input-block">
+                    <input name="info[seo_title]" autocomplete="off" style="width: 900px;" placeholder="SEO标题"  class="layui-input" lay-verify="required" required type="text" value="{$info.seo_title}"/>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-block">
+                <label class="layui-form-label">SEO关键字<font color="red">*</font></label>
+                <div class="layui-input-block">
+                    <input name="info[seo_keywords]" autocomplete="off" style="width: 900px;" placeholder="SEO关键字"  class="layui-input" lay-verify="required" required type="text" value="{$info.seo_keywords}"/>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">SEO描述<font color="red">*</font></label>
+            <div class="layui-input-block">
+                <textarea name="info[seo_description]" style="width: 900px;" placeholder="SEO描述" class="layui-textarea" lay-verify="required" required>{$info.seo_description}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">套餐描述<font color="red">*</font></label>
+            <div class="layui-input-block">
+                <textarea name="info[description]" style="width: 900px;" placeholder="套餐描述" class="layui-textarea" lay-verify="required" required>{$info.description}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text" >
+            <label class="layui-form-label">套餐内容</label>
+            <div class="layui-input-block" style="width: 900px;">
+                <textarea name="info[content]" id='content' placeholder="套餐内容"   class="layui-textarea">{$info.content}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text" >
+            <label class="layui-form-label">服务流程<font color="red">*</font></label>
+            <div class="layui-input-block" style="width: 900px;">
+              <textarea name="info[service_course]" style="width: 900px;height: 400px;" id='service_course' placeholder="服务流程" lay-verify="required" required class="layui-textarea">{$info.service_course}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input name="info[sort]" autocomplete="off" class="layui-input" placeholder="排序" type="text" value="{$info.sort}"/>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" name="info[id]" value="{$info.id}"/>
+                <input type="hidden" name="info[store_id]" value="{$input['store_id']}"/>
+                <input type="hidden" name="info[store_name]" value="{$input['store_name']}"/>
+                <input type="hidden" name="info[store_sn]" value="{$input['store_sn']}"/>
+                <span class="layui-btn" lay-submit lay-filter="editCombo">提交</span>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+
+
+{block name='optJS'}
+<script src="_BACKSTAGE_/ueditor/ueditor.config.js"></script>
+<script src="_BACKSTAGE_/ueditor/ueditor.all.min.js"></script>
+<script>
+layui.use(['jquery', 'form', 'layedit', 'layer'], function() {
+    var $ = layui.jquery,
+        form = layui.form(),
+        layedit = layui.layedit,
+        layer = layui.layer;
+
+     var toolBars = [
+                'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'music', 'insertvideo', 'attachment', 'pagebreak', '|', 'inserttable', '|', 'horizontal', 'date', 'time', 'spechars',
+            ];
+        // 文本编辑器
+        var editor = UE.getEditor('service_course', {
+            toolbars: [
+                toolBars
+            ],
+            autoHeightEnabled: true,
+            autoFloatEnabled: true
+        });
+
+    form.on('submit(editCombo)',function(){
+        var editData = new FormData($('#editComboForm')[0]),
+            returnUrl = "{:url('store/Basestore/combo',['store_id' => $input['store_id'],'store_name' => $input['store_name'],'page' => $input['page'],'store_sn' => $input['store_sn']])}";
+        $.ajax({
+            url: "{:url('store/Basestore/editcombo')}",
+            type: 'post',
+            data: editData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                if (result) {
+                    layer.msg(result['msg'], {
+                        time: 1000
+                    }, function() {
+                        if (result['code'] == 1) {
+                            window.location.href = returnUrl;
+                        }
+                    });
+                }
+            }
+        });
+    })
+});
+</script>
+{/block}

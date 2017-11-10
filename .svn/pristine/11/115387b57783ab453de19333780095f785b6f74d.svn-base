@@ -1,0 +1,153 @@
+{extend name='extra@main' /}
+{block name='body'}   
+<!-- 安葬吉日 -->
+<div class="bury">
+    <div class="contain bury_box">
+        <!-- 安葬吉日内容 -->
+        <div class="bury_main">
+
+            <!-- 安葬吉日左侧 -->
+            <div class="bury_main_left">
+            <form action="{:url('help/Help/bury')}" method="get">
+                <!-- 查询条件 -->
+                <div class="bury_main_query">
+                    <h2>安葬吉日查询</h2>
+                    <ul>
+                        <li>
+                            <select class="sele" name='year'>
+                            {volist name='$Think.config.year' id='vo'}
+                                <option value='{$vo}' {if condition="$year eq $vo"} selected {/if}>{$vo}年</option>
+                            {/volist}
+                            </select>
+                        </li>
+                        <li>
+                            <select class="sele" name='month'>
+                            {volist name='$Think.config.month' id='vo'}
+                                <option value='{$key}' {if condition="$month eq $key"} selected {/if} >{$vo}</option>
+                            {/volist}
+                            </select>
+                        </li>
+                        <li>
+                            <select class="sele sele_y" name='yiji'>
+                                <option value='0'>--请选择--</option>
+                                <option value='suitabl' {notempty name='$yiji'}{eq name='$yiji' value="suitabl"} selected="true" {/eq}{/notempty} >宜</option>
+                                <option value='avoid' {notempty name='$yiji'}{eq name='$yiji' value="avoid"} selected="true" {/eq}{/notempty}>忌</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select class="sele" name='explain' id='explain'>
+                            {notempty name='$yiji'}
+                                {volist name='$Think.config.suitabl_avoid[$yiji]' id='vo'}
+                                <option value='{$vo}' {if condition="$explain eq $vo"} selected {/if} >{$vo}</option>
+                                {/volist}
+                            {/notempty}
+                            </select>
+                        </li>
+                        <li>
+                            <button class="btn">查询</button>
+                        </li>
+                    </ul>
+                </div><!-- bury_main_query 查询条件 End -->
+                </form>
+                <!-- 日历 -->
+                <div class="bury_main_calendar">
+                    <ul class="week clearfix">
+                        <li>星期日</li>
+                        <li>星期一</li>
+                        <li>星期二</li>
+                        <li>星期三</li>
+                        <li>星期四</li>
+                        <li>星期五</li>
+                        <li>星期六</li>
+                    </ul>
+
+                    <ul class="day clearfix">
+                        {if condition='$firstDay neq 0'}
+                            {for start='0' end='$firstDay'}
+                                <li><a href="javascript:void(0);"></a></li>
+                            {/for}
+                        {/if}
+                        {volist name='$countDay' id='vo'}
+                            <li class='li'><a href="{:url('help/Help/bury',['year'=>$year,'month'=>$month,'day'=>$key])}" {in name='$key' value='$arrDay'} class='led' {/in}>{$key}<span>{$vo}</span></a></li>
+                        {/volist}
+                    </ul>
+                </div><!-- bury_main_calendar 日历 End -->
+
+            </div><!-- bury_main_left 安葬吉日左侧 End -->
+            
+            <!-- 安葬吉日右侧 -->
+            <div class="bury_main_right">
+                <p class="data">{$year}-{$month}-{$day}&nbsp;&nbsp;{$Think.config.week[$week]}</p>
+                <div class="day">
+                    <p>{$day}</p>
+                </div>
+                <!-- 农历 -->
+                <ul class="lunarcalendar">
+                    <li class="first">农历&nbsp;{$currnetNoli}</li>
+                    {notempty name='$list'}
+                    <li>{$list.lunar_time}</li>
+                    <li>{$list.festival}</li>
+                    {/notempty}
+                </ul>
+                <!-- 宜 忌 -->
+                <div class="shouldavoid clearfix">
+                    <div class="shouldavoid_main">
+                        <h2>宜</h2>
+                        <ul class="clearfix">
+                        {notempty name='$list'}
+                            {volist name='$list.suitabl' id='vo' offset='0' length='20'}
+                                <li>{$vo}</li>
+                            {/volist}
+                        {/notempty}
+                        </ul>
+                    </div>
+                    <div class="shouldavoid_main">
+                        <h2>忌</h2>
+                        <ul class="clearfix">
+                        {notempty name='$list'}
+                            {volist name='$list.avoid' id='vo' offset='0' length='20'}
+                                <li>{$vo}</li>
+                            {/volist}
+                        {/notempty}
+                        </ul>
+                    </div>
+                </div><!-- shouldavoid 宜 忌 End -->
+            </div><!-- bury_main_right 安葬吉日右侧 End -->
+
+        </div><!-- bury_main 安葬吉日内容 End -->
+    </div><!-- contain End -->
+    <input type="hidden" class='url' value="{:url('help/Help/getyiji')}">
+</div><!-- bury 安葬吉日 End -->
+{/block}
+{block name='js'}
+<script>
+    //切换宜忌查询数据
+    $('.sele_y').change(function(){
+        var yiji = $('.sele_y').val();
+        var url = $('.url').val();
+        if(yiji != 0){
+            $.ajax({
+                url:url,
+                type:'post',
+                data:{id:yiji},
+                dataType:'json',
+                success:function(d){
+                    var data = d.data;
+                    if(d.flag==1){
+                        var str ='';
+                        $.each(data,function(index,item){
+                            str += "<option value='" + item + "'>" + item + "</option>";
+                        })
+                        $('#explain').empty().append(str);
+                    }
+                }
+            });
+        }else{
+            $('#explain').empty();
+        }
+    });
+
+</script>
+{/block}
+    
+    

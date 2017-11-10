@@ -1,0 +1,7 @@
+<?php
+namespace web\index\model;
+use think\Model;
+
+class OrderGrave extends Model{
+    
+}

@@ -1,0 +1,179 @@
+{extend name='extra@main' /}
+{block name='body'}
+<!-- banner -->
+<div class="help_banner"></div>
+
+<div class="contain clearfix contain_pdsize">
+    
+    <!-- 帮助中心 nav -->
+    <div class="help_nav">
+        <div class="help_nav_main">
+            <!-- LOGO -->
+            <div class="help_nav_logo">
+                <img src="_WEB_/images/help_nav_logo.png" alt="LOGO" />
+            </div><!-- help_nav_logo End -->
+            <div id="help_nav_list" class="help_nav_list">
+                <h2 class="active"><span>91搜墓网<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/aboutus')}">关于我们</a></li>
+                    <li><a href="{:url('help/Help/serviceprocess')}">服务流程</a></li>
+                    <li><a href="{:url('help/Help/contactus')}">联系我们</a></li>
+                </ul>
+                <h2><span>购墓指南<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/tombnotes')}">购墓须知</a></li>
+                    <li><a href="#">购墓技巧</a></li>
+                    <li><a href="#">购墓流程</a></li>
+                </ul>
+                <h2><span>常见问题<i class="down"></i></span></h2>
+                <ul class="show">
+                    <li><a href="#">墓型选择</a></li>
+                    <li><a href="{:url('help/Help/tombagelimit')}">公墓年限</a></li>
+                    <li><a href="#">鲜花祭品</a></li>
+                    <li class="led"><a href="{:url('help/Help/wasburied')}">落葬讲究</a></li>
+                    <li><a href="#">迁坟讲究</a></li>
+                </ul>
+                <h2><span>殡葬文化<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/bury')}">安葬吉日</a></li>
+                    <li><a href="#">墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}">碑文挽联</a></li>
+                    <li><a href="#">三大鬼节</a></li>
+                    <li><a href="#">殡葬礼仪</a></li>
+                </ul>
+                <h2><span>平台声明<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="#">版权声明</a></li>
+                    <li><a href="#">免责条款</a></li>
+                    <li><a href="#">法律声明</a></li>
+                    <li><a href="{:url('help/Help/privacy')}">隐私条款</a></li>
+                </ul>
+            </div><!-- help_nav_list End -->
+        </div><!-- help_nav_main End -->
+    </div><!-- help_nav 帮助中心 nav End -->
+    
+    <!-- 帮助中心右侧 -->
+    <div class="help_right help_wasburied">
+
+        <!-- 落葬讲究title -->
+        <div class="help_wasburied_title">
+            <img src="_WEB_/images/help_wasburied_title.png" alt="落葬讲究" />
+        </div>
+
+        <!-- 落葬讲究 -->
+        <div class="help_wasburied_text">
+            <p>落葬在整个丧葬仪式中也是相当重要的。我们往往把它看做是整个仪式的休止符。生活中，人们总是习惯先挑选个适宜落葬的良辰吉日，再将逝者落葬于土中。</p>
+            <p>然而，我国的传统习俗中，关于落葬又有着怎样的讲究，越来越多的现代人对于这一细节一知半解，甚或不知不解。91搜墓网特地整理了这些知识，与大家分享。</p>
+        </div>
+        <!-- 第一步 -->
+        <div class="help_wasburied_box help_wasburied_one">
+            <h2>第一步、<span>选个落葬吉日</span></h2>
+            <div class="help_wasburied_main">
+                <p class="pa">人们常认为选个好日子为逝者落葬能够阴泽后代。因为丧葬吉日不可忽视。那么选择丧葬吉日的标准是什么呢？有以下几种选择方式：</p>
+                <p class="p_red">1）热灰葬</p>
+                <p>要求遗体火化后3天或7天内落葬。这是全国各地比较流行的落葬日确定方法。“热灰葬”盛行是基于“入土为安”观念的影响，认为“早入土，早为安”。</p>
+                <p class="p_red">2）七里葬</p>
+                <p>要求人故世后49日内落葬。由于“热灰葬”常常要先落葬后竖碑(墓穴加工来不及)，故将落葬时间由遗体火化后3至7日推到人过世后49日内。选择“七里葬”也是受“早入土，早为安”观念驱使，因而也可以理解为热灰葬。</p>
+                <p class="p_red">3）圆满葬</p>
+                <p>也叫“祭日葬”，表明逝者从生到死，划上了一个圆满的句号，实现生命回归。“祭日葬”不适合非正常死亡，只适合自然死亡，特别是那些高龄老人。选择“祭日葬”可以把逝者骨灰寄存在墓园，直至周年祭日再行落葬之礼。</p>
+                <p class="p_red">4）黄历葬</p>
+                <p>也是最常见的，看黄历上显示哪天是“宜安葬”的黄道吉日。</p>
+                <p class="p_red">5）节日葬</p>
+                <p>我国二十四节气或传统节庆日中已经形成祭祀风俗的，都可以作为落葬的吉日。具体有以下几个了个重要节日:【上元节】【中元节】【下元节】【清明节】【冬至节】【大寒节】。</p>
+            </div>
+        </div>
+        <!-- 第二步 -->
+        <div class="help_wasburied_box help_wasburied_two">
+            <h2>第二步、<span>迎接骨灰</span></h2>
+            <div class="help_wasburied_main">
+                <p class="pa">大部分家属办完丧事后，会把逝者的骨灰寄存于殡仪馆中。在落葬前首先要将骨灰迎接至落葬墓园。那么，在这个期间要注意些什么哪些问题呢？</p>
+                <p>骨灰盒要摆放在接送车辆的最前排，上面盖好红布。接走时，家属不回头。</p>
+                <p>陵园一般会提供免费接骨灰和免费寄存骨灰的服务，家属不亲自去，骨灰放置在特殊的箱子中，骨灰盒不重叠放置。</p>
+            </div>
+        </div>
+        <!-- 第三步 -->
+        <div class="help_wasburied_box help_wasburied_three">
+            <h2>第三步、<span>落葬前的准备</span></h2>
+            <div class="help_wasburied_main">
+                <p class="pb">落葬前要带些什么？</p>
+                <ul>
+                    <li><span>（1）</span>带好预约的落葬通知书</li>
+                    <li><span>（2）</span>准备好祭祀用品</li>
+                    <li><span>（3）</span>若骨灰寄存在墓园的，要带好领灰凭证</li>
+                    <li><span>（4）</span>联系落葬工人（实际操作中，只要先联系业务员即可，他们会帮你安排好，也会提醒你要带什么）</li>
+                </ul>
+            </div>
+        </div>
+        <!-- 第四步 -->
+        <div class="help_wasburied_box help_wasburied_four">
+            <h2>第四步、<span>落葬仪式程序</span></h2>
+            <div class="help_wasburied_main">
+                <p class="pb">落葬过程中要做些什么？</p>
+                <ul>
+                    <li><span>（1）</span>全体成员在墓穴前站立，并对墓穴行注目礼</li>
+                    <li><span>（2）</span>落葬工人打开墓盖或墓套，若有骨灰盒的保护壳，把它取出来待用</li>
+                    <li><span>（3）</span>逝者家属用少量黄纸或锡箔放入穴内，点燃，进行暖穴礼（不要过热，否则封穴后会产生水蒸汽）</li>
+                    <li><span>（4）</span>将骨灰盒请入骨灰盒保护壳内。打开保护罩，逝者亲属把垫底用的随葬品放入保护壳，再把骨灰盒轻轻放入，亲属在骨灰盒的四周和顶部放一些随葬品，落葬工人把保护罩盖上。随葬品通常选择陶、瓷、铜、玉、水晶和生前爱好的一些小饰品等材质制作的物件，因为这些材质的随葬品不易风化，可以陪葬久远。</li>
+                    <li><span>（5）</span>双手捧骨灰盒，将其轻轻放入穴位中</li>
+                    <li><span>（6）</span>落葬工将福荫土撒入骨灰盒周围，将四周紧紧裹住。</li>
+                </ul>
+            </div>
+        </div>
+        <!-- 第五步 -->
+        <div class="help_wasburied_box help_wasburied_five">
+            <h2>第五步、<span>落葬祭奠仪式</span></h2>
+            <div class="help_wasburied_main">
+                <p class="pb">落葬祭奠的时候要做些什么？</p>
+                <ul>
+                    <li><span>（1）</span>点烛上香</li>
+                    <li><span>（2）</span>奏响祭奠音乐(可以省略)</li>
+                    <li><span>（3）</span>敬献供品</li>
+                    <li><span>（4）</span>敬献鲜花并致词(恭读祭文)三鞠躬或叩首、复位</li>
+                    <li><span>（5）</span>其他亲属依次出场敬献鲜花、真情倾诉、三鞠躬或叩首、复位</li>
+                    <li><span>（6）</span>焚烧祭文</li>
+                    <li><span>（7）</span>礼成 (将可食用的供品带回家吃掉，其它不可食用的留在墓上，有传统说老人墓前祭奠过的食品，小孩子吃了会聪明)</li>
+                </ul>
+            </div>
+        </div>
+
+    </div><!-- help_right 帮助中心右侧 End -->
+
+</div><!-- contain End -->
+
+<!-- 优势 -->
+<div class="home_advantage aboutus_advantage">
+    <div class="contain">
+        <ul>
+            <li>
+                <img src="_WEB_/images/home_advantage_img1.png"/>
+                <h2>信息透明</h2>
+                <P>陵园信息全面，价格透明</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img2.png"/>
+                <h2>预约服务</h2>
+                <P>线上咨询，电话服务</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img3.png"/>
+                <h2>专业服务</h2>
+                <P>专业咨询团队，资深企业</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img4.png"/>
+                <h2>多重优惠</h2>
+                <P>多种礼品，享受独家优惠</P>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/home_advantage_img5.png"/>
+                <h2>诚信保障</h2>
+                <P>诚信商家，保障服务</P>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- 优势 home_advantage End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}
+    

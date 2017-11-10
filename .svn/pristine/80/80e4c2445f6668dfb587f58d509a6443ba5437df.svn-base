@@ -1,0 +1,55 @@
+<!-- 返回顶部工具条 -->
+<div class="toolbar">
+    <ul>
+        <li class="personal">
+            {notempty name="$member_name"}
+                <a href="{:url('ucenter/User/cemeteryorders')}" title='个人中心'>
+                    <i class="toolbar_personal_icon"></i>
+                    <p>我的</p>
+                </a>
+            {else/}
+                <a href="{:url('login/Login/login')}" title='登录'>
+                    <i class="toolbar_personal_icon"></i>
+                    <p>我的</p>
+                </a>
+            {/notempty}
+            
+        </li>
+        <!-- <li>
+            <a href="#">
+                <i class="toolbar_shoping_icon"></i>
+                <p>购<br/>物<br/>车</p>
+            </a>
+        </li> -->
+        <!-- <li>
+            <a href="#">
+                <i class="toolbar_collect_icon"></i>
+                <p>收藏</p>
+            </a>
+        </li> -->
+        <li class="toolbar_weixin">
+            <a href="#">
+                <i class="toolbar_weixin_icon"></i>
+                <p>微信</p>
+            </a>
+            <span class="toolbar_weixin_img"></span>
+        </li>
+        <li class="toolbar_service">
+            <a href="#">
+                <i class="toolbar_service_icon"></i>
+                <p>客服</p>
+            </a>
+            <div class="toolbar_service_main">
+                <a href="#">九儿</a>
+                <a href="#">小一</a>
+                <a href="#">小木</a>
+            </div>
+        </li>
+        <li id="backTop" class="top">
+            <a href="javascript:void(0)">
+                <i class="toolbar_top_icon"></i>
+                <p>TOP</p>
+            </a>
+        </li>
+    </ul>
+</div><!-- toolbar返回顶部工具条结束 -->

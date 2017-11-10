@@ -1,0 +1,162 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="{:url('index/Index/index')}">首页</a></li>
+                <li class="jt">></li>
+                <li>殡仪馆</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain ">
+
+            <!-- 筛选条件 -->
+            <div class="sifting">
+
+                <!-- 筛选条件结果显示 -->
+                <div class="criteria">
+                    <ul>
+                        <li class="sif">所有分类</li>
+                        <li>></li>
+                        {notempty name="input.city"}
+                            <li class="if">{$city[$input.city]}
+                                <a href="{:url('funeral/Funeral/funeral',['dist' => $selectDist])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        {notempty name="input.dist"}
+                            <li class="if">{$input.dist}
+                                <a href="{:url('funeral/Funeral/funeral',['city' => $selectCity])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        <li class="number">共<span> {$dataCount} </span>结果</li>
+                    </ul>
+                </div>
+
+                <!--所在区域 -->
+                <div class="sifting_main clearfix">
+                    <span>所在区域：</span>
+                    <ul>
+                        <li {empty name="input.city"} class="led" {/empty}>
+                            <a href="{:url('funeral/Funeral/funeral')}" title="不限">不限</a>
+                        </li>
+                        {volist name="city" id="c"}
+                            <li {eq name="input.city" value="$key"} class="led" {/eq}>
+                                <a href="{:url('funeral/Funeral/funeral',['city' => $key])}" title="{$c}">{$c}</a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <!-- 距离市区 -->
+                <div class="sifting_main clearfix">
+                    <span>距离市区：</span>
+                    <ul>
+                        <li {empty name="selectDist"} class="led" {/empty}><a href="{:url('funeral/Funeral/funeral',['city' => $selectCity])}">不限</a></li>
+                        {volist name="Think.config.store_length" id="len"}
+                            <li {eq name="selectDist" value="$len"} class="led" {/eq}>
+                                <a href="{:url('funeral/Funeral/funeral',['city' => $selectCity,'dist' => $len])}" title="{$len}">{$len}{if $key == 0}公里及以下{elseif $countDist == $key/}公里及以上{else/}公里{/if}</a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div><!-- sifting筛选条件结束 -->
+
+            <!-- 殡仪馆列表 -->
+            <div class="cemetery_list funeralparlour_list">
+
+                <!-- 排序方式 -->
+                <!--<div class="cemetery_list_rank">
+                    <a class="led" href="javascript:;">默认排序</a>
+                    <a href="javascript:;">价格由低至高</a>
+                </div>--><!-- cemetery_list_rank 排序方式 End -->
+
+                <!-- 殡仪馆内容 -->
+                {volist name="list" id="v"}
+                    <div class="cemetery_list_box">
+                        <div class="cemetery_list_main funeralparlour_list_main clearfix">
+                            <!-- 图片 -->
+                            <div class="cemetery_list_main_img">
+                                <a href="{:url('funeral/Funeral/details',['id' => $v.id])}" title='{$v.name}'><img src="{$v.thumb_image}" alt="{$v.name}"/></a>
+                            </div>
+                            <!-- 信息 -->
+                            <div class="funeralparlour_list_main_info">
+                                <h2 class="clearfix"><a href="{:url('funeral/Funeral/details',['id' => $v.id])}"  title='{$v.name}'>{$v.name}</a></h2>
+                                <p><span>殡仪馆地址：</span>{$v.address}</p>
+                                {notempty name="$v.phone"}
+                                <p><span>服务热线：</span><span class="phone">{$v.phone}</span></p>
+                                {/notempty}
+                                <p><span>浏览量：</span><span class="num">{$v.hits}</span></p>
+                            </div>
+                            <!-- 价格 -->
+                            <div class="cemetery_list_main_price funeralparlour_list_main_price">
+                                <a class="buttonlv" href="{:url('funeral/Funeral/details',['id' => $v.id])}">查看详情</a>
+                            </div>
+                        </div><!-- cemetery_list_main End -->
+                    </div><!-- cemetery_list_box 殡仪馆内容 End -->
+                {/volist}
+                
+                <!-- 分页 -->
+                <div class="paging">
+                    {$page}
+                </div><!-- paging 分页 End -->
+
+            </div><!-- cemetery_list 殡仪馆列表 End -->
+
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            {notempty name="cemetery"}
+                <!-- 陵园推荐 -->
+                <div class="recommend cem_margin_bottom">
+                    <h2>陵园推荐</h2>
+                    <ul>
+                        {volist name="cemetery" id="vo"}
+                            <li>
+                                <a href="{:url('cemetery/Cemetery/details',['id' => $vo.id])}">
+                                    <img src="{$vo.thumb_image}" alt="{$vo.name}" />
+                                    <p>{$vo.name}</p>
+                                </a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- recommend 陵园推荐 End -->
+            {/notempty}
+            <!-- 殡仪服务公司推荐 -->
+            <div class="recommend recommend_etiquette cem_margin_bottom">
+                <h2>殡仪服务公司推荐</h2>
+                <ul>
+                    {volist name="etiquette" id="vo"}
+                        <li>
+                            <a href="{:url('rite/Rite/detail',['id'=>$vo.id])}">
+                                <img src="{$vo.thumb_image}" alt="{$vo.name}" />
+                                <p>{$vo.name}</p>
+                            </a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- recommend 殡仪服务公司推荐 End -->
+            
+             <!--白事常识-->
+            <div class="policies">
+                <h2>白事常识</h2>
+                <ul>
+                    {volist name="sense" id="vo"}
+                        <li><a href="{:url('article/Article/detail',['id'=>$vo.id,'cid'=>$sense_category_id])}">{$vo.title}</a></li>
+                    {/volist}
+                </ul>
+            </div><!-- policies 白事常识 End-->
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+   
+    

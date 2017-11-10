@@ -1,0 +1,206 @@
+<?php
+namespace web\funeral\controller;
+use think\Controller;
+use web\extra\controller\Base;
+use think\Db;
+use think\Request;
+use think\Cookie;//cookie类
+use web\search\controller\Search;
+use web\extra\model\Store;
+
+/**
+ * 殡仪馆控制器
+ * author heqingyu;
+ * date   17/7/14 17:40:00;
+ */
+class Funeral extends Base{  
+    /*
+     * 殡仪馆列表
+     * @param   void;
+     * @return  void;
+     */
+    public function funeral()
+    {   
+        $input = input();
+        $province = decode(Cookie::get('ip_region_id'));
+        $dataCount = 0;
+        $where['category_id'] = config('category_funeral_id');
+        $where['province_id'] = $province;
+        $where['status'] = config('normal_status');
+        $selectCity = 0;
+        if(!empty($input['city']) && $input['city'] != 0){
+            $selectCity = $input['city'];
+            $where['city_id'] = $selectCity;
+        }else{
+            $input['city'] = '';
+        }
+        $selectDist = 0;
+        if(!empty($input['dist']) && in_array($input['dist'],config('store_length'))){
+            $selectDist = $input['dist'];
+            $storeLength = config('store_length');
+            $where['distance'] = $this->betweenWhere($selectDist,$storeLength);
+        }
+        
+        if(!empty($input['name'])){
+            $search = new Search();
+            $resultdata = $search->searchName($input['name'],config('category_funeral_id'));
+            $where['id'] = ['in',$resultdata];
+        }
+        $city = [];
+        $dataCount = Db::name('store')->where($where)->count();
+        $field = 'id,name,store_sn,thumb_image,image,address,hits,actual_hits';
+        $storeList = Store::with('funcontact')->where($where)->field($field)->order('sort DESC')->paginate(config('page_size'),false,['query' => $input]);
+        $city = $this->getRegionData(array('pid'=>$province),array('id','name'),'',true);
+        $page = $storeList->render();
+        //附近陵园推荐
+        if(empty($input['city'])){
+            $cemeteryWhere['province_id'] = $province;
+        }else{
+            $cemeteryWhere['city_id'] = $input['city'];
+        } 
+        $cemeteryWhere['status'] = config('normal_status');
+        $cemeteryWhere['category_id'] = config('category_cemetery_id');
+        $cemeteryWhere['member_status'] = array('neq',config('default_status'));
+        $cemeteryData = Db::name('Store')->where($cemeteryWhere)->field('id,store_sn,name,thumb_image,image')->order('sort DESC')->select();
+        $count = count($cemeteryData);
+        if($count>3){
+            $key = array_rand($cemeteryData,3);
+            foreach($key as $v){
+                $cemetery[] = $cemeteryData[$v];
+            }
+        }else{
+            $cemetery = $cemeteryData;
+        }
+        //殡仪服务公司
+        $etiquetteWhere['status'] = config('normal_status');
+        $etiquetteWhere['category_id'] = config('category_etiquette_id'); 
+        $etiquetteData = Db::name('Store')->where($etiquetteWhere)->field('id,store_sn,name,thumb_image,image')->order('sort DESC')->select();
+        $num = count($etiquetteData);
+        if($num>3){
+            $rand = array_rand($etiquetteData,3);
+            foreach($rand as $val){
+                $etiquette[] = $etiquetteData[$val];
+            }
+        }else{
+            $etiquette = $etiquetteData;
+        }
+        //白事常识
+        $sense = $this->article(config('article_sense'),6);
+        //dump($sense);die;
+        //SEO
+        $seo = $this->getseo(config('seo_type.funeral_list'));
+        $this->assign('seo',$seo);
+        $this->assign([
+            'dataCount'   => $dataCount,
+            'countDist'   => count(config('store_length')),
+            'countRange'  => count(config('price_range')),
+            'selectCity'  => $selectCity,
+            'selectDist'  => $selectDist,
+            'input'       => $input,
+            'list'        => $storeList,
+            'page'        => $page,
+            'city'        => $city,
+            'cemetery'    => $cemetery,
+            'etiquette'   => $etiquette,
+            'sense'       => $sense,
+            'sense_category_id' => config('article_sense')
+        ]);
+        return $this->fetch();
+    }
+     /**
+     * 获取where区间条件
+     * @param  array $selectData 筛选条件
+     * @param  array $conf 配置常量
+     * @return array
+     */
+    private function betweenWhere($selectData,$conf){
+        $cond = [];
+        $min = current($conf);
+        $max = end($conf);
+        if($selectData == $min){
+            $cond = ['elt',$min];
+        }else if($selectData == $max){
+            $cond = ['egt',$max];
+        }else{
+            $data = explode('-',$selectData);
+            if(is_array($data)){
+                $count = count($data);
+                if($count > 1){
+                    $cond = ['between',[(int)$data[0],(int)$data[1]]];
+                }
+            }
+        }
+        return $cond;
+    }
+    /*
+     * 殡仪馆详情
+     * @param   void;
+     * @return  void;
+     */
+    public function details(){
+        $id = input('id');
+        if(!empty($id)){
+            $cookieRegionId = decode(cookie('ip_region_id'));
+            //详情
+            $storeWhere = [
+                'status' => config('normal_status'),
+                'id' => $id,
+            ];
+            Db::name('store')->where($storeWhere)->setInc('actual_hits');
+            $data = Store::with('funcontact')->where($storeWhere)->field('id,name,summary,level,thumb_image,image,hits,actual_hits,address,content,longitude,latitude,seo_title,seo_keywords,seo_description,province_id,city_id')->find();
+            $data['province_id'] != $cookieRegionId ? $this->redirect('/') : '';
+            $data['content'] = str_replace('src="/public/','src="/',$data['content']);
+            $seo  = array('seo_title'=>$data['seo_title'],'seo_keywords'=>$data['seo_keywords'],'seo_description'=>$data['seo_description']);
+            $location = array('name'=>$data['name'],'address'=>$data['address'],'longitude'=>$data['longitude'],'latitude'=>$data['latitude']);
+            //dump($location);die;
+            //浏览量
+            if($data['hits'] == 0){
+                $hits = config('page_view');
+                $data['hits'] = $hits;
+                Db::name('store')->where('id',$id)->update(['hits' => $hits]);
+            }
+            //附近陵园推荐
+            $cemeteryWhere['city_id'] = $data['city_id'];
+            $cemeteryWhere['status'] = config('normal_status');
+            $cemeteryWhere['category_id'] = config('category_cemetery_id');
+            $cemeteryWhere['member_status'] = array('neq',config('default_status'));
+            $cemeteryData = Db::name('Store')->where($cemeteryWhere)->field('id,store_sn,name,thumb_image,image')->order('sort DESC')->select();
+            $count = count($cemeteryData);
+            if($count>3){
+                $key = array_rand($cemeteryData,3);
+                foreach($key as $v){
+                    $cemetery[] = $cemeteryData[$v];
+                }
+            }else{
+                $cemetery = $cemeteryData;
+            }
+            //殡仪服务公司
+            $etiquetteWhere['status'] = config('normal_status');
+            $etiquetteWhere['category_id'] = config('category_etiquette_id'); 
+            $etiquetteData = Db::name('Store')->where($etiquetteWhere)->field('id,store_sn,name,thumb_image,image')->order('sort DESC')->select();
+            $num = count($etiquetteData);
+            if($num>3){
+                $rand = array_rand($etiquetteData,3);
+                foreach($rand as $val){
+                    $etiquette[] = $etiquetteData[$val];
+                }
+            }else{
+                $etiquette = $etiquetteData;
+            }
+            //白事常识
+            $sense = $this->article(config('article_sense'),6);
+            $this->assign([
+                'sense_category_id' => config('article_sense'),
+                'data'       => $data,
+                'cemetery'   => $cemetery,
+                'etiquette'  => $etiquette,
+                'sense'      => $sense,
+                'seo'        => $seo,
+                'location'   => json_encode($location)
+            ]);
+            return $this->fetch();
+        }else{
+            $this->error('你咋来这了啊！');
+        }
+    }
+}

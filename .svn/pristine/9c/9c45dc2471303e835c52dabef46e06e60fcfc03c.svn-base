@@ -1,0 +1,115 @@
+//添加评星
+$("#hj").raty({
+    click: function(t, e) {
+        $("#evalForm input[name='eval[hj]']").val(t);
+    }
+}), $("#jg").raty({
+    click: function(t, e) {
+        $("#evalForm input[name='eval[jg]']").val(t);
+    }
+}), $("#jt").raty({
+    click: function(t, e) {
+        $("#evalForm input[name='eval[jt]']").val(t);
+    }
+}), $("#fw").raty({
+    click: function(t, e) {
+        $("#evalForm input[name='eval[fw]']").val(t);
+    }
+});
+
+$('.cemetery_orders_delete_btn').click(function() {
+
+    if (id) {
+        $(".tooltip_box,.tooltip_cemetery_orders").css({
+            "display": "block"
+        });
+        $('.tooltip_cemetery_orders_btn .qd').click(function() {
+            var url = $('.tooltip_cemetery_orders_btn').attr('data-url');
+            $.ajax({
+                url: url,
+                type: 'get',
+                data: {
+                    id: id,
+                },
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        if (result['code'] == 1) {
+                            $(".tooltip_box,.tooltip_cemetery_orders").css({
+                                "display": "none"
+                            });
+                            window.location.reload();
+                        }
+                    }
+                }
+            });
+        });
+    }
+});
+
+$('.tooltip_cemetery_orders_btn .qx,.tooltip_cemetery_orders_cloce').click(function() {
+    $(".tooltip_box,.tooltip_cemetery_orders").css({
+        "display": "none"
+    });
+});
+
+$('.remark_btn_a').click(function() {
+    $('.remark_btn_a').next('span').remove();
+    var flag = true,
+        evalData = $('#evalForm').serializeArray(),
+        evalContent = $('#evalForm textarea[name="eval[content]"]').val();
+    if (storeId) {
+        if (evalContent == '') {
+            $('.remark_btn_a').after('<span style="position:absolute;" class="pers_validate"><i></i>提示：请输入评论内容</span>');
+            flag = false;
+        }
+        evalData.push({
+            'name': 'eval[store_id]',
+            'value': storeId
+        });
+        if (flag) {
+            var url = $('.remark_btn_a').attr('data-url');
+            var hrefurl = $('.remark_btn_a').attr('data-href-url');
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: evalData,
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        if (result['code'] == 1) {
+                            $('#evalForm')[0].reset();
+                            $('#hj,#jg,#jt,#fw').raty({
+                                score: 0
+                            });
+                            $('.remark_btn_a').after('<span style="position:absolute;" class="pers_validate"><i></i>评论成功</span>');
+                            setTimeout(function() {
+                                window.location.href =hrefurl;
+                            }, 2000);
+                        }
+                    }
+                }
+            });
+        }
+    }
+});
+
+$('#evalForm textarea[name="eval[content]"]').focus(function() {
+    $('.remark_btn_a').next('span').remove();
+});
+
+$('.ms_tarea').on('input propertychange', function() {
+    var max = 200,
+        $this = $(this),
+        _val = $this.val(),
+        count = "";
+    if (_val.length > max) {
+        $this.val(_val.substring(0, max));
+    }
+    count = max - $this.val().length;
+    $('.niname').css({
+        position: 'absolute',
+        width: '100px'
+    }).text('还可输入' + count + '字');
+});
+ 

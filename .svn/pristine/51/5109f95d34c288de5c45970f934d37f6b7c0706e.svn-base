@@ -1,0 +1,8 @@
+<li {eq name="path" value="Index"} class="lineheight" {/eq}><a href="{:url('index/Index/index')}" title='首页'>首页</a></li>
+<li {eq name="path" value="Cemetery"} class="lineheight" {/eq}><a href="{:url('cemetery/Cemetery/index')}" title='陵园墓地'>陵园墓地</a></li>
+<li {eq name="path" value="Map"} class="lineheight" {/eq}><a href="{:url('cemetery/Map/index')}" title='地图看墓'>地图看墓</a></li>
+<li {eq name="path" value="Funeral"} class="lineheight" {/eq}><a href="{:url('funeral/Funeral/funeral')}" title='殡仪馆'>殡仪馆</a></li>
+<li {eq name="path" value="Rite"} class="lineheight" {/eq}><a href="{:url('rite/Rite/lists')}" title='殡葬礼仪'>殡葬礼仪</a></li>
+<li {eq name="path" value="Ecological"} class="lineheight" {/eq}><a href="{:url('cemetery/Ecological/index')}" title='生态葬'>生态葬</a></li>
+<li {eq name="path" value="Article"} class="lineheight" {/eq}><a href="{:url('article/Article/index','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title='殡葬百科'>殡葬百科</a></li>
+<li {eq name="path" value=""} class="lineheight" {/eq}><a href="http://lr.91soumu.com"  target='_blank' title='91乐融'>91乐融</a></li>

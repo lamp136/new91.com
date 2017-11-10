@@ -1,0 +1,229 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('basic/Category/index')}">分类管理</a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    {php}
+        if(showHandle('basic/Categoryinfo/handlecategory')){
+    {/php}
+    <div id="addForm">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <select name="pid" lay-filter="pid">
+                    <option value="0">--顶级分类--</option>
+                    {volist name="list" id="c"}
+                        <option value="{$c.id}">{neq name="c.level" value="0"}{$c.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$c.name}{else/}{$c.name}{/neq}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="你要添加的分类名" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <span class="layui-btn layui-btn-normal add">确定</span>
+            </div>
+        </div>
+    </div>
+    {php}
+        }
+    {/php}
+    <table class="layui-table">
+        <thead>
+            <tr> 
+                <th width="7%">分类id</th>
+                <th width="18%">名称</th>
+                <th width="17%">操作方法</th>
+                <th width="20%">新分类</th>
+                <th width="15%">修改后名称</th>
+                <th width="10%">排序</th>
+                <th width="13%">操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {notempty name="list"}
+                {volist name="list" id="vo"}
+                    <tr data-id="{$vo.pid}" {gt name="vo.pid" value="0"} style="display: none;" {/gt}>
+                        <td>{$vo.id}</td>
+                        <td>
+                            {$vo.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}
+                            <span class="layui-icon unfold" data-id="{$vo.id}" style="cursor:pointer">&#xe602;</span>{$vo.name}
+                            <!--<span class="handle" style="display: none;"><i class="layui-icon addTrees">&#xe654;</i><i class="layui-icon editTrees">&#xe642;</i></span>-->
+                        </td>
+                        <td>
+                            <div class="layui-form">
+                                <select name="changeCate{$vo.id}">
+                                    <option value="1" selected="selected">修改该分类</option>
+                                    <option value="2">在该分类中添加子类</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="layui-form">
+                                <select name="changePid{$vo.id}">
+                                    <option value="0">--顶级分类--</option>
+                                    {volist name="list" id="cate"}
+                                        <option value="{$cate.id}" {eq name="cate.id" value="$vo.id"} selected {/eq}>{neq name="cate.level" value="0"}{$cate.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$cate.name}{else/}{$cate.name}{/neq}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" name="name{$vo.id}" placeholder="要修改的名字" class="layui-input" value=""/>
+                        </td>
+                        <td>
+                            <input type="text" name="sort{$vo.id}" placeholder="排序" class="layui-input" value="{$vo.sort}"/>
+                        </td>
+                        <td>
+                            {php}
+                                if(showHandle('index/Categoryinfo/handlecategory')){
+                            {/php}
+                                {neq name="vo.is_show" value="$Think.config.delete_status"}
+                                    <span class="layui-btn layui-btn-small layui-btn-normal confirm" data-id="{$vo.id}">确定</span>
+                                {/neq}
+                            {php}
+                                }
+                                if(showHandle('index/Categoryinfo/changeisshow')){
+                            {/php}
+                                {if $vo.is_show eq $Think.config.normal_status}
+                                    <span class="layui-btn layui-btn-small layui-btn-danger delete" data-id="{$vo.id}">删除</span>
+                                {else if $vo.is_show eq $Think.config.delete_status/}
+                                    <span class="layui-btn layui-btn-small enabled" data-id="{$vo.id}">启用</span>
+                                {/if}
+                            {php}
+                                }
+                            {/php}
+                        </td>
+                    </tr>
+                {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+</div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form', 'tree'], function() {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                data,
+                form = layui.form();
+
+            $('#addForm .add').on('click',function(){
+                var pid = $('#addForm select[name="pid"]').val(),
+                    name = $('#addForm input[name="name"]').val();
+                if(name == ''){
+                    layer.msg('名称不能为空');return false;
+                }else{
+                    data = {
+                        pid:pid,
+                        name:name
+                    };
+                    handleCategory(data);
+                }
+            })
+
+            $('.confirm').on('click',function(){
+                var id = $(this).data('id');
+                if(id){
+                    var handleType = $('select[name="changeCate'+id+'"]').val(),
+                        handlePid = $('select[name="changePid'+id+'"]').val(),
+                        name = $('input[name="name'+id+'"]').val(),
+                        sort = $('input[name="sort'+id+'"]').val();
+                    if(handleType == 1){
+                        data = {
+                            id:id,
+                            pid:handlePid,
+                            name:name,
+                            sort:sort
+                        };
+                        handleCategory(data);
+                    }
+                    if(handleType == 2){
+                        if(name == ''){
+                            layer.msg('名称不能为空');return false;
+                        }else{
+                            data = {
+                                pid:id,
+                                name:name,
+                                sort:sort
+                            };
+                            handleCategory(data);
+                        }
+                    }
+                }
+            });
+            
+            var handleCategory = function(info){
+                $.ajax({
+                    url:"{:url('index/Categoryinfo/handlecategory')}",
+                    type:'post',
+                    data:info,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            layer.msg(result['msg'],{time:1000},function(){
+                                if(result['code'] == 1){
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            }
+
+            $('.enabled').on('click',function(){
+                var id = $(this).data('id');
+                data = {
+                    id:id,
+                    is_show:{$Think.config.normal_status}
+                };
+                _del(data);
+            })
+
+            $('.delete').on('click',function(){
+                var id = $(this).data('id');
+                data = {
+                    id:id,
+                    is_show:{$Think.config.delete_status}
+                };
+                _del(data);
+            });
+
+            var _del = function(datas){
+                $.ajax({
+                    url:"{:url('index/Categoryinfo/changeisshow')}",
+                    type:'get',
+                    data:datas,
+                    dataType:'json',
+                    success:function(jsonData){
+                        if(jsonData){
+                            layer.msg(jsonData['msg'],{time:1000},function(){
+                                if(jsonData['code'] == 1){
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            }
+
+            $(document).on('click', '.unfold', function() {
+                var id = $(this).data('id'),
+                    td = '',
+                    obj = $(this);
+
+                $('tr[data-id="'+id+'"]').toggle();
+
+                if (!$('tr[data-id="'+id+'"]').is(':hidden')) {
+                    obj.html('&#xe61a;');
+                } else {
+                    obj.html('&#xe602;');
+                }
+            });
+        })
+    </script>
+{/block}

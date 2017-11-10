@@ -1,0 +1,285 @@
+{extend name='extra@main' /}
+{block name="body"}
+<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        <a><cite>过期合同列表</cite></a>
+    </span>
+</div>
+<form class="layui-form" action="{:url('store/Profiles/proOverdue')}" method="get" style="margin-top: 20px;margin-top:10px">
+    <div class="layui-form-item" style="margin-left: 10px;">
+        <div class="layui-inline">
+            <input type="text" name="show_store_name" lay-verify="title" autocomplete="off" placeholder="商家名称" value="{$Think.get.show_store_name}" class="layui-input">
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <select name="province_id" lay-filter="province">
+                    <option value="">选择省</option>
+                    <option value="">选择省</option>
+                    {volist name="provinceData" id="vo"}
+                        <option value="{$key}" {eq name="key" value="$Think.get.province_id" }selected="selected"{/eq}>{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="city_id" id="city">
+                    <option value="">选择市</option>
+                    <option value="">选择市</option>
+                    {volist name="cityData" id="vo"}
+                        <option value="{$key}" {eq name="key" value="$Think.get.city_id" }selected="selected"{/eq}>{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <select name="member_status" lay-filter="aihao">
+                <option value="">会员类型</option>
+                <option value="">会员类型</option>
+                {volist name="memberStatus" id="vo"}
+                    <option value="{$key}" {eq name="key" value="$Think.get.member_status" }selected="selected"{/eq}>{$vo}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-normal">搜索</button>
+        </div>
+    </div>
+</form>
+
+<table class="layui-table">
+    <colgroup>
+        <col width="11%">
+        <col width="10%">
+        <col width="6%">
+        <col width="13%">
+        <col width="6%">
+        <col width="4%">
+        <col width="8%">
+        <col width="8%">
+        <col width="4%">
+        <col width="5%">
+        <col width="25%">
+    </colgroup>
+    <thead>
+      <tr> 
+        <th>商家名称</th>
+        <th>商家地址</th>
+        <th>商家分类</th>
+        <th>合同名称</th>
+        <th>会员类型</th>
+        <th>佣金</th>
+        <th>联系方式</th>
+        <th>合同时间</th>
+        <th>续约</th>
+        <th>备注</th>
+        <th>操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+        {volist name="data"  id="vo"}
+            <tr>
+                <td>{$vo.show_store_name}</td>
+                <td class="provincecity">{$vo.Province["name"]}/{$vo.City["name"]}
+                    <div class='hide address' style="display:none;">{$vo.address}</div>
+                </td>
+                <td>{$vo.Category["name"]}</td>
+                <td>{$vo.profile_name}</td>
+                <td>{$memberStatus[$vo.member_status]}</td>
+                <td>
+                    {notempty name="vo.return_amount"} {$vo.return_amount}% {/notempty}
+                </td>
+                <td>
+                    {$vo.contact_man}<br/>
+                    {notempty name="vo.mobile"}:{$vo.mobile}<br/>{/notempty}
+                    {notempty name="vo.telephone"}:{$vo.telephone}<br/>{/notempty}
+                    {notempty name="vo.fax"}:{$vo.fax}{/notempty}
+                </td>
+                <td>{$vo.start_time|date="Y-m-d",###}至 {$vo.end_time|date="Y-m-d",###}</td>
+                <td>
+                    {php}
+                        if(showHandle('store/Profiles/proRenew')){
+                    {/php}
+                        <a href="{:url('store/Profiles/proRenew',array('id'=>$vo.id))}" class="layui-btn layui-btn-small">续签</a>
+                    {php}
+                        }
+                    {/php}
+                </td>
+                <td>
+                    {notempty name="vo.remarks"} 
+                        <sapn data="{$vo.remarks}"  class="layui-btn layui-btn-small remark">查看</span>
+                    {/notempty}
+                </td>
+                <td>
+                    <div>
+                    {php}
+                        if(showHandle('store/Profiles/proPreview')){
+                    {/php}
+                        <a href="{:url('store/Profiles/proPreview',array('id'=>$vo.id))}"  target='_blank' class="layui-btn layui-btn-small layui-btn-warm">预览</a>
+                    {php}
+                        }
+                        if(showHandle('store/Profiles/proOverEdit')){
+                    {/php}
+                        <a href="{:url('store/Profiles/proOverEdit',array('id'=>$vo.id,'show_store_name'=>urlencode($Think.get.show_store_name),'province_id'=>$Think.get.province_id,'city_id'=>$Think.get.city_id,'member_status'=>$Think.get.member_status,'page'=>$Think.get.page))}" class="layui-btn layui-btn-normal layui-btn-small">编辑</a>
+                    {php}
+                        }
+                        if(showHandle('store/Profiles/proDel')){
+                    {/php}
+                        <button class="layui-btn layui-btn-small layui-btn-danger giveUp" data-id="{$vo.id}">放弃</button>
+                    {php}
+                        }
+                        if(showHandle('store/Profiles/imageList')){
+                    {/php}
+                        <a href="{:url('store/Profiles/imageList',array('id'=>$vo.id))}" target="_blank" class="layui-btn layui-btn-small">图片</a>
+                    {php}
+                        }
+                    {/php}
+                    </div>
+                </td>
+            </tr>
+        {/volist}
+    </tbody>
+</table>
+{$page}
+{/block}
+{block name="layer"}
+<div id='modal' style="display:none">
+    <form id='giveUpForm' class="layui-form" method="post" enctype="multipart/form-data">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <textarea name="remarks" placeholder="备注" class="layui-textarea"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <input type='hidden' name="id" >
+                        <button class="layui-btn giveUpSubmit" type='button'>提交<tton>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<!--查看备注-->
+<div id='remark' style="display:none">
+    <table class="layui-table">
+        <tbody>
+            <tr>
+                <td>
+                    <textarea name="remarks" placeholder="备注" class="layui-textarea"></textarea>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'form','laydate','laypage'],function(){
+            var $= layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form();
+            var laypage = layui.laypage;
+            //查看备注
+            $('.remark').click(function(){
+                var data = $(this).attr('data');
+                $('#remark textarea[name="remarks"]').empty().val(data);
+                layer.open({
+                    closeBtn: 2,
+                    type: 1, 
+                    area: '500px',
+                    title:'查看备注',
+                    content: $('#remark')
+                });
+            });
+            //省市联动
+            form.on('select(province)', function(data){
+                var provinceId = data.value;
+                $.ajax({
+                    url:"{:url('store/Profiles/getRegion')}",
+                    type: "POST", // 请求方式
+                    data: {'provinceId':provinceId},
+                    success:function(d){
+                        var result = eval("(" + d + ")");
+                        var str = '<option value="">选择市</option><option value="">选择市</option>';
+                        var data = result.data;
+                        for(var i in data){
+                            str += "<option value="+i+">"+data[i]+"</option>";
+                        }
+                        $('#city').empty().append(str);
+                        form.render();
+                    }
+                });
+            });
+            
+            //放弃
+            $('.giveUp').click(function(){
+                var id = $(this).attr('data-id');
+                $('#giveUpForm input[name="id"]').val(id);
+                $.ajax({
+                    url:"{:url('store/Profiles/proDel')}",
+                    type: "GET", // 请求方式
+                    data: {'id':id},
+                    success:function(d){
+                        var result = eval("(" + d + ")");
+                        if(result.flag == 1){
+                            $('#giveUpForm textarea[name="remarks"]').empty().val(result.remarks);
+                            layer.open({
+                                closeBtn: 2,
+                                type: 1, 
+                                area: '500px',
+                                title:'放弃原因',
+                                content: $('#modal')
+                            });
+                        }
+                    }
+                });
+            });
+           //提交放弃
+           $('.giveUpSubmit').click(function(){
+               var id = $('#giveUpForm input[name="id"]').val();
+               var remarks = $('#giveUpForm textarea[name="remarks"]').val();
+               if(remarks.length == 0 ){
+                   $('#giveUpForm td').find('span').remove();
+                   $('#giveUpForm textarea[name="remarks"]').after('<span style="color:red;">不能为空！</span>');
+               }else{
+                   $.ajax({
+                        url:"{:url('store/Profiles/proDel')}",
+                        type: "POST", // 请求方式
+                        data: {'id':id,'remarks':remarks},
+                        success:function(d){
+                            var result = eval("(" + d + ")");
+                            if(result.flag == 1){
+                                layer.closeAll(); //疯狂模式，关闭所有层
+                                window.location.reload();//刷新当前页面.
+                            }
+                        }
+                    });
+               }
+           });
+           
+            //地址移入移出
+            $('.provincecity').hover(function(){
+               $(this).children('div').show(); 
+            },
+            function(){
+                $(this).children('div').hide(); 
+            });
+           
+        });  
+    </script>
+{/block}

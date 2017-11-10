@@ -1,0 +1,70 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div class="layui-btn-group">
+  <button class="layui-btn">增加</button>
+</div>
+
+<table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr> 
+      <th>商家名称</th>
+      <th>商家地址</th>
+      <th>商家分类</th>
+      <th>合同名称</th>
+      <th>会员类型</th>
+      <th>佣金</th>
+      <th>联系方式</th>
+      <th>合同时间</th>
+      <th>续约</th>
+      <th>备注</th>
+      <th>操作</th>
+    </tr> 
+  </thead>
+  <tbody>
+    <tr>
+      <td>北京九宫山</td>
+      <td>北京/昌平</td>
+      <td>陵园</td>
+      <td>北京公公山管理国内公司</td>
+      <td>商家</td>
+      <td>40%</td>
+      <td>阿迪斯 13366153502</td>
+      <td>2016-11-29 至 2019-11-28</td>
+      <td>更新</td>
+      <td>查看</td>
+      <td>编辑|放弃|图片</td>
+    </tr>
+    <tr>
+      <td>贝贝九宫山</td>
+      <td>河北/石家庄</td>
+      <td>陵园</td>
+      <td>谁说得很是感动</td>
+      <td>商家</td>
+      <td>20%</td>
+      <td>阿迪斯 13366153502</td>
+      <td>2016-11-29 至 2017-11-28</td>
+      <td>更新</td>
+      <td></td>
+      <td>编辑|放弃|图片</td>
+    </tr>
+    <tr>
+      <td>阿三地方</td>
+      <td>天津/玄武区</td>
+      <td>陵园</td>
+      <td>啊等发达省份</td>
+      <td>商家</td>
+      <td>10%</td>
+      <td>阿迪斯 13366153502</td>
+      <td>2016-11-29 至 2018-11-28</td>
+      <td>更新</td>
+      <td></td>
+      <td>编辑|放弃|图片|预览</td>
+    </tr>
+  </tbody>
+</table>
+{/block}

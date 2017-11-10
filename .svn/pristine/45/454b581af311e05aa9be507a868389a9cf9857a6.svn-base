@@ -1,0 +1,209 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">关闭原因</label>
+            <div class="layui-input-block">
+               <textarea placeholder="请输入订单关闭原因" class="layui-textarea" name="delete_reason"></textarea>
+            </div>
+        </div>
+
+         <div class="layui-form-item">
+            <label class="layui-form-label">未成交原因</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入订单成交原因" class="layui-textarea" name="outstanding_reason"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">解决方案</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入订单未成交的解决方案" class="layui-textarea" name="outstanding_method"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="bbs_update_button">提交</div>
+        </div>
+        <input type='hidden' name='id' class="deleteid" value="">
+
+    </form>
+</div>
+
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-left: 10px;margin-top: 10px;">
+    <form id="quickForm" method="get" class="form-horizontal" autocomplete="off" action='{:url("leavemessage")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input placeholder="手机号" type="tel" name="mobile" autocomplete="off" class="layui-input">
+                <input type="hidden" name="store_name">
+            </div>
+
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="50">
+            <col width="100">
+            <col width="100">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="180">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+                <th>预约人|电话</th>
+                <th>留言时间</th>
+                <th>状态</th>
+                <th>ip地址</th>
+                <th>跟踪人</th>
+                <th>跟踪信息</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+         {volist name="data" id="vo"}
+            <tr>
+                <td><input type="checkbox"  data-name="choice_id" value=
+                "{$vo.id}" lay-skin="primary"></td>
+                <td>{$vo.buyer}<br>{$vo.mobile}</td>
+                <td><neq name="vo['created_time']" value="0">{$vo.created_time|date='Y-m-d',###}</neq></td>
+                <td>
+                    {eq name="vo['status']" value="0"}
+                        <span style="color:red;">[待处理]</span>
+                    {/eq}
+                    {eq name="vo['status']" value="1"}
+                        <span style="color:red;">[处理中]</span>
+                    {/eq}
+                    {eq name="vo['status']" value="2"}
+                        <span style="color:red;">[拒绝]</span>
+                    {/eq}
+                    {eq name="vo['status']" value="5"}
+                        <span style="color:red;">[成功]</span>
+                    {/eq}
+                    {eq name="vo['status']" value="-1"}
+                        <span style="color:red;">[删除]</span>
+                    {/eq}
+                </td>
+                <td>{$vo.ip}</td>
+                <td>
+                    {volist name="order_flow" id="flowmans"}
+                        {if condition="$key eq $vo['order_flow_id'] "}{$flowmans}{/if}
+                    {/volist}
+                </td>
+                <td><a href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'reVisit'))}">更新</a></td>
+                
+                <td>
+                {if $vo['status'] != $Think.config.appoint_status.success}
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-small success"  data-orderId="{$vo.id}" title="成功"><a href="javascript:void(0)"><i class="layui-icon" >&#xe618;</i></a>
+                </div>
+                {/if}
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-small layui-btn-warm refuse"  title="拒绝" data-orderId="{$vo.id}"><a href="javascript:void(0)"><i class="layui-icon">&#xe60f;</i></a>
+                </div>
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-small layui-btn-danger del" title="删除"  data-orderId="{$vo.id}"><a href="javascript:void(0)"  ><i class="layui-icon" >&#x1006;</i></a>
+                </div>
+               
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table> 
+    {$page}
+</div>
+{/block}
+{block name='optJS'}
+<script>
+
+
+layui.use(['jquery', 'layer','form'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    $(".del").bind('click', function(){
+         layer.confirm('您确定要删除该订单吗?', {icon: 3, title:'提示'}, function(index){
+         var id = $('.del').attr('data-orderId');
+         $.ajax({
+            url:"{:url('del')}",
+            data:'id='+id,
+            type:'post',
+            success:function(d){
+               var result = eval("("+d+")");
+                if(result.flag==1){
+                    layer.msg(result.msg);
+                }
+            }
+         });
+         
+       });
+    });
+
+    $(".refuse").bind('click', function(){
+         var id = $('.refuse').attr('data-orderId');
+         $('.deleteid').val(id);
+         layer.open({
+            title:'关闭订单原因',
+            type: 1,
+            skin: 'layui-layer-rim', //样式类名
+            anim: 2,
+            //shadeClose: true, //开启遮罩关闭
+            area: ['600px', '480px'],
+            content: $('#close_update_form')
+         });
+    });
+
+    $('#bbs_update_button').click(function(){
+        var From = $('#update_bbs_info_form').serialize();
+        $.ajax({
+            url: "{:url('refuse')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var d = eval("(" + result + ")");
+                if (d.flag == 1) {
+                    layer.msg(d.msg);
+                    window.location.reload();
+                } else {
+                    layer.msg(d.msg);
+                }
+            }
+        });
+
+    });
+
+     //点击成功按钮进入添加
+    $('.success').click(function(){
+        layer.confirm('您确定该留言订单转为成功?', {icon: 3, title:'提示'}, function(index){
+        var id = $('.success').attr('data-orderId');
+        $.ajax({
+            url: "{:url('leavemessagesuccess')}",
+            data:{'id':id},
+            type:'POST',
+            success:function(d){
+                var result = eval("("+d+")");
+                if(result.flag==1){
+                var url="/orders/Tomb/add";
+                window.location.href=url;       
+                }
+            }
+            });
+        });
+    });
+  
+     
+});
+
+</script>
+{/block}
+

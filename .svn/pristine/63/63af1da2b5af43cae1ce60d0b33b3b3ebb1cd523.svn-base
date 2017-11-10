@@ -1,0 +1,356 @@
+{extend name='extra@main' /}
+
+{block name="body"}
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>编辑订单</legend>
+</fieldset>
+<div class="layui-tab-item layui-show">
+   <form class="layui-form layui-form-pane1" action="">
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">客户名称</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="客户名称" value="洪先生">
+		      	</div>
+		    </div>
+		    <div class="layui-inline">
+		        <label class="layui-form-label">订单来源</label>
+		        <div class="layui-input-inline">
+		        	<select name="modules" lay-verify="required" lay-search="">
+			          <option value="">选择订单来源</option>
+			          <option value="1" selected="selected">400电话</option>
+			          <option value="2">商桥</option>
+			          <option value="3">WAP</option>
+			          <option value="4">自己预约</option>
+			          <option value="5">微信</option>
+			          <option value="6">朋友推荐</option>
+			        </select>
+		        </div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">手机</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="请填写手机号" value="13366153502">
+		      	</div>
+		    </div>
+		    <div class="layui-inline">
+		        <label class="layui-form-label">订单类型</label>
+		        <div class="layui-input-block">
+		        	<input type="radio" name="type" value="1" title="买墓地" checked="">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>买墓地</span>
+			      	</div>
+			      	<input type="radio" name="type" value="2" title="扫墓">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>扫墓</span>
+			      	</div>
+			      	<input type="radio" name="type" value="2" title="迁坟">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>迁坟</span>
+			      	</div>
+			      	<input type="radio" name="type" value="2" title="路线">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>路线</span>
+			      	</div>
+			      	<input type="radio" name="type" value="2" title="价格">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>价格</span>
+			      	</div>
+		      	</div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">座机</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="座机号码">
+		      	</div>
+		    </div>
+		    <div class="layui-inline">
+		        <label class="layui-form-label">预约时间</label>
+		        <div class="layui-input-inline">
+		        	<input class="layui-input" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="2017-05-30">
+		      	</div>
+		    </div>
+		    
+		</div>
+		<div class="layui-form-item">
+				<div class="layui-inline">
+			        <label class="layui-form-label">年龄</label>
+			        <div class="layui-input-inline">
+			        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="咨询者年龄">
+			      	</div>
+			    </div>
+			    <div class="layui-inline">
+			        <label class="layui-form-label">咨询者性别</label>
+			        <div class="layui-input-block">
+			        	<input type="radio" name="sexs" value="男" title="男" checked="">
+				      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+				      		<i class="layui-anim layui-icon"></i><span>男</span>
+				      	</div>
+				      	<input type="radio" name="sexs" value="女" title="女">
+				      	<div class="layui-unselect layui-form-radio">
+				      		<i class="layui-anim layui-icon"></i><span>女</span>
+				      	</div>
+			      	</div>
+			    </div>
+			</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">微信</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="微信">
+		      	</div>
+		    </div>
+		    <div class="layui-inline">
+		        <label class="layui-form-label">QQ</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="QQ号码">
+		      	</div>
+		    </div>
+		</div>
+
+		<div class="layui-form-item">
+		    <label class="layui-form-label">地区商家</label>
+		    <div class="layui-input-inline">
+		      <select name="quiz1">
+		        <option value="">请选择省</option>
+		        <option value="浙江" selected="selected">浙江省</option>
+		        <option value="你的工号">江西省</option>
+		        <option value="你最喜欢的老师">福建省</option>
+		      </select>
+		    </div>
+		    <div class="layui-input-inline">
+		        <select name="quiz2">
+			        <option value="">请选择市</option>
+			        <option value="杭州" selected="selected">杭州</option>
+			        <option value="宁波">宁波</option>
+			        <option value="温州">温州</option>
+			        <option value="温州">台州</option>
+			        <option value="温州">绍兴</option>
+		        </select>
+
+		    </div>
+		    <div class="layui-input-inline">
+		        <select name="quiz3">
+			        <option value="">请选择商家</option>
+			        <option value="西湖区商家" selected="selected">西湖区商家(商)</option>
+			        <option value="余杭区商家">余杭区商家(个)</option>
+			        <option value="拱墅区商家">临安市商家(商)</option>
+		        </select>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+				<div class="layui-inline" style="width:310px">
+					<label class="layui-form-label">是否返现</label>
+				    <div class="layui-input-block">
+				      	<input type="checkbox" name="close" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">返现比例</label>
+			        <div class="layui-input-inline">
+			        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="返现的比例">
+			        	
+			      	</div>
+			      	<div class="layui-form-mid layui-word-aux">佣金比例：5-10</div>
+				</div>
+			</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">价格预算</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="6万元" value="8-10万">
+		      	</div>
+		    </div>
+		    <div class="layui-inline">
+		        <label class="layui-form-label">紧急状态</label>
+		        <div class="layui-input-block">
+		        	<input type="radio" name="instancy" value="高" title="高" checked="checked">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>高</span>
+			      	</div>
+			      	<input type="radio" name="instancy" value="一般" title="一般">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>一般</span>
+			      	</div>
+			      	<input type="radio" name="instancy" value="低" title="低">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      	<i class="layui-anim layui-icon"></i><span>低</span>
+			      	</div>
+		      	</div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">逝者</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="2017-05-22" value="史蒂夫">
+		      	</div>
+		    </div>
+		    <div class="layui-inline">
+		        <label class="layui-form-label">年龄</label>
+		        <div class="layui-input-inline">
+		        	<input type="tel" name="name" autocomplete="off" class="layui-input" placeholder="逝者年龄" value="88">
+		      	</div>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-inline">
+		        <label class="layui-form-label">性别</label>
+		        <div class="layui-input-block">
+		        	<input type="radio" name="sex" value="男" title="男" checked="checked">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>男</span>
+			      	</div>
+			      	<input type="radio" name="sex" value="女" title="女">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>女</span>
+			      	</div>
+			      	<input type="radio" name="sex" value="保密" title="保密">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>保密</span>
+			      	</div>
+		      	</div>
+		    </div>
+		    <div class="layui-inline">
+		        <label class="layui-form-label">是否在世</label>
+		        <div class="layui-input-block">
+		        	<input type="radio" name="is_be_living" value="寿穴" title="寿穴" checked="checked">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>寿穴</span>
+			      	</div>
+			      	<input type="radio" name="is_be_living" value="刚过世" title="刚过世">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>刚过世</span>
+			      	</div>
+			      	<input type="radio" name="is_be_living" value="迁坟" title="迁坟">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>迁坟</span>
+			      	</div>
+			      	<input type="radio" name="is_be_living" value="寄存中" title="寄存中">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>寄存中</span>
+			      	</div>
+			      	<input type="radio" name="is_be_living" value="其他" title="其他">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>其他</span>
+			    	</div>
+		      	</div>
+		    </div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">商家短信</label>
+			<div class="layui-input-inline">
+				<input type="tel" name="contact" class="layui-input" value="联系人" title="商家联系人">
+			</div>
+			<div class="layui-input-inline">
+				<input type="tel" name="mobile" class="layui-input" value="15599898980" title="电话">
+			</div>
+			<div  class="layui-input-inline">
+				<textarea placeholder="请输入内容" class="layui-textarea" style="height: 100px; width: 300px;">尊敬的会员，您有一条来自91搜墓网的贵宾客户预约信息,客户:胡女士,预约时间:2017-05-23 18:10:25,电话:15907330766,请及时关注.【91搜墓网】</textarea>
+			</div>
+			<div  class="layui-input-inline">
+				<button class="layui-btn" >获取商家短信</button>
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">客户短信</label>
+			<div class="layui-input-inline">
+				<textarea placeholder="请输入内容" class="layui-textarea" colspan="5" rowspan="5" style="height: 100px; width: 300px;">贵宾您好,我们已经将您的需求信息告知陵园，陵园会有专人和您联系，如有任何问题请致电：400-8010-344.感谢您对91搜墓网的信任.【91搜墓网】</textarea>
+			</div>
+			<div class="layui-input-inline">
+				<button class="layui-btn">获取客户短信</button>
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">沟通信息</label>
+			<div class="layui-input-block">
+				<textarea id="follow" style="display: none;">
+					<p>需求:家属来电咨询上海福寿园，可以考虑树葬，心理价位8W左右</p>
+					<p>讲解:介绍了上海青浦福寿园，以及上海海港陵园</p>
+					<p>结果:周日去看</p>
+				</textarea>
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<div class="layui-inline">
+				<label class="layui-form-label">是否回访</label>
+			    <div class="layui-input-block">
+			      	<input type="checkbox" name="close" lay-skin="switch" lay-filter="return" lay-text="是|否">
+			    </div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">回访时间</label>
+				<div class="layui-input-inline">
+					<input class="layui-input" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="2017-05-26"> 
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">回访紧急度</label>
+				<div class="layui-input-block">
+		        	<input type="radio" name="calling_feedback" value="高" title="高" checked="checked">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>高</span>
+			      	</div>
+			      	<input type="radio" name="calling_feedback" value="一般" title="一般">
+			      	<div class="layui-unselect layui-form-radio">
+			      		<i class="layui-anim layui-icon"></i><span>一般</span>
+			      	</div>
+			      	<input type="radio" name="calling_feedback" value="低" title="低">
+			      	<div class="layui-unselect layui-form-radio layui-form-radioed">
+			      		<i class="layui-anim layui-icon"></i><span>低</span>
+			      	</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<input type="tel" name="contact" class="layui-input" value="这里是备注信息" title="备注信息">
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-form-text" style="text-align:center">
+			<button class="layui-btn layui-btn-big">保存</button>
+		</div>
+   </form>
+</div>
+
+{/block}
+
+{block name="optJS"}
+<script type="text/javascript">
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  var start = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday:true
+    ,choose: function(datas){
+      end.min = datas; //开始日选好后，重置结束日的最小日期
+      end.start = datas //将结束日的初始值设定为开始日
+    }
+  };
+  
+  var end = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday: true
+    ,choose: function(datas){
+      start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+  };
+  
+});
+
+layui.use('layedit', function(){
+  var layedit = layui.layedit;
+  layedit.build('follow'); //建立编辑器
+});
+</script>
+{/block}

@@ -1,0 +1,236 @@
+<?php
+namespace back\member\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+use think\Session;//session类
+use back\extra\model\Member;
+
+
+/**
+ * 会员类
+ */
+class Membercontro extends Base{
+
+	/**
+	 * 会员列表
+	 */
+	public function index(){
+		$where = array();
+		$getdata = input('get.');
+		if(!empty($getdata['mobile'])){
+			$mobile = $getdata['mobile'];
+		}
+		if(!empty($mobile)){
+			$where['mobile|name'] = array('like','%'.$mobile.'%');
+		}
+		$pageSize = config('page_size');
+        $memberList = Member::with('memberbank')->where($where)->order('id desc')->paginate($pageSize,false,['query' => $getdata]);
+        $pageShow = $memberList->render();
+        $this->assign('type',config('member_types')); 
+		$this->assign('pages', $pageShow);
+		$this->assign('members', $memberList);
+		return $this->fetch();
+	}
+
+
+	/**
+	 * 删除会员，主要是指更改数据状态
+	 *
+	 * @return Json String
+	 */
+	public function delete() {
+		if(Request::instance()->isPost()){
+			$postInfo = input('post.');
+			$memberModel = Db::name('member');
+			$result = array('flag'=>0,'msg'=>'操作失败');
+			if($postInfo['act']=='del'){
+				$data['id'] = $postInfo['id'];
+				$data['status'] = config('delete_status');
+				$final = $memberModel->where('id='.$data['id'])->update($data);
+				if($final){
+					$result['flag'] = 1;
+					$result['msg'] = '操作成功';
+				}
+			}else if($postInfo['act']=='enable'){
+				$data['id'] = $postInfo['id'];
+				$data['status'] = config('normal_status');
+				$final = $memberModel->where('id='.$data['id'])->update($data);
+				if($final){
+					$result['flag'] = 1;
+					$result['msg'] = '操作成功';
+				}
+			}
+			echo json_encode($result);
+		}
+	}
+
+	/**
+	 * 用户密码重置
+	 * 重置密码是六位数
+	 *
+	 * @return Json String
+	 */
+	public function resetpwd(){
+		if(Request::instance()->isPost()){
+			$result = array('flag'=>0,'msg'=>'操作失败');
+			$id = input('id');
+			if(!empty($id)){
+				//查找当前用户的信息
+				$memberModel = Db::name('member');
+				$member = $memberModel->where('id='.$id)->find();
+				if(!empty($member)){
+					//$mobile = $member['mobile'];
+					$pwd = rand(100000, 999999);
+					$encryptpwd= encryptHome($pwd);
+					if($memberModel->where('id='.$id)->setField('password',$encryptpwd)!==false){
+						$result['flag']=1;
+						$result['msg'] = '重置成功,用户密码为：'.$pwd;
+					}
+				}else{
+					$result['msg'] = '没有该数据';
+				}
+			}
+			echo json_encode($result);
+		}
+	}
+	/**
+	 * 获取特定用户的所有银行卡信息
+	 * 银行卡信息直接删除即可，不存在状态问题
+	 *
+	 * @return Json String
+	 */
+	public function memberBankList() {
+		if (Request::instance()->isPost()) {
+			$memberId = input('member_id');
+			$result = array(
+					'flag' => 0,
+					'data' => array()
+			);
+
+			if ($memberId) {
+				$bankWhere['member_id'] = $memberId;
+				$bankInfo = Db::name('member_bank')->where($bankWhere)->select();
+				foreach ($bankInfo as $key => $value) {
+					$bankInfo[$key]['bank_name'] = config('pay_type.'.$value['bank']);
+					$bankInfo[$key]['status'] = config('bank_status.'.$value['status']);
+				}
+				if ($bankInfo) {
+					$result['flag'] = 1;
+					$result['data'] = $bankInfo;
+				}
+			}
+
+			echo json_encode($result);
+		}
+	}
+	/**
+	 * 新增或者修改客户银行卡信息
+	 *
+	 * @return Json String
+	 */
+	public function editMemberBank() {
+		if(Request::instance()->isPost()){
+			$postData = input('post.');
+			$result = array(
+				'flag' => 0,
+				'msg' => "数据操作失败"
+			);
+			$postData['admin_id'] = session('admin_id');
+			$postData['created_time'] = date('Y-m-d H:i:s', time());
+			$postData['region_ip'] =  ip2long(get_client_ip(0, true));
+			if(empty($postData['id'])){
+				$map['status'] = $postData['status'];
+				$map['member_id'] = $postData['member_id'];
+				$bankinfo = Db::name('member_bank')->where($map)->count();
+				if($bankinfo){
+					$result['flag'] = 0;
+					$result['msg'] = "只能有一个默认银行卡号";
+				}else{
+					unset($postData['id']);
+					$ret =  Db::name('member_bank')->insert($postData);
+					if ($ret != false) {
+						$result['flag'] = 1;
+						$result['msg'] = "数据操作成功";
+					}
+				}
+			
+			} else {
+				if($postData['status'] == config('normal_status')){
+					$map['status'] = config('normal_status');
+					$map['member_id'] = $postData['member_id'];
+					$bankinfo = Db::name('member_bank')->where($map)->count();
+					if($bankinfo){
+						$result['flag'] = 0;
+						$result['msg'] = "只能有一个默认银行卡号";
+					}
+				}else{
+					$id = $postData['id'];
+					$ret =  Db::name('member_bank')->where('id='.$id)->update($postData);
+					if ($ret != false) {
+						$result['flag'] = 1;
+						$result['msg'] = "数据操作成功";
+					}
+				}
+			}
+
+			echo json_encode($result);
+		} else {
+			echo "error";die;
+		}
+	}
+	/**
+	 * 删除用户的银行卡信息
+	 *
+	 * @return Json String
+	 */
+	public function deleteMemberBank() {
+		if (Request::instance()->isPost()) {
+			$id = input('id');
+			$result = array(
+					'flag' =>0,
+					'msg' => '删除失败'
+			);
+
+			if ($id) {
+				$ret = Db::name('member_bank')->delete($id);
+				if ($ret) {
+					$result['flag'] = 1;
+					$result['msg'] = '删除成功';
+				}
+			}
+
+			echo json_encode($result);
+		}
+	}
+
+
+
+	/**
+	 * 删除用户的银行卡信息
+	 *
+	 * @return Json String
+	 */
+	public function cancelMemberBank() {
+		if (Request::instance()->isPost()) {
+			$id = input('id');
+			$result = array(
+					'flag' =>0,
+					'msg' => '取消失败'
+			);
+			if ($id) {
+				$data['status'] = config('default_status');
+				$ret = Db::name('member_bank')->where('id='.$id)->update($data);
+				if ($ret) {
+					$result['flag'] = 1;
+					$result['msg'] = '取消成功';
+				}
+			}
+
+			echo json_encode($result);
+		}
+	}
+
+}

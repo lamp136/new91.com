@@ -1,0 +1,431 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<!--添加搜索词 start-->
+    <form id='addForm' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>选择分类</td>
+                    <td>
+                        <div class="layui-input-inline">
+                            <select name="type" lay-filter="type">
+                                <option value="">请选择分类</option>
+                                {volist name="type" id="vo"}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>选择省市</td>
+                    <td>  
+                        <div class="layui-input-inline">
+                            <select name="province_id" lay-filter="province_id">
+                                <option value="">请选择省</option>
+                                {volist name="province" id="vo"}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="city_id" lay-filter="city_id">
+                                <option value="">--选择市区--</option>
+                            </select>
+                        </div>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:20px;"><span style="color:red">*</span>词汇</td>
+                    <td>  
+                        <textarea class="input-xlarge" style="height:100px;width:380px;" name="keyword" data-rule="required"></textarea>多个词语以中文标点<span style="color:red;">"；"</span>隔开<br>
+                    </td>
+                </tr>
+               
+                <tr>
+	                <td colspan='2' style="text-align: center;">  
+	                	<button class="layui-btn" id='addsubmit' type='button'>立即提交</button>
+	            	</td>
+               </tr>
+            </tbody>
+        </table>
+    </form>
+ <!--添加非法词  end-->
+ <!--编辑非法词 start-->
+	<form id='editForm' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                  <tr>
+                    <td>选择分类</td>
+                    <td>
+                        <div class="layui-input-inline">
+                            <select name="type" lay-filter="type">
+                                <option value="">请选择分类</option>
+                                {volist name="type" id="vo"}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>选择省市</td>
+                    <td>  
+                        <div class="layui-input-inline">
+                            <select name="province_id" lay-filter="province_id">
+                                <option value="">请选择省</option>
+                                {volist name="province" id="vo"}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="city_id" lay-filter="city_id">
+                                <option value="">--选择市区--</option>
+                                 {volist name="city" id="vo"}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>词汇</td>
+                    <td>  
+                        <textarea class="input-xlarge" style="height:100px;width:400px;" name="keyword" data-rule="required"></textarea>多个词语以"；"隔开
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">
+                        <input type="hidden" name='id'/> 
+                        <button class="layui-btn" id='editsubmit' type='button'>立即提交</button>
+                    </td>
+               </tr>
+            </tbody>
+        </table>
+    </form>
+ <!--导入非法词  end-->
+    <form id='import' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <div style="width:200px;">
+                            <input type="file" name="txt_file">
+                            <p style="color:red;">格式为excel格式</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="width:300px;height:110px;">
+                            <p>
+                                <span style="color:red;">文件规则：</span><br/>
+                                a1:对应关键词 b1:对应admin_id c1:对于创建时间 d1:对于状态
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <button class="layui-btn" id='importForm' type='button'>立即提交</button>
+                    </td>
+               </tr>
+            </tbody>
+        </table>
+    </form>
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+        <form  action="{:url('basic/SearchKey/index')}" method="get" style="float:left;margin-top:10px;margin-right:10px;margin-bottom:10px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <select name="type" lay-filter="aihao">
+                    <option value="">会员类型</option>
+                    {volist name="type" id="vo"}
+                        <option value="{$key}" {eq name="key" value="$Think.get.search_type" }selected="selected"{/eq}>{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+	<div style="float:right;margin-top:10px;margin-right:10px;margin-bottom:10px;">
+    
+	    <span class="layui-btn add">
+	        <i class="layui-icon" >&#xe608;</i>添加搜索分词
+	    </span>
+        <span class="layui-btn import">
+            <i class="layui-icon" >&#xe608;</i>导入搜索词Excel文件
+        </span>
+	 </div>
+	<table class="layui-table">
+        <colgroup>
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>词汇</th>
+                <th>录入时间</th>
+                <th>类型</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+          {volist name="list" id="vo"}
+
+         <tr>
+             <td>{$vo.keyword}</td>
+             <td>{notempty name="vo.created_time"}
+                    {$vo.created_time|date="Y-m-d H:i:s",###}
+                {/notempty}</td>
+             <td>
+                 {$type[$vo.type]}
+             </td>
+            <td>
+                 <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-small layui-btn-normal edit" data-id="{$vo.id}"><a href="javascript:void(0)" title="编辑"><i class="layui-icon">编辑</i></a>
+                    </button>
+                </div>
+                <div class="layui-btn-group">
+                    <a href="javascript:void(0)"  data-id="{$vo.id}" title="删除" class="layui-btn layui-btn-small layui-btn-danger  delete"><i class="layui-icon">删除</i></a>
+                </div>
+             </td>
+
+         </tr>
+         {/volist}
+        </tbody>
+    </table>
+        <div style="margin-left: 10px;">
+		{$page}
+		</div>
+   </div>
+{/block}
+{block name='optJS'}
+<script>
+layui.use(['jquery', 'layer','form'], function(){
+	var $ = layui.jquery;
+	var layer = layui.layer;
+    var form = layui.form();
+	
+
+
+    //选择省获取市
+    form.on('select(province_id)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('select[name="city_id"]');
+        getcity(provinceId,obj);
+    });
+
+     //获取市区列表
+    function getcity(provinceId,obj){
+        $.ajax({
+            url: "{:url('orders/Tomb/getcity')}",
+            type: 'get',
+            data: {pid: provinceId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择市区--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + key + '">' + val + '</option>';
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render();
+            }
+        });
+    }
+
+
+
+     //点击成功按钮弹出模态框
+    $('.add').click(function(){
+            layer.open({
+                closeBtn: 2,
+                type: 1,
+                area: '700px',
+                title: '添加搜索词模态框',
+                content: $('#addForm'),
+            });
+     });
+
+     //提交添加非法词汇 表单
+    $('#addsubmit').bind('click', function () {
+    	var From = $('#addForm').serialize();
+        $.ajax({
+            url: "{:url('add')}",
+            type: "post",
+            data:From,
+            success: function(d) {
+                var result = eval("(" + d + ")");
+                if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                      })
+                } else {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                     })
+                }
+            }
+        });
+    });
+
+
+     //修改非法词汇信息
+        $('.edit').click(function () {
+           var id = $(this).attr('data-id');
+            var status = $('#editForm input[name="status"]');
+            $.ajax({
+                url: "{:url('edit')}",
+                type: 'get',
+                data:{
+                    id:id,
+                },
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var data = result.data;
+                    if (result.flag == 1) {
+                        $('#editForm textarea[name="keyword"]').text(data.keyword);
+                        $('#editForm input[name="id"]').val(data.id);
+                        $('#editForm select[name="province_id"]').val(data.province_id);
+                        $('#editForm select[name="type"]').val(data.type);
+                        $('#editForm select[name="city_id"]').val(data.city);
+
+                        form.render();
+                        layer.open({
+                            closeBtn: 2,
+                            type: 1,
+                            area: '700px',
+                            title: '编辑搜索词模态框',
+                            content: $('#editForm'),
+                        });
+                    } else {
+                        alert('操作失败');
+                    }
+                }
+            });
+        });
+
+
+
+     //提交编辑非法词汇 表单
+    $('#editsubmit').bind('click', function () {
+    	var From = $('#editForm').serialize();
+        $.ajax({
+            url: "{:url('edit')}",
+            type: "post",
+            data:From,
+            success: function(d) {
+                var result = eval("(" + d + ")");
+                if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                      })
+                } else {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                     })
+                }
+            }
+        });
+    });
+
+  
+
+     //删除
+        $('.delete').click(function(){
+            var id = $(this).attr('data-id');
+            var act = 'del';
+            $.ajax({
+                url: "{:url('del')}",
+                type: 'post',
+                data: 'id='+id+'&act='+act,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+	                    layer.msg(result.msg,{icon:1,time:2000},function(){
+	                          window.location.reload();//刷新当前页面.
+	                    })
+	                } else {
+	                    layer.msg(result.msg,{icon:1,time:2000},function(){
+	                    })
+	                }
+                }
+            });
+        });
+
+        //启用
+        $('.enable').click(function(){
+            var id = $(this).attr('data-id');
+            var act = 'enable';
+            $.ajax({
+                url: "{:url('del')}",
+                type: 'post',
+                data: 'id='+id+'&act='+act,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+	                    layer.msg(result.msg,{icon:1,time:2000},function(){
+	                          window.location.reload();//刷新当前页面.
+	                    })
+	                } else {
+	                    layer.msg(result.msg,{icon:1,time:2000},function(){
+	                    })
+	                }
+                }
+            });
+        });
+
+
+
+        $('.import').click(function(){
+            layer.open({
+                closeBtn: 2,
+                type: 1,
+                area: '700px',
+                title: '导入非法词汇excel文件',
+                content: $('#import'),
+            });
+        });
+
+        $('#importForm').bind('click',function () {
+            var fd = new FormData(document.getElementById("import"));
+            $.ajax({
+                url:"{:url('uploadFile')}",
+                type:"POST",
+                processData: false,
+                contentType: false,
+                data:fd,
+                success:function(d){
+                    var result = eval("("+d+")");
+                        if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                        })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                        })
+                    }
+                    
+                }
+            })
+        });
+
+});
+
+
+
+
+</script>
+
+{/block}

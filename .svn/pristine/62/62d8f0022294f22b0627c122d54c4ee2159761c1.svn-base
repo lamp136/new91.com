@@ -1,0 +1,17 @@
+@charset "utf-8";
+/*commentpage*/
+.commentPage a{ text-decoration:none;}
+.commentPage a:hover{ text-decoration:none;}
+.commentPage{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+.commentPage a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+.commentPage a:hover{text-decoration: none;border: 1px solid #428bca;}
+.commentPage span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+.commentPage span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+
+.comboPage a{ text-decoration:none;}
+.comboPage a:hover{ text-decoration:none;}
+.comboPage{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+.comboPage a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+.comboPage a:hover{text-decoration: none;border: 1px solid #428bca;}
+.comboPage span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+.comboPage span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

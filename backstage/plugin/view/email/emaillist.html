@@ -1,0 +1,220 @@
+{extend name='extra@main' /}
+{block name='layer'}
+    <form id='personlist' style="display:none" class="layui-form" >
+        <table  class="layui-table" id="dep-addUser">
+            <thead>
+                <tr>
+                    <th align="center">姓名</th>
+                    <th align="center">邮箱</th>
+                    <th align="center">手机号</th>
+                    <th align="center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </form>  
+
+    <form id='addperson' style="display:none" class="layui-form" >
+         <table  class='layui-table'>
+                    <thead>
+                        <tr>
+                            <th style='width:20px;'>姓名</th>
+                            <th style='width:30px;'>电子邮箱</th>
+                            <th style='width:30px;'>手机号</th>
+                            <th style='width:30px;'>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id ="demo">
+                            <td><input  type="text" name="name[]" value=' ' required="required"/></td>
+                            <td><input type="text" name="email_address[]" value=' ' required="required"/></td>
+                            <td><input  type="text" name="phone[]" value=' ' required="required"/></td>
+                            <td class='addflag' style="color:green;">[+]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="layui-form-item" style="text-align: center;">
+                    <input type="hidden" name="type" id="addType">
+                    <button type="submit" id="addsubmit"  class="layui-btn">提交</button>
+                </div>
+    </form>
+
+{/block}
+{block name='body'}
+<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">Email</a>
+        <a><cite>email使用人列表</cite></a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    
+	<table class="layui-table">
+        <colgroup>
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>邮件使用处</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+
+        <tbody>
+        {volist name="datalist" id="vo" }
+            <tr>
+                <td>
+                    {$vo}
+                </td>
+        		<td>
+                <a href="javascript:;" class="viewList"  data-type="{$key}" style="color:green;">查看收件人员</a>
+                
+
+                <a href="javascript:;" class="addperson" data-type="{$key}"  style="color:green;">添加收件人员</a>
+
+                </td>
+        	</tr>
+        {/volist}
+        </tbody>
+    </table>
+       
+   </div>
+{/block}
+{block name='optJS'}
+<script>
+layui.use(['jquery', 'layer','form'], function(){
+	var $ = layui.jquery;
+	var layer = layui.layer;
+    var form = layui.form();
+	  $('.viewList').click(function(){
+            var type = $(this).attr('data-type');
+            $.ajax({
+                url: "{:url('viewList')}",
+                type: 'POST',
+                data: {'type':type},
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var str = '';
+                    if(result.flag == 1) {
+                        var data = result.data;
+                        for(i in data){
+                            str +='<tr>';
+                            str +='<td align="right">'+data[i].name+'</td>';
+                            str +='<td align="right">'+data[i].email_address+'</td>';
+                            str +='<td align="right">'+data[i].phone+'</td>';
+                            str +='<td align="center">';
+                            str +='<a class="layui-btn layui-btn-small layui-btn-danger delperson" href="javascript:void(0)"  data-id="'+data[i].id+'" >删除</a>';
+                            str +='</td></tr>';
+                        }
+                    }else if(result.flag == 2){
+                        str += '<tr><td colspan=3>暂无人员记录</td></tr>';
+                    }
+
+                    $('#dep-addUser tbody').html(str);
+                    layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: '700px',
+                        title: '查看收件人员',
+                        content: $('#personlist'),
+                    });
+                }
+            });
+        });
+
+      //弹出添加人员表单
+        $('.addperson').click(function(){
+            var type = $(this).attr('data-type');
+            $("#addType").val(type);
+             layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: '700px',
+                        title: '添加收件人员',
+                        content: $('#addperson'),
+            });
+        });
+        $('.addflag').click(function(){
+            var demo = $(this).parent();
+            if($(this).html()=="[+]"){
+                var newDemo = demo.clone();
+                $(newDemo).find(".addflag").html("[-]");
+                $(newDemo).find('input').val("");
+                demo.after(newDemo);
+            }else{
+                demo.remove();
+            }
+        });
+
+        $('#addsubmit').click(function(){
+            var From = $('#addperson').serialize();
+            $.ajax({
+                url: "{:url('addperson')}",
+                type: 'POST',
+                data: From,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                     if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+                }
+            }); 
+        });
+
+        //删除人员
+        $(document).on('click','.delperson',function(){
+            var dataId = $(this).attr('data-id');
+            var that = $(this);
+            $.ajax({
+                url: "{:url('delEmail')}",
+                type: 'POST',
+                data: {'id':dataId},
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        that.parents('tr').remove();
+                    } else {
+                       layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+                }
+            });
+        });
+        
+
+
+});
+
+
+
+
+</script>
+
+{/block}

@@ -1,0 +1,412 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id='motai' style="display:none">
+<form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+      <tr>
+        <td> <span style="color:red">*</span>真实姓名</td>
+        <td>  
+         <input type="text"  name="name" required  lay-verify="required" placeholder="真实姓名" autocomplete="off"  value="" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>登陆账号 </td>
+        <td>  
+         <input type="text"  name="login_name" required  lay-verify="required" placeholder="登陆账号" value="" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+      <td> <span style="color:red">*</span>登陆密码</td>
+        <td>
+          <input type="text" name="pwd" required lay-verify="required" placeholder="登陆密码" value="" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+      <td> <span style="color:red">*</span>手机号</td>
+        <td>
+          <input type="text" name="mobile" required lay-verify="required" placeholder="手机号" autocomplete="off" class="layui-input" value="">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>邮箱</td>
+        <td>  
+          <input type="text" name="email" required  lay-verify="required" placeholder="电子邮箱" autocomplete="off" value="" class="layui-input">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>备注</td>
+        <td>  
+          <input type="text" name="remark"  placeholder="备注信息" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2' style="text-align: center;">  
+          <button class="layui-btn addpersonsubmit" lay-submit lay-filter="formDemo" type="button">立即提交</button>
+          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    <input type='hidden' >
+</form>
+</div>
+
+
+<div id='editmotai' style="display:none">
+<form id='editdata-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+      <tr>
+        <td> <span style="color:red">*</span>真实姓名</td>
+        <td>  
+         <input type="text"  name="name" required id="name" lay-verify="required" placeholder="真实姓名" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>登陆账号</td>
+        <td>  
+         <input type="text"  name="login_name" id="login_name" required  lay-verify="required" placeholder="登陆账号" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      
+      <tr>
+      <td> <span style="color:red">*</span>手机号</td>
+        <td>
+          <input type="text" name="mobile" id="mobile" required lay-verify="required" placeholder="手机号" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>邮箱</td>
+        <td>  
+          <input type="text" name="email" required  id="email" lay-verify="required" placeholder="电子邮箱" autocomplete="off" class="layui-input">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>备注</td>
+        <td>  
+          <input type="text" name="remark"  id="remark" placeholder="备注信息" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2' style="text-align: center;">  
+          <button class="layui-btn editsubmit" lay-submit lay-filter="formDemo" type="button">立即提交</button>
+          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    <input type='text' id="editid" name="id" value="" hidden="hidden" >
+</form>
+</div>
+
+{/block}
+{block name="body"}
+<div style="height:10px;"></div>
+<div style="float:right;">
+ 
+</div style="margin-top: 20px;margin-left: 20px;">
+<form class="layui-form" action="{:url('Admin/adminList')}" method="get" style="margin-top: 10px;">
+    <div class="layui-form-item" style="margin-left: 10px;">
+       {php}
+        if(showHandle('store/Admin/addPerson')){
+       {/php}
+      <button class="layui-btn addPerson" style="margin-bottom:5px;"><span>添加管理人员</span>
+      </button>
+      {php}
+          }
+      {/php}
+        <div class="layui-inline">
+            <select name="member_status">
+                <option value="1">正常用户</option>
+                <option value="all">所有用户</option>
+                <option value="-1">禁用用户</option>
+            </select>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-normal">搜索</button>
+        </div>
+    </div>
+</form>
+<table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr> 
+      <th style="width:5%;">ID</th>
+      <th style="width:6%;">用户名称</th>
+      <th style="width:6%;">登陆名称</th>
+      <th style="width:6%;">状态</th>
+      <th style="width:6%;">电子邮箱</th>
+      <th style="width:6%;">联系方式</th>
+      <th style="width:10%;">创建时间</th>
+      <th style="width:20%;">操作</th>
+    </tr> 
+  </thead>
+  <tbody>
+  	{volist name="list" id="vo"}
+    <tr>
+     <td>{$vo.id}</td>
+     <td>{$vo.name}</td>
+     <td>{$vo.login_name}</td>
+     <td> 
+    
+     {if condition="$Think.config.admin_name eq $vo['login_name']"}
+            <span style="color:green;">超级用户</span>
+        {else/}
+            <span class="status" >{if condition="$Think.config.normal_status eq $vo['status']"}启用
+            </span>
+                {else/}
+             <span>禁用</span>
+            {/if}
+        {/if}
+        
+      </td>
+     <td>{$vo.email}</td>
+     <td>{$vo.mobile}</td>
+     <td>{$vo.created_time}</td>
+     <td>
+      {php}
+        if(showHandle('store/Admin/editPassword')){
+      {/php}
+     	<span class="edit" data-id="{$vo.id}"> 
+     		<button class="layui-btn layui-btn-small">
+    			<i class="layui-icon">&#xe642;</i><span data-id="{$vo.id}" class=" changpassword">修改密码</span>
+  			</button>
+  		</span>
+      {php}
+      }
+      {/php}
+        {php}
+        if(showHandle('store/Admin/changeStatus')){
+      {/php}
+  		<span class="edit" > 
+     		<button class="layui-btn layui-btn-small layui-btn-danger">
+    			<span class="qiyong" data-id="{$vo.id}" data-status="{$vo.status}">
+    			{if condition="$Think.config.normal_status eq $vo['status']"}
+    			禁用
+           
+                {else /}
+           		启用
+           		{/if}
+             </span>
+  			</button>
+  		</span>
+       {php}
+      }
+      {/php}
+      {php}
+        if(showHandle('store/Admin/editorAdmin')){
+      {/php}
+  		<span class="edit"> 
+     		<button class="layui-btn layui-btn-small editorAdmin" data-id={$vo.id}>
+    			<i class="layui-icon">&#xe642;</i>编辑
+  			</button>
+  		</span>
+      {php}}{/php}
+  	</td>
+    </tr>
+    {/volist}
+  </tbody>
+</table>
+{$page}
+
+{/block}
+{block name="optJS"}
+<script> 
+    layui.use('layer', function() {
+        layui.use(['form', 'jquery', 'laypage'], function() {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            $('.changpassword').on('click', function() {
+                var id = $(this).attr('data-id');
+                layer.prompt({
+                    formType: 3,
+                    value: '',
+                    title: '请输入新的密码',
+                    area: ['100px', '100px']
+                }, function(value, index, elem) {
+                    //将value传入changepassword
+                    $.ajax({
+                        url: '{:url("store/Admin/editPassword")}',
+                        data: {
+                            'id': id,
+                            'pwd': value
+                        },
+                        type: 'post',
+                        success: function(d) {
+                            var result = eval("(" + d + ")");
+                            if (result.flag == 1) {
+                                layer.msg(result.msg);
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            });
+
+            //启用和禁用方法
+            $('.qiyong').on('click', function() {
+                var status = $(this).attr('data-status');
+                var id = $(this).attr('data-id');
+                var layer = layui.layer;
+                $.ajax({
+                    url: "{:url('store/Admin/changeStatus')}",
+                    type: 'post',
+                    data: {
+                        'status': status,
+                        'id': id
+                    },
+                    success: function(d) {
+                        var result = eval("(" + d + ")");
+                        if (result.flag == 1) {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                            });
+                        }
+                    }
+                })
+            });
+
+            //弹出添加管理人员模态框
+            $('.addPerson').click(function() {
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '添加人员',
+                    content: $('#motai'),
+                });
+            });
+            //提交添加管理人员信息
+
+
+            $('.addpersonsubmit').click(function() {
+                var name = $("#data-form input[name='name']").val();
+                var login_name = $("#data-form input[name='login_name']").val();
+                var pwd = $("#data-form input[name='pwd']").val();
+                var mobile = $("#data-form input[name='mobile']").val();
+                var email = $("#data-form input[name='email']").val();
+
+                if (name.length < 1) {
+                    layer.msg('请填写用户名称');
+                    return false;
+                }
+                if (login_name.length < 1) {
+                    layer.msg('请填登陆账号');
+                    return false;
+                }
+                if (pwd.length < 1) {
+                    layer.msg('请填写用户密码');
+                    return false;
+                }
+                if (mobile.length < 1) {
+                    layer.msg('请填写用户手机号');
+                    return false;
+                }
+                if (email.length < 1) {
+                    layer.msg('请填写用户邮箱');
+                    return false;
+                }
+                var From = $('#data-form').serialize();
+                $.ajax({
+                    url: "{:url('addPerson')}",
+                    data: From,
+                    type: 'post',
+                    success: function(result) {
+                        var d = eval("(" + result + ")");
+                        if (d.flag == 1) {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                            });
+                        } else {
+                            layer.msg(d.msg);
+                        }
+                    }
+                });
+            });
+
+            /**编辑人员信息**/
+            $('.editorAdmin').click(function() {
+                var id = $(this).attr('data-id');
+                $.ajax({
+                    url: "{:url('editorAdmin')}",
+                    type: 'get',
+                    data: 'id=' + id,
+                    success: function(d) {
+                        var result = eval("(" + d + ")");
+                        if (result.flag == 1) {
+                            var data = result.data;
+                            $('#name').val(data.name);
+                            $('#login_name').val(data.login_name);
+                            $('#mobile').val(data.mobile);
+                            $('#email').val(data.email);
+                            $('#remark').val(data.remark);
+                            $('#editid').val(data.id);
+                        }
+                        layer.open({
+                            closeBtn: 2,
+                            type: 1,
+                            area: '500px',
+                            title: '编辑人员信息',
+                            content: $('#editmotai'),
+                        });
+                    }
+                });
+            });
+
+            //添加编辑人员信息表单提交
+            $('.editsubmit').click(function() {
+               var name = $("#editdata-form input[name='name']").val();
+                var login_name = $("#editdata-form input[name='login_name']").val();
+                var mobile = $("#editdata-form input[name='mobile']").val();
+                var email = $("#editdata-form input[name='email']").val();
+
+                if (name.length < 1) {
+                    layer.msg('请填写用户名称');
+                    return false;
+                }
+                if (login_name.length < 1) {
+                    layer.msg('请填登陆账号');
+                    return false;
+                }
+                
+                if (mobile.length < 1) {
+                    layer.msg('请填写用户手机号');
+                    return false;
+                }
+                if (email.length < 1) {
+                    layer.msg('请填写用户邮箱');
+                    return false;
+                }
+                var From = $('#editdata-form').serialize();
+                $.ajax({
+                    url: "{:url('editorAdmin')}",
+                    type: 'POST',
+                    data: From,
+                    success: function(d) {
+                        var result = eval("(" + d + ")");
+                        if (result.flag == 3) {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                            });
+                        } else {
+                            layer.msg(result.msg);
+                        }
+
+                    }
+                });
+            });
+
+
+        });
+    });
+
+
+</script>
+{/block}

@@ -1,0 +1,136 @@
+{extend name='extra@main' /}
+{block name='popups'}
+    <!-- 提交评价提示框 -->
+    <div class="tooltip_box"></div>
+    <div class="tooltip_cemetery_orders">
+        <h2>删除订单</h2>
+        <p>您好，您确定要删除该订单吗？</p>
+        <div class="tooltip_cemetery_orders_btn">
+            <a class="qd" href="javascript:void(0);">确定</a>
+            <a class="qx" href="javascript:void(0);">取消</a>
+        </div>
+        <!-- 关闭按钮 -->
+        <span class="tooltip_cemetery_orders_cloce"></span>
+    </div>
+{/block}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/orders')}">陵园订单</a></li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+        {include file="extra@ucenter_left" /}
+        
+        <!-- 用户中心右侧 -->
+        <div class="user_right">
+            
+            <!-- 订单title -->
+            <div class="order_title">
+                <ul class="clearfix">
+                    <li class="ddxx">订单信息</li>
+                    <li class="gmr">购买人</li>
+                    <li class="phone">手机号码</li>
+                    <li class="zt">状态</li>
+                    <li class="jycz">交易操作</li>
+                </ul>
+            </div>
+            {volist name="orderList" id="s"}
+                <!-- 订单内容1 -->
+                <div class="cemetery_orders">
+                    <div class="cemetery_orders_title">
+                        <p>订单编号：{$s.order_grave_sn}    预约时间：{notempty name="s.appoint_time"} {$s.appoint_time|date="Y-m-d H:i:s",###} {/notempty}</p>
+                    </div>
+                    <div class="cemetery_orders_nr">
+                        <!-- 商品1 -->
+                        <ul class="clearfix">
+                            <!-- 订单信息 -->
+                            <li class="liimg clearfix">
+                                <a title="{$s.store_name}" target="_blank" href="{:url('cemetery/Cemetery/details',['id' => $s.store_id])}"><img alt="{$s.store_name}" {notempty name="s.store.thumb_image"} src="{$s.store.thumb_image}" {else/} src="{$s.store.image}" {/notempty}/></a>
+                                <h2>{$s.store_name}</h2>
+                            </li>
+                            <!-- 购买人 -->
+                            <li class="ligmr">{$s.reservation_person}</li>
+                            <!-- 手机号码 -->
+                            <li class="liphone">{$s.reservation_phone}</li>
+                            <!-- 状态 -->
+                            <li class="lizt">
+                                {eq name="s.status" value="0"}
+                                    预约
+                                {else/}
+                                    {gt name="s.status" value="0"}
+                                        成功
+                                    {/gt}
+                                {/eq}
+                            </li>
+                            <!-- 交易操作 -->
+                            <li class="licz">
+                                {gt name="s.status" value="0"}
+                                    <a class="ljfk" target="_blank" title="评论" href="{:url('ucenter/User/orderseval',['id' => $s.id])}">去评价</a>
+                                {else}
+                                    <div style="margin-top: 50px"></div>
+                                {/gt}
+                                <a class="cemetery_orders_delete_btn" data-id="{$s.id}" href="javascript:void(0);">删除订单</a>
+                            </li>
+                        </ul>
+                    </div><!-- cemetery_orders_nr End -->
+                </div><!-- cemetery_orders 订单内容 End -->
+            {/volist}
+            <!-- 分页 -->
+            <div class="paging">
+                {$page}
+            </div><!-- paging 分页 End -->
+
+            <!-- <div class="cemetery_orders_more">
+                <a href="#">查看更多订单</a>
+            </div> -->
+
+        </div><!-- user_right 用户中心右侧 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+{block name="js"}
+    <script>
+        $('.cemetery_orders_delete_btn').click(function() {
+            var id = $(this).data('id');
+            if (id) {
+                $(".tooltip_box,.tooltip_cemetery_orders").css({
+                    "display": "block"
+                });
+                $('.tooltip_cemetery_orders_btn .qd').click(function() {
+                    $.ajax({
+                        url: "{:url('ucenter/User/delorder')}",
+                        type: 'get',
+                        data: {
+                            id: id,
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                if (result['code'] == 1) {
+                                    $(".tooltip_box,.tooltip_cemetery_orders").css({
+                                        "display": "none"
+                                    });
+                                    window.location.reload();
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        $('.tooltip_cemetery_orders_btn .qx,.tooltip_cemetery_orders_cloce').click(function() {
+            $(".tooltip_box,.tooltip_cemetery_orders").css({
+                "display": "none"
+            });
+        });
+    </script>
+{/block}

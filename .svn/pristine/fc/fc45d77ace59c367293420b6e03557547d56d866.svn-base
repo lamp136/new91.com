@@ -1,0 +1,51 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: liu21st <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+return [
+    'subscribe/[:id]$'               => ['cemetery/Cemetery/subscribe',['method' => 'get'],['id' => '\d+']],// 预约看墓
+    'user$'                          => 'ucenter/User/users',// 用户中心
+    'upwd$'                          => 'ucenter/User/change',// 修改密码
+    'map/[:province]$'               => ['cemetery/Map/index',['method' => 'get'],['province' => '\d+']], // 地图看墓
+    'cemetery$'                      => ['cemetery/Cemetery/index',['method' => 'get'],['city' => '\d+'],['price' => '\w+'],['dist' => '\w+']], // 陵园列表页
+    'cemetery/detail/[:id]'          => ['cemetery/Cemetery/details',['method' => 'get'], ['id' => '\d+']], // 陵园详情
+    '/'                              => 'index/Index/index',//网站首页
+    'register$'                      => 'login/Login/register',//用户注册
+    'login$'                         => 'login/Login/login',//用户登录
+    'sublogin$'                      => 'login/Login/sublogin',//提交用户登录
+    'sendcode$'                      => 'login/Login/sendcode',//获取手机登录码
+    'moblogin$'                      => 'login/Login/moblogin',//手机号提交登录
+    'loginout'                       => 'login/Login/loginout',//退出登录
+    'ecological'                     => 'cemetery/Ecological/index',//生态葬首页
+    'funeral$'                       => ['funeral/Funeral/funeral',['method' => 'get'],['city' => '\d+'],['dist' => '\w+']],//殡仪馆列表
+    'funeral/detail/[:id]$'          => ['funeral/Funeral/details',['method' => 'get'], ['id' => '\d+']], // 殡仪馆详情
+    'article/index$'                 => 'article/Article/index', // 百科首页
+    'article/list/[:cid]$'           => ['article/Article/listbox',['method' => 'get'], ['cid' => '\d+']], // 百科列表页
+    'article/detail/[:cid]/[:id]$'   => ['article/Article/detail',['method' => 'get'], ['id' => '\d+'],['cid' => '\d+']],   // 百科详情页
+    
+    
+    'rite$'                          => 'rite/Rite/lists',                //服务列表
+    'rite/detail/:id$'               => 'rite/Rite/detail',        //服务详情
+    'rite/combo/:id$'                => 'rite/Rite/comboDetail',          //服务套餐详细
+    'contactus$'                     => 'help/Help/contactus',            //联系我们
+    'serviceprocess$'                => 'help/Help/serviceprocess',       //服务流程
+    'privacy$'                       => 'help/Help/privacy',              //隐私条款
+    'tombagelimit$'                  => 'help/Help/tombagelimit',         //公墓年限
+    'tombnotes$'                     => 'help/Help/tombnotes',            //购墓须知
+    'tombnotes/:id$'                 => 'help/Help/tombnotesDetails',     //购墓须知详情
+    'wasburied$'                     => 'help/Help/wasburied',            //落葬讲解
+    'aboutus$'                       => 'help/Help/aboutus',              //关于我们
+    'bury$'                          => 'help/Help/bury',                 //安葬吉日
+    'epigraphic$'                    => 'help/Help/epigraphic',           //碑文大全
+    'tombprocess$'                   => 'help/Help/tombprocess',          //购墓流程
+    'epigraphic/:category$'          => 'help/Help/epicdetail',  //碑文大全详情
+    'history$'                       => 'help/Help/history',              //历史上的今天
+    'history/:id$'                   => 'help/Help/historyDetails',       //历史上的今天详情
+];

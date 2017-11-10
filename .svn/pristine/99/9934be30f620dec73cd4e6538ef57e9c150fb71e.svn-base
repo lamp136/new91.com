@@ -1,0 +1,139 @@
+{extend name='extra@main' /}
+{block name='body'}
+<!-- banner -->
+<div class="epigraphic_banner"></div>
+
+<!-- 碑文大全内容 -->
+<div class="epigraphic_box">
+    <div class="contain contain_pdsize">
+
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+
+            <!-- 碑文 -->
+            <div class="epigraphic">
+
+                <!-- 父亲碑文 -->
+                <div class="epigraphic_main">
+                    <h2><img src="_WEB_/images/epigraphic_main_h2img1.png"/><a href="">查看更多>></a></h2>
+                    <ul>
+                        <li><a href="#">多年教导，音容笑貌永铭心下，教子耕读成大器；</a></li>
+                        <li><a href="#">一朝诀别，言谈举止化为儿行，嘱孙文武继良风；</a></li>
+                        <li><a href="#">寿越八秩，惠言惠行炳后世 含辛茹苦，独当风雨四十载；</a></li>
+                        <li><a href="#"> 仙游九天，仁爱仁心传千秋 呕心沥血，力践耕读一百年；</a></li>
+                        <li><a href="#">节俭律己，抱儿育女，恩情难忘 严父荣归，想念惟流伤感泪；</a></li>
+                        <li><a href="#">勤力持家，养子扶孙，功德圆满 子孙哀悼，惭愧未报养育恩；</a></li>
+                        <li><a href="#">完来大璞眼天地；</a></li>
+                    </ul>
+                </div><!-- epigraphic_main End -->
+
+                <!-- 母亲碑文 -->
+                <div class="epigraphic_main">
+                    <h2><img src="_WEB_/images/epigraphic_main_h2img2.png"/><a href="">查看更多>></a></h2>
+                    <ul>
+                        <li><a href="#">多年教导，音容笑貌永铭心下，教子耕读成大器；</a></li>
+                        <li><a href="#">一朝诀别，言谈举止化为儿行，嘱孙文武继良风；</a></li>
+                        <li><a href="#">寿越八秩，惠言惠行炳后世 含辛茹苦，独当风雨四十载；</a></li>
+                        <li><a href="#"> 仙游九天，仁爱仁心传千秋 呕心沥血，力践耕读一百年；</a></li>
+                        <li><a href="#">节俭律己，抱儿育女，恩情难忘 严父荣归，想念惟流伤感泪；</a></li>
+                        <li><a href="#">勤力持家，养子扶孙，功德圆满 子孙哀悼，惭愧未报养育恩；</a></li>
+                        <li><a href="#">完来大璞眼天地；</a></li>
+                    </ul>
+                </div><!-- epigraphic_main End -->
+
+                <!-- 父母合葬碑文 -->
+                <div class="epigraphic_main">
+                    <h2><img src="_WEB_/images/epigraphic_main_h2img3.png"/><a href="">查看更多>></a></h2>
+                    <ul>
+                        <li><a href="#">多年教导，音容笑貌永铭心下，教子耕读成大器；</a></li>
+                        <li><a href="#">一朝诀别，言谈举止化为儿行，嘱孙文武继良风；</a></li>
+                        <li><a href="#">寿越八秩，惠言惠行炳后世 含辛茹苦，独当风雨四十载；</a></li>
+                        <li><a href="#"> 仙游九天，仁爱仁心传千秋 呕心沥血，力践耕读一百年；</a></li>
+                        <li><a href="#">节俭律己，抱儿育女，恩情难忘 严父荣归，想念惟流伤感泪；</a></li>
+                        <li><a href="#">勤力持家，养子扶孙，功德圆满 子孙哀悼，惭愧未报养育恩；</a></li>
+                        <li><a href="#">完来大璞眼天地；</a></li>
+                    </ul>
+                </div><!-- epigraphic_main End -->
+
+                <!-- 子女碑文 -->
+                <div class="epigraphic_main">
+                    <h2><img src="_WEB_/images/epigraphic_main_h2img4.png"/><a href="">查看更多>></a></h2>
+                    <ul>
+                        <li><a href="#">多年教导，音容笑貌永铭心下，教子耕读成大器；</a></li>
+                        <li><a href="#">一朝诀别，言谈举止化为儿行，嘱孙文武继良风；</a></li>
+                        <li><a href="#">寿越八秩，惠言惠行炳后世 含辛茹苦，独当风雨四十载；</a></li>
+                        <li><a href="#"> 仙游九天，仁爱仁心传千秋 呕心沥血，力践耕读一百年；</a></li>
+                        <li><a href="#">节俭律己，抱儿育女，恩情难忘 严父荣归，想念惟流伤感泪；</a></li>
+                        <li><a href="#">勤力持家，养子扶孙，功德圆满 子孙哀悼，惭愧未报养育恩；</a></li>
+                        <li><a href="#">完来大璞眼天地；</a></li>
+                    </ul>
+                </div><!-- epigraphic_main End -->
+
+                <!-- 教师碑文 -->
+                <div class="epigraphic_main">
+                    <h2><img src="_WEB_/images/epigraphic_main_h2img5.png"/><a href="">查看更多>></a></h2>
+                    <ul>
+                        <li><a href="#">多年教导，音容笑貌永铭心下，教子耕读成大器；</a></li>
+                        <li><a href="#">一朝诀别，言谈举止化为儿行，嘱孙文武继良风；</a></li>
+                        <li><a href="#">寿越八秩，惠言惠行炳后世 含辛茹苦，独当风雨四十载；</a></li>
+                        <li><a href="#"> 仙游九天，仁爱仁心传千秋 呕心沥血，力践耕读一百年；</a></li>
+                        <li><a href="#">节俭律己，抱儿育女，恩情难忘 严父荣归，想念惟流伤感泪；</a></li>
+                        <li><a href="#">勤力持家，养子扶孙，功德圆满 子孙哀悼，惭愧未报养育恩；</a></li>
+                        <li><a href="#">完来大璞眼天地；</a></li>
+                    </ul>
+                </div><!-- epigraphic_main End -->
+
+                <!-- 通用碑文 -->
+                <div class="epigraphic_main">
+                    <h2><img src="_WEB_/images/epigraphic_main_h2img6.png"/><a href="">查看更多>></a></h2>
+                    <ul>
+                        <li><a href="#">多年教导，音容笑貌永铭心下，教子耕读成大器；</a></li>
+                        <li><a href="#">一朝诀别，言谈举止化为儿行，嘱孙文武继良风；</a></li>
+                        <li><a href="#">寿越八秩，惠言惠行炳后世 含辛茹苦，独当风雨四十载；</a></li>
+                        <li><a href="#"> 仙游九天，仁爱仁心传千秋 呕心沥血，力践耕读一百年；</a></li>
+                        <li><a href="#">节俭律己，抱儿育女，恩情难忘 严父荣归，想念惟流伤感泪；</a></li>
+                        <li><a href="#">勤力持家，养子扶孙，功德圆满 子孙哀悼，惭愧未报养育恩；</a></li>
+                        <li><a href="#">完来大璞眼天地；</a></li>
+                    </ul>
+                </div><!-- epigraphic_main End -->
+
+            </div><!-- epigraphic End -->
+
+        </div><!-- leftcontain 左侧内容 End -->
+
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+
+            <!-- 碑文的写法 -->
+            <div class="epigraphic_style cem_margin_bottom">
+                <a href="#">
+                    <img src="_WEB_/images/epigraphic_style_img.jpg" alt=""/>
+                    <p>碑文的基本写法</p>
+                </a>
+            </div><!-- epigraphic_style 碑文的写法 End -->
+
+            <!--相关文章-->
+            <div class="policies cem_margin_bottom">
+                <h2>相关文章</h2>
+                <ul>
+                    <li><a href="#">为什么要写碑文呢？</a></li>
+                    <li><a href="#">碑文的格式和样式都有哪些？</a></li>
+                    <li><a href="#">碑文的基本写法有什么？</a></li>
+                    <li><a href="#">为什么要写碑文呢？</a></li> 
+                    <li><a href="#">碑文的格式和样式都有哪些？</a></li>
+                    <li><a href="#">碑文的基本写法有什么？</a></li>
+                </ul>
+            </div><!-- policies 相关文章 End-->
+
+            <!--广告位-->
+            <div class="advertising advborder">
+                <img src="_WEB_/images/epigraphic_img1.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+
+        </div><!-- leftcontain 右侧内容 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+</div><!-- epigraphic_box 碑文大全内容 End -->
+{/block}

@@ -1,0 +1,31 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+use think\Db;
+use back\extra\controller\XmlModel;
+
+/**
+ * Xml生成文件
+ */
+class Sitemap extends XmlModel
+{
+	function index(){
+		return $this->fetch();
+	}
+
+    function createXml(){
+    	$res = array('flag'=>0,'msg'=>'创建失败');
+        $arr = config('xml_url');
+        $site = new Sitemap(); 
+        foreach ($arr as $key => $value) {               
+            $site->AddItem($value, 1);
+        }     
+        $data = $site->SaveToFile('sitemap.xml');
+        if($data){
+        	$res = array('flag'=>1,'msg'=>'创建成功');
+        }
+
+        echo json_encode($res);
+
+    }
+}

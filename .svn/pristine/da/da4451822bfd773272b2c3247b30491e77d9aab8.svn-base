@@ -1,0 +1,60 @@
+<?php
+namespace web\article\controller;
+use think\Controller;
+use web\extra\controller\Base;
+use think\Db;
+use think\Request;
+use think\Cookie;//cookie类
+
+/**
+ * 殡葬百科控制器
+ * author heqingyu;
+ * date   17/7/17 17:04:00;
+ */
+class Article extends Base{  
+    
+//    public function _initialize(){
+//        //百科导航信息
+//        $cateWhere['is_show'] = config('normal_status');
+//        $catdata = Db::name('category')->field('id,pid')->where($cateWhere)->field('id,name,pid')->select();
+//        $category = $this->categorytree($catdata,1);//config('news_category_id')
+//        dump($category);die;
+//        dump($catdata);die;
+//        
+//    }
+    private function categorytree($catdata,$id){
+        static $result = "";
+        foreach($catdata as $val){
+            if($val['pid'] == $id ){
+                $val['child'] = $this->categorytree($catdata,$val['id']);
+                $result[] = $val;
+            }
+            continue;//???
+        }
+        return $result;
+    }
+    /*
+     * 殡葬百科首页
+     * @param   void;
+     * @return  void;
+     */
+    public function index(){
+        return $this->fetch();
+    }
+    /*
+     * 殡葬百科列表页
+     * @param   void;
+     * @return  void;
+     */
+    public function listbox(){
+        return $this->fetch();
+    }
+    /*
+     * 殡葬百科详情页
+     * @param   void;
+     * @return  void;
+     */
+    public function detail(){
+        return $this->fetch();
+    }
+}

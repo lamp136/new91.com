@@ -1,0 +1,142 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+use back\extra\model\SearchEngine;
+
+/**
+ * 搜索词词库
+ * 
+ */
+class SearchKey extends Base
+{
+	/**
+	 * 搜索关键词列表页
+	 * @return void;
+	 */
+	public function index(){
+		$get = input('get.');
+        $pageSize = Config('page_size');
+        $search = array();
+        if(!empty($get)){
+        	$search['type']= $get['type'];
+        }
+		$list = Db::name('SearchEngine')->where($search)->order('created_time desc')->paginate($pageSize,false,['query'=>$get]);
+		$page = $list->render();
+		$map['level'] = config('normal_status');
+        $map['status'] = config('normal_status');
+        $province = Db::name('region')->where($map)->column('id,name');
+        
+        $type= config('search_type');
+        $this->assign('province',$province);
+		$this->assign('list',$list);
+		$this->assign('type',$type);
+		$this->assign('page',$page);
+        return $this->fetch();	
+    }
+
+
+    /**
+	 * 添加过滤词
+	 */
+	public function add(){
+		$postData = input('post.');
+        $member_status['member_status'] = 0;
+        if(!empty($postData['store_id'])){
+            unset($member_status['member_status']);
+            $store_id = $postData['store_id'];
+            $member_status = Db::name('store')->where('id='.$store_id)->field('member_status')->find();
+        }
+		$str = rtrim($postData['keyword'],'；');
+		$data =explode('；',$str);
+		foreach($data as $v){
+			$list[]= [
+ 				'province_id'=>$postData['province_id'],
+ 				'created_time'=>time(),
+ 				'keyword'=>$v,
+ 				'store_id'=>$postData['store_id'],
+ 				'type'=>$postData['type'],
+                'member_status' => $member_status['member_status']
+ 			];
+		}
+		$sub = new SearchEngine;
+ 		$final = $sub->saveAll($list);
+		if($final){
+			$result['flag'] = 1;
+			$result['msg'] = '操作成功';
+		}
+		echo json_encode($result);
+	}
+
+	/**
+	 * 编辑
+	 */
+	public function edit(){
+         $result = array('flag'=>0,'data'=>array());
+
+        if(Request::instance()->isPost()){
+        	$postData = input('post.');
+        	$id = $postData['id'];
+        	$data['updated_time'] = time();
+        	$data['keyword'] = $postData['keyword'];
+            if(Db::name('SearchEngine')->where('id='.$id)->update($data)){
+                $result['flag'] = 1;
+                $result['msg'] = '操作成功';
+            }
+        }else{
+        	$getInfo = input('get.');
+        	$id = $getInfo['id'];
+            if(!empty($id)){
+                $data = Db::name('SearchEngine')->find($id);
+                if(!empty($data['store_id'])){
+                         $name = Db::name('store')->where('id',$data['store_id'])->field('id,name')->find();
+                         $data['store_name'] = $name['id'];
+                 }
+                if(!empty($data)){
+                    $result['flag'] = 1;
+                    $result['data'] = $data;
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+
+
+    /**
+     * 删除
+     */
+    public function del(){
+    	if(Request::instance()->isPost()){
+            $id = input('id');
+            $result = array('flag'=>0,'msg'=>'操作失败');
+            
+            if(Db::name('SearchEngine')->where('id='.$id)->delete()){
+                $result['flag'] = 1;
+                $result['msg'] = '操作成功';
+            }
+            echo json_encode($result);
+        }
+    }
+
+       /**
+     * 获取陵园列表(添加)
+     */
+    public function getcemetery(){
+        $result = array('flg'=>0,'data'=>'');
+        $info = input('post.');
+        $where['province_id'] = $info['provinceId'];
+        $where['category_id'] = $info['type'];
+        $where['status'] = config('normal_status');
+        $list = Db::name('store')->where($where)->field('id,name,member_status')->select();
+        if($list){
+            $result = array('flg'=>1,'data'=>$list);
+        }
+        echo json_encode($result);
+    }
+
+ 
+}	

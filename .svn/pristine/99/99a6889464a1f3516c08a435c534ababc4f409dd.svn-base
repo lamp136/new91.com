@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {include file="extra@head" /}
+    <script src="_WEB_/js/jquery.cookie.js"></script>
+</head>
+<body>
+    {include file="extra@topup" /}
+    {include file="extra@topdown" /}
+    <!-- 面包屑 -->
+    <div class="contain">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/" title="首页">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/cemetery')}" title="陵园">陵园</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('cemetery/Cemetery/details',['id' => $store.id])}" title="{$store.name}">{$store.name}</a></li>
+                <li class="jt">></li>
+                <li>预约看墓</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+    </div><!-- contain End -->
+
+    <div class="subscribe_banner">
+         <div class="contain">
+            <div class="subscribe_box">
+                <h2>{$store.name}</h2>
+                <form id="subscribeForm">
+                    <ul class="subscribe_box_main">
+                        <li>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_name" name="name" type="text" placeholder="姓名" value="{notempty name="session_name"} {$session_name} {/notempty}"/>
+                        </li>
+                        <li>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_mobile" name="mobile" type="text" placeholder="手机号" value="{notempty name="session_mobile"}{$session_mobile}{/notempty}"/>
+                            <input type="hidden" name="store_id" value="{$store.id}"/>
+                            <span class="log_validate reg_mobile"></span>
+                        </li>
+                        
+                        <li class="getyzm" {notempty name="session_name"} style="display: none;" {/notempty}>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_code" name="code" type="text" placeholder="验证码"/>
+                            <input class="getcode_btn" type="button" id="getting"  data-url="{:url('cemetery/Cemetery/verifyCode')}" value="获取验证码">
+                            <span class="log_validate reg_msg"></span>
+                        </li>
+                        <li class="login_btn">
+                            <a class="sub_appoint_btn" href="javascript:void(0);" data-url="{:url('cemetery/Cemetery/putscribe')}" data-order-url="{:url('ucenter/User/cemeteryorders')}"  title="立即预约">立即预约</a>
+                        </li>
+                    </ul>
+                </form>
+             </div>
+         </div>
+    </div>
+    {include file="extra@appiontfootdown" /}
+<!-- 搜索提示 -->
+{include file="extra@publicjs"/}
+<script type="text/javascript" src="_WEB_/js/hit.js"></script>
+<!--私有JS -->
+<script type="text/javascript">
+    var  sessionMobile = {$session_mobile};
+</script>
+<script type="text/javascript" src="_WEB_/js/subscribe.js"></script>
+</body>
+</html>
+    

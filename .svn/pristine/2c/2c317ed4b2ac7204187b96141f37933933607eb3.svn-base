@@ -1,0 +1,124 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        <a><cite>地区订单</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <!--筛选 start-->
+    <form  method="get"  autocomplete="off" action='{:url("regionorder")}'>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" >时间:</label>
+                <div class="layui-input-inline" style="width: 110px;">
+                    <input name="start_time" value="{$start_time}" lay-verify="date" placeholder="开始时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+                </div>
+                <div class="layui-form-mid">—</div>
+                <div class="layui-input-inline" style="width: 110px;">
+                    <input name="end_time" value="{$end_time}" lay-verify="date" placeholder="结束时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+                </div>
+                <button class="layui-btn layui-btn-small" lay-submit="" >查询</button>
+            </div>
+        </div>
+    </form>
+    <!--筛选 end-->
+    <!--下载 start-->
+    {php}
+        if (showHandle('analysis/Analysis/regionorderdown')) {
+    {/php}
+        <form  method="get"  autocomplete="off" action='{:url("Analysis/regionorderdown")}'>
+            <div class="layui-form-item" style="margin-top:-10px;">
+                <span style="display:none;">
+                    <!--时间-->
+                    <input type="text" name="start_time" value="{$start_time}">
+                    <input type="text" name="end_time" value="{$end_time}" >
+                </span>
+                <div class="layui-input-block" style="float:right;">
+                    <button class="layui-btn layui-btn-small" lay-submit="" lay-filter="demo1">下载数据??</button>
+                </div>
+            </div>
+        </form>
+    {php}
+        }
+    {/php}
+    <!--下载 end-->
+    <!--表格部分start-->
+    <table class="layui-table" style="margin-top:-10px;">
+        <colgroup>
+            <col width="200">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>地区名称</th>
+                <th>订单总数</th>
+                <th>完成订单</th>
+                <th>待收佣金</th>
+                <th>已交订金</th>
+                <th>待返现</th>
+                <th>会员</th>
+                <th>非会员</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {php}
+                $all_total = 0;
+                $check_success = 0;
+                $get_money = 0;
+                $deposit = 0;
+                $success = 0;
+                $store_status = 0;
+                $no_store_status = 0;
+            {/php}
+            {volist name="data" id="vo"}
+                <tr>
+                    <td>{$vo.regionname}</td>
+                    <td><a href='{:url("Analysis/orderdetails",array("field"=>"created_time","city_id"=>$vo.regionid,"start_time"=>$start_time,"end_time"=>$end_time))}' target='_blank'>{$vo.all_total}</a></td>
+                    <td>{notempty name="vo.success"}<a href='{:url("Analysis/orderdetails",array("field"=>"payfor_us_time","city_id"=>$vo.regionid,"start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.success))}' target='_blank'>{$vo.success}</a>{/notempty}</td>
+                    <td>{notempty name="vo.check_success"}<a href='{:url("Analysis/orderdetails",array("field"=>"created_time","city_id"=>$vo.regionid,"start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.check_success,"send_finance_status"=>$Think.config.normal_status))}' target='_blank'>{$vo.check_success}</a>{/notempty}</td>
+                    <td>{notempty name="vo.deposit"}<a href='{:url("Analysis/orderdetails",array("field"=>"created_time","city_id"=>$vo.regionid,"start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.deposit))}' target='_blank'>{$vo.deposit}</a>{/notempty}</td>
+                    <td>{notempty name="vo.get_money"}<a href='{:url("Analysis/orderdetails",array("field"=>"created_time","city_id"=>$vo.regionid,"start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.get_money))}' target='_blank'>{$vo.get_money}</a>{/notempty}</td>
+                    <td>{notempty name="vo.store_status"}<a href='{:url("Analysis/orderdetails",array("field"=>"created_time","city_id"=>$vo.regionid,"start_time"=>$start_time,"end_time"=>$end_time,"store_status"=>true))}' target='_blank'>{$vo.store_status}</a>{/notempty}</td>
+                    <td>{notempty name="vo.no_store_status"}<a href='{:url("Analysis/orderdetails",array("field"=>"created_time","city_id"=>$vo.regionid,"start_time"=>$start_time,"end_time"=>$end_time,"store_status"=>"0"))}' target='_blank'>{$vo.no_store_status}</a>{/notempty}</td>
+                </tr>
+                {php}
+                    $all_total += $vo['all_total'];
+                    $check_success += $vo['check_success'];
+                    $get_money += $vo['get_money'];
+                    $deposit += $vo['deposit'];
+                    $success += $vo['success'];
+                    $store_status += $vo['store_status'];
+                    $no_store_status += $vo['no_store_status'];
+                {/php}
+            {/volist}
+            <tr style="color:red">
+                <td>总和</td>
+                <td><a href='{:url("Analysis/orderdetails",array("field"=>"created_time","start_time"=>$start_time,"end_time"=>$end_time))}' target='_blank' style="color:red">{$all_total}</a></td>
+                <td><a href='{:url("Analysis/orderdetails",array("field"=>"payfor_us_time","start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.success))}' target='_blank' style="color:red">{$success}</a></td>
+                <td><a href='{:url("Analysis/orderdetails",array("field"=>"created_time","start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.check_success,"send_finance_status"=>$Think.config.normal_status))}' target='_blank' style="color:red">{$check_success}</td>
+                <td><a href='{:url("Analysis/orderdetails",array("field"=>"created_time","start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.deposit))}' target='_blank' style="color:red">{$deposit}</a></td>
+                <td><a href='{:url("Analysis/orderdetails",array("field"=>"created_time","start_time"=>$start_time,"end_time"=>$end_time,"status"=>$Think.config.order_status.get_money))}' target='_blank' style="color:red">{$get_money}</a></td>
+                <td><a href='{:url("Analysis/orderdetails",array("field"=>"created_time","start_time"=>$start_time,"end_time"=>$end_time,"store_status"=>true))}' target='_blank' style="color:red" >{$store_status}</a></td>
+                <td><a href='{:url("Analysis/orderdetails",array("field"=>"created_time","start_time"=>$start_time,"end_time"=>$end_time,"store_status"=>"0"))}' target='_blank' style="color:red" >{$no_store_status}</a></td>
+            </tr>
+        </tbody>
+    </table> 
+    <!--表格部分end-->
+</div>
+{/block}
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'layer','form','laydate'], function(){
+        
+    });
+</script>
+{/block}
+

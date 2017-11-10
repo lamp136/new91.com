@@ -1,0 +1,172 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- banner 日历 -->
+    <div class="history_banner">
+        <div class="contain">
+
+            <!-- 日历 -->
+            <div class="calendar">
+                <!-- 月份查询 -->
+                <div class="month">
+                    月份查询：
+                    <select class="month_sel">
+                        {volist name='$Think.config.month' id='vo'}
+                        <option value="{:url('help/Help/history',['month'=>$key,'day'=>01])}" {eq name='$month' value='$key'} selected="selected" {/eq} >{$vo}</option>
+                        {/volist}
+                    </select>
+                </div><!-- month 月份查询 End -->
+                
+                <!-- 日期 -->
+                <div class="date">
+                    <p>{$year}-{$month}-{$day}&nbsp;{$Think.config.week[$week]}</p>
+                    <h2>{$day}</h2>
+                    <p>丁酉鸡年&nbsp;五月十八</p>
+                </div>
+                
+                <!-- 日历内容 -->
+                <div class="calendar_main">
+                    <ul class="week clearfix">
+                        <li>日</li>
+                        <li>一</li>
+                        <li>二</li>
+                        <li>三</li>
+                        <li>四</li>
+                        <li>五</li>
+                        <li>六</li>
+                    </ul>
+
+                    <ul class="day clearfix">
+                        {if condition='$firstDay neq 0'}
+                            {for start='0' end='$firstDay'}
+                                <li><a href="javascript:void(0);"></a></li>
+                            {/for}
+                        {/if}
+                        {for start='1' end='$countDay'}
+                            <li><a href="{:url('help/Help/history',['month'=>$month,'day'=>$i])}" {eq name='$i' value='$day'} class='led' {/eq}>{if condition='$i lt 10' } 0{$i} {else/}{$i} {/if}</a></li>
+                        {/for}
+                    </ul>
+                </div><!-- calendar_main 日历内容 End -->
+
+            </div><!-- calendar 日历 End -->
+
+        </div><!-- contain End -->
+    </div><!-- history_banner banner 日历 End -->
+    
+    <!-- 历史上的今天 -->
+    <div class="contain history_contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/" title='91搜墓网'>首页</a></li>
+                <li class="jt">></li>
+                <li>历史上的今天</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 日期 -->
+        <div class="history_title">
+            <h2><span>{$month}</span>月<span>{$day}</span>日</h2>
+            <p>这一天历史上发生的大事</p>
+        </div><!-- history_title 日期 End -->
+        
+        <!-- 历史上的今天内容 -->
+        <div class="history_box">
+            <ul id='box'>
+                <!-- 1 -->
+                {volist name='list' id='vo' }
+                <li class="li" clas-tag='{$vo.tag}'>
+                    <!-- 内容 -->
+                    <div {if $vo.tag%2==0} class="history_box_main history_box_main_left" {else/} class="history_box_main" {/if}>
+                        <!-- 日期 -->
+                        <div {if $vo.tag%2==0} class="title title2" {else/} class="title" {/if}>
+                            <h2>{$key}</h2>
+                        </div>
+                        <!-- 新闻内容 -->
+                        <div  {if $vo.tag%2==0} class="history_main history_main2" {else/} class="history_main"{/if}>
+                            <h3><a href="{:url('help/Help/historyDetails',['id'=>$vo.0.id])}">{$vo.0.title}</a></h3>
+                            <ul>
+                            {volist name='vo' id='data' offset='1' length='9'}
+                                {notempty name='$data.title'}
+                                <li><a href="{:url('help/Help/historyDetails',['id'=>$data.id])}">{$data.title}</a></li>
+                                {/notempty}
+                            {/volist}
+                            </ul>
+                            <span class="bg"></span>
+                        </div>
+                    </div><!-- history_box_main End -->
+                </li>
+                {/volist}
+            </ul>
+        </div><!-- history_box 历史上的今天内容 End -->
+        
+        <!-- 加载更多按钮 -->
+        <div class="history_more_btn clearfix" >
+            <a href="javascript:void(0);" tag-year='{$tagYear}' select-url="{:url('help/Help/historyMore')}" month='{$month}' day='{$day}'>加载更多</a>
+            <span>找到记录约{$countNum}条</span>
+        </div><!-- history_more_btn 加载更多按钮 End -->
+    </div><!-- contain End -->
+{/block}
+{block name='js'}
+<script>
+    //选择月跳转
+    $('.month_sel').change(function(){
+        var url = $(".month_sel option:selected").val();
+        window.location.href = url;
+    });
+    //加载更多
+    $('.history_more_btn').find('a').click(function(){
+        var athis = $(this);
+        var url = athis.attr('select-url');
+        var year = athis.attr('tag-year');
+        var month = athis.attr('month');
+        var day = athis.attr('day');
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {year:year,month:month,day:day},
+            dataType: 'json',
+            success: function(d) {
+                var data = d.data;
+                var keys = Object.keys(data).sort().reverse();
+                var titleLength = $('.title').length;
+                if(d.flag==1){
+                    athis.attr('tag-year',d.tagYear);
+                    var str = '';
+                    var n = 0;
+                    var clas1 = '';
+                    var clas2 = '';
+                    var clas3 = '';
+                    var total = keys.length;
+                    for(var j=0; j<total; j++) {
+                        var index = keys[j];
+                        var item = data[index];
+                        if(((titleLength+n)%2)==0){
+                            clas1 = " class='history_box_main'";
+                            clas2 = " class='title'";
+                            clas3 = " class='history_main'";
+                        }else{
+                            clas1 = " class='history_box_main history_box_main_left'";
+                            clas2 = " class='title title2'";
+                            clas3 = " class='history_main history_main2'";
+                        }
+                        n++;
+                        str += "<li class='li'><div " +clas1 + ">"; 
+                        str += "<div"+clas2+">";
+                        str += "<h2>"+index+"</h2></div>";
+                        str += "<div"+clas3+">";
+                        str += "<h3><a href='history/"+item[0]['id']+"'>"+item[0]['title']+"</a></h3><ul>";
+                        for (var i=1;i<item.length;i++) {
+                            str += "<li><a href='history/"+item[i]['id']+"'>"+item[i]['title']+"</a></li>";
+                        }
+                        str += "</ul><span class='bg'></span></div></div></li>";
+                    }
+                    $('#box').append(str);
+                }else{
+                    athis.remove();
+                }   
+            }
+        });
+    })
+</script>
+{/block}

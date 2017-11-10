@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+    <link href="/static/web/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/static/web/js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+    <div class="contain four">
+        <img src="/static/web/images/four_img.jpg"/>
+        <p>抱歉！您访问的页面可能被删除或者暂时无法访问，<br/>您可以返回到  <a href="/">首页</a>，系统 <span id="count"></span> 秒将自动为您跳转......</p>
+    </div>
+    <script>
+        $(function() {
+            var count = 5;
+            $('#count').text(count);
+            var interVal = setInterval(function() {
+                count--;
+                if (count > 0) {
+                    $('#count').text(count);
+                } else {
+                    location.href = '/';
+                    clearInterval(interVal);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

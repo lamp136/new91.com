@@ -1,0 +1,140 @@
+{extend name='extra@main' /}
+{block name="body"}
+<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        <a><cite>操作日志</cite></a>
+    </span>
+</div>
+
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+ 
+    <span class="layui-btn delall" style="float:right;margin-top:-55px;margin-right:10px;margin-bottom:10px;">
+            <i class="layui-icon" >清空</i>
+    </span>
+        
+    <table class="layui-table">
+        <colgroup>
+            <col width="5%">
+            <col width="6%">
+            <col width="10%">
+            <col width="6%">
+            <col width="20%">
+            <col width="28%">
+            <col width="8%">
+            <col width="20%">
+        </colgroup>
+        <thead>
+          <tr> 
+            <th>操作者</th>
+            <th>控制器</th>
+            <th>执行时间</th>
+            <th>执行方法</th>
+            <th>操作前</th>
+            <th>操作后</th>
+            <th>IP</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+            {volist name="logs"  id="vo"}
+                <tr>
+                    <td>{$vo.admin_name}</td>
+                    <td>{$vo.controller}</td>
+                    <td>{$vo.time|date="Y-m-d H:i:s",###}</td>
+                    <td>{$vo.action}</td>
+                    <td>{$vo.get_data}</td>
+                    <td>{$vo.post_data}</td>
+                    <td>{$vo.ip|long2ip}</td>
+                    <td>
+                        <a href="javascript:void(0)"  data-id="{$vo.id}" title="删除" class="layui-btn layui-btn-small layui-btn-danger  delbill"><i class="layui-icon" >删除</i></a>
+
+
+
+
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {$page}
+</div>
+{/block}
+
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'form','laydate','laypage'],function(){
+         var $= layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form();
+            var laypage = layui.laypage;   
+            // 清空
+        $('.delall').click(function(){
+            layer.confirm('确定清空全部数据?', {icon: 3, title:'提示'}, function(index){
+                 var act = 'delAll';
+                $.ajax({
+                    url: "{:url('deloperateLogs')}",
+                    type: 'post',
+                    data: {
+                        act:act,
+                    },
+                    success: function (d) {
+                        var result = eval("(" + d + ")");
+                         if (result.flag == 1) {
+                             layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                              })
+                        } else {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                             })
+                        }
+                    }
+                });
+            });
+        });
+
+        // 删除
+        $('.delbill').click(function(){
+            var logsId = $(this).attr('data-id');
+            var act = 'del';
+            //获取要编辑的信息
+            $.ajax({
+                url: "{:url('delLogs')}",
+                type: 'POST',
+                data: {
+                    id:logsId,
+                    act:act,
+                },
+                datatype:'json',
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                   if (result.flag == 1) {
+                         layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+                },
+            });
+        });
+
+        $('.backspace').click(function(){
+        });
+}); 
+    </script>
+{/block}

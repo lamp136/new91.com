@@ -1,0 +1,122 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <tr>
+            <td>时间:<span style="color:red;">*</span></td>
+            <td>
+                    <input name="start_time" value="" lay-verify="date" placeholder="开始时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+            </td>
+         </tr>
+         <tr>
+            <td>
+                    <input name="end_time" value="" lay-verify="date" placeholder="结束时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+            </td>
+        </tr>
+        <tr>
+            <td>访客总量<span style="color:red;">*</span></td>
+            <td>  
+                <input type="text" name="total_visitors" placeholder="访客总量" autocomplete="off" class="layui-input" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>自然访客量<span style="color:red;">*</span></td>
+            <td>  
+                <input type="text" name="natural_visitors" placeholder="自然访客量" autocomplete="off" class="layui-input" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>竞价访客量<span style="color:red;">*</span></td>
+            <td>  
+                <input type="text" name="badding_visitors" placeholder="竞价访客量" autocomplete="off" class="layui-input" value="">
+            </td>
+        </tr>
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="bbs_update_button">提交</div>
+        </div>
+       
+
+    </form>
+</div>
+{/block}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">插件</a>
+        <a><cite>百度访客量统计列表</cite></a>
+    </span>
+</div>
+<div  style="margin-top: 10px;margin-left: 10px;margin-bottom: 10px;">
+        <button class="layui-btn  addData" style="margin-bottom:5px;"><span>添加百度访客数据</span>
+</div>
+      
+    
+    <table class="layui-table" style="margin-top:-10px;">
+        <colgroup>
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col width="200">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>访客总量</th>
+                <th>自然访客量</th>
+                <th>竞价访客量</th>
+                <th>录入区间</th>
+            </tr> 
+        </thead>
+        {volist name="data" id="vo"}
+        <tbody>
+                <tr>
+                    <td>{$vo.total_visitors}</td>
+                    <td>{$vo.natural_visitors}</td>
+                    <td>{$vo.badding_visitors}</td>
+                    <td>{$vo.start_time|date='Y-m-d',###}---{$vo.end_time|date='Y-m-d',###}</td>
+                </tr>
+        </tbody>
+        {/volist}
+{/block}
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'layer','form','laydate'], function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+        $('.addData').click(function(){
+            layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '700px',
+            title: '添加百度访客数据',
+            content: $('#close_update_form')
+         })
+        });
+
+    $('#bbs_update_button').click(function(){
+        var From = $('#update_bbs_info_form').serialize();
+        $.ajax({
+            url: "{:url('add')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var result  =  eval("("+result+")");
+                if(result.flag==1){
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                    });
+                }else{
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                    });
+                }
+            }
+        });
+
+    });   
+
+
+
+    });
+</script>
+{/block}

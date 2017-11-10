@@ -1,0 +1,30 @@
+<?php
+namespace web\intro\controller;
+use think\Controller;
+use think\Db;
+use think\Cookie;//cookie类
+use web\extra\controller\Base;
+use web\extra\model\Store;
+
+class Sitemap extends Base
+{
+    /**
+     * 站点地图
+     * @return void
+     */
+    public function index(){
+        $storeDatas = Db::table(['__STORE__' => 's','__REGION__' => 'r'])->field(['s.id','s.name','s.category_id','s.member_status','r.id' => 'region_id','r.name' => 'region_name','r.abbreviate' => 'abbr'])->where('s.province_id = r.id and s.status > 0')->order('s.member_status desc,r.sort asc')->select();
+        if($storeDatas){
+            foreach ($storeDatas as $key => $val) {
+                $stores[strtolower($val['abbr'])][$val['category_id']][] = $val;
+                $stores[strtolower($val['abbr'])]['region_name'] = $val['region_name'];
+            }
+        }
+        $this->assign([
+            'stores' => $stores
+        ]);
+        $seo = $this->getseo();
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+}

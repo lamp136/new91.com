@@ -1,0 +1,603 @@
+{extend name='extra@main' /}
+{block name="layer"}
+
+<div id="addmotai" style="display: none;padding: 20px;">
+    <form id="addForm" method="post" class="layui-form" autocomplete="off">
+            <table class="layui-table">
+                <tbody>
+                <tr>
+                    <td>时间：</td>
+                    <td>
+                        <input class="layui-input add-time" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})"  name="start_time" type="text" data-rule="required" >
+                        至
+                        <input class="layui-input add-time" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" name="end_time" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>省份</td>
+                    <td>
+                        <select class="input-medium m-wrap" name="province_id" lay-filter="addChang">
+                            <option value="">--选择省份--</option>
+                            {volist name="region" id="v"}
+                                <option value="{$key}">{$v}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>用途：</td>
+                    <td>
+                        <select name="category_id" lay-filter="categoryChang" id="categoryChang">
+                            <option value="0">--请选择--</option>
+                            {volist name='moneyUser' id='mu'}
+                                <option value="{$key}">{$mu}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>消费：</td>
+                    <td><input class="layui-input add-price" name="consume" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>点击量：</td>
+                    <td><input class="layui-input add-price"  name="hit" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>展现量：</td>
+                    <td><input class="layui-input add-price" name="show" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>点击价格：</td>
+                    <td><input class="layui-input"  name="average_click_price" type="text" readonly="readonly">
+                    </td>
+                </tr>
+                <tr>
+                    <td>点击率：</td>
+                    <td><input class="layui-input click_rate"  name="click_rate" type="text" readonly="readonly" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>预约量：</td>
+                    <td><input class="layui-input add-price"  name="reservation" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>平均成本</td>
+                    <td><input class="layui-input"  name="cost" type="text" readonly="readonly">
+                    </td>
+                </tr>
+                <tr>
+                    <td>成交量</td>
+                    <td><input class="layui-input"  name="deal" type="text" data-rule="required" >
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td>状态：</td>
+                    <td>
+                        <input type="radio" name="status" value="{$Think.config.normal_status}" title="正常" checked="checked">
+                        <input type="radio" name="status" title="删除" value="{$Think.config.delete_status}">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">
+                        <button class="layui-btn submitadd"  type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<div id="editmotai" style="display: none;padding: 20px;">
+    <form id="editForm" method="post" class="layui-form" autocomplete="off">
+            <table class="layui-table">
+                <tbody>
+                <tr>
+                    <td>时间：</td>
+                    <td>
+                        <input class="layui-input" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" name="start_time" type="text" data-rule="required" >
+                        至
+                        <input class="layui-input" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" name="end_time" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>省份</td>
+                    <td>
+                        <select class="input-medium m-wrap" name="province_id">
+                            <option value="">--选择省份--</option>
+                            {volist name="region" id="v"}
+                                <option value="{$key}">{$v}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>用途：</td>
+                    <td>
+                        <select name="category_id" lay-filter="categoryChang" id="categoryChang">
+                            <option value="0">--请选择--</option>
+                            {volist name='moneyUser' id='mu'}
+                                <option value="{$key}">{$mu}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>消费：</td>
+                    <td><input class="layui-input edit-blur" name="consume" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>点击量：</td>
+                    <td><input class="layui-input edit-blur"  name="hit" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>展现量：</td>
+                    <td><input class="layui-input edit-blur" name="show" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>点击价格：</td>
+                    <td><input class="layui-input"  name="average_click_price" type="text" readonly="readonly">
+                    </td>
+                </tr>
+                <tr>
+                    <td>点击率：</td>
+                    <td><input class="layui-input"  name="click_rate" type="text" readonly="readonly" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>预约量：</td>
+                    <td><input class="layui-input edit-blur"  name="reservation" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>平均成本</td>
+                    <td><input class="layui-input"  name="cost" type="text" readonly="readonly">
+                    </td>
+                </tr>
+                <tr>
+                    <td>成交量</td>
+                    <td><input class="layui-input"  name="deal" type="text" data-rule="required" >
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td>状态：</td>
+                    <td>
+                        <input type="radio" name="status" value="{$Think.config.normal_status}" title="正常" checked="checked">
+                        <input type="radio" name="status" title="删除" value="{$Think.config.delete_status}">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">
+                        <input type="hidden"  name='id' value="">  
+                        <button class="layui-btn submitedit"  type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{/block}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">运营</a>
+        <a><cite>推广支出记录</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: -30px;">
+    <!--筛选 start-->
+    <form  method="get"  autocomplete="off" action='{:url("index")}'>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" >时间:</label>
+                <div class="layui-input-inline" style="width: 110px;">
+                    <input name="start_time"  lay-verify="date" placeholder="开始时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+                </div>
+                <div class="layui-form-mid">—</div>
+                <div class="layui-input-inline" style="width: 110px;">
+                    <input name="end_time"  lay-verify="date" placeholder="结束时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text"  >
+                </div>
+                <div class="layui-form-mid">—</div>
+                <div class="layui-input-inline" style="width: 110px;">
+                    <select class="input-small m-wrap" tabindex="1" name="province_id" id="region">
+                        <option value="0">选择省</option>
+                        {volist name="region" id="vo"}
+                            <option value="{$key}" {eq name="Think.get.province_id" value="$key"} selected="selected" {/eq} >{$vo}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <button class="layui-btn layui-btn-normal" lay-submit="" >查询</button>
+            </div>
+        </div>
+    </form>
+    <a href="javascript:void(0);" style="float:right;margin-top: -60px;margin-bottom:10px;  margin-right: 30px;" class="layui-btn layui-btn-normal add" >添加记录</a>
+</div>
+    <table class="layui-table" style="margin-top:-10px;">
+            <colgroup>
+                <col width="70">
+                <col width="150">
+                <col width="50">
+                <col width="70">
+                <col width="70">
+                <col width="100">
+                <col width="70">
+                <col width="70">
+                <col width="70">
+                <col width="80">
+                <col width="70">
+                <col width="120">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>用途</th>
+                    <th>时间</th>
+                    <th>省份</th>
+                    <th>
+                       花费总额
+                    </th>
+                    <th>展现量</th>
+                    <th>平均点击价格</th>
+                    <th>点击量</th>
+                    <th>点击率</th>
+                    <th>
+                       预约量
+                    </th>
+                    <th>平均成本</th>
+                    <th>
+                        成交量
+                    </th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {volist name="list" id="vo"}
+                <tr class="odd gradeX">
+                    <td>
+                        {volist name='moneyUser' id='mu'}
+                            {if condition='$key eq $vo["category_id"]'}{$mu}{/if}
+                        {/volist}
+                    </td>
+                    <td>
+                        {$vo.start_time|date="Y-m-d",###}至{$vo.end_time|date="Y-m-d",###}
+                    </td>
+                    <td>
+                        {$region[$vo.province_id]}
+                    </td>
+                    <td>
+                        {$vo.consume}
+                    </td>
+                    <td>
+                        {$vo.show}
+                    </td>
+                    <td>
+                        {$vo.average_click_price}
+                    </td>
+                    <td>
+                        {$vo.hit}
+                    </td>
+                    <td>
+                        {$vo.click_rate}
+                    </td>
+                    <td>
+                        {$vo.reservation}
+                    </td>
+                    <td>
+                        {$vo.cost}
+                    </td>
+                    <td>
+                        {$vo.deal}
+                    </td>
+                    <td>
+                        <a class="layui-btn layui-btn-small edit"  href="javascript:void(0)" data-id="{$vo.id}"><i class="icon-pencil icon-white"> </i>编辑</a>
+
+                        {eq name="vo.status" value="1"}
+                            <a class="layui-btn layui-btn-small layui-btn layui-btn-danger del" href="javascript:void(0)" data-delId="{$vo.id}" >
+                                <i class="icon-remove  icon-white"> </i>删除
+                            </a>
+                        {else /}
+                            <a class="layui-btn layui-btn-small enable" href="javascript:void(0)" data-delId="{$vo.id}" >
+                                <i class="icon-ok  icon-white"> </i>启用
+                            </a>
+                        {/eq}
+                    </td>
+                </tr>
+            {/volist}
+            </tbody>
+        </table>
+        {$page}
+
+{/block}
+{block name="optJS"}
+    <script>
+     layui.use(['jquery', 'form','laydate','laypage'],function(){
+        var $= layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+        var laypage = layui.laypage;
+        var laydate = layui.laydate;
+        
+        var start = {
+        min: laydate.now()
+            ,max: '2099-06-16 23:59:59'
+            ,istoday:true
+            ,choose: function(datas){
+              end.min = datas; //开始日选好后，重置结束日的最小日期
+              end.start = datas //将结束日的初始值设定为开始日
+            }
+        };
+          
+      var end = {
+        min: laydate.now()
+            ,max: '2099-06-16 23:59:59'
+            ,istoday: true
+            ,choose: function(datas){
+              start.max = datas; //结束日选好后，重置开始日的最大日期
+            }
+        };
+   
+        //修改推广支出信息
+        $('.edit').click(function () {
+            var id = $(this).attr('data-id');
+            var status = $('#editForm input[name="status"]');
+            $.ajax({
+                url: "{:url('editDisbures')}",
+                type: 'get',
+                data:{
+                    id:id,
+                },
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var data = result.data;
+                    if (result.flag == 1) {
+                        $('#editForm select[name="category_id"] option[value="'+data.category_id+'"]').attr("selected","selected");
+                        $('#editForm input[name="start_time"]').val(data.start_time);
+                        $('#editForm input[name="end_time"]').val(data.end_time);
+                        $('#editForm select[name="province_id"]').val(data.province_id);
+                        $('#editForm input[name="consume"]').val(data.consume);
+                        $('#editForm input[name="show"]').val(data.show);
+                        $('#editForm input[name="average_click_price"]').val(data.average_click_price);
+                        $('#editForm input[name="hit"]').val(data.hit);
+                        $('#editForm input[name="click_rate"]').val(data.click_rate);
+                        $('#editForm input[name="reservation"]').val(data.reservation);
+                        $('#editForm input[name="cost"]').val(data.cost);
+                        $('#editForm input[name="deal"]').val(data.deal);
+                        for (var i = 0; i < status.length; i++) {
+                            if(status[i].value == data['status']){
+                                status[i].checked = true;
+                                break;
+                            }
+                        }
+                        $('#editForm input[name="id"]').val(data.id);
+                        form.render();
+
+                         layer.open({
+                            closeBtn: 2,
+                            type: 1,
+                            area: '500px',
+                            title: '编辑支出记录',
+                            content: $('#editmotai')
+                        })
+                    } else {
+                        alert('操作失败');
+                    }
+                }
+            });
+        });
+
+        //提交修改推广支出的表单
+        $('.submitedit').click(function () {
+            var From = $('#editForm').serialize();
+            $.ajax({
+                url: "{:url('editDisbures')}",
+                type: "POST",
+                data: From,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.alert('修改成功');
+                        window.location.reload();//刷新当前页面.
+                    } else {
+                        layer.alert('修改失败');
+                    }
+                }
+            });
+        });
+
+
+         //添加推广支出 
+        $('.add').click(function () {
+            document.getElementById('addForm').reset();//清空表单
+           layer.open({
+                closeBtn: 2,
+                type: 1,
+                area: '500px',
+                title: '添加支出记录',
+                content: $('#addmotai')
+            })
+        });
+
+        //提交添加推广支出 表单
+        $('.submitadd').click(function () {
+            var From = $('#addForm').serialize()
+            $.ajax({
+                url: "{:url('addDisburse')}",
+                type: "POST",
+                data: From,
+                success: function(d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.alert('添加成功');
+                        window.location.reload();//刷新当前页面.
+                    } else {
+                        layer.alert('添加失败');
+                    }
+                }
+            });
+        });
+
+        //添加操作时间失去焦点事件
+        $('.add-time').blur(function(){
+            var addtime = $('#addForm')
+            getOrderNum(addtime);
+        });
+        //添加操作省份改变事件
+         form.on('select(addChang)', function(data){
+            // $('#addForm select[]').change(function(){
+                var addtime = $('#addForm')
+                getOrderNum(addtime);
+            // });
+        });
+        //修改操作时间失去焦点事件
+        $('.edit-time').blur(function(){
+            var edittime = $('#editForm')
+            getOrderNum(edittime);
+            
+        });
+        //修改操作省份改变事件
+        $('#editForm select[name="province_id"]').change(function(){
+            var editPro = $('#editForm')
+            getOrderNum(editPro);
+            
+        });
+        //失去焦点获取预约量和成交量
+        function getOrderNum(pro){
+            var start_time = pro.find('input[name="start_time"]').val();
+            var end_time = pro.find('input[name="end_time"]').val();
+            var region = pro.find('select[name="province_id"] option:selected').val();
+            if(region>0){
+                $.ajax({
+                    url:"{:url('getOrderNum')}",
+                    type:"post",
+                    dataType:'json',
+                    //async:false,
+                    data:{start_time:start_time,end_time:end_time,region:region},
+                    success:function(d){
+                        pro.find('input[name="reservation"]').val(d.default);
+                        pro.find('input[name="deal"]').val(d.success);
+                        blur(pro);
+                    }
+                })
+            }
+        }
+
+        //添加失去焦点事件
+        $('.add-price').blur(function(){
+            var addPro = $('#addForm');
+            blur(addPro);
+        });
+
+        //修改时失去焦点事件
+        $('.edit-blur').blur(function(){
+            var editPro = $('#editForm');
+            blur(editPro);
+        });
+
+        //失去焦点计算的公共方法
+        function blur(pro){
+            var consume = pro.find('input[name="consume"]').val();
+            var hit = pro.find('input[name="hit"]').val();
+            var show = pro.find('input[name="show"]').val();
+            var reservation = pro.find('input[name="reservation"]').val();
+            //点击价格(消费/点击量)
+            if(consume.length>0 && hit.length>0){
+                if(consume==0 || hit==0){
+                    pro.find('input[name="average_click_price"]').val(0);
+                }else{
+                    var average_click_price = consume / hit;
+                    average_click_price = average_click_price.toFixed(2);//四舍五入保留两位小数
+                    pro.find('input[name="average_click_price"]').val(average_click_price);
+                }
+            }else{
+                pro.find('input[name="average_click_price"]').val('');
+            }
+
+            //点击率(点击量/展现量)
+            if(show.length>0 && hit.length>0){
+                if(show==0 || hit==0){
+                    pro.find('input[name="click_rate"]').val(0);
+                }else{
+                    var click_rate = hit / show;
+                    click_rate = click_rate.toFixed(4);
+                    pro.find('input[name="click_rate"]').val(click_rate);
+                }
+            }else{
+                pro.find('input[name="click_rate"]').val('');
+            }
+
+            //平均成本
+            if(reservation.length>0 && consume.length>0){
+                if(reservation==0 || consume==0){
+                    pro.find('input[name="cost"]').val(0);
+                }else{
+                    var cost = consume / reservation;
+                    cost = cost.toFixed(2);
+                    pro.find('input[name="cost"]').val(cost);
+                }
+            }else{
+                pro.find('input[name="cost"]').val('');
+            }
+        }
+
+
+         //禁用
+        $('.del').click(function () {
+            var id = $(this).attr('data-delId');
+            var act = 'del';
+            $.ajax({
+                url: "{:url('delDisburse')}",
+                type: 'post',
+                data: {
+                    id:id,
+                    act:act
+                },
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.alert(result.msg);
+                        window.location.reload();
+                    } else {
+                        layer.alert(result.msg);
+                    }
+                }
+            });
+        });
+
+        //启用
+        $('.enable').click(function () {
+            var id = $(this).attr('data-delId');
+            var act = 'enable';
+            $.ajax({
+                url: "{:url('delDisburse')}",
+                type: 'post',
+                data: {
+                    id:id,
+                    act:act
+                },
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.alert(result.msg);
+                        window.location.reload();
+                    } else {
+                        layer.alert(result.msg);
+                    }
+                }
+            });
+        });
+
+
+
+     });     
+    </script>
+{/block}

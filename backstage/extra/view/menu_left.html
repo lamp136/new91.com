@@ -1,0 +1,14 @@
+<ul class="layui-nav layui-nav-tree"  lay-filter="test">
+    {volist name='menuData' id='vo'}
+        {volist name='vo.child' id='v1' key="m"}
+            <li class="layui-nav-item layui-nav-itemed has-sub  child-menu{$vo.id}" {neq name='vo.id' value='$currentpriId'} style="display:none;" {/neq}>
+                <a class="" href="javascript:;">{$v1.title}</a>
+                <dl class="layui-nav-child sub"  {neq name='memuId' value='$v1.id'}style="display:none;"{/neq}>
+                    {volist name='v1.child' id='v2'}
+                        <dd {if condition='$v2.name eq $path'}class='layui-this'{/if}><a href="{:url($v2.name)}">{$v2.title}</a></dd>
+                    {/volist}
+                </dl>
+            </li>
+        {/volist}
+    {/volist}
+</ul>

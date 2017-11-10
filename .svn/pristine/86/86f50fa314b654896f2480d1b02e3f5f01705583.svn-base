@@ -1,0 +1,268 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id='motai' style="display:none">
+<form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+      <tr>
+        <td> <span style="color:red">*</span>佣金比例</td>
+        <td>  
+         <input type="text" id="brokerage_percent"  name="brokerage_percent"  disabled="disabled" placeholder="佣金比例" autocomplete="off"  value="" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>佣金金额 </td>
+        <td>  
+         <input type="text" id="brokerage_money"  name="brokerage_money"  disabled="disabled" placeholder="佣金金额" value="" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+      <td> <span style="color:red">*</span>实际金额</td>
+        <td>
+          <input type="text" id="paid_in_amount"  name="paid_in_amount"  disabled="disabled" placeholder="实际金额" value="" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+      <td> <span style="color:red">*</span>返现给客户金额</td>
+        <td>
+          <input type="text" id="return_fact_money"   name="return_fact_money"  disabled="disabled" placeholder="返现给客户金额" autocomplete="off" class="layui-input" value="">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>实际退还金额</td>
+        <td>  
+          <input type="text" id="back_fact_money"  name="back_fact_money" required  lay-verify="required" placeholder="实际退款额" autocomplete="off" value="" class="layui-input">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>上传票据</td>
+        <td>  
+            <div class="layui-input-block">
+                <input name="image"  lay-title="退款票据图片" type="file">
+            </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2' style="text-align: center;">  
+          <button class="layui-btn" id="addpersonsubmit" type="button">立即提交</button>
+          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    <input type='hidden' name="id" id="backmoneyid" value=""  >
+</form>
+</div>
+
+
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left:10px">
+    <form  method="get"  autocomplete="off" action='{:url("backmoneylist")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="10">
+            <col width="100">
+            <col width="200">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="120">
+            <col width="120">
+            <col width="100">
+            <col width="60">
+            <col width="150">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th style="width:4%;"><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+                <th style="width:8%;">预约人<br>电话</th>
+                <th style="width:14%;">商家名称</th>
+                <th style="width:8%;">墓位<br>价格</th>
+                <th style="width:8%;">实收<br>佣金</th>
+                <th style="width:8%;">返现<br>金额</th>
+                <th style="width:12%;">应退金额<br>实退金额</th>
+                <th style="width:10%;">佣金支付时间</th>
+                <th style="width:10%;">申请退单时间</th>
+                <th style="width:20%;">退单操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+         {volist name="data" id="vo"}
+            <tr>
+                <td><input type="checkbox"  data-name="choice_id" value=
+                "{$vo.id}" lay-skin="primary"></td>
+                <td>
+                {empty name="vo['buyer']"}
+                    {$vo.reservation_person}<br>{$vo.reservation_phone}
+                {else /}
+                    {$vo.buyer}<br>{$vo.mobile}
+                {/empty}
+                </td>
+                <td>{notempty name='vo.store_fact_name'}
+                            {$vo.store_fact_name} 
+                        {else/}
+                            {$vo.store_name} 
+                        {/notempty}
+                    {notempty name="vo.store_status"}
+                    {volist name="storeMember" id="member"}
+                            {eq name="vo.store_status" value="$key"}
+                            <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                            {/eq}
+                        {/volist}
+                    {/notempty}
+                </td>
+                <td>{$vo.tomb_price}</td>
+                <td>{$vo.paid_in_amount}</td>
+                <td>{$vo.return_fact_money}
+                </td>
+                <td>
+                    {notempty name="vo['back_money']"}
+                        {$vo.back_money}<br>{$vo.back_fact_money}
+                    {/notempty}
+                </td>
+                <td>
+                    {notempty name="vo['payfor_us_time']"}
+                        {$vo.payfor_us_time|date='Y-m-d',###}
+                    {/notempty}
+                </td>
+                <td>
+                    {notempty name="vo['back_apply_time']"}
+                        {$vo.back_apply_time|date='Y-m-d',###}
+                    {/notempty}
+                </td>
+                <td>    
+                    {neq name="vo['status']" value="30"}
+                    <button class="layui-btn layui-btn-small paymoney " id="" data-id="{$vo.id}" >
+                        确认支付
+                    </button>
+                    {/neq}
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table> 
+    {$page}
+</div>
+{/block}
+{block name='optJS'}
+<script>
+
+
+//页面层
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  var start = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday:true
+    ,choose: function(datas){
+      end.min = datas; //开始日选好后，重置结束日的最小日期
+      end.start = datas //将结束日的初始值设定为开始日
+    }
+  };
+  
+  var end = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday: true
+    ,choose: function(datas){
+      start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+  };
+  
+});
+
+layui.use(['jquery', 'layer','form'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    $(".paymoney").bind('click', function(){
+         var id = $(this).attr('data-id');
+         layer.confirm('您已经支付过了吗?', {icon: 3, title:'提示'}, function(index){
+         $.ajax({
+            url:"{:url('paymoney')}",
+            data:'id='+id,
+            type:'post',
+            success:function(d){
+                var result = eval("("+d+")");
+                if(result.flag == 1){
+                    var brokerage_percent = result['data']['brokerage_percent'];
+                    var brokerage_money = result['data']['brokerage_money'];
+                    var paid_in_amount = result['data']['paid_in_amount'];
+                    var return_fact_money = result['data']['return_fact_money'];
+                    var back_fact_money = result['data']['back_fact_money'];
+                    var id  = result['data']['id'];
+                    
+                    $("#brokerage_percent").val(brokerage_percent);
+                    $("#brokerage_money").val(brokerage_money);
+                    $("#paid_in_amount").val(paid_in_amount);
+                    $("#return_fact_money").val(return_fact_money);
+                    $("#back_fact_money").val(back_fact_money);
+                    $('#backmoneyid').val(id);
+
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '退单操作',
+                    content: $('#motai'),
+                });
+            }
+         });
+       });
+    });
+
+    //支付处理
+    $('#addpersonsubmit').click(function(){
+        money = $("#back_fact_money").val();
+        if(money == ''){
+            layer.alert('请输入实际退款金额');
+            return false;
+        }
+        layer.open({
+            type:3,
+            success: function(layero, index){ 
+                var dataFrom = new FormData(document.getElementById("data-form"));
+                $.ajax({
+                    url:"{:url('paydata')}",
+                    type:'POST',
+                    data:dataFrom,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    success:function(d){
+                        layer.msg(d.msg);
+                    if(d.flag==1){
+                        window.location.reload();
+                    }
+                  }
+               });
+            }
+        });
+    });
+});
+
+
+
+</script>
+{/block}
+

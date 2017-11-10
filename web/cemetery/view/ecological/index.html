@@ -1,0 +1,217 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- 生态葬banner -->
+    <div class="eb_banner"></div>
+    <!-- 生态葬简介 -->
+    <div class="eb_intro">
+        <div class="contain">
+            <!-- 简介 -->
+            <div class="eb_intro_main clearfix">
+                <span>简介</span>
+                <div class="eb_intro_text">
+                    <p>节地生态安葬，就是以节约资源、保护环境为价值导向，鼓励和引导人们采用树葬、花坛葬、壁葬、海葬、深埋、格位存放等不占或少占土地、少耗资源、少使用不可降解材料的方式安葬骨灰或遗体，使安葬活动更好地促进人与自然和谐发展。将生命融入到自然中，将宝贵的土地资源留给子孙后代。</p>
+                    <p>实践证明，推行节地生态安葬不仅减轻了我国的用地紧张问题，也减轻了群众在安葬费方面的压力。推行节地生态安葬是保障基本安葬需求的重要途径；是移风易俗，弘扬社会主义核心价值观的重要举措；是促进生态文明建设，造福当代和子孙后代的必然要求。</p>
+                </div>
+            </div><!-- eb_intro_main End -->
+            <!-- 相关政策法规 -->
+            <div class="eb_intro_policies">
+                <h2>相关文章：</h2>
+                <ul class="clearfix">
+                    <li><a target="_blank" href="{:url('article/Article/detail',['id'=>6921],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="生态葬如何办理？可以到公墓去申请">1.生态葬如何办理？可以到公墓去申请</a></li>
+                    <li><a target="_blank" href="{:url('article/Article/detail',['id'=>6919],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="论生态葬与文化变迁">2.论生态葬与文化变迁</a></li>
+                    <li class="last"><a target="_blank" href="{:url('article/Article/detail',['id'=>6718],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="北京:生态葬可享免费殡仪服务">3.北京：生态葬可享免费殡仪服务</a></li>
+                    <li><a target="_blank" href="{:url('article/Article/detail',['id'=>6667],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="墓地期限太短！以后选择“生态葬”？">4.墓地期限太短！以后选择“生态葬”？</a></li>
+                    <li><a target="_blank" href="{:url('article/Article/detail',['id'=>6561],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="生态葬：树葬-我愿我是一棵树">5.生态葬：树葬-我愿我是一棵树</a></li>
+                </ul>
+            </div><!-- eb_intro_policies End -->
+        </div><!-- contain End -->
+    </div><!-- eb_intro 生态葬简介 End -->
+    
+
+    <div class="contain">
+
+        <!-- 生态植树葬 -->
+        <div id="zs" class="eb_main">
+            <!-- 简介 -->
+            <div class="eb_main_intro clearfix">
+                <div class="eb_main_intro_img">
+                    <img src="_WEB_/images/eb_main_intro_img1.jpg" alt="" />
+                </div>
+                <div class="eb_main_intro_text">
+                    <h2>生态<strong>植树葬</strong></h2>
+                    <p>现代树葬是殡葬的一种新形式，就是人们以认养绿地的办法，植一些树木，将亲人的骨灰撒在树下。现代树葬最大的特点就在于，它的地面减少了大量的殡葬设施，而是以纪念树、自然石或卧碑为标记。传统殡葬方式唯一的作用就是寄托亲人对逝者的怀念之情。而现代树葬不仅可寄托哀思，还可以绿化环境。</p>
+                </div>
+            </div>
+            <!-- 陵园推荐 -->
+            {notempty name="lastdata[$Think.config.ecology_tombs_type.tree]"}
+                <div class="eb_main_list">
+                    <h2>树葬陵园推荐</h2>
+                    <ul class="clearfix">
+                        {volist name="$lastdata[$Think.config.ecology_tombs_type.tree]" id="vo"}
+                            <li {eq name="i" value="3"}class="last"{/eq}>  
+                                <div class="home_cemetery_main_img">
+                                    <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img {empty name='vo.thumb_image'}src="{$vo.image}"{else/}src="{$vo.thumb_image}"{/empty} alt="{$vo.name}"/></a>
+                                    <div class="location">
+                                        <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province['name']}{$vo.city['name']}</a>
+                                    </div>
+                                </div>
+                                <div class="home_cemetery_main_text">
+                                    <h3><a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}">{$vo.name}</a></h3>
+                                    {eq name="vo.min_price" value="0.00"}<p>参考价<span><i></i>--<i></i></span></p>{else /}<p>参考价<span><i>￥</i>{$vo.min_price}<i>万起</i></span></p>{/eq}
+                                </div>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- eb_main_list 陵园推荐 End -->
+            {/notempty}
+        </div><!-- eb_main 生态葬内容 End -->
+
+        <!-- 生态花坛葬 -->
+        <div id="ht" class="eb_main eb_main_a">
+            <!-- 简介 -->
+            <div class="eb_main_intro clearfix">
+                <div class="eb_main_intro_img">
+                    <img src="_WEB_/images/eb_main_intro_img2.jpg" alt="" />
+                </div>
+                <div class="eb_main_intro_text">
+                    <h2>生态<strong>花坛葬</strong></h2>
+                    <p>花坛葬是起源于西方的绿色葬式，是用花坛代替墓穴，将特制的可降解的骨灰盒放入花坛中，花坛上种植花朵。花坛葬价格便宜，经济环保。改善了环境，节约了土地，改变了传统公墓死板无生机的形式。既是对逝者的尊重，也是对生者的尊重。</p>
+                </div>
+            </div>
+            <!-- 陵园推荐 -->
+            {notempty name="lastdata[$Think.config.ecology_tombs_type.flower]"}
+                <div class="eb_main_list">
+                    <h2>生态花坛葬推荐</h2>
+                    <ul class="clearfix">
+                        {volist name="$lastdata[$Think.config.ecology_tombs_type.flower]" id="vo"}
+                            <li {eq name="i" value="3"}class="last"{/eq}>  
+                                <div class="home_cemetery_main_img">
+                                    <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img {empty name='vo.thumb_image'}src="{$vo.image}"{else/}src="{$vo.thumb_image}"{/empty} alt="{$vo.name}"/></a>
+                                    <div class="location">
+                                        <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province['name']}{$vo.city['name']}</a>
+                                    </div>
+                                </div>
+                                <div class="home_cemetery_main_text">
+                                    <h3><a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}">{$vo.name}</a></h3>
+                                    {eq name="vo.min_price" value="0.00"}<p>参考价<span><i></i>--<i></i></span></p>{else /}<p>参考价<span><i>￥</i>{$vo.min_price}<i>万起</i></span></p>{/eq}
+                                </div>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- eb_main_list 陵园推荐 End -->
+            {/notempty}
+        </div><!-- eb_main 生态葬内容 End -->
+
+        <!-- 生态壁葬 -->
+        <div id="bz" class="eb_main">
+            <!-- 简介 -->
+            <div class="eb_main_intro clearfix">
+                <div class="eb_main_intro_img">
+                    <img src="_WEB_/images/eb_main_intro_img3.jpg" alt="" />
+                </div>
+                <div class="eb_main_intro_text">
+                    <h2>生态<strong>壁葬</strong></h2>
+                    <p>壁葬是将骨灰盒嵌在墙壁内的丧葬方式，在安葬死者的同时为后人留福，是一种先进的殡葬理念和行为。</p>
+                    <p>壁葬墙和普通的墙体高低相仿，略厚些，墙体正面分布着井字形的壁葬格，大小可放入骨灰盒。格位口用石材封死，石材外表面就当作墓碑，刻上碑文。</p>
+                </div>
+            </div>
+            <!-- 陵园推荐 -->
+            {notempty name="lastdata[$Think.config.ecology_tombs_type.wall]"}
+                <div class="eb_main_list">
+                    <h2>生态壁葬推荐</h2>
+                    <ul class="clearfix">
+                        {volist name="$lastdata[$Think.config.ecology_tombs_type.wall]" id="vo"}
+                            <li {eq name="i" value="3"}class="last"{/eq}>  
+                                <div class="home_cemetery_main_img">
+                                    <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img {empty name='vo.thumb_image'}src="{$vo.image}"{else/}src="{$vo.thumb_image}"{/empty} alt="{$vo.name}"/></a>
+                                    <div class="location">
+                                        <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province['name']}{$vo.city['name']}</a>
+                                    </div>
+                                </div>
+                                <div class="home_cemetery_main_text">
+                                    <h3><a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}">{$vo.name}</a></h3>
+                                    {eq name="vo.min_price" value="0.00"}<p>参考价<span><i></i>--<i></i></span></p>{else /}<p>参考价<span><i>￥</i>{$vo.min_price}<i>万起</i></span></p>{/eq}
+                                </div>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- eb_main_list 陵园推荐 End -->
+            {/notempty}
+        </div><!-- eb_main 生态葬内容 End -->
+
+        <!-- 生态海葬 -->
+        <div id="hz"  class="eb_main eb_main_a eb_main_b">
+            <!-- 简介 -->
+            <div class="eb_main_intro clearfix">
+                <div class="eb_main_intro_text">
+                    <h2>生态<strong>海葬</strong></h2>
+                    <p>海葬是将骨灰撒入大海的一种葬法。骨灰撒海，冲破了传统的“入土为安”观念。人从自然中来，又回到自然中去。海葬是继墓葬以后的又一次重大改革，是人类思想的一大飞跃，是社会文明的一大标志。</p>
+                </div>
+                <div class="eb_main_intro_img">
+                    <img src="_WEB_/images/eb_main_intro_img4.jpg" alt="" />
+                </div>
+            </div>
+            <!-- 陵园推荐 -->
+            {notempty name="lastdata[$Think.config.ecology_tombs_type.sea]"}
+                <div class="eb_main_list">
+                    <h2>生态海葬推荐</h2>
+                    <ul class="clearfix">
+                        {volist name="$lastdata[$Think.config.ecology_tombs_type.sea]" id="vo"}
+                            <li {eq name="i" value="3"}class="last"{/eq}>  
+                                <div class="home_cemetery_main_img">
+                                    <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img {empty name='vo.thumb_image'}src="{$vo.image}"{else/}src="{$vo.thumb_image}"{/empty} alt="{$vo.name}"/></a>
+                                    <div class="location">
+                                        <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province['name']}{$vo.city['name']}</a>
+                                    </div>
+                                </div>
+                                <div class="home_cemetery_main_text">
+                                    <h3><a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}">{$vo.name}</a></h3>
+                                    {eq name="vo.min_price" value="0.00"}<p>参考价<span><i></i>--<i></i></span></p>{else /}<p>参考价<span><i>￥</i>{$vo.min_price}<i>万起</i></span></p>{/eq}
+                                </div>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- eb_main_list 陵园推荐 End -->
+            {/notempty}
+        </div><!-- eb_main 生态葬内容 End -->
+
+        <!-- 生态草坪葬 -->
+        <div id="cp" class="eb_main">
+            <!-- 简介 -->
+            <div class="eb_main_intro clearfix">
+                <div class="eb_main_intro_img">
+                    <img src="_WEB_/images/eb_main_intro_img5.jpg" alt="" />
+                </div>
+                <div class="eb_main_intro_text">
+                    <h2>生态<strong>草坪葬</strong></h2>
+                    <p>草坪葬，也是一种源于西方、流行于东方的新型生态殡葬形式。即把骨灰撒入草坪下的洞穴后，上面铺一块小小的碑，但占地面积很小，只有现行绿色生态葬法的一半不到。</p>
+                    <p>同时，是在众多生态葬法中保留骨灰盒的一种。（除了壁葬和草坪葬之外，其他生态葬法都不保留骨灰盒）</p>
+                </div>
+            </div>
+            <!-- 陵园推荐 -->
+            {notempty name="lastdata[$Think.config.ecology_tombs_type.lawn]"}
+                <div class="eb_main_list">
+                    <h2>生态草坪葬推荐</h2>
+                    <ul class="clearfix">
+                        {volist name="$lastdata[$Think.config.ecology_tombs_type.lawn]" id="vo"}
+                            <li {eq name="i" value="3"}class="last"{/eq}>  
+                                <div class="home_cemetery_main_img">
+                                    <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><img {empty name='vo.thumb_image'}src="{$vo.image}"{else/}src="{$vo.thumb_image}"{/empty} alt="{$vo.name}"/></a>
+                                    <div class="location">
+                                        <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'><i></i>{$vo.province['name']}{$vo.city['name']}</a>
+                                    </div>
+                                </div>
+                                <div class="home_cemetery_main_text">
+                                    <h3><a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}">{$vo.name}</a></h3>
+                                    {eq name="vo.min_price" value="0.00"}<p>参考价<span><i></i>--<i></i></span></p>{else /}<p>参考价<span><i>￥</i>{$vo.min_price}<i>万起</i></span></p>{/eq}
+                                </div>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- eb_main_list 陵园推荐 End -->
+            {/notempty}
+        </div><!-- eb_main 生态葬内容 End -->
+    </div><!-- contain End --> 
+{/block}
+   
+    

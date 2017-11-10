@@ -1,0 +1,84 @@
+<?php
+namespace web\help\controller;
+use think\Controller;
+use think\Db;
+use web\extra\controller\Base;
+
+/**
+ * 帮助中心
+ * author
+ */
+class Help extends Base{ 
+	
+	/*
+     * 关于我们
+     */
+    public function aboutus(){
+        return $this->fetch();
+    } 
+	
+    /*
+     * 联系我们
+     */
+    public function contactus(){
+        return $this->fetch();
+    }
+
+    /**
+     * 服务流程
+     */
+    public function serviceprocess(){
+    	return $this->fetch();
+    }
+
+    /**
+     * 隐私条款
+     */
+    
+    public function privacy(){
+    	return $this->fetch();
+    }
+    /**
+     * 公墓年限
+     */
+    public function tombagelimit(){
+    	return $this->fetch();
+    }
+    /**
+     * 购墓须知
+     */
+    public function tombnotes(){
+    	return $this->fetch();
+    }
+    /**
+     * 落葬讲究
+     */
+    public function wasburied(){
+    	return $this->fetch();
+    }
+
+    /**
+     * 安葬吉日
+     */
+    public function bury(){
+    	return $this->fetch();
+    }
+
+    /**
+     * 碑文大全
+     */
+    public function epigraphic(){
+    	return $this->fetch();
+    }
+
+    /**
+     * 历史上的今天
+     */
+    public function history(){
+    	return $this->fetch();
+    }
+
+
+
+    
+}

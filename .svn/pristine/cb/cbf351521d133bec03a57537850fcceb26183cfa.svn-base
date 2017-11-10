@@ -1,0 +1,29 @@
+<?php
+namespace back\store\controller;
+use think\Controller;
+
+class Business extends Controller
+{
+	/**
+	 * 商家默认查询页面
+	 * 
+	 * @return void
+	 */
+	public function index() {
+		$data = array('msg'=>'使用thinkPHP5框架作为管理后台', 'menu'=>'菜单');
+        $this->assign('data', $data);
+        return $this->fetch('index');
+	}
+
+	public function search() {
+		$data = array('msg'=>'使用thinkPHP5框架作为管理后台', 'menu'=>'菜单');
+        $this->assign('data', $data);
+        return $this->fetch('search');
+	}
+
+	public function scan() {
+		$data = array('msg'=>'使用thinkPHP5框架作为管理后台', 'menu'=>'预览');
+        $this->assign('data', $data);
+        return $this->fetch('scan');
+	}
+} 

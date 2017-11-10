@@ -1,0 +1,609 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<!-- 添加职位开始 -->
+
+<div id='motai' style="display:none">
+<form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+      <tr>
+        <td>  
+          <div class="layui-form-item">
+            <label class="layui-form-label"> <span style="color:red">*</span>选择部门</label>
+          <div class="layui-input-block">
+        
+          <select name="info[pid]" id="role_pid" lay-verify="required">
+            <option value="">--请选择部门--</option>
+           </select>
+          </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+            <div class="layui-form-item">
+              <label class="layui-form-label"> <span style="color:red">*</span>职位名称</label>
+            <div class="layui-input-block">
+            <input type="text" name="info[title]" required  lay-verify="required" placeholder="请输入职位名称" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+        </td>
+      </tr>
+      <tr>
+          <td>
+            <div class="layui-form-item">
+              <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+            <input type="text" name="info[sort]" required  lay-verify="required" placeholder="越往大越靠前" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2' style="text-align: center;">  
+          <button class="layui-btn" id='submit' type='button'>立即提交</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    <input type='hidden' >
+</form>
+</div>
+<!-- 添加职位结束 -->
+<!-- 编辑职位开始 -->
+
+<div id='editmotai' style="display:none">
+<form id='edit-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+      <tr>
+        <td> <span style="color:red">*</span>上级部门：</td>
+        <td>
+          <div class="layui-form-item">
+            <select name="editinfo[pid]" id="e_role_pid" lay-verify="required">
+            <option value="">--请选择部门--</option>
+           </select>
+         </div>
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>职位名称</td>
+        <td>  
+         <input type="text" id="edittitle" name="editinfo[title]" required  lay-verify="required" placeholder="部门名称" value="" autocomplete="off"  value="" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td>排序</td>
+        <td>  
+          <input type="text" id="editsort" name="editinfo[sort]" required  lay-verify="required" placeholder="排序" value="" autocomplete="off" class="layui-input">越大越靠前
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2' style="text-align: center;"> 
+          <input name="editinfo[id]"  type="hidden" id='editid' data-rule='required'> 
+          <button class="layui-btn" id='editsubmit' type='button'>立即提交</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+</div>
+<!-- 编辑职位结束 -->
+
+<!-- 添加职位下的人员开始 -->
+<div id='addpersonmotai' style="display:none">
+<form id='addpersonmotai-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table" id="dep-addUser">
+      <thead>
+        <tr>
+            <th align="center">编号</th>
+            <th align="center">姓名</th>
+            <th align="center">登陆账号</th>
+            <th align="center">请选择</th>
+        </tr>
+     </thead>
+    <tbody>
+     
+    </tbody>
+  </table>
+     <tr>
+        <td style="text-align: center;"> 
+          <input name="position_id"  type="hidden" id='position_id' data-rule='required'> 
+          <button class="layui-btn"  id='addpersonsubmit' type='button'>立即提交</button>
+        </td>
+      </tr>
+</form>
+</div>
+<!-- 添加职位下的人员结束 -->
+
+<!--查看人员开始-->
+<div id='lookpersontai' style="display:none">
+<form id='lookpersonmotai-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table" id="look-addUser">
+      <thead>
+        <tr>
+            <th align="center">姓名</th>
+            <th align="center">邮箱</th>
+            <th align="center">操作</th>
+           
+        </tr>
+     </thead>
+    <tbody>
+          
+    </tbody>
+  </table>
+</form>
+</div>
+<!-- 查看人员结束 -->
+{/block}
+{block name="body"}
+<div style="height:10px;"></div>
+<div style="float:right;">
+  
+  <button class="layui-btn add">
+    <i class="layui-icon" >&#xe608;</i>添加职位
+  </button>
+  
+</div>
+
+<table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr> 
+     
+      <th style="width:25%;">名称</th>
+      <th style="width:50%;">操作</th>
+    </tr> 
+  </thead>
+  <tbody>
+    {volist name="list" id="vo"}
+    
+    <tr>
+   
+     <td>{$vo.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}|-{$vo.title}</td>
+     <td>
+        {php}
+          if(showHandle('store/Position/editposition')){
+        {/php}
+        <span> 
+            <button class="layui-btn layui-btn-small edit" data-id="{$vo.id}" >
+                <span ><i class="layui-icon">&#xe642;</i>编辑</span>
+            </button>
+        </span>
+        {php}
+          }
+        {/php}
+        {php}
+          if(showHandle('store/Position/delposition')){
+        {/php}
+        <span> 
+            {if condition="$Think.config.normal_status eq $vo['status']"}
+              <button class="layui-btn layui-btn-small layui-btn-danger delete"  data-status="{$vo.status}" data-id="{$vo.id}">
+                <i class="layui-icon">&#xe640;</i>删除
+              </button>
+            {else/} 
+              <button class="layui-btn layui-btn-small layui-btn-danger begin"  data-status="{$vo.status}"  data-id="{$vo.id}">
+                <span>开启</span>
+              </button>
+            {/if} 
+        </span>
+        {php}
+          }
+        {/php}
+        {php}
+          if(showHandle('store/Position/adduser')){
+        {/php}
+        <span> 
+            <button class="layui-btn layui-btn-small addperson" data-id="{$vo.id}">
+               <i class="layui-icon">&#xe654;</i>添加人员
+            </button>
+        </span>
+        {php}
+          }
+        {/php}
+        {php}
+          if(showHandle('store/Position/positionuser')){
+        {/php}
+        <span> 
+            <button class="layui-btn layui-btn-small  layui-btn-warm personlist" data-id="{$vo.id}">
+                <span class="" ><i class="layui-icon">&#xe613;</i>查看人员</span>
+            </button>
+        </span>
+        {php}
+          }
+        {/php}
+        <span> 
+            {php}
+                {
+            {/php}
+                <a href="{:url('Privilegecont/privilegeset',array('id'=>$vo.id))}" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe642;</i>权限分配</a>
+            {php}
+                }
+            {/php}
+        
+        </span>
+    </td>
+    </tr>
+    {/volist}
+  </tbody>
+</table>
+{/block}
+{block name="optJS"}
+<script> 
+    layui.use('layer',function(){
+      layui.use(['jquery','form'],function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+         //摸态框
+         //点击添加职位，弹出添加职位表单
+        $('.add').click(function () {
+            $.ajax({
+               url:"{:url('getprivilege')}",
+               type:"post",
+               success:function(d){
+                   var result = eval("(" + d + ")");
+                    var str = '';
+
+                    if (result.flag == 1) {
+                        var data = result.data;
+                        str += '<option value="">--请选择--</option>'
+                        str += '<option  value="0">顶级</option>'
+                        for (i in data) {
+                            if (data[i].level == 0) {
+                                str += '<option value="' + data[i].id + '">|-' + data[i].title + '</option>'
+                            } else if (data[i].level == 1) {
+                                str += '<option value="' + data[i].id + '">&nbsp;&nbsp;|--' + data[i].title + '</option>'
+                            } else if (data[i].level == 2) {
+                                str += '<option value="' + data[i].id + '">&nbsp;&nbsp;&nbsp;&nbsp;|---' + data[i].title + '</option>'
+                            } else if (data[i].level == 3) {
+                                str += '<option value="' + data[i].id + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|----' + data[i].title + '</option>'
+
+                            }
+
+                        }
+
+                    } else {
+                        str += '<option value="">--请选择--</option>'
+                        str += '<option  value="0">顶级</option>'
+                    }
+                        $('#role_pid').empty().append(str);
+                        form.render();
+                        layer.open({
+                            closeBtn: 2,
+                            type: 1, 
+                            area: '500px',
+                            title:'添加职位信息',
+                            content: $('#motai'),
+                        }); 
+                   }
+                });
+                
+            });
+      
+
+       
+
+      //添加职位信息表单提交
+       $('#submit').bind('click',function(){
+         var  val = $('#role_pid').val();
+         if(val.length<1){
+            layer.msg('请选择部门');
+            return false;
+         }
+          var name = $("#data-form input[name='info[title]']").val();
+          if(name.length<1){
+            layer.msg('请填写职位名称');
+            return false;
+           }
+         
+        var dataFrom = $('#data-form').serialize();
+        $.ajax({
+            url:"{:url('addposition')}",
+            type:'POST',
+            data:dataFrom,
+            dataType:'json',
+            success:function(d){
+                if(d.flag==1){
+                    layer.msg(d.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                    });
+                }else{
+                    layer.msg(d.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                    });
+                }
+            }
+        });
+    });  
+
+        //删除职位
+        $('.delete').click(function(){
+            var id = $(this).attr('data-id');
+            var status = $(this).attr('data-status');
+            $.ajax({
+                url: "{:url('delposition')}",
+                type: 'POST',
+                data: {'id':id,'status':status},
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }
+                }
+            });
+        });
+
+
+        //开启职位
+        $('.begin').click(function(){
+            var id = $(this).attr('data-id');
+            var status = $(this).attr('data-status');
+            $.ajax({
+                url: "{:url('delposition')}",
+                type: 'POST',
+                data: {'id':id,'status':status},
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    } else {
+                       layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }
+                }
+            });
+        });
+
+
+
+        //点击编辑菜单，弹出编辑菜单表单
+        $('.edit').click(function () {
+        
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: "{:url('editposition')}",
+                type: 'GET',
+                data: 'id='+id,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var str ='';
+                    if (result.flag == 1) {
+                         
+                        var currentprivilege = result.currentprivilege;
+                        var privilegeTree = result.privilegeTree;
+                        str += '<option value="">--请选择--</option>';
+                        str += '<option  value="0">顶级</option>';
+                        for (i in privilegeTree) {
+                            if (privilegeTree[i].level == 0) {
+                                if(privilegeTree[i].id==currentprivilege.pid){
+                                    str += '<option value="' + privilegeTree[i].id + '" selected>|--' + privilegeTree[i].title + '</option>';
+                                }else{
+                                    str += '<option value="' + privilegeTree[i].id + '">|--' + privilegeTree[i].title + '</option>';
+                                }
+                            } else if (privilegeTree[i].level == 1) {
+                                if(privilegeTree[i].id==currentprivilege.pid){
+                                    str += '<option value="' + privilegeTree[i].id + '" selected>&nbsp;&nbsp;|--' + privilegeTree[i].title + '</option>';
+                                }else{
+                                    str += '<option value="' + privilegeTree[i].id + '">&nbsp;&nbsp;|--' + privilegeTree[i].title + '</option>';
+                                }
+                            } else if (privilegeTree[i].level == 2) {
+                                if(privilegeTree[i].id==currentprivilege.pid){
+                                    str += '<option value="' + privilegeTree[i].id + '" selected>&nbsp;&nbsp;&nbsp;&nbsp;|-' + privilegeTree[i].title + '</option>';
+                                }else{
+                                    str += '<option value="' + privilegeTree[i].id + '">&nbsp;&nbsp;&nbsp;&nbsp;|--' + privilegeTree[i].title + '</option>';
+                                }
+                            } else if (privilegeTree[i].level == 3) {
+                                if(privilegeTree[i].id==currentprivilege.pid){
+                                    str += '<option value="' + privilegeTree[i].id + '" selected>&nbsp;&nbsp;&nbsp;&nbsp;|---' + privilegeTree[i].title + '</option>';
+                                }else{
+                                    str += '<option value="' + privilegeTree[i].id + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|----' + privilegeTree[i].title + '</option>';
+                                }
+                            } 
+                        }
+                        $('#e_role_pid').html(str);
+                        $('#edittitle').val(currentprivilege.title);
+                        $('#editsort').val(currentprivilege.sort);
+                        $('#editid').val(currentprivilege.id);
+                        form.render();
+                        layer.open({
+                          closeBtn: 2,
+                          type: 1, 
+                          area: '500px',
+                          title:'编辑职位信息',
+                          content: $('#editmotai'),
+                        });
+                    }
+                }
+            });
+        });
+
+
+        //提交编辑职位form 表单
+        $('#editsubmit').click(function () {
+          var  val = $('#e_role_pid').val();
+          if(val.length<1){
+            layer.msg('请选择部门');
+            return false;
+          }
+          var dataFrom = $('#edit-form').serialize();
+            $.ajax({
+                url: "{:url('editposition')}",
+                type: 'POST',
+                data: dataFrom,
+                success: function (result) {
+                   var d = eval("("+result+")"); 
+                   if (d.flag == 1) {
+                        layer.msg(d.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    } else {
+                        layer.msg(d.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }
+                }
+            });
+        });
+
+         //弹出添加人员表单
+        $('.addperson').click(function(){
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: "{:url('adduser')}",
+                type: 'GET',
+                data:'id='+id,
+                success:function(d){
+                    var result = eval("("+d+")");
+                    if(result.flag==0){
+                        alert('请先添加管理员');
+                    }else{
+                        var str = '';
+                        var admindata = result.admindata
+                        var roleuser = result.roleuser;
+                        for(i in admindata){
+                            str +='<tr>';
+                            str +='<td align="right">'+admindata[i].id+'</td>';
+                            str +='<td align="right">'+admindata[i].name+'</td>';
+                            str +='<td align="right">'+admindata[i].login_name+'</td>';
+                            str +='<td align="center">';
+                            if($.inArray(admindata[i].id,roleuser)>=0){
+                                str +='<input type="checkbox" name="uid[]" class="depUserId" value="'+admindata[i].id+'" checked="checked" disabled="disabled">';
+                            }else{
+                                str +='<input type="checkbox" name="uid[]" class="depUserId" value="'+admindata[i].id+'">';
+                            }
+                            str +='</td></tr>';
+                        }
+                        $('#dep-addUser tbody').empty().append(str);
+                        $('#position_id').val(id);
+                        form.render();
+                    }
+                    layer.open({
+                      closeBtn: 2,
+                      type: 1, 
+                      area: '700px',
+                      title:'添加职位下的人员',
+                      content: $('#addpersonmotai'),
+                    });
+                }
+            });
+        });
+
+         //提交添加人员表单
+        $('#addpersonsubmit').click( function () {
+          var From =  $('#addpersonmotai-form').serialize();
+            $.ajax({
+                url: "{:url('adduser')}",
+                type: 'POST',
+                data: From,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    } else {
+                        layer.msg(d.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }
+                }
+            });
+        });
+
+         //查看人员
+        $('.personlist').click(function(){
+            var positionId = $(this).attr('data-id');
+            $.ajax({
+                url: "{:url('positionuser')}",
+                type: 'POST',
+                data: 'id='+positionId,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var str = '';
+                    if (result.flag == 1) {
+                        var data = result.data;
+                        for(i in data){
+                            str +='<tr>';
+                            str +='<td align="right">'+data[i].relation.name+'</td>';
+                            str +='<td align="right">'+data[i].relation.email+'</td>';
+                            str +='<td align="center">';
+                            str +='<span class="layui-btn layui-btn-small delperson" data-user-id="'+data[i].user_id+'" data-position-id="'+data[i].role_job_id+'"><a href="javascript:void(0);">删除</a></span>';
+                            str +='</td></tr>';
+                        }
+                    } else {
+                        str += '<tr><td colspan=3>暂无人员记录</td></tr>';
+                    }
+                    $('#look-addUser tbody').empty().html(str);
+                    form.render();
+                     layer.open({
+                      closeBtn: 2,
+                      type: 1, 
+                      area: '400px',
+                      title:'查看职位下的人员',
+                      content: $('#lookpersontai'),
+                    });
+                }
+            });
+        });
+
+
+
+        //删除职位下的人员
+        $(document).on('click','.delperson',function(){
+            var positionId = $(this).attr('data-position-id');
+            var userId = $(this).attr('data-user-id');
+            var that = $(this);
+            layer.confirm('请确认其名下是否有订单后删除！', {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+                url: "{:url('delpositionuser')}",
+                type: 'POST',
+                data: 'userId='+userId+'&positionId='+positionId,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        that.parents('tr').remove();
+                        layer.close(index);
+                    } else {
+                       layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }
+                }
+            });
+          });
+        });
+
+         //全选/取消
+         $(document).ready(function(){
+          $('#dep-user-chkall').bind('click', function () {
+              if (!$(this).is(':checked')) {
+                  $('.depUserId').attr('checked',false);
+              } else {
+                 $('.depUserId').attr('checked',true);
+
+              }
+           });
+         });
+
+
+
+    });
+ }); 
+
+
+</script>
+{/block}

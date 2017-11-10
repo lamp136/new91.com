@@ -1,0 +1,54 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Db;
+
+class Tel extends Base
+{
+    /**
+     * 列表
+     * @return void
+     */
+    public function index(){
+        $record = Db::name('TelRecord')->select();
+        $this->assign([
+            'record' => $record
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 导入excel记录表格
+     * @return void
+     */
+    public function loadfile(){
+        if(request()->isPost()){
+            $csvFile = request()->file('csv_file');
+            if(!empty($csvFile)){
+                vendor('PHPExcel.PHPExcel.IOFactory');
+                vendor('PHPExcel.PHPExcel.Reader.CSV');
+                $path = './public/zhl/files/';
+                $info = $csvFile->validate(['size' => 3145728,'ext' => 'xls,xlsx,csv'])->rule('uniqid')->move($path);
+                if(empty($info->getError())){
+                    $ext = $info->getExtension();
+                    $fileName = $path.$info->getSaveName();
+                    $reader = \PHPExcel_IOFactory::createReader('CSV');
+                    $excelObj = $reader->load($fileName);
+                    $sheet = $excelObj->getSheet(0);
+                    $highestRow = $sheet->getHighestRow(); // 取得总行数  
+                    $highestColumm = $sheet->getHighestColumn(); // 取得总列数  
+                    for ($i = 2; $i <= $highestRow; $i++) { 
+                        $addData[] = [
+                            'customer_phone' => $sheet->getCell('A'.$i)->getValue(),
+                            'customer'       => $sheet->getCell('B'.$i)->getValue(),
+                            'area'           => $sheet->getCell('C'.$i)->getValue(),
+                        ];
+                    }
+                    dump($addData);
+                    exit;
+                }
+            }
+        }
+    }
+}

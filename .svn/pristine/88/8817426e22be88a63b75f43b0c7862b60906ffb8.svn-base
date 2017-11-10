@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$seo.seo_title}</title>
+    <meta name="keywords" content="{$seo.seo_keywords}" />
+    <meta name="description" content="{$seo.seo_description}" />
+    <link href="_WEB_/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170717103214"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+    <script type="text/javascript" src="_WEB_/js/jquery-1.9.1.min.js"></script>
+    <style>
+        .tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map img {
+            width: auto;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <div class="tombmaps_nav">
+        <div class="contain">
+            <!-- 选择城市 -->
+            <div class="city">
+                <span class="sele">
+                    <i class="city_icon"></i>
+                    {$Think.cookie.ip_region_name}
+                    <i class="iconfont icon-iconfontdownjiantou"></i>
+                </span>
+
+                <!-- 城市列表 -->
+                <div class="city_list">
+                    {volist name="province" id="p"}
+                        <ul class="clearfix">
+                            <li>{$key}</li>
+                            {foreach name="p" item="v" key="k"}
+                                <li><a title="{$v.name}" href="http://{$v.abbr}.{$Think.config.domain_name}/map.html">{$v.name}</a></li>
+                            {/foreach}
+                        </ul>
+                    {/volist}
+                </div>
+               
+            </div><!-- city 选择城市 End -->
+            <!-- nav -->
+            <ul class="tombmaps_nav_main">
+                {include file="extra@nav"/}
+            </ul>
+            <div class="clear"></div>
+
+        </div><!-- contain End -->
+    </div><!-- tombmaps_nav 导航 End -->
+    
+    <!-- 地图看墓 -->
+    <div class="tombmaps_box">
+
+        <!-- 地图看墓左侧 -->
+        <div class="tombmaps_left">
+
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="/" title="首页">
+                    <img src="_WEB_/images/logo.png" alt="LOGO" /><span>地图看墓</span>
+                </a>
+            </div><!-- LOGO End -->
+            
+            <!-- 所在区域 -->
+            <div class="area">
+                <h2>所在区域：</h2>
+                <ul class="clearfix">
+                    <li {notempty name="province"} class="led" {/notempty}>
+                        <a title="全部" href="javascript:void(0);" class="area_city" data-city="">全部({:count($stores)})</a>
+                    </li>
+                    {volist name="storeCity" id="city"}
+                        <li>
+                            <a title="{$city.name}" href="javascript:void(0);" class="area_city" data-city="{$city.id}">{$city.name}({$city.count})</a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- area 所在区域 End -->
+            
+            <!-- 陵园列表 -->
+            <div class="tombmaps_list">
+                
+
+            </div><!-- tombmaps_list 陵园列表 End -->
+
+        </div><!-- tombmaps_left 地图看墓左侧 End -->
+        
+        <!-- 地图看墓右侧 -->
+        <div class="tombmaps_right">
+            <div class="tombmaps_right_contain">
+                <h2><i></i>400-618-9191 <span>全国咨询服务热线</span></h2>
+                <!-- 地图 -->
+                <div class="tombmaps_map">
+                    <div class="tombmaps_map_main" id="Bmap" style="height: 540px;"></div>
+                </div>
+                
+            </div><!-- tombmaps_right_contain End -->
+        </div><!-- tombmaps_right 地图看墓右侧 End -->
+
+    </div><!-- tombmaps_box 地图看墓 End -->
+    
+    {include file="extra@toolsbar" /}
+    {include file="extra@publicjs"/}
+    <script>
+        var stores = <?php echo !empty($stores) ? json_encode($stores) : '' ?>,
+            provinceId = <?php echo !empty($provinceId) ? $provinceId : 3 ?>,
+            storeUrl ="{:url('merchant')}";
+    </script>
+    <script type="text/javascript" src="_WEB_/js/map.js"></script>
+</body>
+</html>
+    

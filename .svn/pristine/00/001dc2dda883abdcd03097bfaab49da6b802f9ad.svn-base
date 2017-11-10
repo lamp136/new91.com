@@ -1,0 +1,154 @@
+var map,
+    searchInfoWindow = null; //创建检索信息窗口对象
+_mapInit();
+
+function layout() {
+    $(".tombmaps_list").css("max-height", $(window).height() - $(".area").outerHeight(true) - 146);
+    $(".tombmaps_map_main").css("max-height", $(window).height() - 152);
+}
+layout();
+$(window).resize(function() {
+    layout();
+});
+
+function _mapInit() {
+    map = new BMap.Map("Bmap"); // 创建地图实例
+    map.addControl(new BMap.NavigationControl({
+        type: BMAP_NAVIGATION_CONTROL_LARGE
+    }));
+
+    map.enableScrollWheelZoom(); //启用地图滚轮放大缩小
+    var jsonData = stores;
+    _loadData(jsonData);
+}
+
+function _addLabel(pos, stores) {
+    var options = {
+        position: pos, // 指定文本标注所在的地理位置
+        offset: new BMap.Size(-60, -40) //设置文本偏移量
+    };
+    var label = new BMap.Label('<span id="' + stores.id + '" class="cemname" style="position:unset;" data-name="' + stores['name'] + '">' + stores['name'] + '</span>', options); // 创建文本标注对象
+    label.setStyle({
+        // position: 'absolute',
+        top: '30px',
+        left: '100px',
+        padding: '0 16px',
+        background: '#2b916b',
+        color: '#fff',
+        lineHeight: '28px',
+        border: "1px solid white",
+        cursor: 'pointer',
+    });
+
+    var marker = new BMap.Marker(pos), //创建marker对象
+        siw = _infoWindow(stores);
+    label.addEventListener('click', function() {
+        siw.open(marker);
+        var busBtn = siw.dom.busBtn,
+            driveBtn = siw.dom.driveBtn,
+            transText = siw.dom.transText;
+        $([busBtn, driveBtn]).click(function() {
+            if ($(transText).val() != '') {
+                map.clearOverlays();
+                map.addOverlay(label);
+            }
+        });
+    });
+
+    setTimeout(function() {
+        map.panTo(stores.longitude, stores.latitude);
+    }, 500);
+    map.addOverlay(label);
+}
+
+function _infoWindow(wd) {
+    var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
+        '<img src="' + wd.image + '" alt="' + wd.name + '" style="float:right;zoom:1;overflow:hidden;width:150px;height:100px;margin-left:3px;"/>' +
+        '地址：' + wd.address + '<br/><a title="' + wd.name + '" href="/cemetery/details/' + wd.id + '.html">查看详情>></a></div>';
+    searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+        title: wd.name, //标题
+        width: 290, //宽度
+        height: 105, //高度
+        panel: "panel", //检索结果面板
+        enableAutoPan: true, //自动平移
+        searchTypes: [
+            BMAPLIB_TAB_TO_HERE, //到这里去
+            BMAPLIB_TAB_FROM_HERE //从这里出发
+        ]
+    });
+
+    return searchInfoWindow;
+}
+
+$('.area_city').on('click', function() {
+    var province = provinceId,
+        that = $(this),
+        city = that.data('city');
+    $('.area').find('li').removeClass('led');
+    that.parent('li').addClass('led');
+    var data = {
+        province: province,
+        city: city
+    };
+    _loadMerchant(data);
+});
+
+function _loadMerchant(info) {
+    $('.tombmaps_list').empty();
+    map.clearOverlays();
+    var data = [];
+    $.ajax({
+        url: storeUrl,
+        type: 'get',
+        data: info,
+        dataType: 'json',
+        success: function(result) {
+            if (result) {
+                if (result['code'] == 1) {
+                    data = result['data'];
+                    _loadData(data);
+                }
+            }
+        }
+    });
+}
+
+function _loadData(datas) {
+    var pointArr = [],
+        s = '';
+    $.each(datas, function(index, val) {
+        var province = city = '';
+        if (val['province'] != null) {
+            province = val['province']['name'];
+        }
+        if (val['city'] != null) {
+            city = val['city']['name'];
+        }
+        var minPrice = '--';
+        if (val['min_price'] != '0.00') {
+            minPrice = val['min_price'];
+            s += '<div class="tombmaps_list_main"><h2><a class="title" data-id="' + val['id'] + '" href="javascript:void(0);">' + val['name'] + '<span>' + province + '' + city + '</span></a></h2><div class="price clearfix"><p>参考价<span><font>￥</font><strong>' + minPrice + '</strong>万起</span></p><a title="' + val['name'] + '" target="_blank" href="/cemetery/details/' + val['id'] + '.html">查看详情</a></div></div>';
+        } else {
+            s += '<div class="tombmaps_list_main"><h2><a class="title" data-id="' + val['id'] + '" href="javascript:void(0);">' + val['name'] + '<span>' + province + '' + city + '</span></a></h2><div class="price clearfix"><p>参考价<span><font></font><strong>' + minPrice + '</strong></span></p><a title="' + val['name'] + '" target="_blank" href="/cemetery/details/' + val['id'] + '.html">查看详情</a></div></div>';
+        }
+        point = new BMap.Point(val['longitude'], val['latitude']);
+        pointArr.push(point);
+        _addLabel(point, val);
+    });
+
+    $('.tombmaps_list').empty().append(s);
+    var view = map.getViewport(pointArr),
+        level = view.zoom, // 缩放级别
+        zoomCenter = view.center; // 中心位置
+    map.centerAndZoom(zoomCenter, level);
+}
+
+$(document).on('click', '.tombmaps_list_main .title', function() {
+    var id = $(this).data('id');
+    var labels = $('#Bmap').find('span');
+    $.each(labels, function(key, val) {
+        if ($(val).attr('id') == id) {
+            $(val).trigger('click');
+        }
+    });
+});

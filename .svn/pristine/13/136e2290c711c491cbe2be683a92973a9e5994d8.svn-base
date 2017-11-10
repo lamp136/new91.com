@@ -1,0 +1,786 @@
+{extend name='extra@main' /}
+{block name='layer'}
+    <!--退单 start-->
+    <form id='backorder' style="display:none" class="layui-form" method="post" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>  
+                        <textarea name="back_reason" placeholder="退单原因" class="layui-textarea" required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <span class="layui-btn backsubmit" type='button'>立即提交</span>
+                        <input type='hidden' name='id' />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <!--退单 end-->
+
+    <!--查看票据 start-->
+    <div id="images" style="display:none">
+        <div>
+        </div>
+    </div>
+    <!--查看票据 end-->
+    
+    <!--查看审核 start-->
+    <form id='viewaudit' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>总金额</td>
+                    <td>  
+                        <input type="text" name="info[total_price]" placeholder="总金额" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>墓位金额</td>
+                    <td>  
+                        <input type="text" name="info[tomb_price]" placeholder="墓位金额" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>佣金比例</td>
+                    <td>  
+                        <input type="text" name="info[brokerage_percent]" placeholder="佣金比例" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>佣金金额</td>
+                    <td>  
+                        <input type="text" name="info[brokerage_money]" placeholder="佣金金额" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                
+                <tr class='check'>
+                    <td>返现比率</td>
+                    <td>  
+                        <input type="text" name="info[return_percent]" placeholder="返现比率" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>返现金额</td>
+                    <td>  
+                        <input type="text" name="info[return_money]" placeholder="返现金额" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                
+                <tr class='check'>
+                    <td>支付类型</td>
+                    <td>
+                        <input type="text" name="info[bank_name]" placeholder="支付类型" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>开户人</td>
+                    <td>  
+                        <input type="text" name="info[bank_member_name]" placeholder="开户人" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>账号</td>
+                    <td>  
+                        <input type="text" name="info[bank_id]" placeholder="账号" autocomplete="off" class="layui-input" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注</td>
+                    <td>  
+                      <textarea name="info[reason]" placeholder="备注" class="layui-textarea" readonly></textarea>
+                    </td>
+                </tr>
+               
+            </tbody>
+        </table>
+    </form>
+    <!--查看审核 end-->
+
+    <!--审核 start-->
+    <form id='audit' style="display:none" class="layui-form" method="post" enctype="multipart/form-data">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>总金额</td>
+                    <td>  
+                        <input type="text" name="info[total_price]" placeholder="总金额" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>墓位金额</td>
+                    <td>  
+                        <input type="text" name="info[tomb_price]" placeholder="墓位金额" autocomplete="off" class="layui-input calculate">
+                    </td>
+                </tr>
+                <tr>
+                    <td>佣金比例</td>
+                    <td>  
+                        <div class="layui-input-inline" style="width: 80%;">
+                            <input type="text" name="info[brokerage_percent]" placeholder="佣金比例" autocomplete="off" class="layui-input calculate percent" >
+                        </div>
+                        <div class="layui-input-inline" style="width: 17%;">
+                            <input type="text"   class="layui-input brokerage_percent"  placeholder="%" readonly>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>佣金金额</td>
+                    <td>  
+                        <input type="text" name="info[brokerage_money]" placeholder="佣金金额" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>是否需要返现</td>
+                    <td>
+                        <input type="radio"class="need_return" name="info[apply_return_status]" value="1" title="是" lay-filter="fan" >
+                        <input type="radio" class="no_need_return" name="info[apply_return_status]" value="0" title="否" lay-filter="fan" checked>
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>返现比率</td>
+                    <td>  
+                        <input type="text" name="info[return_percent]" placeholder="返现比率" autocomplete="off" class="layui-input calculate percent">
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>返现金额</td>
+                    <td>  
+                        <input type="text" name="info[return_money]" placeholder="返现金额" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>票据</td>
+                    <td id='parents'>  
+                        <div>
+                            <a href='javascript:void(0)' class="hide" data-name="add_plus">[+]</a><input type="file" class="default" name="image[]"/>
+                        <div>
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>支付类型</td>
+                    <td>
+                         <select name="info[bank_name]">
+                            <option value="">请选择</option>
+                            {volist name='$Think.config.PAY_TYPE' id='vo'}
+                                <option value="{$vo}">{$vo}</option>
+                            {/volist}
+                        </select> 
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>开户人</td>
+                    <td>  
+                        <input type="text" name="info[bank_member_name]" placeholder="开户人" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr class='check'>
+                    <td>账号</td>
+                    <td>  
+                        <input type="text" name="info[bank_id]" placeholder="账号" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注</td>
+                    <td>  
+                      <textarea name="info[reason]" placeholder="备注" class="layui-textarea"></textarea>
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <input type='hidden' name='orderId'>
+                        <button class="layui-btn" id='subaudit' type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <!--审核 end-->
+
+    <!--关闭 start-->
+    <div id="close_update_form" style="display: none;padding: 20px;">
+        <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">关闭原因</label>
+                <div class="layui-input-block">
+                   <textarea placeholder="请输入订单关闭原因" class="layui-textarea" name="reason"></textarea>
+                </div>
+            </div>
+
+             
+            <div class="layui-form-item" style="text-align: right;">
+                <div class="layui-btn" id="bbs_update_button">提交</div>
+            </div>
+            <input type='hidden' name='id' class="deleteid" value="">
+        </form>
+    </div>
+    <!--关闭 end-->
+{/block}
+
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form  method="get"  autocomplete="off" action='{:url("check")}' >
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+    {php}
+        if(showHandle('orders/Tomb/checkback')){
+    {/php}
+        <button class="layui-btn layui-btn-normal layui-btn-warm checkback" >退单</button>
+    {php}
+        }
+        if(showHandle('orders/Tomb/cooperatefail')){
+    {/php}
+        <button class="layui-btn layui-btn-normal layui-btn-danger closedorder">删除</button>
+    {php}
+        }
+    {/php}
+    <table class="layui-table">
+        <colgroup>
+            <col width="10">
+            <col width="100">
+            <col width="120">
+            <col width="200">
+            <col width="130">
+            <col width="120">
+            <col width="90">
+            <col width="100">
+            <col width="70">
+            <col width="300">
+        </colgroup>
+        <thead>
+            <tr>
+                <th></th>
+                <th>预约人|电话</th>
+                <th>完成时间</th>
+                <th>商家名称</th>
+                <th>联系人|电话</th>
+                <th>创建时间</th>
+                <th>跟踪人</th>
+                <th>跟踪信息</th>
+                <th>出车次数</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name="data" id="vo"}
+                <tr>
+                    <td>
+                        <input type="checkbox" lay-filter="checkInfo" name="radio" data-id="{$vo.id}" lay-skin="primary">
+                    </td>
+                    <td> 
+                    {notempty name='vo.buyer'}
+                        {$vo.buyer} <br> {$vo.mobile}
+                    {else/}
+                        {$vo.reservation_person} <br> {$vo.reservation_phone}
+                    {/notempty}
+                   
+                    </td>
+                    <td>
+                        {notempty name='vo.contract_time'}
+                            {$vo.contract_time|date='Y-m-d',###}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {notempty name='vo.store_fact_name'}
+                            {$vo.store_fact_name} 
+                        {else/}
+                            {$vo.store_name} 
+                        {/notempty}
+
+                        {notempty name="vo.store_status"}
+                            {volist name="storeMember" id="member"}
+                                {eq name="vo.store_status" value="$key"}
+                                    <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                                {/eq}
+                            {/volist}
+                        {/notempty}
+                    <br>
+                        {if condition="$Think.config.normal_status eq $vo['pushed_status']"}
+                            <font color="red">已推送商家</font>
+                        {else/}
+                            尚未推送商家
+                        {/if}
+                    </td>
+                    <td>{$vo.findmember.contact_name}<br/>{$vo.findmember.mobile}<br>{$vo.findmember.tel}</td>
+                    <td>{$vo.created_time|date='Y-m-d',###}</td>
+                    <td>{$order_flow[$vo.order_flow_id]}</td>
+                    <td><a class="layui-btn layui-btn-small" href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'reVisit'))}">更新</a><br/>
+                      {notempty name="$vo['degree']"}
+                    {$Think.config.degree[$vo.degree]}
+                    {/notempty}</td>
+                    <td>
+                        {notempty name="$vo['appcount']"}
+                            <a href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'appointCar'))}">{$vo.appcount}</a>
+                        {else /}无{/notempty}
+                    </td>
+                    <td>
+                        <div class="layui-btn-group">
+                            {php}
+                                if(showHandle('orders/Tomb/detail')){
+                            {/php}
+                                <a href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'orderDetail'))}" style="margin-left:10px" title='详细信息'>
+                                    <button class="layui-btn layui-btn-small" ><i class="layui-icon">&#xe615;</i></button>
+                                </a> 
+                            {php}
+                                }
+                                if(showHandle('orders/Tomb/audit')){
+                            {/php}
+                                {eq name="$vo.status" value="$Think.config.order_status['ok']"}
+                                    <a herf="javascript:;" class='audit' data-id="{$vo.id}" store-id="{$vo.store_id}" title='待审核' style="margin-left:10px">
+                                        <button class="layui-btn layui-btn-small  layui-btn-warm" ><i class="layui-icon">审</i></button>
+                                    </a>
+                                {/eq}
+                                {eq name="$vo.status" value="$Think.config.order_status['check_success']"}
+                                    <a herf="javascript:;" class='viewaudit' data-id="{$vo.id}" title='查看审核' style="margin-left:10px">
+                                        <button class="layui-btn layui-btn-small  layui-btn-warm" ><i class="layui-icon">看</i></button>
+                                    </a>
+                                {/eq}
+                            {php}
+                                }
+                                if(showHandle('orders/Tomb/getbill')){
+                            {/php}
+                                <a  title='票据' class='viewimage' order_id='{$vo.id}' style="margin-left:10px">
+                                    <button class="layui-btn layui-btn-small" ><i class="layui-icon">票</i></button>
+                                </a>
+                            {php}
+                                }
+                                if(showHandle('orders/Tomb/pushfinance')){
+                            {/php}
+                                {eq name="$vo.status" value="$Think.config.order_status['check_success']"}
+                                    <a  title='推送财务' order_id='{$vo.id}'class="pushfinance" style="margin-left:10px">
+                                        <button class="layui-btn layui-btn-small layui-btn-danger" >推财</button>
+                                    </a>
+                                {/eq}
+                            {php}
+                                }
+                            {/php}
+                        </div>
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table> 
+    {php}
+        if(showHandle('orders/Tomb/checkback')){
+    {/php}
+        <button class="layui-btn layui-btn-normal layui-btn-warm checkback" >退单</button>
+    {php}
+        }
+        if(showHandle('orders/Tomb/cooperatefail')){
+    {/php}
+        <button class="layui-btn layui-btn-normal layui-btn-danger closedorder">删除</button>
+    {php}
+        }
+    {/php}
+</div>
+<div style="margin-left: 10px;">
+    {$page}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'layer','form','laydate'], function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();  
+        var laydate = layui.laydate;
+        var start = {
+            min: laydate.now(),
+            max: '2099-06-16 23:59:59',
+            istoday:true,
+            choose: function(datas){
+                end.min = datas; //开始日选好后，重置结束日的最小日期
+                end.start = datas; //将结束日的初始值设定为开始日
+            }
+        };
+        var end = {
+            min: laydate.now(),
+            max: '2099-06-16 23:59:59',
+            istoday: true,
+            choose: function(datas){
+                start.max = datas; //结束日选好后，重置开始日的最大日期
+            }
+        };
+      
+        //删除订单
+        $(".closedorder").bind('click', function(){
+            var orderid = $('input[name="radio"]:checked').attr('data-id');
+            if(orderid){
+                layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, 
+                function(index){
+                    $('.deleteid').val(orderid);
+                    layer.open({
+                         closeBtn: 2,
+                        type: 1,
+                        area: '500px',
+                        title: '订单关闭原因',
+                        content: $('#close_update_form')
+                    });
+                });
+            }else{
+                layer.alert('请选择订单!');
+            }
+        });
+        //提交删除订单
+        $('#bbs_update_button').click(function(){
+            var From = $('#update_bbs_info_form').serialize();
+            $.ajax({
+                url: "{:url('cooperatefail')}",
+                data: From,
+                type: 'post',
+                success: function(result) {
+                    var d = eval("(" + result + ")");
+                    if (d.flag == 1) {
+                        layer.msg('操作成功!',{time:1000},function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.alert(d.msg);
+                    }
+                }
+            });
+        });
+        
+       /* $('.dingjin').click(function(){
+            $('.ishidden').show();
+        });
+
+        $('.deposit').click(function(){
+            $('.ishidden').hide();
+        });*/
+        
+        
+        $(".audit").bind('click', function(){
+            var orderId = $(this).attr('data-id');
+            var storeId = $(this).attr('store-id');
+            if(orderId){
+                $.ajax({
+                    url: "{:url('audit')}",
+                    data: {'orderId':orderId,'storeId':storeId},
+                    type: 'get',
+                    success: function(d) {
+                        var res = eval("(" + d + ")");
+                        if (res.flag == 1) {
+                            var data = res.data;
+                            if(data){
+                                if(data.total_price != '0.00'){
+                                    $('#audit input[name="info[total_price]"]').val(data.total_price);
+                                }
+                                if(data.tomb_price != '0.00'){
+                                    $('#audit input[name="info[tomb_price]"]').val(data.tomb_price);
+                                }
+                                if(data.brokerage_percent != '0.00'){
+                                    $('.brokerage_percent').val(data.brokerage_percent+'%');
+                                }
+                                if(data.brokerage_money != '0.00'){
+                                    $('#audit input[name="info[brokerage_money]"]').val(data.brokerage_money);
+                                }
+                                if(data.apply_return_status == 1){
+                                    $('.need_return').attr("checked","checked");
+                                    form.render('radio'); 
+                                    if(data.return_percent != '0.00'){
+                                        $('#audit input[name="info[return_percent]"]').val(data.return_percent);
+                                    }
+                                    if(data.return_money != '0.00'){
+                                        $('#audit input[name="info[return_money]"]').val(data.return_money);
+                                    }
+                                    $('.check').show();
+                                }else{
+                                    $('.check').hide();
+                                }
+                                
+                                $('#audit input[name="orderId"]').val(data.id);
+                            }
+                            layer.open({
+                                type: 1,
+                                skin: 'layui-layer-demo', //样式类名
+                                area: ['40%','65%'], //宽高
+                                closeBtn: 2, //不显示关闭按钮
+                                anim: 2,
+                                title:"审核票据",
+                                content: $('#audit')   
+                            });
+                        } else {
+                            layer.alert(d.msg);
+                        }
+                    }
+                });
+            }else{
+                layer.alert('请联系开发人员!');
+            }
+        });
+        //是否返现
+        form.on('radio(fan)',function(data){
+            var value = data.value;
+            if(value==0){
+                $('.check').hide();
+            }else{
+                $('.check').show();
+            }
+        })
+       //批量添加
+        $('#parents').on('click','.hide',function(){
+            var a = $(this);
+            var li = $(this).parent();
+            if(a.html()=="[+]"){
+                var newli = li.clone();
+                $(newli).find('a').html("[-]");
+                $(newli).find('input').val("");
+                li.after(newli);
+            }else{
+                li.remove();
+            }
+        });
+        //佣金比和返现比判断
+        $('.percent').blur(function(){
+            var brokerage_percent = parseFloat($('#audit input[name="info[brokerage_percent]"]').val());//佣金比
+            var return_percent = parseFloat($('#audit input[name="info[return_percent]"]').val());//返现比
+            if(return_percent >= brokerage_percent){
+                $(this).val(' ');
+                layer.alert('返现高于佣金,请重新核对！');
+            }
+        });
+        //佣金返现计算
+        $('.calculate').blur(function(){
+            var tomb_price = $('#audit input[name="info[tomb_price]"]').val();//墓价
+            var brokerage_percent = $('#audit input[name="info[brokerage_percent]"]').val();//佣金比
+            var return_percent = $('#audit input[name="info[return_percent]"]').val();//返现比
+            if(tomb_price){
+                $('#audit input[name="info[brokerage_money]"]').val(tomb_price*brokerage_percent*0.01);//佣金金额
+                $('#audit input[name="info[return_money]"]').val(tomb_price*return_percent*0.01);//返现金额
+            }
+        });
+        //提交审核
+        $('#subaudit').click(function(){
+            layer.open({
+                type:3,
+                success: function(layero, index){  
+                    var From = new FormData(document.getElementById("audit"));
+                    $.ajax({
+                        url: "{:url('audit')}",
+                        data: From,
+                        type: 'post',
+                        processData: false,
+                        contentType: false,
+                        dataType:'json',
+                        success: function(d) {
+                            if (d.flag == 1) {
+                                layer.msg('操作成功!',{time:1000},function(){
+                                    layer.closeAll(); //疯狂模式，关闭所有层
+                                    window.location.reload();
+                                });
+                            } else {
+                                layer.alert(d.msg);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        //查看审核  
+        $(".viewaudit").bind('click', function(){
+            var orderId = $(this).attr('data-id');
+            if(orderId){
+                $.ajax({
+                    url: "{:url('audit')}",
+                    data: {'orderId':orderId},
+                    type: 'get',
+                    success: function(d) {
+                        var res = eval("(" + d + ")");
+                        if (res.flag == 1) {
+                            var data = res.data;
+                            if(data){
+                                if(data.total_price != '0.00'){
+                                    $('#viewaudit input[name="info[total_price]"]').val(data.total_price);
+                                }
+                                if(data.tomb_price != '0.00'){
+                                    $('#viewaudit input[name="info[tomb_price]"]').val(data.tomb_price);
+                                }
+                                if(data.brokerage_percent != '0.00'){
+                                    $('#viewaudit input[name="info[brokerage_percent]"]').val(data.brokerage_percent);
+                                }
+                                if(data.brokerage_money != '0.00'){
+                                    $('#viewaudit input[name="info[brokerage_money]"]').val(data.brokerage_money);
+                                }
+                                if(data.apply_return_status == 1){
+                                    if(data.return_percent != '0.00'){
+                                        $('#viewaudit input[name="info[return_percent]"]').val(data.return_percent);
+                                    }
+                                    if(data.return_money != '0.00'){
+                                        $('#viewaudit input[name="info[return_money]"]').val(data.return_money);
+                                    }
+                                    $('#viewaudit input[name="orderId"]').val(data.id);
+                                    $('#viewaudit input[name="info[bank_name]"]').val(data.bank_name);
+                                    $('#viewaudit input[name="info[bank_member_name]"]').val(data.bank_member_name);
+                                    if(data.bank_id != '0'){
+                                        $('#viewaudit input[name="info[bank_id]"]').val(data.bank_id);
+                                    }
+                                    $('#viewaudit textarea[name="info[reason]"]').val(data.reason);
+                                    $('.check').show();
+                                }else{
+                                    $('.check').hide();
+                                }
+                            }
+                            layer.open({
+                                type: 1,
+                                skin: 'layui-layer-demo', //样式类名
+                                area: ['40%','60%'], //宽高
+                                closeBtn: 2, //不显示关闭按钮
+                                anim: 2,
+                                title:"查看审核",
+                                content: $('#viewaudit')   
+                            });
+                        } else {
+                            layer.alert(d.msg);
+                        }
+                    }
+                });
+            }else{
+                layer.alert('请联系开发人员!');
+            }
+        });
+        
+        //推送给财务
+        $('.pushfinance').click(function(){
+            var orderid = $(this).attr('order_id');
+            if(orderid){
+                layer.confirm('确定推送财务吗?', {icon: 3, title:'提示'}, 
+                function(index){
+                    layer.open({
+                        type:3,
+                        success: function(layero, indexs){  
+                            $.ajax({
+                                url: "{:url('pushfinance')}",
+                                data: {'orderId':orderid},
+                                type: 'post',
+                                success: function(res){
+                                    var d = eval("(" + res + ")");
+                                    if(d.flag == 1){
+                                        layer.msg('操作成功!',{time:1000},function(){
+                                            window.location.reload();
+                                        });
+                                    }else{
+                                        layer.alert(d.msg);
+                                    }
+                                }
+                            });
+                        }
+                    });    
+                });
+            }else{
+                layer.alert('请联系开发人员！');
+            }
+        });
+        //查看票据
+        $(".viewimage").bind('click', function(){
+            var order_id = $(this).attr('order_id');
+            layer.open({
+                type:3,
+                success: function(layero, indexs){  
+                    $.ajax({
+                        url:"{:url('orders/Tomb/getbill')}",
+                        type:'post',
+                        data:{'order_id':order_id},
+                        dataType:'json',
+                        success:function(result){
+                            layer.closeAll(); //疯狂模式，关闭所有层
+                            if(result.flag==1){
+                                var data = result.data;
+                                var str = '';
+                                for(var item in data) {
+                                   str += "<img src="+data[item]['bill_image']+" title="+data[item]['type']+"><br/>";
+                                }
+                                $('#images div').empty().append(str);
+                                layer.open({
+                                    type: 1,
+                                    skin: 'layui-layer-demo', //样式类名
+                                    closeBtn: 2, //不显示关闭按钮
+                                    anim: 2,
+                                    area: ['40%','60%'], //宽高
+                                    title:"查看票据",
+                                    content: $('#images')
+                                });
+                            }else{
+                                layer.msg(result.msg);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        
+        //退单
+        $('.checkback').click(function(){
+            var order_id = $('input[name="radio"]:checked').attr('data-id');
+            if(order_id){
+                $("#backorder input[name='id']").val(order_id);
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 2, //不显示关闭按钮
+                    anim: 2,
+                    area: ['30%','35%'], //宽高
+                    title:"退单原因",
+                    content: $('#backorder')
+                });
+            }else{
+                layer.alert('请选择订单!');
+            }
+        });
+        
+        //提交退单原因
+        $('.backsubmit').click(function(){
+            var order_id = $("#backorder input[name='id']").val();
+            var back_reason = $('#backorder textarea[name="back_reason"]').val().replace(/(^\s*)|(\s*$)/g, "");
+            if(!back_reason){
+                return false;
+            }
+            layer.open({
+                type:3,
+                success: function(layero, indexs){ 
+                    $.ajax({
+                        url: "{:url('checkback')}",
+                        data: {'orderId':order_id,'back_reason':back_reason},
+                        type: 'post',
+                        success: function(res){
+                            var d = eval("(" + res + ")");
+                            if(d.flag == 1){
+                                layer.msg('操作成功!',{time:1000},function(){
+                                    window.location.reload();
+                                });
+                            }else{
+                                layer.alert(d.msg);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+         //单选处理
+        form.on('checkbox(checkInfo)', function() {
+            var checkInfo = $('input[name="radio"]'),othis = this;
+            checkInfo.each(function(i, el) {
+                if (el != othis) {
+                    $(el).removeAttr('checked');
+                }
+            });
+            form.render();
+        });
+    });
+</script>
+{/block}
+

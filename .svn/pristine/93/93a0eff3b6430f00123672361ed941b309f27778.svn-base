@@ -1,0 +1,26 @@
+<?php
+namespace back\store\controller;
+use think\Controller;
+/**
+ * 商家合同列表
+ */
+class Contract extends Controller 
+{
+	/**
+	 * 合同列表页
+	 * 
+	 * @return void
+	 */
+	public function index() {
+		$data = array('msg'=>'使用thinkPHP5框架作为管理后台', 'menu'=>'菜单');
+        $this->assign('data', $data);
+		return $this->fetch('index');
+	}
+
+	public function add() {
+		$data = array('msg'=>'使用thinkPHP5框架作为管理后台', 'menu'=>'菜单');
+        $this->assign('data', $data);
+		return $this->fetch('add');
+	}
+
+} 

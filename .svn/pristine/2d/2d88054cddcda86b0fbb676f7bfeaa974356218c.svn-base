@@ -1,0 +1,36 @@
+$('.cemetery_orders_delete_btn').click(function() {
+    var id = $(this).data('id');
+    if (id) {
+        $(".tooltip_box,.tooltip_cemetery_orders").css({
+            "display": "block"
+        });
+        $('.tooltip_cemetery_orders_btn .qd').click(function() {
+            var url = $('.tooltip_cemetery_orders_btn').attr('data-url');
+            $.ajax({
+                url: url,
+                type: 'get',
+                data: {
+                    id: id,
+                },
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        if (result['code'] == 1) {
+                            $(".tooltip_box,.tooltip_cemetery_orders").css({
+                                "display": "none"
+                            });
+                            window.location.reload();
+                        }
+                    }
+                }
+            });
+        });
+    }
+});
+
+$('.tooltip_cemetery_orders_btn .qx,.tooltip_cemetery_orders_cloce').click(function() {
+    $(".tooltip_box,.tooltip_cemetery_orders").css({
+        "display": "none"
+    });
+});
+    

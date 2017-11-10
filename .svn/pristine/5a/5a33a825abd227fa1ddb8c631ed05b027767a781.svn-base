@@ -1,0 +1,516 @@
+{extend name='extra@main' /}
+
+{block name="body"}
+<div class="layui-tab layui-tab-card" lay-filter="opt">
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+       <form class="layui-form layui-form-pane1" method="post" action="{:url('orders/Tomb/add')}">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>客户名称</label>
+                    <div class="layui-input-inline">
+                        {empty name="order.reservation_person"}
+                              <input type="text" name="info[reservation_person]" autocomplete="off" class="layui-input" placeholder="客户名称" lay-verify="required" value="" required>
+                        {else /}
+                             <input type="text" name="info[reservation_person]" autocomplete="off" class="layui-input" placeholder="客户名称" lay-verify="required" value="{$order.reservation_person}" required>
+                        {/empty}
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>订单来源</label>
+                    <div class="layui-input-inline">
+                        <select name="info[order_type]" lay-verify="required" lay-search="">
+                            <option value="">选择订单来源</option>
+                            {volist name='Think.config.order_type' id='vo'}
+                                <option value="{$key}">{$vo}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>手机</label>
+                    <div class="layui-input-inline">
+                        {empty name="order.reservation_phone"}
+                        <input type="tel" name="info[reservation_phone]" autocomplete="off" class="layui-input" placeholder="请填写手机号">
+                        {else /}
+                        <input type="tel" name="info[reservation_phone]" autocomplete="off" class="layui-input" placeholder="请填写手机号" value="{$order.reservation_phone}">
+                        {/empty}
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>订单类型</label>
+                    <div class="layui-input-block">
+                        {volist name='Think.config.call_type' id='vo'}
+                            <input type="radio" name="info[call_type]" value="{$key}" title="{$vo}" {if condition="$key eq 1"}checked="checked"{/if}>
+                            <div class="layui-unselect layui-form-radio layui-form-radioed">
+                                <i class="layui-anim layui-icon"></i><span>{$vo}</span>
+                            </div>
+                        {/volist}
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">座机</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="info[reservation_landline]" autocomplete="off" class="layui-input" placeholder="座机号码">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">预约时间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="info[appoint_time]" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">年龄</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="info[reservation_age]" autocomplete="off" class="layui-input" placeholder="咨询者年龄">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">咨询者性别</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="info[reservation_sex]" value="男" title="男" checked="">
+                        <div class="layui-unselect layui-form-radio layui-form-radioed">
+                            <i class="layui-anim layui-icon"></i><span>男</span>
+                        </div>
+                        <input type="radio" name="info[reservation_sex]" value="女" title="女">
+                        <div class="layui-unselect layui-form-radio">
+                            <i class="layui-anim layui-icon"></i><span>女</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                
+                <div class="layui-inline">
+                    <label class="layui-form-label">微信</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="info[reservation_wechat]" autocomplete="off" class="layui-input" placeholder="微信">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">QQ</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="info[reservation_qq]" autocomplete="off" class="layui-input" placeholder="QQ号码">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color:red">*</span>地区商家</label>
+                <div class="layui-input-inline">
+                    <select name="info[province_id]" lay-filter="province_id">
+                        <option value="">请选择省</option>
+                        {volist name="province" id="vo"}
+                            <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="info[city_id]" lay-filter="city_id">
+                        <option value="">--选择市区--</option>
+                    </select>
+
+                </div>
+                <div class="layui-input-inline">
+                    <select name="info[store_id]" lay-filter="store_id">
+                        <option value="">请选择商家</option>
+                    </select>
+                </div>
+            </div>
+        <span id='vip' style="display:none">
+            <div class="layui-form-item">
+                <div class="layui-inline" style="width:310px">
+                    <label class="layui-form-label">是否返现</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" id='istrue' name="info[apply_return_status]" name="close" lay-skin="switch" value='0' lay-filter="switchTest" lay-text="是|否">
+                    </div>
+                </div>
+                <div class="layui-inline" id='return_percent' style="display:none;">
+                    <label class="layui-form-label">返现比例</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="info[return_percent]" autocomplete="off" class="layui-input" placeholder="返现的比例">
+                        
+                    </div>
+                    <div class="layui-form-mid layui-word-aux return_amount" msg_amoutn=""></div>
+                </div>
+            </div>
+            
+            <div id='message' class="layui-form-item layui-form-text" style="display:none;">
+                <label class="layui-form-label ">商家短信</label>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">客户短信</label>
+                <div class="layui-input-inline">
+                    <textarea placeholder="请输入内容" name="client_msg" class="layui-textarea text_client" colspan="5" rowspan="5" style="height: 100px; width: 340px;"></textarea>
+                </div>
+                <div class="layui-input-inline">
+                    <button class="layui-btn" type='button' id='client'>获取客户短信</button>
+                </div>
+            </div>
+
+        </span>
+             <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">价格预算</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="info[budgeted_price]" autocomplete="off" class="layui-input" placeholder="6万元">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">紧急状态</label>
+                    <div class="layui-input-block">
+                        {volist name='Think.config.degree' id='vo'}
+                            <input type="radio" name="info[degree]" {eq name='key' value='2'}checked{/eq} value="{$key}" title="{$vo}" >
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">逝者姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="info[tomb_user]" autocomplete="off" class="layui-input" placeholder="逝者姓名">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">逝者年龄</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="info[tomb_user_age]" autocomplete="off" class="layui-input" placeholder="逝者年龄">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block">
+                        {volist name='Think.config.tomb_sex' id='vo'}
+                            <input type="radio" name="info[tomb_user_sex]" value="{$key}" title="{$vo}" checked="">
+                            <div class="layui-unselect layui-form-radio layui-form-radioed">
+                                <i class="layui-anim layui-icon"></i><span>{$vo}</span>
+                            </div>
+                        {/volist}
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否在世</label>
+                    <div class="layui-input-block">
+                        {volist name='Think.config.tomb_user_status' id='vo'}
+                            <input type="radio" name="info[is_live]" value="{$key}" title="{$vo}" checked="">
+                            <div class="layui-unselect layui-form-radio layui-form-radioed">
+                                <i class="layui-anim layui-icon"></i><span>{$vo}</span>
+                            </div>
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">沟通信息</label>
+                <div class="layui-input-block">
+                    <textarea id="follow" name='info[demand]' style="display: none;">
+                        <p>需求:</p>
+                        <p>讲解:</p>
+                        <p>结果:</p>
+                    </textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否回访</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" id='return_status' name="info[is_return_visit]" value='1' lay-skin="switch" lay-filter="return" lay-text="是|否" >
+                    </div>
+                </div>
+                <div class="layui-inline" id='return_time' style="display:none">
+                    <label class="layui-form-label">回访时间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name='info[return_visit_time]' placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+                    </div>
+                </div>
+                <div class="layui-inline" id='return_alive' style="display:none">
+                    <label class="layui-form-label">回访紧急度</label>
+                    <div class="layui-input-block">
+                        {volist name='Think.config.is_alive' id='vo'}
+                            <input type="radio" name="info[is_alive]" value="{$key}" title="{$vo}" >
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="tel" name="info[remark]" class="layui-input" placeholder="备注信息" title="备注信息">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text" style="text-align:center">
+                <button class="layui-btn layui-btn-big" id='save'>保存</button>
+            </div>
+       </form>
+    </div>
+    
+</div>
+{/block}
+
+{block name="optJS"}
+<script type="text/javascript">
+layui.use(['form', 'element', 'jquery','layedit','laydate'], function(){
+    var form = layui.form()
+    var $ = layui.jquery,element = layui.element();
+    var layedit = layui.layedit;
+    var laydate = layui.laydate;
+    
+    var start = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday:true
+        ,choose: function(datas){
+          end.min = datas; //开始日选好后，重置结束日的最小日期
+          end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+  
+  var end = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday: true
+        ,choose: function(datas){
+          start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+
+    //建立编辑器
+    layedit.build('follow'); 
+
+    //监听指定开关
+    form.on('switch(switchTest)', function(data){
+        layer.tips('温馨提示：'+(this.checked ? '你确认返现么？' : '现在是不返现'), data.othis);
+        if(!data.elem.checked){
+            $('#return_percent').find('input[name="info[return_percent]"]').val('');
+            $('#return_percent').hide();
+            $("#istrue").val('0');
+        }else{
+            $('#return_percent').show();
+            $("#istrue").val('1'); 
+        } 
+    });
+    form.on('switch(return)', function(data){
+        layer.tips('温馨提示：'+(this.checked ? '现在需要回访' : '不需要回访'), data.othis)
+        
+        if(!data.elem.checked){
+            $('#return_time').find('input[name="info[return_visit_time]"]').val('');
+            $('#return_time').hide();
+            $('#return_alive').hide();
+            $('#return_status').val('0'); 
+        }else{
+            $('#return_status').val('1');
+            $('#return_time').show();
+            $('#return_alive').show(); 
+        } 
+    });
+
+
+    var layid = location.hash.replace(/^#opt=/, '');
+    element.tabChange('opt', layid);
+  
+    element.on('tab(opt)', function(elem){
+        location.hash = 'opt='+ $(this).attr('lay-id');
+    });
+    
+    //选择省获取市
+    form.on('select(province_id)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('select[name="info[city_id]"]');
+
+        $('select[name="info[store_id]"]').empty().append('<option value="">--选择商家--</option>');
+        getcity(provinceId,obj);
+        
+    });
+
+    //获取陵园列表
+    form.on('select(city_id)', function(data) {
+        var provinceId = $('select[name="info[province_id]"]').val();
+        var cityId = data['value'];
+        var obj =  $('select[name="info[store_id]"]');
+        getcemetery(provinceId,cityId,obj);
+        
+    });
+
+    //获取陵园信息
+    form.on('select(store_id)', function(data) {
+        var storeId = data['value'];
+        getcemeterydetail(storeId);
+        
+    });
+
+    //获取陵园列表
+    function getcemetery(provinceId,cityId,obj){
+        $.ajax({
+            url: "{:url('Tomb/getcemetery')}",
+            type: 'post',
+            data: {provinceId: provinceId,cityId:cityId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择商家--</option>';
+                if (result['flg'] == 1) {
+                    var data = result['data'];
+                    $.each(data, function(key, val) {
+                        var code = ''
+                        if(val['member_status'] != 0){
+                            code = "(会)";
+                        }
+                        t += '<option value="' + val['id'] + '">' + val['name']+code+'</option>';
+                    })
+                }
+                $(obj).empty().append(t);
+                form.render();
+                
+            }
+        });
+    }
+
+    //获取市区列表
+    function getcity(provinceId,obj){
+        $.ajax({
+            url: "{:url('Tomb/getcity')}",
+            type: 'get',
+            data: {pid: provinceId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择市区--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + key + '">' + val + '</option>';
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render();
+            }
+        });
+    }
+
+    //获取陵园详情
+    function getcemeterydetail(storeId){
+        $.ajax({
+            url: "{:url('Tomb/getcemeterydetail')}",
+            type: 'get',
+            data: {storeId: storeId},
+            dataType: 'json',
+            success: function(result) {
+                if(result['flag']==1){
+                    var data = result['data'];
+                    if(data['return_amount']){
+                        $('.return_amount').empty().append('佣金比例:'+data['return_amount']);
+                        $('.return_amount').attr('msg_amoutn',data['return_amount']);
+                    }
+                    if(data['member_status'] ==0){
+                        $('#vip').hide();
+                    }else{
+                        $('#vip').show();
+                    }
+                    var str = '';
+                     $.each(data['storecontact'], function(key, val) {
+                        str += '<div class="layui-form-item layui-form-text box"><label class="layui-form-label ">商家短信</label><div class="layui-input-inline"><input type="text" name="contact_name[]" class="layui-input" value="'+val["contact_name"]+'" title="商家联系人"></div><div class="layui-input-inline"><input type="tel" name="contact_mobile[]" class="layui-input" value="'+val["mobile"]+'" title="电话"></div><div  class="layui-input-inline"><textarea placeholder="请输入内容" class="layui-textarea" name="contact_msg[]" style="height: 100px; width: 340px;"></textarea></div><div  class="layui-input-inline"><button type="button" class="layui-btn">获取商家短信</button></div></div>';
+                    })
+                }
+                $('#message').empty().append(str).show();
+                form.render();
+            }
+        });
+    }
+
+    /**获取发送给商家的信息**/
+    $('#message').on('click','button',function(){
+        var a = $(this);
+        getstoremsg(a);
+    })
+    function getstoremsg(a) {
+        var div = $(a).parents('.box');
+        var customer = $("input[name='info[reservation_person]']").val();
+        var mobile = $("input[name='info[reservation_phone]']").val();
+        var contactman = $(div).find("input[name='contact_name[]']").val();
+        var contactmobile = $(div).find("input[name='contact_mobile[]']").val();
+        var appointTime = $("input[name='info[appoint_time]']").val(); 
+
+        if (!contactman) {
+             layer.msg("商家联系人名称不能为空");
+            return false;
+        }
+        var reg = /^(1[3|4|5|7|8]\d{9})$/;
+        if (!contactmobile) {
+            layer.msg("商家联系人手机号不能为空");
+            return false;
+        }
+
+        if (!reg.test(contactmobile)) {
+            layer.msg("商家联系人手机号不正确");
+            return false;
+        }
+
+        if (!customer) {
+            layer.msg("客户名称不能为空");
+            return false;
+        }
+        if (!mobile) {
+            layer.msg("客户联系方式不能为空");
+            return false;
+        }
+        if (!appointTime) {
+            appointTime = '';
+        }
+        var msg_store = $(div).find("textarea[name='contact_msg[]']");
+        var msgCustomer = "尊敬的会员，您有一条来自91搜墓网的贵宾客户预约信息,客户:" + customer + ",预约时间:" + appointTime + ",电话:" + mobile + ",请及时关注.【91搜墓网】";
+        $(msg_store).val(msgCustomer);
+    }
+
+    // 获取客户短信
+    $('#client').click(function(){
+        var msgcontent = "贵宾您好,我们已经将您的需求信息告知陵园，陵园会有专人和您联系，如有任何问题请致电：400-8010-344.感谢您对91搜墓网的信任.【91搜墓网】";
+        $('.text_client').val(msgcontent);
+    });
+
+    //表单验证
+    $('#save').click(function(){
+        var com = $("select[name='info[order_type]']").val();
+        var store = $("select[name='info[store_id]']").val();
+        var mobile = $("input[name='info[reservation_phone]']").val();
+        var tel = $("input[name='info[reservation_landline]']").val();
+
+        if(!com){
+            layer.msg('请填写订单来源');
+            return false;
+        }
+
+        if(mobile.length<1 && tel.length<1){
+            layer.msg('请填写联系方式');
+            return false;
+        }
+        if(!store){
+            layer.msg('请填写商家');
+            return false;
+        }
+        
+    })
+
+    //佣金验证
+    $("input[name='info[return_percent]']").blur(function(){
+        var yj = parseFloat($('.return_amount').attr('msg_amoutn'));
+        var fx = parseFloat($(this).val());
+        if(fx >= yj){
+            layer.msg('返现比例不能大于佣金比例');
+            $(this).val('');
+        }
+    }) 
+});
+</script>
+{/block}

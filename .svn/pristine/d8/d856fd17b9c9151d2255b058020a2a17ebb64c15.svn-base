@@ -1,0 +1,167 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<form id='data-form' style="display:none" class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+        <tr>
+            <td>佣金比例</td>
+            <td>  
+                <input type="text" name="brokerage_percent" placeholder="佣金比例" disabled="disabled" autocomplete="off" value="" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>佣金金额</td>
+            <td>  
+                <input type="text" name="brokerage_money" placeholder="佣金金额"  disabled="disabled" value="" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>实际金额</td>
+            <td>  
+                <input type="text" name="paid_in_amount" placeholder="实际金额" disabled="disabled" value="" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>客户返现金额</td>
+            <td>  
+                <input type="text" name="return_fact_money" placeholder="客户返现金额" disabled="disabled" value=""  autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>开户行</td>
+            <td>
+                <select name="bank" lay-verify="">
+                  <option value="">请选择</option>
+                </select>     
+            </td>
+        </tr>
+        <tr id='member' class='check'>
+            <td>开户人</td>
+            <td>  
+                <input type="text" name="name" placeholder="开户人" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr id='number' class='check'>
+            <td>账号</td>
+            <td>  
+                <input type="text" name="number" placeholder="账号" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+       <tr>
+            <td>退还陵园金额</td>
+            <td>  
+                <input type="text" name="back_money" placeholder="退还陵园金额" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>退单原因</td>
+            <td>  
+              <textarea name="back_reason" placeholder="退单原因" class="layui-textarea"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' style="text-align: center;">  
+                <button class="layui-btn" id='backsubmit' type='button'>立即提交</button>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+    <input type='hidden' name='id' id="backid" value="">
+</form>
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form method="get"  autocomplete="off" action='{:url("finish")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+    <table class="layui-table">
+        <colgroup>
+            <col width="120">
+            <col width="200">
+            <col width="80">
+            <col width="100">
+            <col width="80">
+            <col width="110">
+            <col width="110">
+            <col width="100">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>购买人|电话</th>
+                <th>商家名称</th>
+                <th>墓价|比例|应收|实收</th>
+                <th>比例|应返|实返</th>
+                <th>跟踪人</th>
+                <th>下单时间</th>
+                <th>完成时间</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+        {notempty name="list"}
+            {volist name="list" id="vo"}
+                <tr>
+                    <td>
+                        {empty name="vo['buyer']"}
+                            {$vo.reservation_person}<br>{$vo.reservation_phone}
+                        {else /}
+                            {$vo.buyer}<br>{$vo.mobile}
+                        {/empty}
+                    </td>
+                    <td>
+                        {$vo.store_name}
+                        {notempty name="vo.store_status"}
+                        {volist name="storeMember" id="member"}
+                            {eq name="vo.store_status" value="$key"}
+                            <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                            {/eq}
+                        {/volist}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {$vo.tomb_price}|{$vo.brokerage_percent}|{$vo.brokerage_money}|{$vo.paid_in_amount}
+                    </td>
+                    <td>{$vo.return_percent}|{$vo.return_money}|{$vo.return_fact_money}</td>
+                    <td>{volist name="order_flow" id="flowmans"}
+                            {if $key == $vo['order_flow_id']}
+                                {$flowmans}
+                            {/if}
+                        {/volist}
+                    </td>
+                    <td>
+                        {notempty name="vo.created_time"}
+                            {$vo.created_time|date='Y-m-d',###}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {notempty name="vo.payfor_us_time"}
+                            {$vo.payfor_us_time|date='Y-m-d',###}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {php}
+                            if(showHandle('money/Money/finishdetail')){
+                        {/php}
+                            <a class="layui-btn layui-btn-small" href="{:url('money/Money/finishdetail',array('orderId'=>$vo['id']))}" style="margin-left:10px" title='详细信息'><i class="layui-icon">&#xe615;</i></a>
+                        {php}
+                            }
+                        {/php}
+                    </td>
+                </tr>
+            {/volist}
+        {/notempty}
+        </tbody>
+    </table>
+    {$page}
+</div>
+{/block}

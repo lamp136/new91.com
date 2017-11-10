@@ -1,0 +1,70 @@
+<!-- 底部footer部分 -->
+<div class="footer clearfix">
+    <div class="contain">
+        <!-- 底部导航+联系我们 -->
+        <div class="footer_main clearfix">
+            <!-- 底部导航 -->
+            <div class="footer_nav clearfix">
+                <ul class="first">
+                    <h1>殡葬文化</h1>
+                    <li><a href="{:url('help/Help/bury')}">殡葬吉日</a></li>
+                    <li><a href="{:url('article/Article/listbox',['cid'=>$Think.config.category_fengshui_culture])}">墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}">碑文挽联</a></li>
+                </ul>
+                <ul>
+                    <h1>购墓指南</h1>
+                    <li><a href="{:url('help/Help/tombnotes')}">购墓须知</a></li>
+                    <li><a href="#">选墓技巧</a></li>
+                    <li><a href="{:url('help/Help/tombprocess')}">购墓流程</a></li>
+                </ul>
+                <ul>
+                    <h1>常见问题</h1>
+                    <li><a href="#">墓型选择</a></li>
+                    <li><a href="{:url('help/Help/tombagelimit')}">公墓年限</a></li>
+                    <li><a href="#">鲜花祭品</a></li>
+                </ul>
+                <ul>
+                    <h1>平台保障</h1>
+                    <li><a href="#">免责条款</a></li>
+                    <li><a href="{:url('help/Help/privacy')}">隐私保护</a></li>
+                    <li><a href="#">法律声明</a></li>
+                </ul>
+            </div><!-- footer_nav底部导航结束 -->
+
+            <!-- 公众号 -->
+            <div class="wechat">
+                <img src="_WEB_/images/footer_wechat.jpg" align="微信号" />
+                <h2>91忆语</h2>
+                <p>91搜墓网微信公众号</p>
+            </div><!-- contact联系我们结束 -->
+        </div><!-- footer_main底部导航+联系我们结束 -->
+
+    </div><!-- contain -->
+</div><!-- footer底部footer部分结束 -->
+
+<!-- 友情链接 -->
+<div class="blogroll">
+    <div class="contain clearfix">
+        <h3>友情链接：</h3>
+        <ul>
+            {volist name="friendlinks" id="vo"}
+                <li><a href="{$vo.url}" title="{$vo.name}" target="_blank">{$vo.name}</a></li>
+            {/volist}
+        </ul>
+    </div>
+</div><!-- blogroll友情链接结束 -->
+
+<!-- 版权 -->
+<div class="copyright">
+    <ul>
+        <li><a href="{:url('help/Help/aboutus')}">关于我们</a></li>
+        <li><a href="{:url('help/Help/contactus')}">联系我们</a></li>
+        <li><a href="websitemap.html">网站地图</a></li>
+        <li><a href="#">加盟合作</a></li>
+        <li><a href="#">手机站</a></li>
+        <li>热线：<span>400-618-9191</span></li>
+    </ul>
+    <p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;91搜墓网版权所有</p>
+    <p>CopyRight (C)2015-2016 Huigeyuan Technology Allrights</p>
+</div><!-- copyright版权结束 -->
+{include file="extra@toolsbar" /}

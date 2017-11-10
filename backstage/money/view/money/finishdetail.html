@@ -1,0 +1,257 @@
+{extend name='extra@main' /}
+{block name='body'}
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    {notempty name="$title"}
+    <legend>{$title.created_time|date='Y-m-d',###}|{$title.reservation_person}|{$title.store_name}订单详情</legend>
+    {/notempty}
+</fieldset>
+<div class="layui-tab" lay-filter="items">
+    <!--订单信息-->
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">  
+            {notempty name="data"}
+                <table class="layui-table">
+                    <tr>
+                        <th>预约人</th>
+                        <td>{$data.reservation_person}</td>
+                        <th>手机</th>
+                        <td>
+                            {notempty name="data.reservation_phone"}
+                                {$data.reservation_phone}
+                            {/notempty}
+                        </td>
+                        <th>来源</th>
+                        <td>
+                            {notempty name="data.order_type"}
+                                {$order_type[$data.order_type]}
+                            {/notempty}
+                        </td>
+                        <th>地区</th>
+                        <td>
+                            {notempty name="zone.province"}
+                                {$zone.province.name}
+                                {notempty name="zone.city"}
+                                    /{$zone.city.name}
+                                {/notempty}
+                            {/notempty}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>订单类型</th>
+                        <td>
+                            <span class="label label-info">
+                            {notempty name="data['call_type']"}
+                                {$call_arr[$data.call_type]}
+                            {/notempty}
+                            </span>&nbsp;
+                        </td>
+                        <th>座机</th>
+                        <td>
+                            {if $data.reservation_landline != 0}
+                                {$data.reservation_landline}
+                            {/if}
+                        </td>
+                        <th>微信</th>
+                        <td>{$data.reservation_wechat}</td>
+                        <th>QQ</th>
+                        <td>{$data.reservation_qq}</td>
+                    </tr>
+                    <tr>
+                        <th>预约陵园</th>
+                        <td colspan="3">
+                            {notempty name="data.store_names"}
+                                {$data.store_names}
+                            {else/}
+                                {$data.store_name}
+                            {/notempty}
+                        </td>
+                        <th>实际购买园区</th><td colspan="3">
+                           {$data.store_fact_name}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>心里价位</th>
+                        <td>{$data.budgeted_price}万</td>
+                        <th>下单时间</th>
+                        <td>
+                            {notempty name="data.created_time"}
+                                {$data.created_time|date='Y-m-d',###}
+                            {/notempty}
+                        </td>
+                        <th>意向程度</th>
+                        <td></td>
+                        <th>看墓时间</th>
+                        <td>
+                            {notempty name="data.appoint_time"}
+                                {$data.appoint_time|date="Y-m-d",###}
+                            {/notempty}
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <th>安葬人名</th>
+                        <td>{$data.tomb_user}</td>
+                        <th>安葬人性别</th>
+                        <td>
+                            {notempty name="data['tomb_user_sex']"}
+                                {$sex[$data.tomb_user_sex]}
+                            {/notempty}
+                        </td>
+                        <th>安葬人年龄</th>
+                        <td>
+                            {if $data.tomb_user_age != 0}
+                                {$data.tomb_user_age}
+                            {/if}
+                        </td>
+                        <th>安葬人状态</th>
+                        <td>
+                            {notempty name="vo['is_live']"}
+                                {$tomb_user_status[$data.is_live]}
+                            {/notempty}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>购买人</th>
+                        <td>{$data.buyer}</td>
+                        <th>手机</th>
+                        <td>
+                            {if $data.mobile != 0 && !empty($data.mobile)}
+                                {$data.mobile}
+                            {/if}
+                        </td>
+                        <th>性别</th>
+                        <td>
+                            {notempty name="data['reservation_sex']"}
+                                {$sex[$data.reservation_sex]}
+                            {/notempty}
+                        </td>
+                        <th>年龄</th>
+                        <td>
+                            {if $data.reservation_age != 0 && !empty($data.reservation_age)}
+                                {$data.reservation_age}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>座机</th>
+                        <td>
+                            {$data.buyer_landline}
+                        </td>
+                        <th>微信</th>
+                        <td>{$data.buyer_wechat}</td>
+                        <th>QQ</th>
+                        <td>{$data.buyer_qq}</td>
+                    </tr>
+                    <tr>
+                        <th>是否成交</th>
+                        <td>
+                            是 <!-- <img src="" title="凭证" style="width:20px;height:20px;"/> -->
+                        </td>
+                        
+                        <th>订单状态</th>
+                        <td>
+                            {if $data.state == config('normal_status')}
+                                {$order_status_change[$data.status]}
+                            {else /}
+                                已删除
+                            {/if}
+                        </td>
+                        <th>推送商家</th>
+                        <td>
+                            {eq name="data['pushed_status']" value="1"}
+                                已推送
+                            {else/}
+                                未推送
+                            {/eq}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>墓价</th>
+                        <td>
+                            {neq name="data.total_price" value="0.00"}
+                                {$data.total_price}
+                            {/neq}
+                        </td>
+                        <th>成交价</th>
+                        <td>
+                            {neq name="data.tomb_price" value="0.00"}
+                                {$data.tomb_price}
+                            {/neq}
+                        </td>
+                        <th>园区折扣</th>
+                        <td>
+                            {notempty name="data.store_discount"}
+                                {$data.store_discount}
+                            {/notempty}
+                        </td>
+                        <th>91折扣</th>
+                        <td>
+                            {notempty name="data.91_discount"}
+                                {$data.91_discount}
+                            {/notempty}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>佣金比例</th>
+                        <td>
+                            {neq name="data.brokerage_percent" value="0.00"}
+                                {$data.brokerage_percent}
+                            {/neq}
+                        </td>
+                        <th>应收</th>
+                        <td>
+                            {neq name="data.brokerage_money" value="0.00"}
+                                {$data.brokerage_money}
+                            {/neq}
+                        </td>
+                        <th>实收</th>
+                        <td>
+                            {neq name="data.paid_in_amount" value="0.00"}
+                                {$data.paid_in_amount}
+                            {/neq}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>返现比例</th>
+                        <td>
+                            {neq name="data.return_percent" value="0.00"}
+                                {$data.return_percent}
+                            {/neq}
+                        </td>
+                        <th>应返</th>
+                        <td>
+                            {neq name="data.return_money" value="0.00"}
+                                {$data.return_money}
+                            {/neq}
+                        </td>
+                        <th>实返</th>
+                        <td>
+                            {neq name="data.return_fact_money" value="0.00"}
+                                {$data.return_fact_money}
+                            {/neq}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>墓穴位置</th>
+                        <td colspan="3">{$data.tomb_address}</td>
+                        <th>备注</th>
+                        <td colspan="3">{$data.remark}</td>
+                    </tr>
+                    <tr>
+                        <th>未成交原因</th>
+                        <td colspan="3">{$data.outstanding_reason}</td>
+                        <th>解决方案</th>
+                        <td colspan="3">{$data.outstanding_method}</td>
+                    </tr>
+                    <tr>
+                        <th>需求描述</th>
+                        <td colspan="7">
+                            {$data.demand}
+                        </td>
+                    </tr>
+                </table>
+            {/notempty}
+        </div>
+    </div>
+</div>
+{/block}

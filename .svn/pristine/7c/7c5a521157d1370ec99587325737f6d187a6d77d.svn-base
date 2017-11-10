@@ -1,0 +1,108 @@
+{extend name='extra@main'}
+{block name='body'}
+<fieldset class="layui-elem-field layui-field-title">
+  <legend>北京九宫山陵园</legend>
+</fieldset>  
+ 
+<table class="layui-table" lay-even="" lay-skin="row">
+  <colgroup>
+    <col width="100">
+    <col width="200">
+    <col width="100">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>地址</th><td>北京昌平啊上佳福地啦圣诞节分厘卡似的</td>
+      <th>市区距离</th><td>35</td>
+    </tr> 
+    <tr>
+      <th>联系人</th><td>长啥地 14455678909</td>
+      <th>联系人</th><td>士大夫 13366783940</td>
+    </tr> 
+    <tr>
+      <th>价格区间</th><td>1.8万——   <img src="" alt="价格清单"/></td>
+      <th>会员</th><td>商家</td>
+    </tr> 
+    <tr>
+      <th>商家性质</th><td>北京民政局批准的经营性公墓</td>
+      <th>朝向</th><td>坐北朝南</td>
+    </tr> 
+    <tr>
+      <th>优点</th><td>的fads法大师傅啊的说法的说法各位然后今天一天看但是</td>
+      <th>缺点</th><td>啊的说法的说法但是发啊等发达省份射点发生官方电视台和他人</td>
+    </tr> 
+    <tr>
+      <th>描述</th><td colspan="3">垃圾地方垃圾地方了咯觉得舒服了那里肯定是你发了可是啦电视机分厘卡的顺利开发阶段是浪费拉升阶段分厘卡机都是分厘卡机的方腊时大家flak大家分厘卡电视机flak电视剧flak电视机分厘卡机的说服力阿里的时间flak的手机发垃圾的说服力</td>
+    </tr> 
+    <tr>
+      <th>入住名人</th><td colspan="3">啊的说，啊都发，啊都发，梵蒂冈，让他</td>
+    </tr>
+    <tr>
+      <th>交通路线</th>
+      <td colspan="3">
+        <p>
+        平台班车:
+        自驾路线:
+        公交|地铁:
+        </p>
+      </td>
+    </tr> 
+    <tr>
+      <th>其他</th>
+      <td colspan="3">
+        <p>
+        安葬费:
+        刻字费:
+        管理费:
+        礼仪服务：流程
+        </p>
+      </td>
+    </tr> 
+    <tr>
+      <th colspan="4">普通福位 (2017-05-12)</th>
+    </tr>
+    <tr>
+      <th>福位A</th><td>5万，大理石、0.9㎡、坐北朝南</td>
+      <th>福位B</th><td>3万，大理石、0.6㎡、坐北朝南</td>
+    </tr> 
+    <tr>
+      <th>福位C</th><td>50万，大理石、0.9㎡、坐北朝南</td>
+      <th>福位D</th><td>30万，大理石、0.9㎡、坐北朝南</td>
+    </tr> 
+    <tr>
+      <th>福位E</th><td>20万，大理石、0.9㎡、坐北朝南</td>
+      <th>福位F</th><td>15万，大理石、0.9㎡、坐北朝南</td>
+    </tr> 
+     <tr>
+      <th colspan="4">家族墓 (2017-05-12)</th>
+    </tr>
+    <tr>
+      <th>福区</th><td>5万/㎡，1.5平米起售</td>
+      <th>寿区</th><td>5万/㎡，1.5平米起售</td>
+    </tr> 
+    <tr>
+      <th colspan="4">其他安葬方式 (2017-05-12)</th>
+    </tr>
+    <tr>
+      <th>树葬</th><td>5万</td>
+      <th>草坪葬</th><td>5万</td>
+    </tr> 
+    <tr>
+      <th>骨灰墙</th><td>5万</td>
+      <th>宗教</th><td>5万</td>
+    </tr> 
+    <tr>
+      <th colspan="4">陵园服务信息</th>
+    </tr>
+    <tr>
+      <th>市内办事处</th><td colspan="3">地址、职责、电话</td>
+    </tr> 
+    <tr>
+      <th>官方网站</th><td>www.91soumu.com</td>
+      <th>园区电话</th><td>010-62988461</td>
+    </tr> 
+  </thead>
+</table> 
+{/block}

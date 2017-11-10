@@ -1,0 +1,258 @@
+{extend name='extra@main' /}
+
+{block name='body'}
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+    <legend>修改司机车辆信息</legend>
+</fieldset>
+
+<form class="layui-form" action="{:url('tool/Car/edit')}" method="post" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red;">*</span>司机名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[driver]" autocomplete="off" class="layui-input" lay-verify="required" required placeholder="司机名称" value="{$car.driver}">
+            </div>
+        </div>
+        <div class="layui-box layui-upload-button">
+            <input type="file" name="photo" lay-type="images"  class="layui-upload-file" cat='type_one'/>
+            <span class="layui-upload-icon"><i class="layui-icon"></i><span style="color:red;">*</span>上传图片</span>
+        </div>
+        <div class="layui-box layui-upload-button">
+            <input type="file" name="id_card" lay-type="images"  class="layui-upload-file" cat='type_two'/>
+            <span class="layui-upload-icon"><i class="layui-icon"></i><span style="color:red;">*</span>身份证</span>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red;">*</span>电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[driver_phone]"  autocomplete="off" class="layui-input" lay-verify="required" required placeholder="司机电话" value="{$car.driver_phone}">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-block" style="float:left;">
+            <img src="{$Think.config.public_path}{$car.photo}" style="width:200px;height:250px;border:1px solid #E6E6E6;margin-left:112px" id='type_one' alt='生活照'>
+        </div>
+        <div class="layui-block" style="float:left;">
+            <img src='{$Think.config.public_path}{$car.id_card}' style="width:200px;height:250px;border:1px solid #E6E6E6;" id='type_two' alt='身份证照片'>
+        </div>
+        <div class="layui-block" style="float:left;">
+            <img src='{$Think.config.public_path}{$car.models_image}' style="width:200px;height:250px;border:1px solid #E6E6E6;" id='type_three' alt='车型照片'>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>居住地址</label>
+        <div class="layui-input-inline">
+            <select name="info[province_id]" lay-filter="province_id" lay-verify="required" required>
+                <option value="">请选择省</option>
+                {volist name="province" id="vo"}
+                    <option value="{$key}-{$vo}" {eq name="key" value="$car.province_id"} selected='selected' {/eq}>{$vo}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="info[city_id]" lay-filter="city_id" lay-verify="required" required>
+                <option value="">--选择市区--</option>
+                {volist name='city' id='ci'}
+                    <option value="{$key}-{$ci}" {eq name="key" value="$car.city_id"} selected='selected'{/eq}>{$ci}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" name='info[address]' class="layui-input" placeholder="具体地址" value="{$car.address}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red;">*</span>车型</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[models]" autocomplete="off" class="layui-input" placeholder="比如：大众帕萨特" value="{$car.models}">
+            </div>
+        </div>
+        <div class="layui-box layui-upload-button">
+            <input type="file" name="models_image" lay-type="images" class="layui-upload-file" cat='type_three'/>
+            <span class="layui-upload-icon"><i class="layui-icon"></i><span style="color:red;">*</span>上传车型照片</span>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red;">*</span>车牌号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[plate_number]" autocomplete="off" class="layui-input" placeholder="比如：京H33689" value="{$car.plate_number}">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <select name="info[car_type]">
+                <option value="">车辆分类</option>
+                {volist name="Think.config.car_type" id="vo"}
+                    <option value="{$key}" {eq name="key" value="$car.car_type"} selected='selected' {/eq}>{$vo}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>选择覆盖陵园</label>
+        <div class="layui-input-inline">
+            <select  lay-filter="cemetery_pro" class='cemetery_pro'>
+                <option value="">请选择省</option>
+                {volist name="province" id="vo"}
+                    <option value="{$key}">{$vo}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select  lay-filter="cemetery_cit" class='cemetery_city'>
+                <option value="">--选择市区--</option>
+            </select>
+        </div>
+        <div class="layui-input-inline" id='cemetery'>
+
+        </div>
+        <div class="layui-input-inline" id='show'>
+            <a class="layui-input">--已选列表--</a>
+            {volist name='cemetery' id='ce'}
+                <span class='layui-input' storeId="{$key}">{$ce}<i class='layui-icon' style='float: right;margin-right: 10px;cursor: pointer;'>&#x1006;</i><input type='hidden' name='storeId[]' value="{$key}"></span>
+            {/volist}
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block">
+      <textarea placeholder="备注内容" class="layui-textarea" name="info[remarks]">{$car.remarks}</textarea>
+    </div>
+  </div>
+   <div class="layui-form-item"  style="text-align: center;">
+        <input type="hidden" name='nowPage' value="{$nowPage}">
+        <input type="hidden" name='info[id]' value="{$car.id}">
+        <button class="layui-btn" lay-submit="" lay-filter="submit">提交</button>
+  </div>
+</form>
+{/block}
+
+{block name='optJS'}
+<script type="text/javascript">
+ layui.use(['jquery', 'form','layedit'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+
+    form.on('select(province_id)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('select[name="info[city_id]"]');
+        getcity(provinceId,obj);
+        
+    });
+    form.on('select(cemetery_pro)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('.cemetery_city');
+        getcity(provinceId,obj);
+        var storeObj = $('#cemetery');
+        getcemetery(provinceId,'',storeObj);
+        
+    });
+    
+    //获取陵园列表
+    form.on('select(cemetery_cit)', function(data) {
+        var provinceId = $('.cemetery_pro').val();
+        var cityId = data['value'];
+        var obj = $('#cemetery');
+        getcemetery(provinceId,cityId,obj);
+        
+    });
+
+    //获取市区列表
+    function getcity(provinceId,obj){
+        $.ajax({
+            url: "{:url('Car/getRegion')}",
+            type: 'get',
+            data: {provinceId: provinceId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择市区--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + key + '-'+val+'">' + val + '</option>';
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render();
+            }
+        });
+    }
+
+    //获取陵园列表
+    function getcemetery(provinceId,cityId,obj){
+        $.ajax({
+            url: "{:url('Car/getcemetery')}",
+            type: 'post',
+            data: {provinceId: provinceId,cityId:cityId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '';
+                if (result) {
+                    if (result['flg'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += "<span class='layui-input' storeId="+key+">"+val+"</span>";
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render();
+            }
+        });
+    }
+    
+    //选中陵园显示
+    $('#cemetery').on('click','span',function(){
+        var storeId = $(this).attr('storeId');
+        var storeName = $(this).html();
+        if($('#show').find('span').length >0){
+            var arr = $('#show').find('span');
+
+            for (var i =0; i<arr.length; i++) {
+                
+                if($(arr[i]).attr('storeId')==storeId){
+                    layer.msg('陵园已添加');return false;
+                }
+            }
+        }
+        var t = '';
+        t = "<span class='layui-input' storeId="+storeId+">"+storeName+"<i class='layui-icon' style='float: right;margin-right: 10px;cursor: pointer;'>&#x1006;</i><input type='hidden' name='storeId[]' value="+storeId+"></span>";
+        $('#show').append(t)
+
+    });
+
+    //删除选中陵园
+     $('#show').on('click','i',function(){
+        $(this).parents('span').remove();
+    });
+
+    //上传图片前的预览
+    $(function() {
+        $(".layui-upload-file").change(function() {
+            var $file = $(this);
+            var fileObj = $file[0];
+
+            var windowURL = window.URL || window.webkitURL;
+            var dataURL;
+            // var $img = $(this).next('.image');
+            var cat = $(this).attr('cat');
+            if(cat =='type_one'){
+                var $img = $('#type_one');
+            }else if(cat == 'type_two'){
+                var $img = $('#type_two');
+            }else if(cat == 'type_three'){
+                var $img = $('#type_three');
+            }
+            if(fileObj && fileObj.files && fileObj.files[0]){
+                dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                $img.attr('src',dataURL);
+                $img.parents('div').show();
+            }
+        });
+    });
+});
+</script>
+{/block}

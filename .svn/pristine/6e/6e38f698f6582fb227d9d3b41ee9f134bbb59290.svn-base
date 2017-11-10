@@ -1,0 +1,295 @@
+{extend name='extra@main' /}
+{block name='layer'}
+    <form id='orderfollowform' style="display:none" class="layui-form" >
+        <table class="ayui-tablel">
+            <tbody>
+                <tr>
+                      <td>分配的工作日</td><br>
+                      <td><input  id="workday" style="height:30px;" type="text" value=""  disabled="disabled"></td>
+                </tr>
+            </tbody>
+        </table>
+    </form> 
+    <form id='flowForm' style="display:none" class="layui-form" >
+        <table class="ayui-tablel">
+            <tbody>
+                <tr>
+                <td>
+                    <select name="admin_id" id="order_flow_man" >
+                        <option value="0">--选择跟踪人--</option>
+                        {volist name="workmen" id="men"}
+                            <option value="{$key}">{$men}</option>
+                        {/volist}
+                    </select>
+                </td>
+                </tr>
+                <tr>
+                    <td> 
+                     <input data-name="choice_id" name="week[]"  type="checkbox" value="1">周一
+                     <input data-name="choice_id" name="week[]" type="checkbox" value="2">周二
+                     <input data-name="choice_id" name="week[]"  type="checkbox" value="3">周三
+                     <input data-name="choice_id" name="week[]" type="checkbox" value="4">周四
+                     <input data-name="choice_id" name="week[]" type="checkbox" value="5">周五
+                     <input data-name="choice_id" name="week[]" type="checkbox" value="6">周六
+                     <input data-name="choice_id" name="week[]" type="checkbox" value="0">周日
+                    </td>   
+                </tr>
+              
+            </tbody>
+        </table>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="hidden" name="email" id="email">
+                <span class="layui-btn flowForm">立即提交</span>
+            </div>
+        </div>
+    </form>
+    <div id="addFlowMan" style="display: none;">
+    <form style="margin-left: 25px;margin-top: 20px;height: 300px;" id="addFlowManForm" class="layui-form layui-form-pane">
+        <table class="layui-table" style="margin-left: 25px;margin-top: 20px;">
+            <tbody style="margin-left: 25px;margin-top: 20px;">
+                <tr>
+                      <td>姓名</td>
+                      <td>
+                        <select name="admin_id" id="order_flow_man" lay-filter="flow_man">
+                        <option value="0">--选择跟踪人--</option>
+                        {volist name="workmen" id="men"}
+                            <option value="{$key}">{$men}</option>
+                        {/volist}
+                        </select>
+                      </td>
+                </tr>
+                <tr>
+                    <td>邮箱地址</td>
+                    <td><input  style="height:30px;width:80%;" type="text" value="" name="email" placeholder="邮箱地址" ></td>
+                </tr>
+                <tr>
+                    <td>能接收的邮件类型</td>
+                    <td><select name="get_coupon_type" id='type' lay-filter="flow_man">
+                    <option value="0">--能接收的邮件类型--</option>
+                    {volist name="$Think.config.business_email_msg" id="men"}
+                        <option value="{$key}">{$men}</option>
+                    {/volist}
+                </select></td>
+                </tr>
+                <tr>
+                    <td>手机号</td>
+                    <td><input  style="height:30px;width:80%;" type="text" value="" name="phone" placeholder="手机号" ></td>
+                </tr>
+            </tbody>
+        </table>
+       
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <span class="layui-btn saveFlowMan">立即提交</span>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+
+    <div style="float:right;margin-top:10px;margin-right:10px;margin-bottom:10px;">
+        <span class="layui-btn add">
+            <i class="layui-icon" >&#xe608;</i>添加商务人员
+        </span>
+     </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>邮箱</th>
+                <th>手机号</th>
+                <th>可接收的短信/邮件类型</th>
+                <th>这周排班情况</th>
+                <th>操作</th>            
+            </tr> 
+        </thead>
+        <tbody>
+        {volist name="list" id="vo"}
+            <tr>
+             <td>{$vo.name}</td>
+             <td>{$vo.email_address}</td>
+             <td>{$vo.phone}</td>
+             <td> 
+                {$call_arr[$vo.type]}</span>
+             </td>
+             <td>
+                <a class="layui-btn layui-btn-small layui-btn-normal lookwork" data-email="{$vo.email_address}" href="javascript:void(0)" ><i class="icon-pencil icon-white"> </i>查看排班信息</a>
+            </td>
+            <td>
+                 <a class="layui-btn layui-btn-small layui-btn-normal editorwork" href="javascript:void(0)" data-email="{$vo.email_address}" ><i class="icon-pencil icon-white"> </i>编辑排班信息</a>
+                 <a class="layui-btn layui-btn-small layui-btn-danger delete" data-id="{$vo.email_address}" href="javascript:void(0)" ><i class="icon-remove  icon-white"> </i>删除</a>
+            </td>
+           </tr>
+        {/volist}
+        </tbody>
+    </table>
+        
+</div>
+{/block}
+
+
+
+{block name='optJS'}
+<script>
+layui.use(['jquery', 'layer','form'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    $('.lookwork').click(function(){
+            var email = $(this).attr('data-email');
+            $.ajax({
+                url:"{:url('lookwork')}",
+                type:'post',
+                data:'email='+email,
+                success:function(d){
+                    var result = eval("("+d+")");
+                    if (result.flag == 1) {
+                        var str = result.data
+                    }else{
+                        var str = result.msg;
+                    }
+                    $('#workday').val(str)
+                    layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: '700px',
+                        title: '查看排班信息',
+                        content: $('#orderfollowform'),
+                    });
+                }
+            });
+        }); 
+
+        //添加商务人员
+        $('.add').click(function(){
+            layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: '700px',
+                        title: '添加商务人员',
+                        content: $('#addFlowMan'),
+                    });
+        });
+
+        $('.saveFlowMan').click(function(){
+            var From = $('#addFlowManForm').serialize();
+            $.ajax({
+                url:"{:url('addbusinessinfo')}",
+                type:'post',
+                data:From,
+                success:function(d){
+                    var result = eval("("+d+")");
+                   if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+                }
+            });
+        });
+
+
+           $('.delete').click(function(){
+            var email = $(this).attr('data-id');
+              $.ajax({
+                url:"{:url('removeemail')}",
+                type:'post',
+                data:'email='+email,
+                success:function(d){
+                    var result = eval("("+d+")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                        })
+                }
+            }
+        });
+    });
+
+        $('.editorwork').click(function(){
+            $('input:checkbox').attr('checked',false);
+            var email = $(this).attr('data-email');
+            $('#email').val(email);
+            $.ajax({
+                url:"{:url('searchwork')}",
+                data:'email='+email,
+                dataType:'json',
+                type:'post',
+                success:function(d){
+                    if(d.flag == 1){
+                        var data = d.week;
+                        if(data){
+                            $.each(data,function(key,value){
+                               
+                                 $('input:checkbox[value="'+value.week+'"]').prop('checked',true);
+                                form.render('checkbox');
+                            })
+                        }
+                    }
+                    layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: ['600px','200px'],
+                        title: '编辑排班信息',
+                        content: $('#flowForm'),
+                    });  
+                  form.render();
+
+                }
+
+            });
+         });
+         
+        $('.flowForm').click(function(){
+            var str = '';
+            $("#flowForm input[data-name='choice_id']:checked").each(function(){
+                str += ($(this).val()+',');
+            });
+            str = str.substring(0,str.lastIndexOf(','));
+            var flow_man = $('#order_flow_man option:selected') .val();
+            if(flow_man == '' ||flow_man == 0 ){
+                layer.msg('请选择跟踪人')
+                return false;
+            }
+            var email = $('#email').val();
+            $.ajax({
+                url:"{:url('editorwork')}",
+                type:'POST',
+                data: {'admin_id':flow_man,'week':str,'email':email},
+                success:function(d){
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                        })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                        })
+                    }
+                }
+            });
+
+        });
+
+});
+
+
+
+
+</script>
+
+{/block}

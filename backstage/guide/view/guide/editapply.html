@@ -1,0 +1,191 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('apply')}">申请列表</a>
+        <a href="javascript:void(0);">编辑</a>
+    </span>
+</div>
+<div class="site-text site-block" style="margin-top: 8px;">
+    <form class="layui-form" method="post" id="saveApplyForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="type" lay-filter="type" lay-verify="required">
+                    <option value="0">--类型--</option>
+                    {notempty name="categoryList"}
+                        {volist name="categoryList" id="cate"}
+                            <option value="{$cate.id}" {eq name="data.type" value="$cate.id"} selected="selected" {/eq}>{$cate.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$cate.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+        </div> 
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择地区</label>
+            <div class="layui-input-inline">
+                <select name="province_id" lay-filter="province_id" lay-verify="required">
+                    <option value="0">--选择省份--</option>
+                    {notempty name="province"}
+                        {volist name="province" id="vo"}
+                            <option value="{$key}" {eq name="key" value="$data.province_id"} selected="selected" {/eq}>{$vo}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="city_id" lay-filter="city_id" lay-verify="required">
+                    <option value="0">--选择市区--</option>
+                    {notempty name="data.citys"}
+                        {volist name="data.citys" id="c"}
+                            <option value="{$c.id}" {eq name="c.id" value="$data.city_id"} selected="selected" {/eq}>{$c.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+        </div> 
+        <div class="layui-form-item">
+            <label class="layui-form-label">网站名称<font color="red">*</font></label>
+            <div class="layui-input-block" style="width: 390px;">
+                <input type="text" name="name" required lay-verify="required" placeholder="网站名称" autocomplete="off" class="layui-input" value="{$data.name}"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">网址<font color="red">*</font></label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="url" required lay-verify="required" class="layui-input" value="{$data.url}" placeholder="网址" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系方式</label>
+            <div class="layui-input-inline">
+                <input type="text" name="qq" placeholder="qq号" class="layui-input" value="{$data.qq}"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="tel" placeholder="手机" class="layui-input" value="{$data.tel}"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="email" placeholder="邮箱" class="layui-input" value="{$data.email}"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">建站时间</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" name="creat_sit_time" placeholder="建站时间" onclick="layui.laydate({elem: this, festival: true})" value="{$data.creat_sit_time}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">百度权重</label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="baidu_weight" required lay-verify="required" class="layui-input" value="{$data.baidu_weight}" placeholder="百度权重" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">审核状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" {eq name="data.status" value="2"} checked {/eq} value="2" title="通过"/>
+                <input type="radio" name="status" {eq name="data.status" value="$Think.config.delete_status"} checked {/eq} value="{$Think.config.delete_status}" title="未通过"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea style="width: 50%;" placeholder="描述" class="layui-textarea layui-btn-disabled">{$data.description}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">建议</label>
+            <div class="layui-input-block">
+                <textarea style="width: 50%;" placeholder="建议" class="layui-textarea layui-btn-disabled">{$data.suggest}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sort" placeholder="排序" value="{$data.sort}" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <span class="layui-btn" lay-submit lay-filter="saveApply">立即提交</span>
+            </div>
+        </div>
+    </form>   
+</div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'form', 'laydate'], function() {
+            var $ = layui.jquery,
+                form = layui.form(),
+                provinceId,
+                cityId;
+
+            form.on('select(province_id)', function(data) {
+                provinceId = data['value'];
+                var data = {
+                    provinceId: provinceId
+                };
+                loadCity(provinceId);
+            })
+
+            /**
+             * 获取市区列表
+             * @param  {string} id 省份id
+             */
+            function loadCity(id) {
+                $.ajax({
+                    url: "{:url('guide/Guide/getcity')}",
+                    type: 'get',
+                    data: {
+                        provinceId: id
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        var t = '<option value="0">--选择市区--</option>';
+                        if (result) {
+                            if (result['code'] == 1) {
+                                var data = result['data'];
+                                $.each(data, function(key, val) {
+                                    t += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        $('select[name="city_id"]').empty().append(t);
+                        form.render();
+                    }
+                });
+            }
+
+            form.on('submit(saveApply)', function() {
+                var id = {$data.id},
+                    jumpUrl = "{:url('guide/Guide/apply',['page' => $Think.get.page])}",
+                    saveData = $('#saveApplyForm').serializeArray();
+                saveData.push({
+                    'name': 'id',
+                    'value': id
+                });
+                if(id){
+                    $.ajax({
+                        url: "{:url('guide/Guide/editapply')}",
+                        type: 'post',
+                        data: saveData,
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                layer.msg(result['msg'], {
+                                    time: 1000
+                                }, function() {
+                                    if (result['code'] == 1) {
+                                        window.location.href = jumpUrl;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+{/block}

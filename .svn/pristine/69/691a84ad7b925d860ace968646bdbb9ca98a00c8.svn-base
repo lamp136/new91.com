@@ -1,0 +1,42 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+use think\Db;
+use back\extra\controller\XmlModel;
+
+/**
+ * Xml生成文件
+ */
+class Sitemap extends XmlModel
+{
+	function index(){
+		return $this->fetch();
+	}
+
+    function createXml(){
+    	$res = array('flag'=>0,'msg'=>'创建失败');
+        $arr = array();
+        $conUrl = config('xml_url');
+        $where['status'] = config('normal_status');
+        $where['level'] = config('normal_status');
+        $region = Db::name('region')->where($where)->column('id,abbreviate');
+
+        foreach ($region as $key => $value) {
+            $arr[] = "http://".strtolower($value).".91soumu.com";
+        }
+
+        $arr = array_merge($arr,$conUrl);
+
+        $site = new Sitemap(); 
+        foreach ($arr as $key => $value) {               
+            $site->AddItem($value, 1);
+        }     
+        $data = $site->SaveToFile('./public/sitemap.xml');
+        if($data){
+        	$res = array('flag'=>1,'msg'=>'创建成功');
+        }
+
+        echo json_encode($res);
+
+    }
+}

@@ -1,0 +1,44 @@
+<!-- 底部footer部分 -->
+<div class="footer clearfix">
+    <div class="contain">
+        <!-- 底部导航+联系我们 -->
+        <div class="footer_main clearfix">
+            <!-- 底部导航 -->
+            <div class="footer_nav clearfix">
+                <ul class="first">
+                    <h1>殡葬文化</h1>
+                    <li><a href="{:url('help/Help/bury')}" title='殡葬吉日' target='_blank'>殡葬吉日</a></li>
+                    <li><a href="{:url('article/Article/listbox',['cid'=>$Think.config.article_fengshui_culture],$Think.config.assign_suffix,$Think.config.assign_domain)}" title='墓地风水' target='_blank'>墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}" target='_blank' title='碑文挽联'>碑文挽联</a></li>
+                </ul>
+                <ul>
+                    <h1>购墓指南</h1>
+                    <li><a href="{:url('help/Help/tombnotes')}" target='_blank' title='购墓须知'>购墓须知</a></li>
+                    <li><a href="#" target='_blank' title='选墓技巧'>选墓技巧</a></li>
+                    <li><a href="{:url('help/Help/tombprocess')}"  target='_blank' title='购墓流程'>购墓流程</a></li>
+                </ul>
+                <ul>
+                    <h1>常见问题</h1>
+
+                    <li><a href="{:url('help/Help/wasburied')}" target='_blank' title='落葬讲究'>落葬讲究</a></li>
+                    <li><a href="{:url('help/Help/tombagelimit')}"  target='_blank' title='公墓年限'>公墓年限</a></li>
+                    <li><a href="#"  target='_blank' title='鲜花祭品'>鲜花祭品</a></li>
+                </ul>
+                <ul>
+                    <h1>平台保障</h1>
+                    <li><a href="{:url('help/Help/disclaimer')}" target='_blank' title='免责条款'>免责条款</a></li>
+                    <li><a href="{:url('help/Help/privacy')}" target='_blank' title='隐私保护'>隐私保护</a></li>
+                    <li><a href="{:url('help/Help/law')}" target='_blank' title='法律声明'>法律声明</a></li>
+                </ul>
+            </div><!-- footer_nav底部导航结束 -->
+
+            <!-- 公众号 -->
+            <div class="wechat">
+                <img src="_WEB_/images/footer_wechat.jpg" align="微信号" />
+                <h2>91忆语</h2>
+                <p>91搜墓网微信公众号</p>
+            </div><!-- contact联系我们结束 -->
+        </div><!-- footer_main底部导航+联系我们结束 -->
+
+    </div><!-- contain -->
+</div><!-- footer底部footer部分结束 -->

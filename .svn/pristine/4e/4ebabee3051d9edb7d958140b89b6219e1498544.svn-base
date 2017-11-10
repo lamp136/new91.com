@@ -1,0 +1,174 @@
+{extend name='extra@main' /}
+
+{block name='body'} 
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;"> 
+
+<div style="width:100%;height:40px;border-bottom:1px solid #E2E2E2;line-height:40px;padding-left:10px;margin-bottom:10px">
+        <span class="layui-breadcrumb" style="font-size:10px">
+            <a href="">首页</a>
+            {empty name='secondCategory'}
+                <a href="{:url('Article/'.lcfirst($name))}">{$firstCategory}</a>
+            {else /}
+                <a><cite>{$firstCategory}</cite></a>
+                <a href="{:url('Article/'.lcfirst($name))}">{$secondCategory}</a>
+            {/empty}
+        </span>
+</div>
+ <form  method="get"  autocomplete="off" action='{:url("$name")}' style="float:left">
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <input type="text" name="title" autocomplete="off" placeholder="新闻标题" value="{$Think.get.title}" class="layui-input">
+        </div> 
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-normal">搜索</button>
+        </div>
+    </div>
+</form>
+    {php}
+        if(showHandle('article/Article/add')){
+    {/php}
+        <div class="layui-inline">
+            <span class="layui-btn add">
+                <a href="{:url('Article/add',array('categoryId'=>$categoryId,'firstCategory'=>$firstCategory,'secondCategory'=>$secondCategory,'name'=>$name))}" style="color:white;"><i class="layui-icon">&#xe608;</i>添加</a>
+            </span>
+        </div>
+    {php}
+        }
+    {/php}
+<table class="layui-table">
+    <colgroup>
+        <col width="200">
+        {if condition="$categoryId eq $Think.config.category_traditional_festival"}
+            <col width="80">
+        {/if}
+        <col width="80">
+        <col width="80">
+        <col width="120">
+        <col width="120">
+        <col width="120">
+        <col>
+    </colgroup>
+    <thead>
+        <tr>
+            <th>标题</th>
+            {if condition="$categoryId eq $Think.config.category_traditional_festival"}
+                <th class="hidden-phone">所属节日</th>
+            {/if}
+            <th>状态</th>
+            {if condition="$login_name eq 'admin'"}<th>发布者</th>{/if}
+            <th>发布时间</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr> 
+    </thead>
+  <tbody>
+    {volist name='list' id='vo'}
+    <tr>
+        <td >
+            <span title="{$vo.title}">{$vo.titles}</span>
+            {eq name="vo.top" value="1"}
+                <img width="19px" src="/public/static/backstage/img/top.png" title="置顶">
+            {/eq}
+            {eq name="vo.is_hot" value="1"}
+                <img width="21px" src="/public/static/backstage/img/hot.png" title="热门">
+            {/eq}
+            {eq name="vo.recommend" value="1"}
+                <img width="23px" src="/public/static/backstage/img/recommend.png" title="推荐">
+            {/eq}
+        </td>
+        {if condition="$categoryId eq $Think.config.category_traditional_festival"}
+            <td>{$vo.catname.name}</td>
+        {/if}
+        <td>
+            {if condition="$vo.status eq $Think.config.normal_status"}已发布
+                {elseif condition="$vo.status eq $Think.config.default_status" /}审核中
+                {elseif condition="$vo.status eq $Think.config.delete_status" /}删除
+            {/if}
+        </td>
+        {if condition="$login_name eq 'admin'"}<td>{$vo.nickname.name} </td>{/if}
+        <td>
+        {notempty name="vo['published_time']"}
+            {$vo.published_time|date="Y-m-d H:i:s",###}
+        {/notempty}
+        </td>
+        <td>{$vo.created_time|date="Y-m-d H:i:s",###}</td>
+        <td>
+            {php}
+                if(showHandle('article/Article/edit')){
+            {/php}
+                <a href="{:url('Article/edit',array('categoryId'=>$vo['category_id'],'firstCategory'=>$firstCategory,'secondCategory'=>$secondCategory,'name'=>$name,'newsId'=>$vo['id'],'nowPage'=>$nowPage))}" class="layui-btn layui-btn-small">编辑</a>
+            {php}
+                }
+                if(showHandle('article/Article/delnews')){
+            {/php}
+                {if condition='$vo.status neq $Think.config.delete_status'}
+                    <button href="javascript:;" news_id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-danger del">删除</button>
+                {else/}
+                    <button href="javascript:;" news_id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-normal  start">启用</button>
+                {/if}  
+            {php}
+                }
+            {/php}
+        </td>
+    </tr>
+    {/volist}
+  </tbody>
+</table>
+    {$page}
+</div>
+{/block}
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'form'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+
+    //删除新闻
+    $('.del').click(function(){
+        var id = $(this).attr('news_id');
+        layer.confirm('确定要删除？', {
+          btn: ['确定','取消'], //按钮
+          icon:3,
+          title:'提示'
+        }, function(){
+            $.ajax({
+                url:"{:url('delnews')}",
+                type:'post',
+                data:{'id':id,'token':'del'},
+                dataType:'json',
+                success : function(e){
+                    if(e.flg ==1){
+                        layer.msg(e.msg,{icon:1});
+                    }else{
+                        layer.msg(e.msg,{icon:1});
+                    }
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+        }, function(){
+            layer.closeAll();
+        });
+    });
+
+    //启用新闻
+    $('.start').click(function(){
+        var id = $(this).attr('news_id');
+        $.ajax({
+            url:"{:url('delnews')}",
+            type:'post',
+            data:{'id':id,'token':'start'},
+            dataType:'json',
+            success : function(e){
+                if(e.flg ==1){
+                    layer.msg(e.msg,{icon:1});
+                }else{
+                    layer.msg(e.msg);
+                }
+                window.location.reload();//刷新当前页面.
+            }
+        });
+    })
+
+});
+</script>
+{/block}

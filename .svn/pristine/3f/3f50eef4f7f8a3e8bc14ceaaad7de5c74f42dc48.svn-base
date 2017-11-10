@@ -1,0 +1,236 @@
+{extend name='extra@main' /}
+{block name='popups'}
+    <!-- 提交评价提示框 -->
+    <div class="tooltip_box"></div>
+    <div class="tooltip_cemetery_orders">
+        <h2>删除订单</h2>
+        <p>您好，您确定要删除该订单吗？</p>
+        <div class="tooltip_cemetery_orders_btn">
+            <a class="qd" href="javascript:void(0);">确定</a>
+            <a class="qx" href="javascript:void(0);">取消</a>
+        </div>
+        <!-- 关闭按钮 -->
+        <span class="tooltip_cemetery_orders_cloce"></span>
+    </div>
+{/block}
+{block name="body"}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/">首页</a><li>
+                <li class="jt">></li>
+                <li>订单评论</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+        {include file="extra@ucenter_left" /}
+        
+        <!-- 用户中心右侧 -->
+        <div class="user_right">
+            
+            <!-- 订单title -->
+            <div class="order_title">
+                <ul class="clearfix">
+                    <li class="ddxx">订单信息</li>
+                    <li class="gmr">购买人</li>
+                    <li class="phone">手机号码</li>
+                    <li class="zt">状态</li>
+                    <li class="jycz">交易操作</li>
+                </ul>
+            </div>
+            
+            <!-- 订单内容1 -->
+            <div class="cemetery_orders etiquette_orders">
+                <div class="cemetery_orders_title">
+                    <p>订单编号：{$info.order_service_sn}    预约时间：{notempty name="info.appoint_time"} {$info.appoint_time|date="Y-m-d H:i:s",###} {/notempty}&nbsp;&nbsp;&nbsp;&nbsp;<i></i>{$info.store_name}</p>
+                </div>
+                <div class="cemetery_orders_nr">
+                    <ul class="clearfix">
+                        <!-- 订单信息 -->
+                        <li class="liimg clearfix">
+                            <a title="{$info.store_name}" href="{:url('rite/Rite/detail',['id' => $info.store_id])}"><img alt="{$info.store_name}" src="{$info.store.thumb_image}"/></a>
+                            <div class="txt">
+                                <h2>{$info.store_name}</h2>
+                                <!-- <p>该套餐包含鲜花一束，瓜果一份，香一把，思念卡一份...</p> -->
+                            </div>
+                        </li>
+                        <!-- 购买人 -->
+                        <li class="ligmr">{$info.reservation_person}</li>
+                        <!-- 手机号码 -->
+                        <li class="liphone">{$info.reservation_phone}</li>
+                        <!-- 状态 -->
+                        <li class="lizt">
+                            {if array_key_exists($info.status,$orderStatus)}
+                                {$orderStatus[$info.status]}
+                            {/if}
+                        </li>
+                        <!-- 交易操作 -->
+                        <li class="licz licz_eva">
+                            <a class="cemetery_orders_delete_btn" href="javascript:void(0);">删除订单</a>
+                        </li>
+                    </ul>
+                </div><!-- cemetery_orders_nr End -->
+            </div><!-- cemetery_orders 订单内容 End -->
+
+            <!-- 我的评价 -->
+            <div class="cemetery_orders_evaluate">
+                <form id="evalForm">
+                    <h2>我的评价</h2>
+                    <div class="pf clearfix">
+                        <span class="title">评分：</span>
+                         <ul>
+                            <li>环境：
+                                <span id="hj"></span>
+                            </li>
+                            <li class="last">价格：
+                                <span id="jg"></span>
+                            </li>
+                            <li>交通：
+                                <span id="jt"></span>
+                            </li>
+                            <li class="last">服务：
+                                <span id="fw"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ms">
+                        <span class="title">描述：</span>
+                        <textarea name="eval[content]" class="ms_tarea" placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+                    </div>
+                    <div class="niname">
+                        
+                    </div>
+                    <div class="remark_btn">
+                        <a class="remark_btn_a" href="javascript:void(0);">提交评价</a>
+                        <input type="hidden" name="eval[hj]" value=""/>
+                        <input type="hidden" name="eval[jg]" value=""/>
+                        <input type="hidden" name="eval[jt]" value=""/>
+                        <input type="hidden" name="eval[fw]" value=""/>
+                    </div>
+                    <div class="cemetery_orders_evaluate_close"></div>
+                </form>
+            </div><!-- cemetery_orders_evaluate 我要评价 End -->
+
+        </div><!-- user_right 用户中心右侧 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+{block name="js"}
+    <script src="_WEB_/js/raty/jquery.raty.js"></script>
+    <script>
+        //添加评星
+        $("#hj").raty({
+            click: function(t, e) {
+                $("#evalForm input[name='eval[hj]']").val(t);
+            }
+        }), $("#jg").raty({
+            click: function(t, e) {
+                $("#evalForm input[name='eval[jg]']").val(t);
+            }
+        }), $("#jt").raty({
+            click: function(t, e) {
+                $("#evalForm input[name='eval[jt]']").val(t);
+            }
+        }), $("#fw").raty({
+            click: function(t, e) {
+                $("#evalForm input[name='eval[fw]']").val(t);
+            }
+        });
+
+        $('.cemetery_orders_delete_btn').click(function() {
+            var id = {$info.id};
+            if (id) {
+                $(".tooltip_box,.tooltip_cemetery_orders").css({
+                    "display": "block"
+                });
+                $('.tooltip_cemetery_orders_btn .qd').click(function() {
+                    $.ajax({
+                        url: "{:url('ucenter/User/delorder')}",
+                        type: 'get',
+                        data: {
+                            id: id,
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                if (result['code'] == 1) {
+                                    $(".tooltip_box,.tooltip_cemetery_orders").css({
+                                        "display": "none"
+                                    });
+                                    window.location.reload();
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+        $('.tooltip_cemetery_orders_btn .qx,.tooltip_cemetery_orders_cloce').click(function() {
+            $(".tooltip_box,.tooltip_cemetery_orders").css({
+                "display": "none"
+            });
+        });
+
+        $('.remark_btn_a').click(function() {
+            $('.remark_btn_a').next('span').remove();
+            var flag = true,
+                evalData = $('#evalForm').serializeArray(),
+                evalContent = $('#evalForm textarea[name="eval[content]"]').val(),
+                storeId = {$info.store_id};
+            if (storeId) {
+                if (evalContent == '') {
+                    $('.remark_btn_a').after('<span style="position:absolute;" class="pers_validate"><i></i>提示：请输入评论内容</span>');
+                    flag = false;
+                }
+                evalData.push({
+                    'name': 'eval[store_id]',
+                    'value': storeId
+                });
+                if (flag) {
+                    $.ajax({
+                        url: "{:url('ucenter/User/subeval')}",
+                        type: 'post',
+                        data: evalData,
+                        dataType: 'json',
+                        success: function(result) {
+                            if(result){
+                                if(result['code'] == 1){
+                                    $('#evalForm')[0].reset();
+                                    $('#hj,#jg,#jt,#fw').raty({
+                                        score:0
+                                    });
+                                    $('.remark_btn_a').after('<span style="position:absolute;" class="pers_validate"><i></i>评论成功</span>');
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        $('#evalForm textarea[name="eval[content]"]').focus(function() {
+            $('.remark_btn_a').next('span').remove();
+        });
+
+        $('.ms_tarea').on('input propertychange', function() {
+            var max = 200,
+                $this = $(this),
+                _val = $this.val(),
+                count = "";
+            if (_val.length > max) {
+                $this.val(_val.substring(0, max));
+            }
+            count = max - $this.val().length;
+            $('.niname').css({
+                position: 'absolute',
+                width: '100px'
+            }).text('还可输入' + count + '字');
+        });
+    </script>
+{/block}

@@ -1,0 +1,213 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <div class="layui-form-item">
+               <textarea  disabled="disabled" class="layui-textarea closereason" name="delete_reason"></textarea>
+        </div>
+    </form>
+</div>
+{/block}
+{block name='body'}
+
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form id="quickForm" method="get" autocomplete="off" action='{:url("callbacks")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="50">
+            <col width="100">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+                <th>预约人|电话</th>
+                <th>预约时间</th>
+                <th>商家名称</th>
+                <th>删除时间</th>
+                <th>删除原因</th>
+                <th>跟踪人</th>
+                <th>跟踪信息</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+         {volist name="data" id="vo"}
+            <tr>
+                <td><input type="checkbox" lay-filter="checkInfo" name="radio" data-id="{$vo.id}" lay-skin="primary"></td>
+                <td>
+
+                    {notempty name='vo.buyer'}
+                        {$vo.buyer} <br> {$vo.mobile}
+                    {else/}
+                        {$vo.reservation_person} <br> {$vo.reservation_phone}
+                    {/notempty}
+                    
+
+                </td>
+                <td>
+                {notempty name="vo['appoint_time']"}
+                    <neq name="vo['created_time']" value="0">{$vo.appoint_time|date='Y-m-d',###}</neq>
+                {/notempty}
+                </td>
+                <td>{notempty name='vo.store_fact_name'}
+                            {$vo.store_fact_name} 
+                        {else/}
+                            {$vo.store_name} 
+                        {/notempty}
+                    {notempty name="vo.store_status"}
+                    {volist name="storeMember" id="member"}
+                            {eq name="vo.store_status" value="$key"}
+                            <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                            {/eq}
+                        {/volist}
+                    {/notempty}
+                    
+                </td>
+                <td>{$vo.updated_time|date='Y-m-d',###}</td>
+                <td>
+                    <button class="layui-btn layui-btn-small layui-btn-danger lookreason"  delete-id="{$vo.id}"><i class="layui-icon"></i>查看</button>
+                </td>
+                <td>
+                    {volist name="order_flow" id="flowmans"}
+                        {if condition="$key eq $vo['order_flow_id'] "}{$flowmans}{/if}
+                    {/volist}
+                </td>
+                <td>
+                    <a class="layui-btn layui-btn-small" href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'reVisit'))}">更新</a>
+                </td>
+                <td>
+                     <div class="layui-btn-group">
+                        <a href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'orderDetail'))}" style="margin-left:10px" title='详细信息'>
+                            <button class="layui-btn layui-btn-small" ><i class="layui-icon">&#xe615;</i></button>
+                        </a>
+                     </div>
+                     {php} if(showHandle('orders/Tomb/backspace')){ {/php}
+                     <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-small layui-btn-warm backspace"  data-orderId="{$vo.id}"><a href="javascript:void(0)"  >删除回撤</a>
+                        </button>
+                     </div>
+                     {php} } {/php}
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {$page}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+
+
+//页面层
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  var start = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday:true
+    ,choose: function(datas){
+      end.min = datas; //开始日选好后，重置结束日的最小日期
+      end.start = datas //将结束日的初始值设定为开始日
+    }
+  };
+  
+  var end = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday: true
+    ,choose: function(datas){
+      start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+  };
+  
+});
+layui.use(['jquery', 'layer','form'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    $(".backspace").bind('click', function(){
+         var id = $(this).attr('data-orderId');
+         layer.confirm('您确定要撤回删除该订单吗?', {icon: 3, title:'提示'}, function(index){
+         $.ajax({
+            url:"{:url('backspace')}",
+            data:'id='+id,
+            type:'post',
+            success:function(d){
+               var result = eval("("+d+")");
+                if(result.flag==1){
+                    layer.msg(result.msg);
+                    window.location.reload();
+                    
+                }
+            }
+         });
+         
+       });
+    });
+
+  //查看关闭订单原因
+    $(".lookreason").bind('click', function(){
+         var id = $(this).attr('delete-id');
+         $.ajax({
+            url:"{:url('lookreason')}",
+            data:{'id':id},
+            type:'post',
+            success:function(d){
+                var result = eval("("+d+")");
+                if(result.flag==1){
+                   $('.closereason').html(result.data);
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '订单关闭原因',
+                    content: $('#close_update_form')
+                 })
+            }
+
+         });   
+         
+    });
+
+       //单选处理
+        form.on('checkbox(checkInfo)', function() {
+        var checkInfo = $('input[name="radio"]'),othis = this;
+        checkInfo.each(function(i, el) {
+            if (el != othis) {
+                $(el).removeAttr('checked');
+            }
+        })
+        form.render();
+    });
+     
+});
+
+</script>
+{/block}
+

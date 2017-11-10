@@ -1,0 +1,342 @@
+<?php
+namespace back\guide\controller;
+use back\extra\controller\Base;
+use think\Db;
+use think\Session;
+use back\extra\model\Category;
+use back\extra\model\WebGuide;
+use back\extra\model\WebGuideApply;
+
+class Guide extends Base
+{
+    /**
+     * 网址列表
+     * @return void
+     */
+    public function web(){
+        $input = input('get.');
+        $this->_category();
+        $where = [];
+        if(!empty($input['category'])){
+            $where['category_id'] = $input['category'];
+        }
+        if(!empty($input['name'])){
+            $where['name'] = ['like','%'.$input['name'].'%'];
+        }
+        $webGuideList = WebGuide::with('apply')->where($where)->field('id,name,category_id,logo_path,status,url,apply_id,created_time')->order('created_time desc')->paginate(config('page_size'),false,['query' => $input]);
+        $page = $webGuideList->render();
+        $this->assign([
+            'webGuideList' => $webGuideList,
+            'page'         => $page
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 添加网址
+     * @return void
+     */
+    public function addweb(){
+        if(request()->isPost()){
+            $data = input('post.');
+            $result = ['code' => 0,'msg' => '添加失败'];
+            if($_FILES['logo_path']['error'] == 0 && !empty($_FILES['logo_path']['tmp_name'])){
+                $info = uploadOne('logo_path',config('web_guide_image'),array(),false);
+                if($info['ok'] == 1){
+                    $data['logo_path'] = $info['images'][0];
+                }
+            }
+            $data['admin_id'] = Session::get('admin_id');
+            $data['status'] = config('normal_status');
+            $data['created_time'] = $data['updated_time'] = date('Y-m-d H:i:s');
+            $addResult = Db::name('WebGuide')->data($data)->insert();
+            if($addResult){
+                $result = ['code' => 1,'msg' => '添加成功'];
+            }
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * 编辑网址
+     * @return void
+     */
+    public function editweb(){
+        if(request()->isPost()){
+            $input = input('post.');
+            $result = ['code' => 0,'msg' => '修改失败'];
+            $data = $input;
+            if($_FILES['logo_path']['error'] == 0 && !empty($_FILES['logo_path']['tmp_name'])){
+                $info = uploadOne('logo_path',config('web_guide_image'),array(),false);
+                if($info['ok'] == 1){
+                    $img = Db::name('WebGuide')->where('id',$data['id'])->field('logo_path')->find();
+                    if(!empty($img['logo_path']) && is_file('.'.config('public_path').$img['logo_path'])){
+                        unlink('.'.config('public_path').$img['logo_path']);
+                    }
+                    $data['logo_path'] = $info['images'][0];
+                }
+            }
+            $data['admin_id'] = Session::get('admin_id');
+            $data['updated_time'] = date('Y-m-d H:i:s');
+            $saveWeb = Db::name('WebGuide')->data($data)->update();
+            if($saveWeb){
+                $result = ['code' => 1,'msg' => '修改成功'];
+            }
+        }else{
+            $id = input('get.id');
+            $result = ['code' => 0,'data' => []];
+            if($id){
+                $info = WebGuide::with('citys')->where('id',$id)->field('id,name,province_id,city_id,category_id,logo_path,status,url,created_time,sort')->find()->toArray();
+                if(!empty($info)){
+                    $result = ['code' => 1,'data' => $info];
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 删除网址
+     * @return void
+     */
+    public function delweb(){
+        $ids = input('get.ids');
+        $result = ['code' => 0,'msg' => '删除失败'];
+        if($ids){
+            $where['id'] = ['in',$ids];
+            $list = Db::name('WebGuide')->where($where)->field('logo_path')->select();
+            if(!empty($list)){
+                foreach ($list as $key => $val) {
+                    if(is_file('.'.config('public_path').$val['logo_path'])){
+                        unlink('.'.config('public_path').$val['logo_path']);
+                    }
+                }
+                $ret = Db::name('WebGuide')->where($where)->delete();
+                if($ret){
+                    $result = ['code' => 1,'msg' => '删除成功'];
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 检测重复
+     * @return void
+     */
+    public function checkrepeat(){
+        $input = input('get.');
+        $result = ['code' => 0,'msg' => ''];
+        if($input){
+            if(!empty($input['name'])){
+                $where['name'] = $input['name'];
+            }
+            if(!empty($input['id'])){
+                $where['id'] = ['neq',$input['id']];
+            }
+            $count = Db::name('WebGuide')->where($where)->field('id')->count();
+            if($count > 0){
+                $result = ['code' => 1,'msg' => '已存在'];
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 获取市区
+     * @return void
+     */
+    public function getcity(){
+        $province = input('get.provinceId');
+        $result = ['code' => 0,'data' => []];
+        if($province){
+            $citys = $this->cityList($province);
+            if(!empty($citys)){
+                $result = ['code' => 1,'data' => $citys];
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 审核网址
+     * @return void
+     */
+    public function checkweb(){
+        if(request()->isPost()){
+            $input = input('post.');
+            $result = ['code' => 0,'msg' => '审核失败'];
+            if($input['id']){
+                $data = [
+                    'id'           => $input['id'],
+                    'status'       => $input['status'],
+                    'updated_time' => date('Y-m-d H:i:s')
+                ];
+                $checkResult = Db::name('WebGuide')->data($data)->update();
+                if($checkResult){
+                    $result = ['code' => 1,'msg' => '审核成功'];
+                }
+            }
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * 申请列表
+     * @return void
+     */
+    public function apply(){
+        $input = input('get.');
+        $p = !empty($input['page']) ? $input['page'] : 1;
+        $this->_category();
+        $where = [];
+        if(!empty($input['category'])){
+            $where['type'] = $input['category'];
+        }
+        if(!empty($input['name'])){
+            $where['name'] = ['like','%'.$input['name'].'%'];
+        }
+        $applyList = WebGuideApply::with(['province','city'])->where($where)->order('created_time desc')->paginate(config('page_size'),false,['query' => $input]);
+        $page = $applyList->render();
+        $this->assign([
+            'p' => $p,
+            'page' => $page,
+            'applyList' => $applyList
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 编辑申请
+     * @return void
+     */
+    public function editapply(){
+        if(request()->isPost()){
+            $result = ['code' => 0,'msg' => '修改失败'];
+            $input = input('post.');
+            $data = $input;
+            $data['updated_time'] = date('Y-m-d H:i:s');
+            $saveResult = Db::name('WebGuideApply')->data($data)->update();
+            if($saveResult){
+                $result = ['code' => 1,'msg' => '修改成功'];
+                if($input['status'] == 2){
+                    $addWeb = $this->_checkAddWeb($input);
+                    if($addWeb){
+                        $result = ['code' => 1,'msg' => '修改成功'];
+                    }
+                }
+            }
+            echo json_encode($result);
+        }else{
+            $this->_category();
+            $id = input('get.id');
+            $data = [];
+            if($id){
+                $data = WebGuideApply::with('citys')->where('id',$id)->find()->toArray();
+            }
+            $this->assign([
+                'data' => $data
+            ]);
+            return $this->fetch();
+        }
+    }
+
+    /**
+     * 审核申请
+     * @return void
+     */
+    public function checkapply(){
+        if(request()->isPost()){
+            $input = input('post.');
+            $result = ['code' => 0,'msg' => '审核失败'];
+            if($input['id']){
+                $data = [
+                    'id'           => $input['id'],
+                    'status'       => $input['status'],
+                    'updated_time' => date('Y-m-d H:i:s')
+                ];
+                $checkResult = Db::name('WebGuideApply')->data($data)->update();
+                if($checkResult){
+                    $result = ['code' => 1,'msg' => '审核成功'];
+                    if($input['status'] == 2){
+                        $findList = Db::name('WebGuideApply')->where('id',$input['id'])->field('id,name,type,url,province_id,city_id')->find();
+                        $addWeb = $this->_checkAddWeb($findList);
+                        if($addWeb){
+                            $result = ['code' => 1,'msg' => '审核成功'];
+                        }
+                    }
+                }
+            }
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * 删除申请
+     * @return void
+     */
+    public function delapply(){
+        $ids = input('get.ids');
+        $result = ['code' => 0,'msg' => '删除失败'];
+        if($ids){
+            $where['id'] = ['in',$ids];
+            $ret = Db::name('WebGuideApply')->where($where)->delete();
+            if($ret){
+                $result = ['code' => 1,'msg' => '删除成功'];
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 公共分类
+     * @return void
+     */
+    private function _category(){
+        $categoryObj = new Category;
+        $category = Db::name('category')->where(['is_show' => config('normal_status')])->column('id,pid,name');
+        $categoryList = $categoryObj->categoryTree($category,config('category_web_guide'));
+        $province = Db::name('region')->where(['level' => config('normal_status'),'status' => config('normal_status')])->column('id,name');
+        $this->assign([
+            'category'     => $category,
+            'categoryList' => $categoryList,
+            'province'     => $province
+        ]);
+    }
+
+    /**
+     * 审核成功插入网址列表
+     * @param  array $data 审核数据
+     * @return bool
+     */
+    private function _checkAddWeb($data){
+        $result = false;
+        $addData = [
+            'name'         => $data['name'],
+            'category_id'  => $data['type'],
+            'url'          => $data['url'],
+            'admin_id'     => Session::get('admin_id'),
+            'province_id'  => $data['province_id'],
+            'city_id'      => $data['city_id'],
+            'status'       => config('normal_status'),
+            'created_time' => date('Y-m-d H:i:s'),
+            'updated_time' => date('Y-m-d H:i:s'),
+            'apply_id'     => $data['id']
+        ];
+
+        $countWhere = [
+            'name'        => $data['name'],
+            'url'         => $data['url'],
+            'category_id' => $data['type']
+        ];
+        $count = Db::name('WebGuide')->where($countWhere)->field('id')->count();
+        if($count == 0){
+            $addWeb = Db::name('WebGuide')->data($addData)->insert();
+            if($addWeb){
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+}

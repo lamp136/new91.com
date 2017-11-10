@@ -1,0 +1,771 @@
+{extend name='extra@main' /}
+{block name="link"}
+    <link href="_WEB_/css/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="_WEB_/js/jquery-1.8.2.min.js"></script>
+{/block}
+{block name="modal"}
+    <!-- 我要评价 -->
+    <div class="tooltip_box"></div>
+    <div class="tooltip tooltip_remark">
+        <h2>我的评价</h2>
+        <div class="pf clearfix">
+            <span class="title">评分：</span>
+             <ul>
+                <li>环境：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+                <li class="last">风水：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+                <li>交通：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+                <li class="last">服务：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+            </ul>
+        </div>
+        <div class="ms">
+            <span class="title">描述：</span>
+            <textarea class="ms_tarea" placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+        </div>
+        <div class="phone">
+            <span class="title">评分：</span>
+            <input class="phone_txt" type="text" value="" placeholder="请输入您正在使用的手机号" />
+        </div>
+        <div class="niname">
+            <span></span>匿名评价
+        </div>
+        <div class="remark_btn">
+            <a href="#">提交评价</a>
+        </div>
+        <div class="tooltip_remark_close"></div>
+    </div><!-- tooltip_remark 我要评价 End -->
+{/block}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('cemetery/Cemetery/index')}">陵园墓地</a></li>
+                <li class="jt">></li>
+                <li>{$data.name}</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 陵园详情介绍 -->
+        <div class="cemetery_detail_main clearfix">
+            {eq name="Think.config.store_member_ad" value="$data.member_status"}
+                <!-- 图片 -->
+                <div class="cemetery_detail_main_img">
+                    <img alt="{$data.name}" src="{$data.image}" alt="陵园详情图片" />
+                </div>
+                <!-- 详情 -->
+                <div class="cemetery_detail_main_text">
+                    <h2>{$data.name}<a href="#"><i class="cemetery_detail_attention_icon"></i>点击关注</a></h2>
+                    <!-- 最新报价 浏览量 客户评价 -->
+                    <div class="price clearfix">
+                        <p class="zxprice">最新报价：<font>￥</font><strong>{$data.min_price}</strong><span>万起</span></p>
+                        <p class="llnum">浏览量：<span class="ll">{$data.actual_hits + $data.hits}</span><span class="fg">|</span>客户评价：<span>3268</span></p>
+                    </div>
+                    <div class="infoAd clearfix">
+                        <ul>
+                            <li><span>{$data.city_id}</span>行政区域</li>
+                            <li><span>{$data.distance}</span>距离市区</li>
+                            <li><span>{$data.service_time}</span>服务时间</li>
+                            <li class="phoneAd last"><span>{$data.phone}</span>服务热线</li>
+                        </ul>
+                    </div>
+                    <!-- 环境 -->
+                    <div class="setting settingAd">
+                        <ul class="clearfix">
+                            {notempty name="data.label"}
+                                {php}
+                                    $label = explode(',',$data['label']);
+                                    foreach($label as $val){
+                                        echo '<li>'.$val.'</li>';
+                                    }
+                                {/php}
+                            {/notempty}
+                        </ul>
+                    </div>
+                    <!-- 地址 -->
+                    <div class="addressAd clearfix">
+                        <p><span>陵园地址：</span>{$data.address}<a href="#" class="lookmap"><i></i>查看地图</a></p>
+                    </div>
+                </div>
+            {else/}
+                <!-- 图片 -->
+                <div class="cemetery_detail_main_img">
+                    <img alt="{$data.name}" src="{$data.image}" alt="{$data.name}" />
+                    {eq name="data.status" value="0"}
+                        <span class="ygwicon"></span>
+                    {/eq}
+                </div>
+                <!-- 详情 -->
+                <div class="cemetery_detail_main_text">
+                    <h2>{$data.name}</h2>
+                    <!-- 环境 -->
+                    <div class="setting">
+                        <ul class="clearfix">
+                            {notempty name="data.label"}
+                                {php}
+                                    $label = explode(',',$data['label']);
+                                    foreach($label as $val){
+                                        echo '<li>'.$val.'</li>';
+                                    }
+                                {/php}
+                            {/notempty}
+                        </ul>
+                    </div>
+                    <!-- 最新报价 浏览量 客户评价 -->
+                    <div class="price clearfix">
+                        <p class="zxprice">最新报价：
+                            <font>￥</font><strong>{$data.min_price}</strong>
+                            <span>万起</span>
+                        </p>
+                        <p class="llnum">浏览量：<span class="ll">{$data.actual_hits + $data.hits}</span><span class="fg">|</span>客户评价：<span>3268</span></p>
+                    </div>
+                    <!-- 地址 -->
+                    <div class="address clearfix">
+                        <p><span>陵园地址：{$data.address}</span><a href="#" class="lookmap"><i></i>查看地图</a></p>
+                    </div>
+                    <!-- 平台优惠 -->
+                    <!-- <div class="favorable clearfix">
+                        <p><span>平台优惠：</span></p>
+                        <ul class="clearfix">
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                        </ul>
+                    </div> -->
+                    <!-- 预约看墓 在线咨询 -->
+                    <div class="btn clearfix">
+                        <a class="buttonlv btnleft" href="#">预约看墓</a>
+                        <a class="buttonbai" href="#">在线咨询</a>
+                    </div>
+                </div>
+            {/eq}
+        </div><!-- cemetery_detail_main 陵园详情介绍 End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+            <div class="cem_detail">
+                <!-- 定位导航头部 -->
+                <div class="cem_detail_title" id="cem_detail_title">
+                    <ul>
+                        <li class="thistab"><a href="javascript:void(0);" tab="tabcem1">环境照片</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem2">墓型展示</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem3">陵园简介</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem4">名人墓地</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem5">交通信息</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem6">客户评价</a></li>
+                        <div class="clear"></div>
+                    </ul>
+                </div>
+                <ul>
+                    <!-- 环境照片 -->
+                    <li class="cem_details_box" id="tabcem1">
+                        <!-- 环境照片内容 -->
+                        <div class="cem_detail_environment">
+                            <!-- 展示内容title -->
+                            <div class="environment_title clearfix">
+                                <ul>
+                                    <li class="led" data-zone="0">
+                                        <a href="javascript:void(0);">全部（{$data['landscape']['total']}）</a>
+                                    </li>
+                                    {volist name="data['landscape']['info']" id="zone"}
+                                        {notempty name="zone"}
+                                            {neq name="key" value="0"}
+                                                <li data-zone="{$key}"><a href="javascript:void(0);">{if array_key_exists($key,$tombZones)}{$tombZones[$key]}{/if}（{:count($zone)}）</a></li>
+                                            {/neq}
+                                        {/notempty}
+                                    {/volist}
+                                </ul>
+                            </div>
+                            <!-- 展示图片 -->
+                            <div class="environment clearfix">
+                                <ul>
+                                    {notempty name="data['landscape']['list']"}
+                                        {volist name="data['landscape']['list']" id="landscape"}
+                                            <li {if $i%3 == 0} class="last" {/if}>
+                                                <a class="fancybox" href="{$landscape.image}" data-fancybox-group="group" title="{$landscape.title}">
+                                                    <img src="{$landscape.thumb_image}" alt="{$landscape.title}" />
+                                                    <p>{$landscape.title}</p>
+                                                </a>
+                                            </li>
+                                        {/volist}
+                                    {/notempty}
+                                </ul>
+                            </div><!-- environment 展示图片 End -->
+                        </div><!-- cem_detail_environment 环境照片内容 End -->
+                    </li>
+                    
+                    <!-- 墓型展示 -->
+                    <li  class="cem_details_box cem_detail_tombtype" id="tabcem2">
+                        <!-- 筛选条件 -->
+                        <div class="sifting">
+
+                            <!-- 筛选条件结果显示 -->
+                            <div class="criteria">
+                                <!-- <ul>
+                                    <li class="sif">所有分类</li>
+                                    <li>></li>
+                                    <li class="if">常青园<span></span></li>
+                                    <li class="if">免费<span></span></li>
+                                    <li class="number">共<span> 100 </span>结果</li>
+                                </ul> -->
+                            </div>
+                            {notempty name="tombZones"}
+                                <!--所在区域 -->
+                                <div class="sifting_main clearfix">
+                                    <span>所在墓区：</span>
+                                    <ul>
+                                        <li><a href="javascript:void(0);">不限</a></li>
+                                        <!-- <li class="led"><a href="#">常青园</a></li>-->
+                                        {volist name="tombZones" id="zone"}
+                                            <li><a href="javascript:void(0);">{$zone}</a></li>
+                                        {/volist}
+                                    </ul>
+                                </div>
+                            {/notempty}
+
+                            <!-- 价格区间 -->
+                            <div class="sifting_main clearfix">
+                                <span>价格区间：</span>
+                                <ul>
+                                    <li><a class="tombs_price" data-range="0" href="javascript:void(0);">不限</a></li>
+                                    <!-- <li class="led"><a href="#">免费</a></li>
+                                    <li><a href="#">2万以下</a></li>
+                                    <li><a href="#">2-5万</a></li>
+                                    <li><a href="#">5-10万</a></li>
+                                    <li><a href="#">10-20万</a></li>
+                                    <li><a href="#">20万以上</a></li> -->
+                                    {volist name="Think.config.price_range" id="range"}
+                                        <li><a href="javascript:void(0);" data-range="{$range}" class="tombs_price" title="{$range}">{$range}{if $key == 0}万及以下{else/}万{/if}</a></li>
+                                    {/volist}
+                                </ul>                   
+                            </div>
+                            
+                        </div><!-- sifting筛选条件结束 -->
+                        
+                        <!-- 墓型列表 -->
+                        <div class="tombtype">
+                            <ul class="tombtypeul clearfix">
+                                
+                            </ul>
+
+                            <!-- 分页 -->
+                            <div class="paging">
+                                
+                            </div><!-- paging 分页 End -->
+                        </div><!-- tombtype 墓型列表 End -->
+                    </li>
+                    
+                    <!-- 陵园简介 -->
+                    <li class="cem_details_box" id="tabcem3">
+                        <div class="cem_detail_intro">
+                            {$data.content}
+                        </div><!-- cem_detail_intro 陵园简介 End -->
+                    </li>
+                    
+                    <!-- 名人墓地 -->
+                    <li class="cem_details_box" id="tabcem4">
+                        <!-- 名人墓地 -->
+                        <div class="cem_detail_celebrity">
+                            {volist name="data.celebrity" id="celebrity"}
+                                <!-- 名人墓内容1 -->
+                                <div class="celebrity_list_box">
+                                    <div class="celebrity_list_main clearfix">
+                                        <!-- 图片 -->
+                                        <div class="celebrity_list_main_img">
+                                            <a href="celebrities_details.html"><img src="{$celebrity.thumb_image_url}" alt="{$celebrity.name}"/></a>
+                                        </div>
+                                        <!-- 信息 -->
+                                        <div class="celebrity_list_main_info">
+                                            <h2 class="clearfix">
+                                                <a href="#">{$celebrity.name}
+                                                    <span>（ {$celebrity.born_in}-{$celebrity.died_in} ）</span>
+                                                </a>
+                                            </h2>
+                                            <h3>{$celebrity.life_info}</h3>
+                                            <p>{$celebrity.content}</p>
+                                        </div>
+                                        <!-- 了解更多 -->
+                                        <div class="celebrity_list_main_more">
+                                            <a class="buttonlv" href="celebrities_details.html">了解更多</a>
+                                        </div>
+                                    </div><!-- celebrity_list_main End -->
+                                </div><!-- celebrity_list_box 名人墓内容 End -->
+                            {/volist}
+                            <!-- 分页 -->
+                            <!-- <div class="paging">
+                                <ul>
+                                    <li class="jiant jianled"><a href="#"><i class="iconfont icon-arrow-left-copy"></i></a></li>
+                                    <li class="numled"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">6</a></li>
+                                    <li><a href="#">7</a></li>
+                                    <li class="dian">...</li>
+                                    <li><a href="#">99</a></li>
+                                    <li><a href="#">100</a></li>
+                                    <li class="jiant"><a href="#"><i class="iconfont icon-arrow-left-copy1"></i></a></li>
+                                    <li class="tzd">跳转到：</li>
+                                    <li class="intext"><input class="tex" type="text" value="" /></li>
+                                    <li class="go"><a href="#">GO</a></li>
+                                </ul>
+                            </div> --><!-- paging 分页 End -->
+
+                        </div><!-- cem_detail_celebrity 名人墓地 End -->
+                    </li>
+                    
+                    <!-- 交通信息 -->
+                    <li class="cem_details_box" id="tabcem5">
+                        <div class="cem_detail_map" id="Bmap" style="width: 812px;height: 484px;">
+                            <!-- <img src="_WEB_/images/cem_details_map_img1.jpg" alt="地图" /> -->
+                        </div>
+                    </li>
+                    
+                    <!-- 客户评价 -->
+                    <li class="cem_details_box" id="tabcem6">
+                        <!-- 评价 -->
+                        <div class="cem_details_remark">
+
+                            <!-- 与描述相符+星星 -->
+                            <div class="cem_details_star clearfix">
+                                <div class="coincide">
+                                    <p>综合评价</p>
+                                    <h2>4.7<span>分</span></h2>
+                                </div>
+                                <ul>
+                                    <li>环境：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+                                    <li class="last">风水：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+                                    <li>交通：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+                                    <li class="last">服务：<img src="_WEB_/images/cem_detail_star_img5.jpg"/>5分</li>
+                                </ul>
+                                <div class="remark_btn">
+                                    <a class="remark_a" href="javascript:void(0);">我要评价</a>
+                                </div>
+                            </div>
+
+                            <!-- 评价数量 -->
+                            <div class="cem_details_evaluate_title clearfix">
+                                <ul>
+                                    <li class="led"><img src="_WEB_/images/evaluate_title1.png"/>全部 888</li>
+                                    <li><img src="_WEB_/images/evaluate_title.png"/>追加 66</li>
+                                    <li><img src="_WEB_/images/evaluate_title.png"/>晒图 88</li>
+                                </ul>
+                            </div>
+
+                            <!-- 评价内容1 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                                <!-- 追加 -->
+                                <div class="evaluate_main_zj">
+                                    <h6>追加：</h6>
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务。</p>
+                                </div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容2 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容3 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容4 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                                <!-- 追加 -->
+                                <div class="evaluate_main_zj">
+                                    <h6>追加：</h6>
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务。</p>
+                                </div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容5 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容6 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容7 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容8 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="_WEB_/images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 分页 -->
+                            <div class="paging">
+                                <ul>
+                                    <li class="jiant jianled"><a href="#"><i class="iconfont icon-arrow-left-copy"></i></a></li>
+                                    <li class="numled"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">6</a></li>
+                                    <li><a href="#">7</a></li>
+                                    <li class="dian">...</li>
+                                    <li><a href="#">99</a></li>
+                                    <li><a href="#">100</a></li>
+                                    <li class="jiant"><a href="#"><i class="iconfont icon-arrow-left-copy1"></i></a></li>
+                                    <li class="tzd">跳转到：</li>
+                                    <li class="intext"><input class="tex" type="text" value="" /></li>
+                                    <li class="go"><a href="#">GO</a></li>
+                                </ul>
+                            </div><!-- paging 分页 End -->
+
+                        </div><!-- cem_details_remark 评价 End -->
+                    </li>
+                </ul>
+            </div>
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <!--陵园动态-->
+            <div class="policies cem_margin_bottom">
+                <h2>陵园动态</h2>
+                <ul>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重</a></li> 
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿陵园召开</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                </ul>
+            </div><!-- policies 惠民政策 End-->
+
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <img src="_WEB_/images/advertising_img1.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <a href="#"><img src="_WEB_/images/advertising_img.jpg"/></a>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--惠民政策-->
+            <div class="policies">
+                <h2>惠民政策</h2>
+                <ul>
+                    <li><a href="#">北京墓地可以用多少年？北京墓地年限问题。</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重</a></li>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿陵园召开</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                </ul>
+            </div><!-- policies 惠民政策 End-->
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+
+{block name="js"}
+    <!-- 环境照片点击小图弹出大图jquery.fancybox.js -->
+    <script src="_WEB_/js/jquery.fancybox.js"></script>
+    <script src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170705114645"></script>
+    <!-- JS -->
+    <script type="text/javascript">
+        var data = <?php echo !empty($data) ? json_encode($data) : ''?>;
+        var map = new BMap.Map("Bmap"); // 创建地图实例
+        map.addControl(new BMap.NavigationControl({
+            type: BMAP_NAVIGATION_CONTROL_LARGE
+        }));
+
+        var pointArr = [];
+        var longitude = data['longitude'],
+            latitude = data['latitude'];
+        var point = new BMap.Point(longitude, latitude);
+        pointArr.push(point);
+        var view = map.getViewport(pointArr),
+            level = view.zoom, // 缩放级别
+            zoomCenter = view.center; // 中心位置
+        map.centerAndZoom(zoomCenter, level);
+
+        map.enableScrollWheelZoom(); //启用地图滚轮放大缩小
+        
+        var _mapApi = function() {
+            var options = {
+                position: point, // 指定文本标注所在的地理位置
+                offset: new BMap.Size(-40, -20) //设置文本偏移量
+            };
+            var label = new BMap.Label('<span class="cemname" data-name="' + data['name'] + '">' + data['name'] + '</span>', options); // 创建文本标注对象
+            label.setStyle({
+                position: 'absolute',
+                top: '30px',
+                left: '100px',
+                padding: '0 16px',
+                background: '#2b916b',
+                color: '#fff',
+                lineHeight: '28px',
+                border: "1px solid white",
+                cursor: 'pointer',
+            });
+
+            var sContent = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>" + data['name'] + "</h4><img style='float:right;margin:4px' id='imgDemo' src='" + data['image'] + "' width='139px' height='104px' title='" + data['name'] + "'/><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + data['address'] + "</p></div>";
+            var infoWindow = new BMap.InfoWindow(sContent);
+
+            label.addEventListener('click', function() {
+                map.openInfoWindow(infoWindow,
+                    point
+                );
+            });
+            setTimeout(function() {
+                map.panTo(data.longitude, data.latitude);
+            }, 500);
+            map.addOverlay(label);
+        }
+
+        //详情跟随顶部导航
+        var mt = 0;
+        window.onload = function() {
+            _loadPage(1, data['tombs']);
+            _mapApi();
+            var mydiv = document.getElementById("cem_detail_title");
+            var mt = mydiv.offsetTop; //当前对象到距离上方或上层控件的位置
+            var tt = document.documentElement.scrollTop || document.body.scrollTop;
+            if (tt > mt) {
+                mydiv.style.position = "fixed";
+                mydiv.style.margin = "0";
+                mydiv.style.top = "0";
+            }
+            window.onscroll = function() {
+                var t = document.documentElement.scrollTop || document.body.scrollTop;
+                if (t > mt) {
+                    mydiv.style.position = "fixed";
+                    mydiv.style.margin = "0";
+                    mydiv.style.top = "0";
+                } else {
+                    mydiv.style.position = "static";
+                }
+            }
+        }
+
+        $('.tombs_price').click(function(){
+            var priceRange = $(this).data('range');
+            console.log(priceRange);
+        });
+
+        var _loadPage = function(currentPage, tombsData) {
+            $('.tombtype .paging ul li').removeClass('numled');
+            var p = '<ul>',
+                tombsTotal = tombsData.length,
+                pageNum = 9,
+                pages = Math.ceil(tombsTotal / pageNum);
+            var datas = tombsData.slice((currentPage - 1) * pageNum, (pageNum * currentPage));
+            _loadTombs(datas);
+            p += '<li data-page="" class="tzd">共' + tombsTotal + '条数据</li>';
+            if (pages > 1) {
+                if (currentPage > 1) {
+                    p += '<li data-page="' + (currentPage - 1) + '" class="jiant jianled"><a href="javascript:void(0);"><i class="iconfont icon-arrow-left-copy"></i></a></li>';
+                }
+                for (var i = 1; i < pages + 1; i++) {
+                    var numled = '';
+                    if (currentPage == i) {
+                        numled = 'class="numled"';
+                    }
+                    p += '<li ' + numled + ' data-page="' + i + '">';
+                    p += '<a href="javascript:void(0);">' + i + '</a></li>';
+                }
+                if (currentPage < pages) {
+                    p += '<li data-page="' + (currentPage + 1) + '" class="jiant"><a href="javascript:void(0);"><i class="iconfont icon-arrow-left-copy1"></i></a></li>';
+                }
+            }
+            p += '</ul>';
+            $('.tombtype .paging').empty().append(p);
+        }
+
+        var _loadTombs = function(data) {
+            var d = '',
+                i = 1;
+            $.each(data, function(key, val) {
+                var cl = '';
+                if (i % 3 == 0) {
+                    cl = 'class="last"';
+                }
+                d += '<li ' + cl + '><img src="' + val['image'] + '" alt="墓型图片"/>';
+                if (val['status'] == 0) {
+                    d += '<span class="ygwicon"></span>';
+                }
+                d += '<div class="txt"><h2>' + val['tomb_name'] + '</h2><p><span>参考价格：</span><strong>' + val['sales_price'] + '</strong><span class="yuan">' + val['unit'] + ' / 平米</span></p><div class="small clearfix"><p class="smalla"><span>大小：</span>' + val['size'] + '</p><p><span>穴位：</span>' + val['meridians'] + '</p></div><p><span>材质：</span>' + val['material'] + '</p><div class="btn clearfix"><a href="#">预约看墓</a><a class="zxzx" href="#">在线咨询</a></div></div></li>';
+                i++;
+            });
+
+            $('.tombtype ul').empty().append(d);
+        }
+
+        $(document).on('click', '.tombtype .paging ul li', function() {
+            var currentPage = $(this).data('page');
+            if (currentPage != '') {
+                $('.tombtype ul').empty();
+                _loadPage(currentPage, data['tombs']);
+            }
+        });
+
+        // 环境照片点击小图弹出大图
+        $('.fancybox').fancybox();
+
+        $('.environment_title li').click(function() {
+            $('.environment_title li').removeClass('led');
+            $(this).addClass('led');
+            var landscape = <?php echo !empty($data['landscape']['list']) ? json_encode($data['landscape']['list']) : '' ?>,
+                zone = $(this).data('zone'),
+                env = $('.environment li'),
+                str = '';
+            if (landscape) {
+                var i = 1;
+                $.each(landscape, function(key, val) {
+                    if (zone == val['tomb_zone_id']) {
+                        if (zone != 0) {
+                            str += _handleImages(val, i);
+                        }
+                    } else if (zone == 0) {
+                        str += _handleImages(val, i);
+                    }
+                    i++;
+                });
+            }
+
+            $('.environment ul').empty().append(str);
+        });
+
+        var _handleImages = function(data, k) {
+            var x = '',
+                cla = '';
+            if (k % 3 == 0) {
+                cla = 'class="last"';
+            }
+            x += '<li ' + cla + '>';
+            x += '<a class="fancybox" href="' + data['image'] + '" data-fancybox-group="group" title="' + data['title'] + '"><img src="' + data['thumb_image'] + '" alt="" /><p>' + data['title'] + '</p></a>';
+            x += '</li>';
+
+            return x;
+        }
+    </script>
+{/block}

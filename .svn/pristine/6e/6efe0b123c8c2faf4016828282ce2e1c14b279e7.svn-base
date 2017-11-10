@@ -1,0 +1,90 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        <a href="{:url('orderanalysis')}">订单分析</a>
+        <a><cite>{$region.name}订单分布</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <!--筛选 start-->
+    <form  method="get"  autocomplete="off" action='{:url("orderanalysis")}'>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" >时间:</label>
+                <div class="layui-input-inline" style="width: 110px;">
+                    <input name="start_time" {notempty name="start_time"}value="{$start_time}"{else /}value="0000-00-00"{/notempty} lay-verify="date" placeholder="开始时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+                </div>
+                <div class="layui-form-mid">—</div>
+                <div class="layui-input-inline" style="width: 110px;">
+                    <input name="end_time" {notempty name="Think.get.end_time"}value="{$Think.get.end_time}" {else /} value="{:date('Y-m-d')}" {/notempty} lay-verify="date" placeholder="结束时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+                </div>
+                <button class="layui-btn layui-btn-small" lay-submit="" >查询</button>
+            </div>
+        </div>
+    </form>
+    <!--筛选 end-->
+    <!-- ECharts start -->
+    <div id="main" style="width:100%;height:400px;"></div>
+    <!-- ECharts end -->
+    <table class="layui-table" style="margin-left:60px;margin-right:100px;">
+        <tbody>
+            <tr>
+                {volist name="data" id="vo"}
+                    <td>{$vo}</td>
+                {/volist}
+            </tr>
+        </tbody>
+    </table>
+</div>
+{/block}
+{block name='optJS'}
+<script src="_BACKSTAGE_/echarts/echarts.common.min.js"></script>
+<script>
+    layui.use(['jquery', 'layer','form','laydate'], function(){
+        var label = {php}echo $name;{/php};
+        var datas = {php}echo $datas;{/php};
+        var regionname = {php}echo $regionname;{/php};
+        // 初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            title: {
+                text:label,
+                subtext: '数据来源91搜墓网',
+                sublink: 'http://www.91soumu.com'
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [{
+                    type : 'category',
+                    data : regionname,
+                    axisTick:{alignWithLabel: true}
+                }],
+            yAxis : [{type : 'value'}],
+            series : [{
+                    name:'订单数量',
+                    type:'bar',
+                    barWidth: '50%',
+                    data:datas
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表
+        myChart.setOption(option);
+
+    });
+    
+</script>
+{/block}
+

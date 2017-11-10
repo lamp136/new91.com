@@ -1,0 +1,15 @@
+<?php
+namespace back\extra\model;
+use think\Model;
+
+class OrderService extends Model{
+
+	/**查询陵园联系人**/
+	public function findmember(){
+		return $this->hasOne('StoreContact','store_id','store_id')->field('contact_name,mobile,tel,store_id');
+	}
+
+	public function flowman(){
+		return $this->hasOne('Admin','id','order_flow_id')->field('id,name');
+	}
+}

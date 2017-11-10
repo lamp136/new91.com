@@ -1,0 +1,80 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/user')}">个人资料</a></li>
+                <!-- <li class="jt">></li> -->
+                <!-- <li>个人资料</li> -->
+            </ul>
+        </div><!-- breadcrumb End -->
+
+        {include file="extra@ucenter_left" /}
+        
+        <!-- 用户中心右侧 -->
+        <div class="user_right">
+            
+            <h1>个人资料</h1>
+            <!-- 个人资料 -->
+            <div class="personaldata">
+                <form id="userForm">
+                    <ul>
+                        <!-- 姓名 -->
+                        <li>
+                            <span class="pers_nam"><font>*</font>真实姓名：</span>
+                            <input class="pers_tex user_name" type="text" name="member[name]" value="{$member.name}"/>
+                        </li>
+                        <!-- 手机 -->
+                        <li>
+                            <span class="pers_nam"><font>*</font>手<span class="space"></span>机：</span>
+                            <input class="pers_tex user_mobile" type="text" name="member[mobile]" value="{$member.mobile}" />
+                        </li>
+                        <!-- 支付类型 -->
+                        <li>
+                            <span class="pers_nam"><font></font>支付类型：</span>
+                            <select class="pers_sel user_bank_type" name="bank[bank_type]">
+                                <option value="0">--类型--</option>
+                                {volist name="Think.config.pay_type" id="bank"}
+                                    <option {eq name="member['bank']['bank_type']" value="$key"} selected="selected" {/eq} value="{$key}-{$bank}">{$bank}</option>
+                                {/volist}
+                            </select>
+                        </li>
+                        <!-- 银行账户 -->
+                        <li>
+                            <span class="pers_nam">
+                                <font></font>银行账号：
+                            </span>
+                            <input class="pers_tex user_bank_account" name="bank[bank_account]" type="text" value="{notempty name="member['bank']['bank_account']"} {$member['bank']['bank_account']|substr_replace='**** **** **** ',0,-4} {/notempty}"/>
+                        </li>
+                        <!-- 支付类型 -->
+                        <li>
+                            <psan class="pers_nam">
+                                <font></font>开&nbsp;户&nbsp;人：
+                            </psan>
+                            <input class="pers_tex user_bank_member" name="bank[bank_member]" type="text" value="{$member['bank']['bank_member']}"/>
+                        </li>
+                    </ul>
+                </form>
+                <p>91搜墓网郑重承诺：<br/>我们将尊重您的个人隐私，您的个人信息不会被公开。</p>
+                <!-- 保存按钮 -->
+                <a class="pers_save" data-url="{:url('ucenter/User/alter')}" href="javascript:void(0);">保存</a>  
+            </div><!-- personaldata 个人资料 End -->
+
+        </div><!-- user_right 用户中心右侧 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+{block name="js"}
+    <!--私有JS -->
+    <script type="text/javascript">
+        var id = {$member.id};
+    </script>
+    <script type="text/javascript" src="_WEB_/js/users.js"></script>
+{/block}

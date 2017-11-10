@@ -1,0 +1,361 @@
+{extend name='extra@main' /}
+{block name="layer"}
+<form id='addForm' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td><span style="color:red">*</span>类型：</td>
+                    <td id="type" >
+                        <input name="type" value="{$Think.config.seo_type.cemetery_home}" type="radio" data-rule="checked" checked title="陵园首页 "> 
+                        <input name="type" value="{$Think.config.seo_type.cemetery_list}" type="radio" data-rule="checked" title="陵园列表页"> 
+                         <input name="type" value="{$Think.config.seo_type.funeral_list}" type="radio" data-rule="checked" title="殡仪馆列表">
+                          <input name="type" value="{$Think.config.seo_type.funeral_liyi}" type="radio" data-rule="checked" title="殡仪礼仪"> 
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>省份：</td>
+                    <td>
+                        <select name="province_id"   id="province">
+                            <option value="">请选择</option>
+                            {volist name="region" id="vo"}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>标题：</td>
+                    <td>
+                        <textarea style="height:100px;width:400px;"  name='seo_title'  /> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>关键词：</td>
+                    <td>
+                        <textarea class="input-xxlarge" style="height:100px;width:400px;" name='seo_keywords' data-rule='required' /> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>描述：</td>
+                    <td>
+                        <textarea class="input-xxlarge" style="height:100px;width:400px;" name='seo_description' data-rule='required' /> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>是否显示</td>
+                    <td><input name="status" value="1" type="radio" data-rule="checked" checked  title="是">  
+                        <input name="status" value="-1" type="radio" data-rule="checked" title="否"> 
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;"> 
+                        <input type="hidden" name="act" value="cemeteryseo">
+                        <button class="layui-btn" id='addsubmit'   type='button'>立即提交</button>
+                    </td>
+                </tr>   
+            </tbody>
+        </table>
+    </form>
+
+
+
+<form id='editForm' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td><span style="color:red">*</span>类型：</td>
+                    <td id="type" >
+                        <input name="type" value="{$Think.config.seo_type.cemetery_home}" type="radio" data-rule="checked" checked title="陵园首页 "> 
+                        <input name="type" value="{$Think.config.seo_type.cemetery_list}" type="radio" data-rule="checked" title="陵园列表页"> 
+                        <input name="type" value="{$Think.config.seo_type.funeral_list}" type="radio" data-rule="checked" title="殡仪馆列表">
+                        <input name="type" value="{$Think.config.seo_type.funeral_liyi}" type="radio" data-rule="checked" title="殡仪礼仪"> 
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>省份：</td>
+                    <td>
+                        <select name="province_id" data-rule="required" id="province" >
+                            <option value="">请选择</option>
+                            {volist name="region" id="vo"}
+                                <option value="{$vo.id}" >{$vo.name}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>标题：</td>
+                    <td>
+                        <textarea style="height:100px;width:400px;"  name='seo_title' data-rule='required' /> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>关键词：</td>
+                    <td>
+                        <textarea class="input-xxlarge" style="height:100px;width:400px;" name='seo_keywords' data-rule='required' /> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color:red">*</span>描述：</td>
+                    <td>
+                        <textarea class="input-xxlarge" style="height:100px;width:400px;" name='seo_description' data-rule='required' /> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>是否显示</td>
+                    <td><input name="status" value="1" type="radio" data-rule="checked" checked  title="是">  
+                        <input name="status" value="-1" type="radio" data-rule="checked" title="否"> 
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;"> 
+                        <input type="hidden" name='id' /> 
+                        <button class="layui-btn" id='editsubmit'   type='button'>立即提交</button>
+
+                    </td>
+                </tr>   
+            </tbody>
+        </table>
+    </form>
+
+{/block}
+{block name="body"}
+<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        <a><cite>陵园/殡仪馆/礼仪SEO</cite></a>
+    </span>
+</div>
+
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <form  action="{:url('operate/Opex/cemetoryseo')}" method="get">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <select name="province_id" >
+                    <option value="">请选择地区</option>
+                    {volist name="region" id="vo"}
+                        <option value="{$vo.id}" {eq name="vo.id" value="$Think.get.province_id"}selected="selected"{/eq}>{$vo.name}</option>
+                    {/volist}
+                 </select>
+            </div>
+           
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+    {php}
+            if(showHandle('operate/Opex/add')){
+    {/php}
+    <span class="layui-btn add" style="float:right;margin-top:-55px;margin-right:10px;margin-bottom:10px;">
+            <i class="layui-icon" >&#xe608;</i>添加陵园/殡仪馆/礼仪SEO
+    </span>
+    {php} } {/php}
+        
+    <table class="layui-table">
+        <colgroup>
+            <col width="30">
+            <col width="70">
+            <col width="100">
+            <col width="200">
+            <col width="200">
+            <col width="50">
+            <col width="100">
+        </colgroup>
+        <thead>
+          <tr> 
+            <th>省份</th>
+            <th>类型</th>
+            <th>SEO标题</th>
+            <th>关键字</th>
+            <th>描述</th>
+            <th>时间</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+            {volist name="list"  id="vo"}
+                <tr>
+                    <td>{$vo.Province.name}</td>
+                      <td>{switch name="vo.type"}
+                        {case value="$seoType['cemetery_home']"}
+                        <span class='text-success'>首页</span>
+                        {/case}
+                        {case value="$seoType['cemetery_list']"}
+                        <span class="text-error">陵园列表页</span>
+                        {/case}
+                        {case value="$seoType['funeral_list']"}
+                        <span class="text-error">殡仪馆列表页</span>
+                        {/case}
+                        {case value="$seoType['funeral_liyi']"}
+                        <span class="text-error">殡仪礼仪</span>
+                        {/case}
+                        {/switch}
+                    </td>
+                    <td>{$vo.seo_title}</td>
+                    <td>{$vo.seo_keywords}</td>
+                    <td>{$vo.seo_description}</td>
+                    <td>{$vo.created_time}</td>
+                    <td>
+                    {php}
+                            if(showHandle('operate/Opex/edit')){
+                    {/php}
+                         <div class="layui-btn-group">
+                            <span class="layui-btn layui-btn-small layui-btn-normal edit" data-id="{$vo.id}"><a href="javascript:void(0)" title="编辑"><i class="layui-icon">编辑</i></a>
+                            </span>
+                        </div> 
+                    {php} } {/php}
+                    {php}
+                        if(showHandle('operate/Opex/button')){
+                      {/php}
+                    <div class="layui-btn-group">
+                            {eq name="vo.status" value="1"}
+                                 <a href="javascript:void(0)" data-status="-1" data-id="{$vo.id}" title="删除" class="layui-btn layui-btn-small layui-btn-danger  switch"><i class="layui-icon" >删除</i></a>
+                           {else/}
+                                <a href="javascript:void(0)"  data-id="{$vo.id}" title="启用" data-status="1" class="layui-btn layui-btn-small layui-btn-normal  switch"><i class="layui-icon">启用</i></a>
+                           {/eq}
+                     </div>
+                    {php} } {/php}
+                     
+
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {$page}
+</div>
+{/block}
+
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'form','laydate','laypage'],function(){
+            var $= layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form();
+            var laypage = layui.laypage;
+             //点击成功按钮弹出模态框
+            $('.add').click(function(){
+                    layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: '700px',
+                        title: '添加陵园/殡仪馆SEO',
+                        content: $('#addForm'),
+                    });
+            });
+           
+            //提交添加友链 表单
+            $('#addsubmit').bind('click', function () {
+                var From = $('#addForm').serialize();
+                $.ajax({
+                    url: "{:url('add')}",
+                    type: "post",
+                    data:From,
+                    success: function(d) {
+                        var result = eval("(" + d + ")");
+                        if (result.flag == 1) {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                                  window.location.reload();//刷新当前页面.
+                              })
+                        } else {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                             })
+                        }
+                    }
+                });
+            });
+
+
+        //编辑seo信息
+        $('.edit').click(function () {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: "{:url('edit')}",
+                data:'id='+id,
+                type: 'get',
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var data = result.data;
+                    if (result.flag == 1) {
+                        $('#editForm select[name="province_id"]').val(data.province_id);
+                        $('#editForm textarea[name="seo_title"]').val(data.seo_title);
+                        $('#editForm textarea[name="seo_keywords"]').val(data.seo_keywords);
+                        $('#editForm textarea[name="seo_description"]').val(data.seo_description);
+                        $("#editForm input[name='status'][value="+data.status+"]").attr("checked",true); 
+                        $("#editForm input[name='type'][value="+data.type+"]").attr("checked",true); 
+                        $('#editForm input[name="id"]').val(data.id);
+                        form.render(); 
+
+                        layer.open({
+                            closeBtn: 2,
+                            type: 1,
+                            area: '700px',
+                            title: '编辑陵园/殡仪馆SEO',
+                            content: $('#editForm'),
+                            });
+                    } else {
+                        layer.alert('操作失败');
+                    }
+                }
+            });
+        });
+        //提交编辑seo的表单
+        $('#editsubmit').bind('click', function () {
+            var From = $('#editForm').serialize();
+            $.ajax({
+                url: "{:url('edit')}",
+                type: 'post',
+                data: From,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+                }
+            });
+        });
+
+
+        //SEO删除开启
+        $('.switch').click(function () {
+            var id = $(this).attr('data-id');
+            var status = $(this).attr('data-status');
+            $.ajax({
+                url: "{:url('button')}",
+                type: 'post',
+                data: {'id':id,'status':status},
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                     if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+                }
+            });
+        });
+           
+    });  
+    </script>
+{/block}

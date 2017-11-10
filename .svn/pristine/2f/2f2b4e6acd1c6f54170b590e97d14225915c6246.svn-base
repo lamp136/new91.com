@@ -1,0 +1,1818 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<!--短信区域模态框开始-->
+<!--编辑短信模态框开始-->
+<div id="editmsg_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="edit_info_form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">编辑短信信息</label>
+            <div class="layui-input-block">
+               <textarea placeholder="编辑短信信息" class="layui-textarea" name="msg" id="msgid" ></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="editmsg">提交</div>
+        </div>
+        <input type='hidden' name='id' class="editid" value="">
+    </form>
+</div>
+<!--编辑短信模态框结束-->
+<!--短信区域模态框结束-->
+
+<!-- 修改约车信息 -->
+<div id="editViewCar" style="display: none;">
+    <form class="layui-form" id="editViewCarForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">交通工具</label>
+            <div class="layui-input-block">
+                {volist name="Think.config.have_car" id="car"}
+                    <input type="radio" name="vehicle" value="{$key}" title="{$car}">
+                {/volist}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址</label>
+            <div class="layui-input-block" style="width: 513px;">
+                <input type="text" name="riding_address" autocomplete="off" class="layui-input" placeholder="乘车地址">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="appointer" autocomplete="off" class="layui-input" placeholder="乘车联系人">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">人数</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rider_number" autocomplete="off" class="layui-input" placeholder="乘车人数">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rider_phone" autocomplete="off" class="layui-input" placeholder="乘车联系人手机号">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">看墓时间</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" name="arrive_time" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择陵园</label>
+            <div class="layui-input-inline">
+                <span class="layui-btn layui-btn-normal choice_store">点击选择</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <div class="store_choice_list" style="display: none;">
+                
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">陪同顾问</label>
+                <div class="layui-input-inline">
+                    <select name="company_counselor" lay-verify="required" lay-search="">
+                        <option value="">选择陪同顾问</option>
+                        {volist name="business" id="b"}
+                            <option value="{$key}">{$b}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">陪同人员</label>
+                <div class="layui-input-inline">
+                    <select name="company_person" lay-verify="required" lay-search="">
+                        <option value="">陪同人员</option>
+                        {volist name="business" id="persons"}
+                            <option value="{$key}">{$persons}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-form-inline">
+                <label class="layui-form-label">车辆</label>
+                <div class="layui-input-inline">
+                    <select name="car_id" lay-verify="required" lay-search="">
+                        <option value="">选择车辆</option>
+                        {notempty name="carInfo"}
+                            {volist name="carInfo" id="car"}
+                                <option value="{$car.id}">{$car.plate_number} - {$car.driver}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block" style="width: 513px;">
+                <textarea class="layui-textarea" name="remark" placeholder="备注信息"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <div class="layui-input-block">
+                <span class="layui-btn" lay-submit lay-filter="editCarInfo">保存</span>
+                <input type="hidden" name="id"/>
+                <input type="hidden" name="store_ids"/>
+                <input type="hidden" name="store_names"/>
+                <input type="hidden" name="order_id" value="{$orderId}">
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 修改约车信息结束 -->
+
+<!-- 选择陵园 -->
+<div id="choiceStore" style="display: none;height: 400px;">
+    <form class="layui-form" style="margin-top: 20px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择地区</label>
+            <div class="layui-input-inline">
+                <select class="select_province" lay-filter="select_province">
+                    <option value="">--选择省份--</option>
+                    {notempty name="allProvince"}
+                        {volist name="allProvince" id="name"}
+                            <option value="{$key}">{$name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select class="select_city" lay-filter="select_city">
+                    <option value="">--选择市区--</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 100px">
+                <span class="layui-btn layui-btn-normal choice_confirm" style="display: none;">确定</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline store_list">
+                
+            </div>
+            <div class="layui-input-inline selected_stores" style="width: 220px;">
+                
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 选择陵园结束 -->
+
+{/block}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+        <span class="layui-breadcrumb" style="font-size:10px">
+            <a href="">订单</a>
+            <a href='{$bread.url}'>{$bread.string}</a>
+            <a><cite>{$endstr}</cite></a>
+        </span>
+</div>
+
+<div class="layui-tab" lay-filter="items">
+    <ul class="layui-tab-title" id='ul_table'>
+        <li lay-id="orderDetail" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"items"=>"orderDetail","returnurl"=>$bread.url))}'>订单信息</li>
+        <li lay-id="reVisit" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"items"=>"reVisit","returnurl"=>$bread.url))}' >回访跟踪</li>
+        <li lay-id="viewTomb" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"items"=>"viewTomb","returnurl"=>$bread.url))}'>看墓记录</li>
+        <li lay-id="messages" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"items"=>"messages","returnurl"=>$bread.url))}'>短信</li>
+        <li lay-id="appointCar" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"items"=>"appointCar","returnurl"=>$bread.url))}'>车辆预约</li>
+        <li lay-id="addViewTomb" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"items"=>"addViewTomb","returnurl"=>$bread.url))}'>填写看墓记录</li><li lay-id="buyerlist" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"items"=>"buyerlist","returnurl"=>$bread.url))}'>添加购买人</li>
+        <li lay-id="77" data-url='{:url("orders/Tomb/detail",array("orderId"=>$orderId,"returnurl"=>$bread.url))}'>赠品</li>
+    </ul>
+    <!--订单信息-->
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">  
+        {notempty name="$data"}
+            {volist name="data" id="vo"}
+            <table class="layui-table">
+
+                <tr>
+                    <th>预约人</th><td>{$vo.reservation_person}</td>
+                    <th>手机</th><td>{$vo.reservation_phone}</td>
+                    <th>来源</th><td>{$order_type[$vo.order_type]}</td>
+                    <th>地区</th><td>{$zone.province.name}/{$zone.city.name}</td>
+                </tr>
+                <tr>
+                    <th>订单类型</th><td>
+                    <span class="label label-info">
+                    {notempty name="vo['call_type']"}
+                    {$call_arr[$vo.call_type]}
+                    {/notempty}
+                    </span>&nbsp;
+                    </td>
+                    <th>座机</th><td> 
+                    {neq name="vo['reservation_landline']" value="0"}
+                      {$vo.reservation_landline}
+                    {/neq}</td>
+                    <th>微信</th><td>{$vo.reservation_wechat}</td>
+                    <th>QQ</th><td>{$vo.reservation_qq}</td>
+                </tr>
+                <tr>
+                    {if condition="($vo['store_names'] == '')"}
+
+                    <th>预约陵园</th><td colspan="3">{$vo.store_name}</td>
+                    {else /}
+                    <th>预约陵园</th><td colspan="3">{$vo.store_names}</td>
+                    {/if}
+                    <th>实际购买园区</th><td colspan="3">
+                       {$vo.store_fact_name}
+                    </td>
+                </tr>
+                <tr>
+                    <th>心里价位</th><td>{$vo.budgeted_price}</td>
+                    <th>下单时间</th><td>{$vo.created_time|date='Y-m-d',###}</td>
+                    <th>意向程度</th><td></td>
+                    <th>看墓时间</th><td>{$vo.appoint_time|date="Y-m-d",###}</td>
+                </tr>
+    
+                <tr>
+                    <th>安葬人名</th><td>{$vo.tomb_user}</td>
+                    <th>安葬人性别</th><td>
+                    {notempty name="vo['tomb_user_sex']"}
+                     {$sex[$vo.tomb_user_sex]}
+                    {/notempty}
+                    </td>
+                    <th>安葬人年龄</th><td>
+                     {neq name="vo['tomb_user_age']" value="0"}
+                    {$vo.tomb_user_age}
+                    {/neq}</td>
+                    <th>安葬人状态</th><td>
+                    {notempty name="vo['is_live']"}
+
+                    {$tomb_user_status[$vo.is_live]}
+                    {/notempty}
+                    </td>
+                </tr>
+                <tr>
+                    <th>购买人</th><td>{$vo.buyer}</td>
+                    <th>手机</th><td>{neq name="vo['mobile']" value="0"}{$vo.mobile}{/neq}</td>
+                    <th>性别</th><td>
+                    {notempty name="vo['reservation_sex']"}
+                        {$sex[$vo.reservation_sex]}
+                    {/notempty}
+                    </td>
+                    <th>年龄</th><td>{neq name="vo['reservation_age']" value="0"}{$vo.reservation_age}{/neq}</td>
+                </tr>
+                <tr>
+                    <th>座机</th><td>
+                        {$vo.buyer_landline}
+                    </td>
+                    <th>微信</th><td>{$vo.buyer_wechat}</td>
+                    <th>QQ</th><td>{$vo.buyer_qq}</td>
+                </tr>
+                <tr>
+                    <th>是否成交</th><td></td>
+                    
+                    <th>订单状态</th><td>
+                    {if condition="$Think.config.normal_status eq ($vo['state'])"}
+                        {$order_status_change[$vo.status]}
+                    {else /}
+                        已删除
+                    {/if}
+                    </td>
+                    <th>推送商家</th><td>
+                    {eq name="vo['pushed_status']" value="0"}
+                        未推送
+                    {/eq}
+                    {eq name="vo['pushed_status']" value="1"}
+                     已推送
+                    {/eq}
+                 </td>
+                </tr>
+                <tr>
+                    <th>墓价</th><td>{$vo.total_price}</td>
+                    <th>成交价</th><td>{$vo.tomb_price}</td>
+                    <th>园区折扣</th><td>{$vo.store_discount}</td>
+                    <th>91折扣</th><td>{$vo.91_discount}</td>
+                </tr>
+                 <tr>
+                    <th>佣金比例</th><td>{$vo.brokerage_percent}</td>
+                    <th>应收</th><td>{$vo.brokerage_money}</td>
+                    <th>实收</th><td>{$vo.paid_in_amount}</td>
+                </tr>
+                <tr>
+                    <th>返现比例</th><td>{$vo.return_percent}</td>
+                    <th>应返</th><td>{$vo.return_money}</td>
+                    <th>实返</th><td>{$vo.return_fact_money}</td>
+                </tr>
+                <tr>
+                    <th>墓穴位置</th><td colspan="3">{$vo.tomb_address}</td>
+                    <th>备注</th><td colspan="3">{$vo.remark}</td>
+                </tr>
+                <tr>
+                    <th>未成交原因</th><td colspan="3">{$vo.outstanding_reason}</td>
+                    <th>解决方案</th><td colspan="3">{$vo.outstanding_method}</td>
+                </tr>
+                <tr>
+                    <th>需求描述</th><td colspan="7">
+                        {$vo.demand}
+                    </td>
+                </tr>
+            </table> 
+            {/volist}
+            {/notempty}
+        </div>
+        <!--订单回访信息-->
+            <div class="layui-tab-item" >
+            {notempty name='$orderSn'}
+                <div id='box_reviest'>
+                {volist name='revisit' id='vo'}
+                    <p class="layui-elem-quote">{$vo.created_time|date='Y-m-d H:i:s',###} {$vo.admin_name} 第{$revisitcount-$key}次回访，{$vo.content}。</p> 
+                {/volist}
+         
+                </div>
+                <form class="layui-form layui-form-pane" id='reviest_form'>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">添加跟踪信息 </label>
+                        <div class="layui-input-block">
+                          <textarea placeholder="请输入跟踪信息" class="layui-textarea" name='info[content]'></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="hidden" name="info[order_id]" value="{$orderId}">
+                            <input type="hidden" name="info[order_sn]" value="{$orderSn}">
+                            <input type="hidden" name="tag" value="revisit">
+                            <button class="layui-btn reviest" type="button">立即提交</button>
+                        </div>
+                    </div>
+                </form>
+                <form class="layui-form" id='demand_form'>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">需求讲解</label>
+                        <div class="layui-input-block" style="margin-left: 0">
+                          <textarea name="demand" id='demo_edit'  class="layui-textarea">{empty name="demand"}<p>需求：</p><p>讲解：</p><p>结果：</p>{else/}{$demand}{/empty}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="hidden" name="order_id" value="{$orderId}">
+                            <input type="hidden" name="tag" value="demand">
+                            <button class="layui-btn" type='button' lay-filter="demo1">立即提交</button>
+                        </div>
+                    </div>
+                </form>
+            {/notempty}
+            </div>
+        
+        <!--看墓信息开始-->
+        <div class="layui-tab-item">
+            {notempty name="viewDatas"}
+            
+                <div class="layui-collapse">
+                    {volist name="appointCarData" id="vo"}
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title"><font color="#FF5722">第{$viewNum-$key}趟</font>看墓信息</h2>
+                            <div class="layui-colla-content layui-show">
+                                <table class="layui-table">
+                                    <tr>
+                                        <th>交通工具</th><td>
+                                            {$Think.config.view_tomb_vehicle[$vo.vehicle]}
+                                        </td>
+                                        <th>乘车地址</th><td>{$vo.riding_address}</td>
+                                        <th>预约时间</th><td>
+                                            {notempty name="vo.arrive_time"}
+                                                {$vo.arrive_time|date='Y-m-d H:i:s',###}
+                                            {/notempty}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>联系人</th><td>{$vo.appointer}</td>
+                                        <th>电话</th><td>{$vo.rider_phone}</td>
+                                        <th>乘车人数</th><td> {$vo.rider_number}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>购墓顾问</th><td>{$vo.company_counselor}</td>
+                                        <th>司机</th><td>{$vo['driverinfo']['driver']} {$vo['driverinfo']['driver_phone']}</td>
+                                        <th>车辆信息</th><td>{$vo['driverinfo']['plate_number']}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>接单时间</th><td>
+                                            {notempty name="vo['order_time']"}
+                                                {$vo['order_time']|date='Y-m-d H:i:s',###}
+                                            {/notempty}
+                                        </td>
+                                        <th>墓地</th><td colspan="3">{$vo.store_names}</td>
+                                    </tr>
+                                    
+                                    
+                                    <tr>
+                                        <th>详情</th>
+                                        <td colspan="5">
+                                            {volist name="viewDatas"  id="voo"}
+                                                {eq name="voo['appoint_car_id']" value="$vo.id"}
+                                                    <table>
+                                                        <tr>
+                                                            <th>陵园</th><td>{$voo.store_names}</td>
+                                                            <th>到家属地</th>
+                                                            <td>
+                                                                {neq name="voo['incar_time']" value="0000-00-00 00:00:00"}
+                                                                    {$voo.incar_time}
+                                                                {/neq}
+                                                            </td>
+                                                            <th>抵达时间</th>
+                                                            <td>
+                                                                {neq name="voo['arrive_time']" value="0000-00-00 00:00:00"}
+                                                                    {$voo.arrive_time}
+                                                                {/neq}
+                                                            </td>
+                                                            <th>离开时间</th>
+                                                            <td>
+                                                                {neq name="voo['leave_time']" value="0000-00-00 00:00:00"}
+                                                                    {$voo.leave_time}
+                                                                {/neq}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>园区接待</th><td>{$voo.store_reception}</td>
+                                                            <th>购买人</th><td>{$voo.buyer}</td>
+                                                            <th>意向</th><td>
+                                                                {$Think.config.view_tomb_intention[$voo.purpose]}
+                                                            </td>
+                                                            <th>结果</th><td>{$Think.config.view_tomb_result[$voo.result]}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>原因</th><td colspan="3">{$voo.reason}</td>
+                                                            <th>墓穴位置</th><td colspan="3">{$voo.location}</td>
+                                                        </tr>
+                                                       
+                                                        <tr>
+                                                            <th>成交价</th><td>
+                                                                {neq name="voo.total_price" value="0.00"}{$voo['total_price']}元{/neq}
+                                                            </td>
+                                                            <th>墓价</th><td>
+                                                                {neq name="voo.tomb_price" value="0"}{$voo['tomb_price']}元{/neq}
+                                                            </td>
+                                                            <th>91折扣</th><td>
+                                                                {neq name="voo.91_discount" value="0"}{$voo['91_discount']}元{/neq}
+                                                            </td>
+                                                            <th>园区折扣</th><td>
+                                                                {neq name="voo.store_discount" value="0"}{$voo['store_discount']}元{/neq}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>赠品</th><td>无</td>
+                                                            <th>票据照片</th>
+                                                            <td>
+                                                                {notempty name="voo['bill_image']"}
+                                                                    <span class="layui-btn layui-btn-small viewTombZoomIn" data-image="{$voo['bill_image']}">查看</span>
+                                                                {/notempty}
+                                                            </td>
+                                                            <th>备注</th><td colspan="3">{$voo.remark}</td>
+                                                        </tr>
+                                                    </table>
+                                                    <hr style="border-top:2px dotted #185598;"/>
+                                                {/eq}
+                                            {/volist}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    {/volist}
+                </div>
+            {/notempty}
+        </div>
+        <!--看墓信息结束-->
+        
+        <!--短信信息-->
+          <div class="layui-tab-item">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="80">
+                    <col width="80">
+                    <col width="100">
+                    <col width="300">
+                    <col width="60">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>对象</th>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>短信内容</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {notempty name="$msg"}
+                     {volist name="msg" id="vo"}
+                    <tr>
+                        <td>{switch name="vo.classify"}
+                                {case value="1"}客户{/case}
+                                {case value="2"}商家{/case}
+                                {default /}客户
+                            {/switch}</td>
+                        <td>{$vo.name} </td>
+                        <td>{$vo.mobile}</td>
+                        <td>{$vo.msg}</td>
+                        <td>{switch name="vo.status"}
+                                {case value="0"}未发送{/case}
+                                {case value="1"}已发送{/case}
+                                {case value="-1"}已删除{/case}
+                                {default /}客户
+                            {/switch}</td>
+                        <td>    
+                        {if condition="$vo['status'] == 0"}
+                        <a href="javascript:void(0);"><span class="
+                        editmsg" edit-id="{$vo.id}">编辑</span></a> 
+
+                        <a href="javascript:void(0);"><span class="
+                        sendmsg" send-id="{$vo.id}" send-classify="{$vo.classify}">发送</span></a>
+                        {/if}
+                        </td>
+                    </tr>
+                    {/volist}
+                   {/notempty}
+                </tbody>
+            </table>
+        </div>
+        <!--车辆预约信息-->
+        <div class="layui-tab-item" id="carViewList">
+            {notempty name="list"}
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th width="8%">预约人</th>
+                            <th width="10%">电话</th>
+                            <th width="10%">出车时间</th>
+                            <th width="10%">地址</th>
+                            <th width="10%">目标陵园</th>
+                            <th width="10%">司机</th>
+                            <th width="10%">司机电话</th>
+                            <th width="8%">状态</th>
+                            <th width="24%">操作</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        {volist name="list" id="vo"}
+                            <tr>
+                                <td>{$vo.appointer}</td>
+                                <td>{$vo.rider_phone}</td>
+                                <td>
+                                    {notempty name="vo.created_time"}
+                                        {$vo.created_time|date="Y-m-d H:i:s",###}
+                                    {/notempty}
+                                </td>
+                                <td>
+                                    {notempty name="vo.riding_address"}
+                                        <span class="layui-btn layui-btn-small layui-btn-normal ridingAddress"><i class="layui-icon">&#xe62e;</i></span>
+                                        <div class="layui-hide">{$vo.riding_address}</div>
+                                    {/notempty}
+                                </td>
+                                <td>
+                                    {notempty name="vo.store_names"}
+                                        <span class="layui-btn layui-btn-small storeNames"><i class="layui-icon">&#xe611;</i></span>
+                                        <div class="layui-hide">{$vo.store_names}</div>
+                                    {/notempty}
+                                </td>
+                                <td>{$vo.driverinfo.driver}</td>
+                                <td>{$vo.driverinfo.driver_phone}</td>
+                                <td>
+                                    {switch name="vo.status" }
+                                        {case value="0"}待出发{/case}
+                                        {case value="1"}进行中{/case}
+                                        {case value="10"}完成{/case}
+                                        {default /}
+                                    {/switch}
+                                </td>
+                                <td>
+                                    {php}
+                                        if(showHandle('orders/Tomb/editappointcar')){
+                                    {/php}
+                                        <a href="javascript:void(0)" data-id="{$vo.id}" title="编辑" class="layui-btn layui-btn-small edit"><i class="layui-icon">&#xe642;</i></a>
+                                    {php}
+                                        }
+                                        if(showHandle('orders/Tomb/cancelViewCar')){
+                                    {/php}
+                                        <a href="javascript:void(0)" title="取消" data-id="{$vo.id}" class="layui-btn layui-btn-danger layui-btn-small cancel"><i class="layui-icon">&#x1006;</i></a>
+                                    {php}
+                                        }
+                                        if(showHandle('orders/Tomb/addViewTomb')){
+                                    {/php}
+                                        <a href="{:url('orders/Tomb/detail',['orderId' => $orderId,'items' => 'addViewTomb','appointId' => $vo.id])}" title="填写看墓记录" data-id="{$vo.id}" class="layui-btn layui-btn-normal layui-btn-small"><i class="layui-icon">&#xe654;</i></a>
+                                    {php}
+                                        }
+                                        if(showHandle('orders/Tomb/finishViewCar')){
+                                    {/php}
+                                        {neq name="vo.status" value="$Think.config.appoint_car_status.finish"}
+                                            <a href="javascript:void(0);" data-id="{$vo.id}" title="约车完成" class="layui-btn layui-btn-small finish" style="background-color: purple;"><i class="layui-icon">&#xe605;</i></a>
+                                        {/neq}
+                                    {php}
+                                        }
+                                    {/php}
+                                </td>
+                            </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+            {/notempty}
+            <!--车辆预约表单-->
+            <div class="layui-form-item">
+                <form id="carInfoForm" class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">交通工具<font color="red">*</font></label>
+                        <div class="layui-input-block">
+                            {volist name="Think.config.have_car" id="car"}
+                                <input type="radio" name="vehicle" value="{$key}" title="{$car}" lay-verify="required" required/>
+                            {/volist}
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">地址<font color="red">*</font></label>
+                        <div class="layui-input-block" style="width: 513px;">
+                            <input type="text" name="riding_address" autocomplete="off" class="layui-input" placeholder="乘车地址" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人<font color="red">*</font></label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="appointer" autocomplete="off" class="layui-input" placeholder="乘车联系人" lay-verify="required" required/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">人数<font color="red">*</font></label>
+                            <div class="layui-input-inline">
+                                <input type="number" name="rider_number" autocomplete="off" class="layui-input" placeholder="乘车人数" lay-verify="required" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系电话<font color="red">*</font></label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="rider_phone" autocomplete="off" class="layui-input" placeholder="乘车联系人手机号" lay-verify="required|phone" required/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">看墓时间<font color="red">*</font></label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" name="arrive_time" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" lay-verify="required" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">选择陵园</label>
+                        <div class="layui-input-inline">
+                            <span class="layui-btn layui-btn-normal choice_store">点击选择</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <div class="store_choice_list" style="display: none;">
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">陪同顾问<font color="red">*</font></label>
+                            <div class="layui-input-inline">
+                                <select name="company_counselor" lay-verify="required" required lay-search="">
+                                    <option value="">选择陪同顾问</option>
+                                    {volist name="business" id="b"}
+                                        <option value="{$key}-{$b}">{$b}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">陪同人员<font color="red">*</font></label>
+                            <div class="layui-input-inline">
+                                <select name="company_person" lay-verify="required" required lay-search="">
+                                    <option value="">陪同人员</option>
+                                    {volist name="business" id="persons"}
+                                        <option value="{$key}-{$persons}">{$persons}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-inline">
+                            <label class="layui-form-label">车辆<font color="red">*</font></label>
+                            <div class="layui-input-inline">
+                                <select class="car_province" lay-filter="car_province">
+                                    <option value="">--选择省份--</option>
+                                    {notempty name="province"}
+                                        {volist name="province" id="name"}
+                                            <option value="{$key}">{$name}</option>
+                                        {/volist}
+                                    {/notempty}
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select class="car_city" lay-filter="car_city">
+                                    <option value="">--选择市区--</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="car_id" lay-verify="required" required lay-search="">
+                                    <option value="">选择车辆</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block" style="width: 513px;">
+                            <textarea class="layui-textarea" name="remark" placeholder="备注信息"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <div class="layui-input-block">
+                            <span class="layui-btn" lay-submit lay-filter="addCarInfo">保存</span>
+                            <input type="hidden" name="store_ids"/>
+                            <input type="hidden" name="store_names"/>
+                            <input type="hidden" name="order_id" value="{$orderId}"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <form class="layui-form layui-form-pane1" method="post" action="{:url('orders/Tomb/submitAddView')}" enctype="multipart/form-data" >
+                    {notempty name="vehicle"}
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">交通工具</label>
+                            <div class="layui-input-block">
+                                {volist name='$Think.config.view_tomb_vehicle' id='vo'}
+                                    <input type="radio" name="vehicle" value="{$key}" title="{$vo}" {eq name='$key' value='$vehicle'}checked{/eq} >
+                                {/volist}
+                            </div>
+                        </div>
+                    {/notempty}
+                    {notempty name="appData"}  
+                        <input type='hidden' name='appoint_car_id' {notempty name='$appData.id'}value='{$appData.id}'{/notempty}>
+                        <input type='hidden' name='card_id' {notempty name='appData.car_id'}value='{$appData.car_id}'{/notempty}>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">地址</label>
+                            <div class="layui-input-block">
+                                <input type="text"  autocomplete="off" class="layui-input" placeholder="乘车地址" {notempty name='appData.riding_address'}value="{$appData.riding_address}"{/notempty} readonly>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联系人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" class="layui-input" placeholder="乘车联系人" {notempty name='appData.appointer'}value="{$appData.appointer}"{/notempty} readonly>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">人数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" class="layui-input" placeholder="乘车人数" {notempty name='appData.rider_number'}value="{$appData.rider_number}"{/notempty} readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联系电话</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" class="layui-input" placeholder="乘车联系人手机号" {notempty name='appData.rider_phone'}value="{$appData.rider_phone}"{/notempty} readonly>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">预约时间</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="自定义日期格式"  {notempty name='appData.arrive_time'}value="{$appData.arrive_time|date='Y-m-d H:i:s',###}"{/notempty}  readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">陪同顾问</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" class="layui-input" placeholder="陪同顾问" {notempty name='$appData.company_counselor_name'}value="{$appData.company_counselor_name}" {/notempty} readonly>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">陪同人员</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" class="layui-input" placeholder="陪同人员" {notempty name='$appData.company_person_name'}value="{$appData.company_person_name}" {/notempty} readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">司机</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" class="layui-input" placeholder="司机" {notempty name='$carData.driver'}value="{$carData.driver}"{/notempty}  readonly>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">车辆信息</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" class="layui-input" placeholder="车辆信息" {notempty name='$carData.plate_number'}value="{$carData.plate_number}"{/notempty}  readonly>
+                                </div>
+                            </div>
+                        </div>
+                {/notempty}
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red">*</span>选择陵园</label>
+                    <div class="layui-input-inline">
+                        <select class="province_id" lay-filter="province_id">
+                            <option value="">请选择省</option>
+                            {notempty name='province'}
+                                {volist name="province" id="vo"}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            {/notempty}
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select lay-filter="city_id" class="city">
+                            <option value="">--选择市区--</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select class="store_id" name="store_id" lay-verify="required" required>
+                            <option value="">请选择商家</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>到家属地</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='incar_time' placeholder="到家属地时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" required>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <!--<div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>行程结束</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='over_time' placeholder="看墓行程结束时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" required >
+                        </div>
+                    </div>
+                </div>-->
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">抵达陵园</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='arrive_time' placeholder="抵达陵园时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">离开陵园</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='leave_time' placeholder="离开陵园时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园接待</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="store_reception" autocomplete="off" class="layui-input" placeholder="陵园接待人员">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>意向</label>
+                        <div class="layui-input-inline">
+                            <select name="purpose" lay-filter="required" required>
+                                {volist name="$Think.config.view_tomb_intention" id='vo'}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                     <div class="layui-inline">
+                        <label class="layui-form-label">购买人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="buyer" autocomplete="off" class="layui-input" placeholder="购买人" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>结果</label>
+                        <div class="layui-input-inline">
+                            {volist name="$Think.config.view_tomb_result" id='vo'}
+                                <input type="radio" name="result" value="{$key}" title="{$vo}" checked>
+                            {/volist}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">墓穴位置</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="location" autocomplete="off" class="layui-input" placeholder="购买墓地的位置">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">原因</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="reason" autocomplete="off" class="layui-input" placeholder="原因">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">墓价</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="total_price" autocomplete="off" class="layui-input" placeholder="墓位总价格(元)">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">成交价</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="tomb_price" autocomplete="off" class="layui-input" placeholder="成交价格(元)">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">91折扣</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="91_discount" autocomplete="off" class="layui-input" placeholder="平台折扣(元)">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园折扣</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="store_discount" autocomplete="off" class="layui-input" placeholder="陵园折扣(元)">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">上传图片</label>
+                    <div class="layui-input-block">
+                        <input type="file" name="image" > 
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="remark" class="layui-input" title="备注信息">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text" style="text-align:center">
+                    <input type='hidden' name='order_id' value='{$orderId}'>
+                    <button class="layui-btn layui-btn-big submit">保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+        <form class="layui-form" method="post" id='addbuyer_form'>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>购买人名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="info[buyer]" autocomplete="off" class="layui-input" lay-filter="required" required placeholder="购买人名称" {notempty name='$buyer.buyer'}value={$buyer.buyer}{/notempty}>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="info[mobile]" autocomplete="off" class="layui-input" placeholder="请填写手机号" {notempty name='$buyer.mobile'}value={$buyer.mobile}{/notempty}>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">座机</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="info[buyer_landline]" autocomplete="off" class="layui-input" placeholder="座机号码" {notempty name='$buyer.buyer_landline'}value={$buyer.buyer_landline}{/notempty}>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">微信</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="info[buyer_wechat]" autocomplete="off" class="layui-input" placeholder="微信" {notempty name='$buyer.buyer_wechat'}value={$buyer.buyer_wechat}{/notempty}>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">QQ</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="info[buyer_qq]" autocomplete="off" class="layui-input" placeholder="QQ" {notempty name='$buyer.buyer_qq'}value={$buyer.buyer_qq}{/notempty}>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name='info[id]' value="{$orderId}">
+                    <button class="layui-btn" type='button' id='buyer_add' lay-filter="demo1">立即提交</button>
+                </div>
+            </div>
+        </form>
+        </div>
+        <div class="layui-tab-item">
+            等待开发
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+layui.use(['element', 'form', 'layedit', 'jquery', 'laydate', 'layer'], function() {
+    var $ = layui.jquery,
+        element = layui.element(),
+        layedit = layui.layedit,
+        laydate = layui.laydate,
+        layer = layui.layer,
+        form = layui.form(),
+        msgTips,
+        provinceId,
+        cityId,
+        choiceStore,
+        editViewCar,
+        carpid,
+        carcid;
+
+    var start = {
+        min: laydate.now(),
+        max: '2099-06-16 23:59:59',
+        istoday: true,
+        choose: function(datas) {
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+
+    var end = {
+        min: laydate.now(),
+        max: '2099-06-16 23:59:59',
+        istoday: true,
+        choose: function(datas) {
+            start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+
+    $('.ridingAddress,.storeNames').hover(function() {
+        var tips = $(this).next('div').html();
+        msgTips = layer.tips(tips, this);
+    }, function() {
+        layer.close(msgTips);
+    });
+
+
+
+    $('#carInfoForm .choice_store').on('click', function() {
+        _choiceStore();
+    });
+
+    $('#editViewCarForm .choice_store').on('click', function() {
+        _choiceStore();
+    })
+
+    /**
+     * 选择陵园弹框
+     */
+    var _choiceStore = function() {
+        $('#choiceStore').find('form')[0].reset();
+        $('#choiceStore .store_list').empty();
+        $('#choiceStore .selected_stores').empty();
+        $('#choiceStore .choice_confirm').hide();
+        choiceStore = layer.open({
+            type: 1,
+            area: ['700px','600px'],
+            title: '选择陵园',
+            content: $('#choiceStore'),
+        });
+    }
+
+    /**
+     * 选择陵园弹框选择省份
+     * @param  {data} 当前选择的value
+     * @return {void}
+     */
+    form.on('select(select_province)', function(data) {
+        provinceId = data.value;
+        $('#choiceStore .store_list').empty().append('');
+        if (provinceId) {
+            _city(provinceId,$('#choiceStore .select_city'));
+        }
+    });
+
+    /**
+     * 选择陵园弹框选择市区
+     * @param  {data} 当前选择的value
+     * @return {void}
+     */
+    form.on('select(select_city)', function(data) {
+        cityId = data.value;
+        if (cityId) {
+            var data = {
+                province_id: provinceId,
+                city_id: cityId
+            };
+            _stores(data);
+        }
+    });
+
+    form.on('select(car_province)',function(data){
+        carpid = data.value;
+        if(carpid){
+            var obj = {
+                province:carpid
+            };
+            _cars(obj);
+            _carCity(carpid);
+        }
+    });
+
+    form.on('select(car_city)',function(data){
+        carcid = data.value;
+        if(carcid){
+            var obj = {
+                province:carpid,
+                city:carcid
+            };
+            _cars(obj);
+        }
+    });
+
+    /**
+     * 获取车辆所在市区
+     * @param  {int} pid 省份
+     * @return {void}
+     */
+    var _carCity = function(pid){
+        $.ajax({
+            url:"{:url('orders/Tomb/getCarCity')}",
+            type:'get',
+            data:{
+                province:pid
+            },
+            dataType:'json',
+            success:function(result){
+                if(result){
+                    if(result['code'] == 1){
+                        /**
+                         * [carCity 仅找有车辆的市区]
+                         * @type {json}
+                         */
+                        var carCity = result['data'],
+                            scity = '<option value="">--选择市区--</option>';
+                        if(carCity){
+                            $.each(carCity,function(i,s){
+                                scity += '<option value="'+s['city_id']+'">'+s['city_name']+'</option>'
+                            });
+                        }
+                        $('#carInfoForm .car_city').empty().append(scity);
+                        form.render();
+                    }
+                }
+            }
+        })
+    }
+
+    /**
+     * 获取市区
+     * @param  {int} pid 省份id
+     * @param  {obj} cityBox 市区选择器
+     */
+    var _city = function(pid,cityBox) {
+        $.ajax({
+            url: "{:url('orders/Tomb/getcity')}",
+            type: 'get',
+            data: {
+                pid: pid
+            },
+            dataType: 'json',
+            success: function(result) {
+                var c = '<option value="">--选择市区--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var cityData = result['data'];
+                        $.each(cityData, function(id, name) {
+                            c += '<option value="' + id + '">' + name + '</option>';
+                        });
+                    }
+                }
+                cityBox.empty().append(c);
+                form.render();
+            }
+        })
+    }
+
+    /**
+     * 获取车辆信息
+     * @param  {obj} objData ajax传值
+     * @return {void}
+     */
+    var _cars = function(objData){
+        $.ajax({
+            url:"{:url('orders/Tomb/getCarInfo')}",
+            type:'get',
+            data:objData,
+            dataType:'json',
+            success:function(result){
+                var car = '<option value="">选择车辆</option>';
+                if(result){
+                    if(result['code'] == 1){
+                        var data = result['data'];
+                        $.each(data,function(k,v){
+                            car += '<option value="'+v['id']+'">'+v['plate_number']+'-'+v['driver']+'</option>'
+                        });
+                    }
+                }
+                $('#carInfoForm select[name="car_id"]').empty().append(car);
+                form.render();
+            }
+        })
+    }
+
+    /**
+     * 获取陵园
+     * @param  {object} info 省份||市区
+     */
+    var _stores = function(info) {
+        $.ajax({
+            url: "{:url('orders/Tomb/obtainMerchant')}",
+            type: 'get',
+            data: info,
+            dataType: 'json',
+            success: function(jsons) {
+                var s = '<a class="layui-input">--陵园列表--</a>';
+                if (jsons) {
+                    if (jsons['code'] == 1) {
+                        var data = jsons['data'];
+                        $.each(data, function(storeId, storeName) {
+                            s += '<span class="layui-input" data-sid="' + storeId + '">' + storeName + '</span>';
+                        })
+                    }
+                }
+                $('#choiceStore .store_list').empty().append(s);
+                form.render();
+            }
+        })
+    }
+
+    /**
+     * 第一次点击时追加：<a class="layui-input">--已选列表--</a>
+     */
+    $(document).one('click', '#choiceStore .store_list span', function() {
+        $('#choiceStore .selected_stores').append('<a class="layui-input">--已选列表--</a>');
+    })
+
+    /**
+     * 点击选择陵园添加到已选列表
+     */
+    $(document).on('click', '#choiceStore .store_list span', function() {
+        $('#choiceStore .choice_confirm').show();
+        var othis = $(this),
+            sid = othis.data('sid'),
+            sname = othis.text(),
+            storesSpan = $('#choiceStore .selected_stores').find('span'),
+            choiceStoreList = $('#carInfoForm .store_choice_list').find('span');
+        if (storesSpan.length > 0) {
+            for (var i = 0, lens = storesSpan.length; i < lens; i++) {
+                if ($(storesSpan[i]).data('sid') == sid) {
+                    layer.msg('陵园已存在');
+                    return false;
+                }
+            }
+        }
+        if (choiceStoreList.length > 0) {
+            for (var j = 0, counts = choiceStoreList.length; j < counts; j++) {
+                if ($(choiceStoreList[j]).data('sid') == sid) {
+                    layer.msg('已选列表中已存在');
+                    return false;
+                }
+            }
+        }
+        var str = '<span class="layui-input" data-sid="' + sid + '" data-sname="' + sname + '">' + sname + '<i class="layui-icon" style="float: right;margin-right: 10px;cursor: pointer;">&#x1006;</i></span>';
+        $('#choiceStore .selected_stores').append(str);
+    });
+
+    $(document).on('click', '#choiceStore .selected_stores span i', function() {
+        $(this).parent('span').remove();
+        var length = $('#choiceStore .selected_stores span').length;
+        if (length < 1) {
+            $('#choiceStore .choice_confirm').hide();
+        }
+    });
+
+    $(document).on('click', '#carInfoForm .store_choice_list span i', function() {
+        _storeChoiceListDel($(this), '#carInfoForm');
+    });
+
+    $(document).on('click', '#editViewCarForm .store_choice_list span i', function() {
+        _storeChoiceListDel($(this), '#editViewCarForm');
+    });
+
+    /**
+     * 列表点击删除陵园
+     * @param  {object} obj    点击对象
+     * @param  {array}  list   已选陵园列表
+     * @param  {string} formId form表单id
+     * @return {void}
+     */
+    var _storeChoiceListDel = function(obj, formId) {
+        obj.parent('span').remove();
+        var list = $(formId + ' .store_choice_list').find('span'),
+            lsid = '',
+            lsname = '';
+        $.each(list, function(a, b) {
+            lsid += ($(b).data('sid') + ',');
+            lsname += ($(b).data('sname') + ',');
+        });
+        lsid = lsid.substring(0, lsid.lastIndexOf(','));
+        lsname = lsname.substring(0, lsname.lastIndexOf(','));
+        $(formId + ' input[name="store_ids"]').val(lsid);
+        $(formId + ' input[name="store_names"]').val(lsname);
+    }
+
+    $('#choiceStore .choice_confirm').on('click', function() {
+        if (!$('#editViewCar').is(':hidden')) {
+            _storeAppendList('#editViewCarForm');
+        } else {
+            _storeAppendList('#carInfoForm');
+        }
+    });
+
+    /**
+     * 追加陵园
+     * @param  {string} formId form表单id
+     * @return {void}
+     */
+    var _storeAppendList = function(formId) {
+        var selecteds = $('#choiceStore .selected_stores').find('span'),
+            choiceList = $(formId + ' .store_choice_list').find('span');
+
+        if (choiceList.length > 0) {
+            // 合并已选列表和追加陵园重新生成数组
+            for (var c = 0, ln = choiceList.length; c < ln; c++) {
+                selecteds.push(choiceList[c]);
+            }
+            $(formId + ' .store_choice_list').empty();
+        }
+        _baseAppend(selecteds, formId);
+        layer.close(choiceStore);
+    }
+
+    /**
+     * 处理追加数据
+     * @param  {object} slist  待处理的数据
+     * @param  {string} formId form表单ID
+     * @return {void}
+     */
+    var _baseAppend = function(slist, formId) {
+        var spans = '',
+            count = slist.length,
+            vsid = '',
+            vsname = '',
+            ids = '',
+            names = '';
+        x = 0;
+        $.each(slist, function(k, v) {
+            vsid = $(v).data('sid');
+            vsname = $(v).data('sname');
+            ids += (vsid + ',');
+            names += (vsname + ',');
+            if (x % 4 == 0) {
+                spans += '<div class="layui-input-inline" style="width:220px;">'
+            }
+            spans += '<span class="layui-input" data-sid="' + vsid + '" data-sname="' + vsname + '">' + vsname + '<i class="layui-icon" style="float: right;margin-right: 10px;cursor: pointer;">&#x1006;</i></span>';
+            if ((x % 4) == 3 || x == count - 1) {
+                spans += '</div>'
+            }
+            x++;
+        });
+        ids = ids.substring(0, ids.lastIndexOf(','));
+        names = names.substring(0, names.lastIndexOf(','));
+        $(formId + ' input[name="store_ids"]').val(ids);
+        $(formId + ' input[name="store_names"]').val(names);
+        $(formId + ' .store_choice_list').show().append(spans);
+    }
+
+
+    form.on('submit(addCarInfo)', function() {
+        var serialize = $('#carInfoForm').serialize();
+        $.ajax({
+            url: "{:url('orders/Tomb/addappointcar')}",
+            type: 'post',
+            data: serialize,
+            dataType: 'json',
+            success: function(result) {
+                if (result) {
+                    layer.msg(result['msg'],{time:1000});
+                    if (result['code'] == 1) {
+                        window.location.reload();
+                    }
+                }
+            }
+        })
+    });
+
+    $('#carViewList .edit').on('click', function() {
+        $('#editViewCarForm')[0].reset();
+        $('#editViewCarForm .store_choice_list').empty();
+        var id = $(this).data('id');
+        if (id) {
+            $.ajax({
+                url: "{:url('orders/Tomb/editappointcar')}",
+                type: 'get',
+                data: {
+                    id: id,
+                },
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        if (result['code'] == 1) {
+                            var data = result['data'],
+                                vehicle = $('#editViewCarForm input[name="vehicle"]');
+                            console.log(data);
+                            var storeIds = '';
+                            var storeNames = '';
+                            var span = '';
+                            if (data['store_ids'] != '') {
+                                storeIds = data['store_ids'].split(',');
+                                if (data['store_names'] != '') {
+                                    storeNames = data['store_names'].split(',');
+                                }
+                                for (var d in storeIds) {
+                                    span += '<span class="layui-input" data-sid="' + storeIds[d] + '" data-sname="' + storeNames[d] + '">' + storeNames[d] + '</span>';
+                                }
+                                _baseAppend($(span), '#editViewCarForm');
+                            }
+                            for (var i = 0, lens = vehicle.length; i < lens; i++) {
+                                if (vehicle[i].value == data['vehicle']) {
+                                    vehicle[i].checked = true;
+                                    break;
+                                }
+                            }
+                            $('#editViewCarForm input[name="riding_address"]').val(data['riding_address']);
+                            $('#editViewCarForm input[name="appointer"]').val(data['appointer']);
+                            $('#editViewCarForm input[name="rider_number"]').val(data['rider_number']);
+                            $('#editViewCarForm input[name="rider_phone"]').val(data['rider_phone']);
+                            $('#editViewCarForm input[name="arrive_time"]').val(data['arrive_time']);
+                            $('#editViewCarForm select[name="company_counselor"]').val(data['company_counselor']);
+                            $('#editViewCarForm select[name="company_person"]').val(data['company_person']);
+                            $('#editViewCarForm select[name="car_id"]').val(data['car_id']);
+                            $('#editViewCarForm input[name="remark"]').val(data['remark']);
+                            $('#editViewCarForm input[name="id"]').val(data['id']);
+                            form.render();
+                        }
+                        editViewCar = layer.open({
+                            type: 1,
+                            area: '730px',
+                            title: '编辑约车信息',
+                            content: $('#editViewCar'),
+                        });
+                    }
+                }
+            })
+        }
+    });
+
+    $('#carViewList .cancel').on('click', function() {
+        var id = $(this).data('id');
+        layer.confirm('确定删除约车记录？', {
+            icon: 3,
+            title: '提示'
+        }, function(cancel) {
+            if (id) {
+                $.ajax({
+                    url: "{:url('orders/Tomb/cancelViewCar')}",
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg']);
+                            if (result['code'] == 1) {
+                                layer.close(cancel);
+                                window.location.reload();
+                            }
+                        }
+                    }
+                })
+            }
+        });
+    });
+
+    $('#carViewList .finish').on('click', function() {
+        var id = $(this).data('id');
+        layer.confirm('确认看墓记录已填写，约车完成操作不可逆？', {
+            icon: 3,
+            title: '提示'
+        }, function(finish) {
+            if (id) {
+                $.ajax({
+                    url: "{:url('orders/Tomb/finishViewCar')}",
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg']);
+                            if (result['code'] == 1) {
+                                layer.close(finish);
+                                window.location.reload();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    form.on('submit(editCarInfo)', function() {
+        var formData = $('#editViewCarForm').serialize();
+        $.ajax({
+            url: "{:url('orders/Tomb/editappointcar')}",
+            type: 'post',
+            data: formData,
+            dataType: 'json',
+            success: function(result) {
+                if (result) {
+                    layer.msg(result['msg']);
+                    if (result['code'] == 1) {
+                        layer.close(editViewCar);
+                        window.location.reload();
+                    }
+                }
+            }
+        })
+    })
+
+    //创建一个编辑器
+    var demo_index = layedit.build('demo_edit');
+    //接收锚点
+    var layid = "{$items}";
+    //跳转目的地
+    element.tabChange('items', layid);
+    //tab切换方法
+    element.on('tab(items)', function(elem) {
+        var items = $(this).attr('lay-id');
+        var URL = $(this).attr('data-url');
+        window.location.href = URL;
+    });
+
+
+    //短信区域JS代码开始
+    //编辑短信信息
+    $('.editmsg').click(function() {
+        var id = $(this).attr('edit-id');
+        $('.editid').val(id);
+        $.ajax({
+            url: "{:url('editordermsg')}",
+            type: 'get',
+            data: 'id=' + id,
+            success: function(d) {
+                var result = eval("(" + d + ")");
+                if (result.flag == 1) {
+                    var data = result.data;
+                    $('#msgid').empty().text(data.msg);
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '编辑短信信息',
+                    content: $('#editmsg_form'),
+                });
+            }
+        });
+    });
+
+    $('#editmsg').click(function() {
+        var From = $('#edit_info_form').serialize();
+        $.ajax({
+            url: "{:url('editordermsg')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var d = eval("(" + result + ")");
+                if (d.flag == 1) {
+                    layer.msg(d.msg);
+                    window.location.reload();
+                } else {
+                    layer.msg(d.msg);
+                }
+            }
+        });
+    });
+
+    //发送短信
+    $('.sendmsg').click(function() {
+        var id = $(this).attr('send-id');
+        layer.confirm('确定要发送短信吗?', {
+            icon: 3,
+            title: '提示'
+        }, function(index) {
+            $.ajax({
+                url: "{:url('sendmessage')}",
+                data: {
+                    'id': id
+                },
+                type: 'post',
+                success: function(result) {
+                    var d = eval("(" + result + ")");
+                    if (d.flag == 1) {
+                        layer.msg(d.msg);
+                        window.location.reload();
+                    } else {
+                        layer.msg(d.msg);
+                    }
+                }
+            });
+        });
+    });
+
+    //短信区域JS代码结束
+
+    //添加回访跟踪信息
+    $('.reviest').click(function() {
+        var cont = $('#reviest_form textarea').val();
+        if (cont.length < 1) {
+            layer.msg('请填写回访信息!');
+            return false;
+        }
+        var Form = $('#reviest_form').serialize();
+        commonreviest(Form);
+    });
+
+    //添加需求讲解
+    $('#demand_form').click(function() {
+        var content = layedit.getContent(demo_index);
+        var order_id = $("#demand_form input[name='order_id']").val();
+        var tag = $("#demand_form input[name='tag']").val();
+        $.ajax({
+            url: "{:url('addrevisit')}",
+            data: {
+                content: content,
+                order_id: order_id,
+                tag: tag
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(result) {
+                if (result.flg == 2) {
+                    layer.msg('操作成功',{icon:1,time:1000},function(){
+                        
+                        var url = $("#ul_table").find("li:first-child").attr('data-url');
+                        window.location.href = url;
+                    });
+                } else {
+                    layer.msg('操作失败');
+                }
+            }
+        });
+    });
+
+    function commonreviest(Form) {
+        $.ajax({
+            url: "{:url('addrevisit')}",
+            data: Form,
+            type: 'post',
+            dataType: 'json',
+            success: function(result) {
+                if (result.flg == 1) {
+                    layer.msg('添加回访信息成功');
+                    var data = result.msg;
+                    var length = $('#box_reviest').find('p').length;
+
+                    var timeDate = new Date(parseInt(data.created_time) * 1000);
+                    var pushZero = function(n) {
+                        return n < 10 ? '0' + n : n;
+                    };
+                    var time = timeDate.getFullYear() + '-' + pushZero(timeDate.getMonth() + 1) + '-' + pushZero(timeDate.getDate()) + "  " + pushZero(timeDate.getHours()) + ":" + pushZero(timeDate.getMinutes()) + ":" + pushZero(timeDate.getSeconds());
+
+                    var str = "<p class='layui-elem-quote'>" + time + "  " + data.admin_name + "  第" + (length + 1) + "次回访，  " + data.content + "。</p> ";
+
+                    $('#box_reviest').before(str);
+                    $('#reviest_form')[0].reset();
+                } else {
+                    layer.msg('操作失败');
+                }
+            }
+        });
+    }
+
+
+    //新增购买人
+    $('#buyer_add').click(function() {
+        var name = $("#addbuyer_form input[name='info[buyer]']").val();
+        var mobile = $("#addbuyer_form input[name='info[mobile]']").val();
+        var tel = $("#addbuyer_form input[name='info[buyer_landline]']").val();
+        if (!name) {
+            layer.msg('请填写购买人姓名');
+            return false;
+        }
+        if (mobile.length < 1 && tel.length < 1) {
+            layer.msg('请填写联系方式');
+            return false;
+        }
+
+        var Form = $('#addbuyer_form').serialize();
+        $.ajax({
+            url: "{:url('addbuyer')}",
+            data: Form,
+            type: 'post',
+            dataType: 'json',
+            success: function(result) {
+                if (result.flag == 1) {
+                    layer.msg(result.msg);
+                    var url = $("#ul_table").find("li:first-child").attr('data-url');
+                    window.location.href = url;
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+        });
+    })
+
+    //看墓记录放大图片
+    $('.viewTombZoomIn').click(function() {
+        var src = $(this).attr('data-image');
+        layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: ['500px', '500px'],
+            title: '查看图片',
+            content: '<img src="' + src + '" width="100%" height="100%"/>'
+        });
+    });
+    
+    //选择省获取市
+    form.on('select(province_id)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('.province_id');
+        //layer.alert(provinceId);
+        getcity(provinceId,obj);
+    });
+    //获取市区列表
+    function getcity(provinceId,obj){
+        $.ajax({
+            url: "{:url('Tomb/getcity')}",
+            type: 'get',
+            data: {pid: provinceId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择市区--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + key + '">' + val + '</option>';
+                        });
+                    }
+                }
+                $('.city').empty().append(t);
+                form.render();
+            }
+        });
+    }
+     //获取陵园列表
+    form.on('select(city_id)', function(data) {
+        var provinceId = $('.province_id').val();
+        var cityId = data['value'];
+        var obj =  $('.city');
+        getcemetery(provinceId,cityId,obj);
+    });
+    //获取陵园列表
+    function getcemetery(provinceId,cityId,obj){
+        $.ajax({
+            url: "{:url('Tomb/getcemetery')}",
+            type: 'post',
+            data: {provinceId: provinceId,cityId:cityId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择商家--</option>';
+                if (result['flg'] == 1) {
+                    var data = result['data'];
+                    $.each(data, function(key, val) {
+                        var code = ''
+                        if(val['member_status'] != 0){
+                            code = "(会)";
+                        }
+                        t += '<option value="' + val['id'] + '">' + val['name']+code+'</option>';
+                    })
+                }
+                $('.store_id').empty().append(t);
+                form.render();
+            }
+        });
+    }
+});
+</script>
+{/block}

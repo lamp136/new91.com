@@ -1,0 +1,105 @@
+<?php
+namespace back\member\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+use common\sendmsg\SendMsg;
+use think\Session;//session类
+
+
+/**
+ * 陵园合作申请
+ */
+class Handtohand extends Base
+{
+
+	 /**商务跟踪判断**/
+	   public function power(){
+	        $where = array();
+	        if(session('?admin_id')){
+	          $ret=  Db::name('RoleUser')->where('user_id='.session('admin_id'))->field('role_job_id')->find();
+	          $level = Db::name('Role')->where('id='.$ret['role_job_id'])->field('level')->find(); 
+	          if($level['level'] == 3){
+	            $where = session('admin_id');
+	          }
+	        }
+	        return $where;
+	    }
+
+  
+
+	/**
+	 * 陵园合作列表
+	 */
+	public function index(){
+		$getCondition = input('get.');
+		if(!empty($getCondition['mobile'])){
+			$where['mobile'] = $getCondition['mobile'];
+		}
+		if(!empty($getCondition['flow_man'])){
+			$where['flow_man'] = $getCondition['flow_man'];
+		}
+      
+        $ordermen =  $this->power();
+        if($ordermen){
+            $where['flow_man'] =  $ordermen;
+        }
+        $where = array();
+		$collaborate = Db::name('Collaborate');
+		$arr = '0,1,2,3,4';
+		$where['status'] = array('in',$arr);
+
+		$pageSize = config('page_size');
+        $list = $collaborate->where($where)->order('id desc')->paginate($pageSize,false,['query' => $getCondition]);
+        $show = $list->render();
+        // $flow_man = $this->getBusinessMen(true,false);
+        $this->assign('page',$show);
+        // $this->assign('flow_man',$flow_man);
+        $this->assign('condition',$getCondition);
+        $this->assign('list',$list);
+        return $this->fetch();
+	}
+
+	
+	/**
+	 * 跟踪人
+	 */
+	public function editflowMan(){
+		if(Request::instance()->isPost()){
+			$collaborate = Db::name('Collaborate');
+			$info = input('post.');
+	        $id = $info['id'];
+	        $data['flow_man'] = $info['flow_man'];
+	        if($collaborate->where('id='.$id)->update($data)){
+	            die('修改成功!');
+	        }else{
+	            die('修改失败!');
+	        }  
+		}else{
+			$flowMan = $this->getBusinessMen(true,true);
+			$i=0;
+			foreach ($flowMan as $key => $value) {
+				$result[$i]['id'] = $key;
+				$result[$i]['nickname'] = $value;
+				$i++;
+			}
+			echo json_encode($result);
+		}
+	}
+
+    /**
+     * 修改陵园合作申请中的status和添加备注
+     */
+    public function edit(){
+        $collaborate = Db::name('Collaborate');
+        $postVal = input('post.');
+        $result = array('flag'=>0,'msg'=>'操作失败');
+        
+        // if($collaborate->data($postVal)->save()){
+        //     $result = array('flag'=>1,'msg'=>'操作成功');
+        // }
+        echo json_encode($result);
+    }
+}

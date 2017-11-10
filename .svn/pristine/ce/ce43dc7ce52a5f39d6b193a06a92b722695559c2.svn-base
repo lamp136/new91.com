@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>陵园详情</title>
+    <link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <!-- 环境照片点击小图弹出大图jquery.fancybox.css -->
+    <link href="stylesheets/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="javascripts/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="javascripts/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+    <!-- 我要评价 -->
+    <div class="tooltip_box"></div>
+    <div class="tooltip tooltip_remark">
+        <h2>我的评价</h2>
+        <div class="pf clearfix">
+            <span class="title">评分：</span>
+             <ul>
+                <li>环境：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                <li class="last">风水：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                <li>交通：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                <li class="last">服务：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+            </ul>
+        </div>
+        <div class="ms">
+            <span class="title">描述：</span>
+            <textarea class="ms_tarea" placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+        </div>
+        <div class="phone">
+            <span class="title">评分：</span>
+            <input class="phone_txt" type="text" value="" placeholder="请输入您正在使用的手机号" />
+        </div>
+        <div class="niname">
+            <span></span>匿名评价
+        </div>
+        <div class="remark_btn">
+            <a href="#">提交评价</a>
+        </div>
+        <div class="tooltip_remark_close"></div>
+    </div><!-- tooltip_remark 我要评价 End -->
+
+    <!-- 顶部 -->
+    <div class="navbar_top">
+        <div class="contain">
+            <div class="greet">
+                <span>您好，欢迎来到91搜墓网</span>
+                <a class="login" href="login.html">登录</a>
+                <i>|</i>
+                <a href="register.html">免费注册</a>
+            </div>
+            <div class="nav_top">
+                <ul>
+                    <li class="scan"><a href="#">我的订单<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                    <li class="gwc"><a href="#">购物车<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                    <li><a href="#">个人中心<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                    <li><a href="#">帮助中心</a>|</li>
+                    <li><a href="#">网站地图</a>|</li>
+                    <li class="last"><a href="#">商家后台</a></li>
+                </ul>
+            </div>
+            <div style="clear:both;"></div>
+        </div>  
+    </div><!-- navbar_top 顶部 End -->
+    
+    <!-- header -->
+    <div class="header">
+        <div class="contain">
+
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png" alt="LOGO" /></a>
+            </div>
+            
+            <!-- 选择城市+搜索 -->
+            <div class="city_search">
+
+                <!-- 选择城市 -->
+                <div class="city">
+
+                    <span class="sele">
+                        <i class="city_icon"></i>
+                        上海
+                        <i class="iconfont icon-iconfontdownjiantou"></i>
+                    </span>
+
+                    <!-- 城市列表 -->
+                    <div class="city_list">
+                        <ul class="clearfix">
+                            <li>A</li>
+                            <li><a href="#">安徽</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>B</li>
+                            <li><a href="#">北京</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>C</li>
+                            <li><a href="#">重庆</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>F</li>
+                            <li><a href="#">福建</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>G</li>
+                            <li><a href="#">广东</a></li>
+                            <li><a href="#">广西</a></li>
+                            <li><a href="#">贵州</a></li>
+                            <li><a href="#">甘肃</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>H</li>
+                            <li><a href="#">河北</a></li>
+                            <li><a href="#">河南</a></li>
+                            <li><a href="#">黑龙江</a></li>
+                            <li><a href="#">海南</a></li>
+                            <li><a href="#">湖北</a></li>
+                            <li><a href="#">湖南</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>J</li>
+                            <li><a href="#">江苏</a></li>
+                            <li><a href="#">吉林</a></li>
+                            <li><a href="#">江西</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>L</li>
+                            <li><a href="#">辽宁</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>N</li>
+                            <li><a href="#">宁夏</a></li>
+                            <li><a href="#">内蒙古</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>Q</li>
+                            <li><a href="#">青海</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>S</li>
+                            <li><a href="#">上海</a></li>
+                            <li><a href="#">山东</a></li>
+                            <li><a href="#">山西</a></li>
+                            <li><a href="#">四川</a></li>
+                            <li><a href="#">陕西</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>T</li>
+                            <li><a href="#">天津</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>X</li>
+                            <li><a href="#">新疆</a></li>
+                            <li><a href="#">西藏</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>Y</li>
+                            <li><a href="#">云南</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>Z</li>
+                            <li><a href="#">浙江</a></li>
+                        </ul>
+                    </div>
+                   
+                </div><!-- city 选择城市 End -->
+
+                <!-- 搜索 -->
+                <div class="search">
+
+                    <!-- 选择搜索内容 -->
+                    <div class="search_sel_box">
+                        <span class="search_sel">陵园墓地<i class="iconfont icon-iconfontdownjiantou"></i></span>
+                        <div class="search_sel_list">
+                            <ul>
+                                <li><a href="#">陵园墓地</a></li>
+                                <li><a href="#">殡仪馆</a></li>
+                                <li><a href="#">殡仪公司</a></li>
+                                <li><a href="#">新闻</a></li>
+                            </ul>
+                        </div>
+                    </div><!-- search_sel_box 选择搜索内容 End -->
+                    
+                    <!-- 搜索框 -->
+                    <div class="search_input">
+                        <input id="gover_search_key" class="txt" type="text" value="" placeholder="我们帮您找陵园"/>
+                        <div class="search_suggest" id="gov_search_suggest">  
+                            <ul>
+                            </ul>
+                        </div>
+                    </div><!-- search_input 搜索框 End -->
+                    
+                    <div style="clear:both;"></div>
+
+                </div><!-- search 搜索 End -->
+
+                <!-- 搜索按钮 -->
+                <div class="search_btn">
+                    <button class="ssbtn"></button>
+                </div><!-- search_btn 搜索按钮 End -->
+                
+                <div style="clear:both;"></div>
+                
+                <!-- 搜索展示内容 -->
+                <div class="search_text clearfix">
+                    <ul>
+                        <li><a href="#">天寿陵园</a></li>
+                        <li><a href="#">殡仪服务</a></li>
+                        <li><a href="#">树葬</a></li>
+                        <li><a href="#">海葬</a></li>
+                        <li><a href="#">风水</a></li>
+                    </ul>
+                </div><!-- search_text 搜索展示内容 End -->
+
+            </div><!-- city_search 选择城市+搜索 End -->
+            
+            <!-- 电话 -->
+            <div class="telephone">
+                <img src="images/telephone.png" alt="电话" />
+            </div><!-- telephone 电话 End -->
+
+        </div><!-- contain End -->
+    </div><!-- header End -->
+    
+    <!-- 导航 -->
+    <div class="nav">
+        <div class="contain">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li class="lineheight"><a href="cemetery.html">陵园墓地</a></li>
+                <li><a href="tombmaps.html">地图看墓</a></li>
+                <li><a href="funeralparlour.html">殡仪馆</a></li>
+                <li><a href="etiquette.html">殡葬礼仪</a></li>
+                <li><a href="ecologicalburial.html">节地生态葬</a></li>
+                <li><a href="funeralencyclopedia.html">殡葬百科</a></li>
+                <li><a href="#">91乐融</a></li>
+            </ul>
+        </div><!-- contain End -->
+    </div><!-- nav 导航 End -->
+    
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="cemetery.html">陵园墓地</a></li>
+                <li class="jt">></li>
+                <li>北京天寿陵园</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 陵园详情介绍 -->
+        <div class="cemetery_detail_main clearfix">
+
+            <!-- 图片 -->
+            <div class="cemetery_detail_main_img">
+                <img src="images/cemetery_detailAd_main_img1.jpg" alt="陵园详情图片" />
+            </div>
+            <!-- 详情 -->
+            <div class="cemetery_detail_main_text">
+                <h2>天津憩园公墓<a href="#"><i class="cemetery_detail_attention_icon"></i>点击关注</a></h2>
+                <!-- 最新报价 浏览量 客户评价 -->
+                <div class="price clearfix">
+                    <p class="zxprice">最新报价：<font>￥</font><strong>25800.00</strong><span>元起</span></p>
+                    <p class="llnum">浏览量：<span class="ll">20326</span><span class="fg">|</span>客户评价：<span>3268</span></p>
+                </div>
+                <div class="infoAd clearfix">
+                    <ul>
+                        <li><span>北辰区</span>行政区域</li>
+                        <li><span>15公里</span>距离市区</li>
+                        <li><span>8:00 - 14:30</span>服务时间</li>
+                        <li class="phoneAd last"><span>022-26824711</span>服务热线</li>
+                    </ul>
+                </div>
+                <!-- 环境 -->
+                <div class="setting">
+                    <ul class="clearfix">
+                        <li>幽静</li>
+                        <li>依山傍水</li>
+                        <li>幽静</li>
+                        <li>依山傍水</li>
+                        <li>幽静</li>
+                        <li>幽静</li>
+                        <li>依山傍水</li>
+                        <li>幽静</li>
+                        <li>依山傍水</li>
+                        <li>幽静</li>
+                    </ul>
+                </div>
+                <!-- 地址 -->
+                <div class="addressAd clearfix">
+                    <p><span>陵园地址：</span>北京市昌平区南口镇檀峪村西<a href="#" class="lookmap"><i></i>查看地图</a></p>
+                </div>
+            </div>
+
+        </div><!-- cemetery_detail_main 陵园详情介绍 End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+            <div class="cem_detail">
+                <!-- 定位导航头部 -->
+                <div class="cem_detail_title" id="cem_detail_title">
+                    <ul>
+                        <li class="thistab"><a href="javascript:void(0);" tab="tabcem1">环境照片</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem2">墓型展示</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem3">陵园简介</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem4">名人墓地</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem5">交通信息</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem6">客户评价</a></li>
+                        <div class="clear"></div>
+                    </ul>
+                </div>
+                <ul>
+                    <!-- 环境照片 -->
+                    <li class="cem_details_box" id="tabcem1">
+                        <!-- 环境照片内容 -->
+                        <div class="cem_detail_environment">
+                            <!-- 展示内容title -->
+                            <div class="environment_title clearfix">
+                                <ul>
+                                    <li class="led"><a href="#">全部（36）</a></li>
+                                    <li><a href="#">静竹园（8）</a></li>
+                                    <li><a href="#">梅园（16）</a></li>
+                                    <li><a href="#">梅园（12）</a></li>
+                                </ul>
+                            </div>
+                            <!-- 展示图片 -->
+                            <div class="environment clearfix">
+                                <ul>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园道路一角" title="陵园道路一角">
+                                            <img src="images/cem_detail_environment_imgs1.jpg" alt="" />
+                                            <p>陵园道路一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园主干道" title="陵园主干道">
+                                            <img src="images/cem_detail_environment_imgs2.jpg" alt="" />
+                                            <p>陵园主干道</p>
+                                        </a>
+                                    </li>
+                                    <li class="last">
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园墓区一角" title="陵园墓区一角">
+                                            <img src="images/cem_detail_environment_imgs3.jpg" alt="" />
+                                            <p>陵园墓区一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园道路一角" title="陵园道路一角">
+                                            <img src="images/cem_detail_environment_imgs1.jpg" alt="" />
+                                            <p>陵园道路一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园主干道" title="陵园主干道">
+                                            <img src="images/cem_detail_environment_imgs2.jpg" alt="" />
+                                            <p>陵园主干道</p>
+                                        </a>
+                                    </li>
+                                    <li class="last">
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园墓区一角" title="陵园墓区一角">
+                                            <img src="images/cem_detail_environment_imgs3.jpg" alt="" />
+                                            <p>陵园墓区一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园道路一角" title="陵园道路一角">
+                                            <img src="images/cem_detail_environment_imgs1.jpg" alt="" />
+                                            <p>陵园道路一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园主干道" title="陵园主干道">
+                                            <img src="images/cem_detail_environment_imgs2.jpg" alt="" />
+                                            <p>陵园主干道</p>
+                                        </a>
+                                    </li>
+                                    <li class="last">
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园墓区一角" title="陵园墓区一角">
+                                            <img src="images/cem_detail_environment_imgs3.jpg" alt="" />
+                                            <p>陵园墓区一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园道路一角" title="陵园道路一角">
+                                            <img src="images/cem_detail_environment_imgs1.jpg" alt="" />
+                                            <p>陵园道路一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园主干道" title="陵园主干道">
+                                            <img src="images/cem_detail_environment_imgs2.jpg" alt="" />
+                                            <p>陵园主干道</p>
+                                        </a>
+                                    </li>
+                                    <li class="last">
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园墓区一角" title="陵园墓区一角">
+                                            <img src="images/cem_detail_environment_imgs3.jpg" alt="" />
+                                            <p>陵园墓区一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园道路一角" title="陵园道路一角">
+                                            <img src="images/cem_detail_environment_imgs1.jpg" alt="" />
+                                            <p>陵园道路一角</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="fancybox" href="images/cem_detail_environment_imgb.jpg" data-fancybox-group="陵园主干道" title="陵园主干道">
+                                            <img src="images/cem_detail_environment_imgs2.jpg" alt="" />
+                                            <p>陵园主干道</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div><!-- environment 展示图片 End -->
+                        </div><!-- cem_detail_environment 环境照片内容 End -->
+                    </li>
+                    
+                    <!-- 墓型展示 -->
+                    <li  class="cem_details_box cem_detail_tombtype" id="tabcem2">
+                        <!-- 筛选条件 -->
+                        <div class="sifting">
+
+                            <!-- 筛选条件结果显示 -->
+                            <div class="criteria">
+                                <ul>
+                                    <li class="sif">所有分类</li>
+                                    <li>></li>
+                                    <li class="if">常青园<span></span></li>
+                                    <li class="if">免费<span></span></li>
+                                    <li class="number">共<span> 100 </span>结果</li>
+                                </ul>
+                            </div>
+
+                            <!--所在区域 -->
+                            <div class="sifting_main clearfix">
+                                <span>所在墓区：</span>
+                                <ul>
+                                    <li><a href="#">不限</a></li>
+                                    <li class="led"><a href="#">常青园</a></li>
+                                    <li><a href="#">松柏园</a></li>
+                                    <li><a href="#">拙梅园</a></li>
+                                    <li><a href="#">雅竹苑</a></li>
+                                    <li><a href="#">拙梅园</a></li>
+                                    <li><a href="#">雅竹苑雅竹苑</a></li>
+                                    <li><a href="#">松柏园</a></li>
+                                    <li><a href="#">拙梅园</a></li>
+                                    <li><a href="#">雅竹苑</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- 价格区间 -->
+                            <div class="sifting_main clearfix">
+                                <span>价格区间：</span>
+                                <ul>
+                                    <li><a href="#">不限</a></li>
+                                    <li class="led"><a href="#">免费</a></li>
+                                    <li><a href="#">2万以下</a></li>
+                                    <li><a href="#">2-5万</a></li>
+                                    <li><a href="#">5-10万</a></li>
+                                    <li><a href="#">10-20万</a></li>
+                                    <li><a href="#">20万以上</a></li>
+                                </ul>                   
+                            </div>
+                            
+                        </div><!-- sifting筛选条件结束 -->
+                        
+                        <!-- 墓型列表 -->
+                        <div class="tombtype">
+                            <ul class="tombtypeul clearfix">
+                                <li>
+                                    <img src="images/cem_detail_tombtype_img1.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="images/cem_detail_tombtype_img2.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="last">
+                                    <img src="images/cem_detail_tombtype_img1.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="images/cem_detail_tombtype_img1.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="images/cem_detail_tombtype_img1.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="last">
+                                    <img src="images/cem_detail_tombtype_img3.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="images/cem_detail_tombtype_img4.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="images/cem_detail_tombtype_img1.jpg" alt="墓型图片"/>
+                                    <div class="txt">
+                                        <h2>音容宛在墓</h2>
+                                        <p><span>参考价格：</span><strong>13900</strong><span class="yuan">元 / 平米</span></p>
+                                        <div class="small clearfix">
+                                            <p class="smalla"><span>大小：</span>4平</p>
+                                            <p><span>穴位：</span>双穴</p>
+                                        </div>
+                                        <p><span>材质：</span>大理石、 花岗岩、金刚岩</p>
+                                        <div class="btn clearfix">
+                                            <a href="#">预约看墓</a>
+                                            <a class="zxzx" href="#">在线咨询</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 分页 -->
+                            <div class="paging">
+                                <ul>
+                                    <li class="jiant jianled"><a href="#"><i class="iconfont icon-arrow-left-copy"></i></a></li>
+                                    <li class="numled"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">6</a></li>
+                                    <li><a href="#">7</a></li>
+                                    <li class="dian">...</li>
+                                    <li><a href="#">99</a></li>
+                                    <li><a href="#">100</a></li>
+                                    <li class="jiant"><a href="#"><i class="iconfont icon-arrow-left-copy1"></i></a></li>
+                                    <li class="tzd">跳转到：</li>
+                                    <li class="intext"><input class="tex" type="text" value="" /></li>
+                                    <li class="go"><a href="#">GO</a></li>
+                                </ul>
+                            </div><!-- paging 分页 End -->
+                        </div><!-- tombtype 墓型列表 End -->
+                    </li>
+                    
+                    <!-- 陵园简介 -->
+                    <li class="cem_details_box" id="tabcem3">
+                        <div class="cem_detail_intro">
+                            <p>北京平谷区金牛山公墓是2006年经平谷区民政局特批建设，并按照区民政局“统一规划、统一建设、统一管理”的标准由夏各庄村负责管理的新型公墓。金牛山公墓现坐落在著名的京东绿谷--平谷区境内，位于平谷区城东6公里夏各庄镇金牛山上，距离北京市区有70公里的距离，自驾车仅45分钟就能抵达墓区。公墓在青山绿水的环抱中，东眺著名的旅游胜地盘山景区与清东陵风水一脉相承，完全满足中国传统风水学说对阴宅墓穴的要求，风水大师曾断言：葬于此地者，当代和后代福运双至。金牛山公墓择水而居，占天时择地利，并获称为“人生后花园”的美誉。</p>
+                            <p>平谷金牛山公墓是一座面向广大工薪阶层的经济适用型公墓，高性价比墓型一直是公墓不断追求的目标。万元以下的经济型墓型就有6种之多，一万五以下可选择的墓型也不下10种，墓型均采用高等级大理石和花岗岩制作，货真价实，质量上乘，雕工精细，性价比非常高。</p>
+                            <div class="img">
+                                <img src="images/cem_detail_intro_img1.jpg" alt="陵园简介图片"/>
+                                <p>陵园墓区景色</p>
+                            </div>
+                            <p>北京平谷区金牛山公墓是2006年经平谷区民政局特批建设，并按照区民政局“统一规划、统一建设、统一管理”的标准由夏各庄村负责管理的新型公墓。金牛山公墓现坐落在著名的京东绿谷--平谷区境内，位于平谷区城东6公里夏各庄镇金牛山上，距离北京市区有70公里的距离，自驾车仅45分钟就能抵达墓区。公墓在青山绿水的环抱中，东眺著名的旅游胜地盘山景区与清东陵风水一脉相承，完全满足中国传统风水学说对阴宅墓穴的要求，风水大师曾断言：葬于此地者，当代和后代福运双至。金牛山公墓择水而居，占天时择地利，并获称为“人生后花园”的美誉。</p>
+                            <p>平谷金牛山公墓是一座面向广大工薪阶层的经济适用型公墓，高性价比墓型一直是公墓不断追求的目标。万元以下的经济型墓型就有6种之多，一万五以下可选择的墓型也不下10种，墓型均采用高等级大理石和花岗岩制作，货真价实，质量上乘，雕工精细，性价比非常高。</p>
+                            <div class="intro">
+                                <img src="images/cem_detail_intro_img2.jpg" alt="陵园简介图片"/>
+                                <p>陵园墓区景色</p>
+                            </div>
+                            <div class="intro">                                
+                                <img src="images/cem_detail_intro_img3.jpg" alt="陵园简介图片"/>
+                                <p>陵园墓区景色</p>
+                            </div>
+                            <div class="clear"></div>
+                            <p>北京平谷区金牛山公墓是2006年经平谷区民政局特批建设，并按照区民政局“统一规划、统一建设、统一管理”的标准由夏各庄村负责管理的新型公墓。金牛山公墓现坐落在著名的京东绿谷--平谷区境内，位于平谷区城东6公里夏各庄镇金牛山上，距离北京市区有70公里的距离，自驾车仅45分钟就能抵达墓区。公墓在青山绿水的环抱中，东眺著名的旅游胜地盘山景区与清东陵风水一脉相承，完全满足中国传统风水学说对阴宅墓穴的要求，风水大师曾断言：葬于此地者，当代和后代福运双至。金牛山公墓择水而居，占天时择地利，并获称为“人生后花园”的美誉。</p>
+                        </div><!-- cem_detail_intro 陵园简介 End -->
+                    </li>
+                    
+                    <!-- 名人墓地 -->
+                    <li class="cem_details_box" id="tabcem4">
+                        <!-- 名人墓地 -->
+                        <div class="cem_detail_celebrity">
+
+                            <!-- 名人墓内容1 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img1.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">赵丽蓉<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>著名小品、评剧演员</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+
+                            <!-- 名人墓内容2 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img2.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">李媛媛<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>国家一级演员</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+
+                            <!-- 名人墓内容3 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img3.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">陈晓旭<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>电视剧《红楼梦》中林黛玉的饰演者</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+
+                            <!-- 名人墓内容4 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img4.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">文兴宇<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>中国著名导演，表演艺术家</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+
+                            <!-- 名人墓内容5 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img1.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">赵丽蓉<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>著名小品、评剧演员</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+
+                            <!-- 名人墓内容6 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img2.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">赵丽蓉<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>著名小品、评剧演员</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+
+                            <!-- 名人墓内容7 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img3.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">赵丽蓉<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>著名小品、评剧演员</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+
+                            <!-- 名人墓内容8 -->
+                            <div class="celebrity_list_box">
+                                <div class="celebrity_list_main clearfix">
+                                    <!-- 图片 -->
+                                    <div class="celebrity_list_main_img">
+                                        <a href="#"><img src="images/cem_detail_celebrity_img4.jpg" alt="名人墓地图片"/></a>
+                                    </div>
+                                    <!-- 信息 -->
+                                    <div class="celebrity_list_main_info">
+                                        <h2 class="clearfix"><a href="#">赵丽蓉<span>（ 1926-2000 ）</span></a></h2>
+                                        <h3>著名小品、评剧演员</h3>
+                                        <p>赵丽蓉河北唐山人，著名小品、评剧演员。原籍西庄村，中国评剧院著名评剧表演艺术家，孩提时期在沈阳被抱上戏台演“彩娃子，2000年7月17日清晨7时30分因肺癌逝世，享年72岁。</p>
+                                    </div>
+                                    <!-- 了解更多 -->
+                                    <div class="celebrity_list_main_more">
+                                        <a class="buttonlv" href="#">了解更多</a>
+                                    </div>
+                                </div><!-- celebrity_list_main End -->
+                            </div><!-- celebrity_list_box 名人墓内容 End -->
+                            
+                            <!-- 分页 -->
+                            <div class="paging">
+                                <ul>
+                                    <li class="jiant jianled"><a href="#"><i class="iconfont icon-arrow-left-copy"></i></a></li>
+                                    <li class="numled"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">6</a></li>
+                                    <li><a href="#">7</a></li>
+                                    <li class="dian">...</li>
+                                    <li><a href="#">99</a></li>
+                                    <li><a href="#">100</a></li>
+                                    <li class="jiant"><a href="#"><i class="iconfont icon-arrow-left-copy1"></i></a></li>
+                                    <li class="tzd">跳转到：</li>
+                                    <li class="intext"><input class="tex" type="text" value="" /></li>
+                                    <li class="go"><a href="#">GO</a></li>
+                                </ul>
+                            </div><!-- paging 分页 End -->
+
+                        </div><!-- cem_detail_celebrity 名人墓地 End -->
+                    </li>
+                    
+                    <!-- 交通信息 -->
+                    <li class="cem_details_box" id="tabcem5">
+                        <div class="cem_detail_map">
+                            <img src="images/cem_details_map_img1.jpg" alt="地图" />
+                        </div>
+                    </li>
+                    
+                    <!-- 客户评价 -->
+                    <li class="cem_details_box" id="tabcem6">
+                        <!-- 评价 -->
+                        <div class="cem_details_remark">
+
+                            <!-- 与描述相符+星星 -->
+                            <div class="cem_details_star clearfix">
+                                <div class="coincide">
+                                    <p>综合评价</p>
+                                    <h2>4.7<span>分</span></h2>
+                                </div>
+                                <ul>
+                                    <li>环境：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                                    <li class="last">风水：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                                    <li>交通：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                                    <li class="last">服务：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                                </ul>
+                                <div class="remark_btn">
+                                    <a class="remark_a" href="javascript:void(0);">我要评价</a>
+                                </div>
+                            </div>
+
+                            <!-- 评价数量 -->
+                            <div class="cem_details_evaluate_title clearfix">
+                                <ul>
+                                    <li class="led"><img src="images/evaluate_title1.png"/>全部 888</li>
+                                    <li><img src="images/evaluate_title.png"/>追加 66</li>
+                                    <li><img src="images/evaluate_title.png"/>晒图 88</li>
+                                </ul>
+                            </div>
+
+                            <!-- 评价内容1 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                                <!-- 追加 -->
+                                <div class="evaluate_main_zj">
+                                    <h6>追加：</h6>
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务。</p>
+                                </div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容2 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容3 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容4 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                                <!-- 追加 -->
+                                <div class="evaluate_main_zj">
+                                    <h6>追加：</h6>
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务。</p>
+                                </div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容5 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容6 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容7 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 评价内容8 -->
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    131****0029
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!非常满意的一次服务，下次有需要还会再来的，好评哦，希望你们越来越好!</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <img src="images/cem_detail_star_img5.jpg"/>
+                                    <p>2016 - 12- 28  16:26</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+
+                            <!-- 分页 -->
+                            <div class="paging">
+                                <ul>
+                                    <li class="jiant jianled"><a href="#"><i class="iconfont icon-arrow-left-copy"></i></a></li>
+                                    <li class="numled"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">6</a></li>
+                                    <li><a href="#">7</a></li>
+                                    <li class="dian">...</li>
+                                    <li><a href="#">99</a></li>
+                                    <li><a href="#">100</a></li>
+                                    <li class="jiant"><a href="#"><i class="iconfont icon-arrow-left-copy1"></i></a></li>
+                                    <li class="tzd">跳转到：</li>
+                                    <li class="intext"><input class="tex" type="text" value="" /></li>
+                                    <li class="go"><a href="#">GO</a></li>
+                                </ul>
+                            </div><!-- paging 分页 End -->
+
+                        </div><!-- cem_details_remark 评价 End -->
+                    </li>
+                </ul>
+            </div>
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <!--陵园动态-->
+            <div class="policies cem_margin_bottom">
+                <h2>陵园动态</h2>
+                <ul>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重</a></li> 
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿陵园召开</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                </ul>
+            </div><!-- policies 惠民政策 End-->
+
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <img src="images/advertising_img1.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <a href="#"><img src="images/advertising_img.jpg"/></a>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--惠民政策-->
+            <div class="policies">
+                <h2>惠民政策</h2>
+                <ul>
+                    <li><a href="#">北京墓地可以用多少年？北京墓地年限问题。</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重</a></li>
+                    <li><a href="#">北京天寿首届清明民俗文化节将在天寿陵园召开</a></li>
+                    <li><a href="#">铭记历史缅怀先烈  北京天寿陵园隆重举行</a></li>
+                </ul>
+            </div><!-- policies 惠民政策 End-->
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+
+    <!-- 底部footer部分 -->
+    <div class="footer clearfix">
+        <div class="contain">
+
+            <!-- 底部导航+联系我们 -->
+            <div class="footer_main clearfix">
+
+                <!-- 底部导航 -->
+                <div class="footer_nav clearfix">
+                    <ul class="first">
+                        <h1>殡葬文化</h1>
+                        <li><a href="#">殡葬吉日</a></li>
+                        <li><a href="#">墓地风水</a></li>
+                        <li><a href="#">碑文挽联</a></li>
+                    </ul>
+                    <ul>
+                        <h1>购墓指南</h1>
+                        <li><a href="#">购墓须知</a></li>
+                        <li><a href="#">选墓技巧</a></li>
+                        <li><a href="#">购墓流程</a></li>
+                    </ul>
+                    <ul>
+                        <h1>常见问题</h1>
+                        <li><a href="#">墓型选择</a></li>
+                        <li><a href="#">公墓年限</a></li>
+                        <li><a href="#">鲜花祭品</a></li>
+                    </ul>
+                    <ul>
+                        <h1>平台保障</h1>
+                        <li><a href="#">免责条款</a></li>
+                        <li><a href="#">隐私保护</a></li>
+                        <li><a href="#">法律声明</a></li>
+                    </ul>
+                </div><!-- footer_nav底部导航结束 -->
+
+                <!-- 公众号 -->
+                <div class="wechat">
+                    <img src="images/footer_wechat.jpg" align="微信号" />
+                    <h2>91忆语</h2>
+                    <p>91搜墓网微信公众号</p>
+                </div><!-- contact联系我们结束 -->
+            </div><!-- footer_main底部导航+联系我们结束 -->
+            
+        </div><!-- contain -->
+    </div><!-- footer底部footer部分结束 -->
+
+    <!-- 友情链接 -->
+    <div class="blogroll">
+        <div class="contain clearfix">
+            <h3>友情链接：</h3>
+            <ul>
+                <li><a href="#">广东公墓</a></li>
+                <li><a href="#">上海墓地网站</a></li>
+                <li><a href="#">北京墓地网</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">殡葬人才网</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">广东公墓</a></li>
+                <li><a href="#">上海墓地网站</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">殡葬人才网</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">殡葬人才网</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">天堂家园</a></li>
+                <li><a href="#">风水殡葬学</a></li>
+                <li><a href="#">九宫风水网</a></li>
+                <li><a href="#">网上纪念馆</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">网上纪念馆</a></li>
+                <li><a href="#">广东公墓</a></li>
+                <li><a href="#">上海墓地</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">网上纪念馆</a></li>
+            </ul>
+        </div>
+    </div><!-- blogroll友情链接结束 -->
+
+    <!-- 版权 -->
+    <div class="copyright">
+        <ul>
+            <li><a href="aboutus.html">关于我们</a></li>
+            <li><a href="help_contactus.html">联系我们</a></li>
+            <li><a href="websitemap.html">网站地图</a></li>
+            <li><a href="#">加盟合作</a></li>
+            <li><a href="#">手机站</a></li>
+            <li>热线：<span>400-618-9191</span></li>
+        </ul>
+        <p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;91搜墓网版权所有</p>
+        <p>CopyRight (C)2015-2016 Huigeyuan Technology Allrights</p>
+    </div><!-- copyright版权结束 -->
+
+    <!-- 返回顶部工具条 -->
+    <div class="toolbar">
+        <ul>
+            <li class="personal">
+                <a href="#">
+                    <i class="toolbar_personal_icon"></i>
+                    <p>我的</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="toolbar_shoping_icon"></i>
+                    <p>购<br/>物<br/>车</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="toolbar_collect_icon"></i>
+                    <p>收藏</p>
+                </a>
+            </li>
+            <li class="toolbar_weixin">
+                <a href="#">
+                    <i class="toolbar_weixin_icon"></i>
+                    <p>微信</p>
+                </a>
+                <span class="toolbar_weixin_img"></span>
+            </li>
+            <li class="toolbar_service">
+                <a href="#">
+                    <i class="toolbar_service_icon"></i>
+                    <p>客服</p>
+                </a>
+                <div class="toolbar_service_main">
+                    <a href="#">九儿</a>
+                    <a href="#">小一</a>
+                    <a href="#">小木</a>
+                </div>
+            </li>
+            <li id="backTop" class="top">
+                <a href="javascript:void(0)">
+                    <i class="toolbar_top_icon"></i>
+                    <p>TOP</p>
+                </a>
+            </li>
+        </ul>
+    </div><!-- toolbar返回顶部工具条结束 -->
+
+<!-- 搜索提示 -->
+<script type="text/javascript" src="javascripts/hit.js"></script>
+<!-- 返回顶部JS -->
+<script src="javascripts/backtop.js"></script>
+<!-- 环境照片点击小图弹出大图jquery.fancybox.js -->
+<script src="javascripts/jquery.fancybox.js"></script>
+<!-- JS -->
+<script src="javascripts/common.js"></script>
+<script type="text/javascript">
+    //详情跟随顶部导航
+    var mt = 0;
+    window.onload = function () {
+        var mydiv = document.getElementById("cem_detail_title");
+        var mt = mydiv.offsetTop; //当前对象到距离上方或上层控件的位置
+        var tt = document.documentElement.scrollTop || document.body.scrollTop;
+        if (tt > mt) {
+            mydiv.style.position = "fixed";
+            mydiv.style.margin = "0";
+            mydiv.style.top = "0";
+        }
+        window.onscroll = function () {
+            var t = document.documentElement.scrollTop || document.body.scrollTop;
+            if (t > mt) {
+                mydiv.style.position = "fixed";
+                mydiv.style.margin = "0";
+                mydiv.style.top = "0";
+            }
+            else {
+                mydiv.style.position = "static";
+            }
+        }
+    }
+
+    // 环境照片点击小图弹出大图
+    $('.fancybox').fancybox();
+</script>
+</body>
+</html>
+    

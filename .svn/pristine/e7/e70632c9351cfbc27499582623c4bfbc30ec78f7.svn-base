@@ -1,0 +1,10 @@
+<!-- 返回顶部JS -->
+<script src="_WEB_/js/backtop.js"></script>
+<!-- JS -->
+<script src="_WEB_/js/common.js"></script>
+
+<!--jquery.lazyloadxt部分 -->
+<script type="text/javascript" src="_WEB_/js/jquery.lazyload.min.js"></script>
+<script type="text/javascript">
+    $("img").lazyload({effect: "fadeIn"});
+</script>

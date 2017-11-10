@@ -1,0 +1,154 @@
+
+$(document).ready(function(){
+    //选择城市
+    $(".city").mouseover(function (){  
+        $(".city_list").css("display","block");
+    }).mouseout(function (){  
+        $(".city_list").hide();
+    }); 
+
+    $(".city_list ul li").click(function(){
+        $(".city_list").hide();
+    })
+
+    //选择搜索内容
+    $(".search_sel_box").mouseover(function (){  
+        $(".search_sel_list").css("display","block");
+    }).mouseout(function (){  
+        $(".search_sel_list").hide();
+    }); 
+
+    $(".search_sel_list ul li").click(function(){
+        $(".search_sel_list").hide();
+    })
+
+    //微信
+    $(".toolbar_weixin").mouseover(function (){  
+        $(".toolbar_weixin_img").css("display","block");
+    }).mouseout(function (){  
+        $(".toolbar_weixin_img").hide();
+    }); 
+
+    //客服
+    $(".toolbar_service").mouseover(function (){  
+        $(".toolbar_service_main").css("display","block");
+    }).mouseout(function (){  
+        $(".toolbar_service_main").hide();
+    }); 
+
+    //tab切换
+    jQuery.jqtab = function(tabtit,tabcon) {
+        $(tabcon).hide();
+        $(tabtit+" li:first").addClass("thistab").show();
+        $(tabcon+":first").show();
+    
+        $(tabtit+" li").click(function() {
+            $(tabtit+" li").removeClass("thistab");
+            $(this).addClass("thistab");
+            $(tabcon).hide();
+            var activeTab = $(this).find("a").attr("tab");
+            $("#"+activeTab).fadeIn();
+            return false;
+        });
+        
+    };
+    /*调用方法如下：*/
+    $.jqtab("#cem_detail_title",".cem_details_box");
+    $.jqtab("#login_title",".login_box");
+
+    //首页js
+
+    //banner信息关闭
+    $(".close").click(function(){
+        $(this).parent().parent('li').hide();
+    })
+
+
+    // 节地生态葬左右切换
+    $(".drama-slide li.next a").click(function () {
+        var b = $(".drama-poster ul>li:first");
+        $(".drama-poster ul>li:last").after(b);
+    });
+    $(".drama-slide li.prev a").click(function () {
+        var c = $(".drama-poster ul>li:last");
+        $(".drama-poster ul>li:first").before(c);
+    }) 
+
+
+    //陵园墓地
+    $(".cemetery_list_box").mouseover(function (){  
+         $(this).siblings("span").addClass("bg");
+    }).mouseout(function (){  
+        $(".bg").hide();
+    }); 
+
+    
+    //陵园详情js
+
+    //匿名评价
+    $(".niname").click(function (){  
+         $(this).find("span").toggleClass("niname_hover");
+    })
+
+    //我要评价
+    $(".remark_a").click(function (){  
+        $(".tooltip_box").css("display","block");
+        $(".tooltip").css("display","block");
+    })
+    $(".tooltip_remark_close").click(function (){  
+        $(".tooltip_box").hide();
+        $(".tooltip").hide();
+    })
+
+    //殡葬百科
+
+    //导航下拉菜单
+    $(".fe_nav li").hover(function(){
+        $(this).find(".fe_subnav").slideDown("fast");
+        },function(){
+        $(this).find(".fe_subnav").slideUp("fast");
+    });
+
+    //陵园订单
+
+    //提示框
+    // $(".cemetery_orders_delete_btn").click(function(event){
+    //     $(".tooltip_box").css({"display":"block"});
+    //     $(".tooltip_cemetery_orders").css({"display":"block"});
+    // });
+    // $(".tooltip_cemetery_orders_cloce").click(function(event){
+    //     $(".tooltip_box").css({"display":"none"});
+    //     $(".tooltip_cemetery_orders").css({"display":"none"});
+    // });
+
+
+    //历史上的今天
+
+    //加载更多
+    $(".history_more_btn").click(function(event){
+        $(".history_more").css({"display":"block"});
+    });
+
+    //加盟合作
+    //提示框
+    $(".leag_joinbtn").click(function(event){
+        $(".tooltip").css({"display":"block"});
+        $(".tooltip_box").css({"display":"block"});
+    });
+    $(".tooltip_cloce").click(function(event){
+        $(".tooltip").css({"display":"none"});
+        $(".tooltip_box").css({"display":"none"});
+    });
+    
+
+    //登录
+    //提示框
+    $(".login_btn_dl").click(function(event){
+        $(".tooltip").css({"display":"block"});
+        $(".tooltip_box").css({"display":"block"});
+    });
+    $(".tooltip_cloce").click(function(event){
+        $(".tooltip").css({"display":"none"});
+        $(".tooltip_box").css({"display":"none"});
+    });
+});

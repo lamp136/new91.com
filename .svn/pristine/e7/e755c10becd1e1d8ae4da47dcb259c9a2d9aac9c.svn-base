@@ -1,0 +1,470 @@
+{extend name='extra@main' /}
+{block name='popups'}
+<!-- 我要评价 -->
+<form method="post" id='form-data'>
+    <div class="tooltip_box"></div>
+    <div class="tooltip tooltip_remark">
+        <h2>我的评价</h2>
+        <div class="pf clearfix">
+            <span class="title">评分：</span>
+             <ul>
+                <li>环境：<span id='hj'></span></li>
+                <li >风水：<span id='fs'></span></li>
+                <li>交通：<span id='jt'></span></li>
+                <li>服务：<span id='fw'></span></li>
+            </ul>
+        </div>
+        <div class="ms">
+            <span class="title">描述：</span>
+            <textarea class="ms_tarea" name='info[content]' placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+        </div>
+        <div class="remark_btn">
+            <a href="javascript:;" id='remark_sub'>提交评价</a>
+        </div>
+        <input type="hidden" name='info[environment]' value=""> 
+        <input type="hidden" name='info[price]' value=""> 
+        <input type="hidden" name='info[service]' value=""> 
+        <input type="hidden" name='info[traffic]' value=""> 
+        <input type="hidden" name='info[store_id]' value='{$data.id}'>
+        <div class="tooltip_remark_close"></div>
+    </div><!-- tooltip_remark 我要评价 End -->
+</form>
+{/block}
+{block name='body'}
+    
+<!-- contain -->
+<div class="contain contain_pdsize">
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <ul>
+            <li><a href="/" title='91搜墓网'>首页</a></li>
+            <li class="jt">></li>
+            <li><a href="{:url('rite/Rite/lists')}" title="殡葬礼仪">殡葬礼仪</a></li>
+            <li class="jt">></li>
+            <li>{$data.name}</li>
+        </ul>
+    </div><!-- breadcrumb End -->
+
+    <!-- 殡葬礼仪详情介绍 -->
+    <div class="etiquette_detail_main clearfix">
+        <!-- 图片 -->
+        <div class="etiquette_detail_main_img">
+            <img src="{$data.thumb_image}" alt="{$data.name}" />
+        </div>
+        <!-- 详情内容介绍 -->
+        <div class="etiquette_detail_main_text">
+            <h2>{$data.name}</h2>
+            <p class="clearfix"><span class="fwqy">服务区域：</span><span class="dq">上海市、浙江省、徐州市、武汉市、浙江省、徐州市、浙江省、武汉市、浙江省、徐州市、</span></p>
+            <p><span>服务热线：</span><font>{$data.phone}</font></p>
+            <p><span>地&nbsp;&nbsp;&nbsp;&nbsp;址：</span>{$data.address}</p>
+            <p class="num"><span class="first">浏&nbsp;览&nbsp;量：</span>{$data.actual_hits + $data.hits} <span>预约量：</span>{$data.order_grave_count}<span>客户评价：</span>{$aveScore.commentNum}</p>
+        </div>
+        <!-- 立即预约 在线咨询 -->
+        <div class="etiquette_detail_main_btn">
+            <a class="buttonlv" href="{:url('rite/Rite/reservation',['id'=>$data.id,'type'=>1])}">立即预约</a>
+            <a class="buttonbai" target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439">在线咨询</a>
+        </div>
+    </div><!-- cemetery_detail_main 殡葬礼仪详情介绍 End -->
+    
+    <!-- 左侧内容 -->
+    <div class="leftcontain">
+        <div class="cem_detail">
+            <!-- 定位导航头部 -->
+            <div class="cem_detail_title" id="cem_detail_title">
+                <ul>
+                    <li class="thistab"><a href="javascript:void(0);" tab="tabcem1">服务套餐</a></li>
+                    <li><a href="javascript:void(0);" tab="tabcem2">服务商简介</a></li>
+                    <li><a href="javascript:void(0);" tab="tabcem3">客户评价</a></li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <ul>
+                <!-- 服务套餐 -->
+                {notempty name='$combo'}
+                <li  class="cem_details_box etiquette_detail_package" id="tabcem1">
+                    <!-- 筛选条件 -->
+                    <div class="sifting">
+
+                        <!-- 筛选条件结果显示 -->
+                        <div class="criteria">
+                            <ul>
+                                <li class="sif">所有分类</li>
+                                <li>></li>
+                                
+                                
+                                <li class="number">共<span> {$comboNum} </span>结果</li>
+                            </ul>
+                        </div>
+
+                        <!--服务类别 -->
+                        <div class="sifting_main clearfix">
+                            <span>服务类别：</span>
+                            <ul id='combo_type'>
+                                <li class="led"><a href="javascript:void(0);" combo_type=''>不限</a></li>
+                                {volist name='Think.config.combo_type' id='vo'}
+                                <li ><a href="javascript:void(0);" combo_type='{$key}'>{$vo}</a></li>
+                                {/volist}
+                            </ul>
+                        </div>
+
+                        <!-- 价格区间 -->
+                        <div class="sifting_main clearfix">
+                            <span>价格区间：</span>
+                            <ul id='combo_price'>
+                                <li class="led"><a href="javascript:void(0);" combo_price=''>不限</a></li>
+                                {volist name='Think.config.combo_price' id='vo'}
+                                <li ><a href="javascript:void(0);" combo_price='{$vo}'>{$key}</a></li>
+                                {/volist}
+                            </ul>                   
+                        </div>
+                        
+                    </div><!-- sifting筛选条件结束 -->
+                    
+                    <!-- 服务套餐列表 -->
+                    <div class="package">
+                        <ul class="packageul clearfix" id='combo_content'>
+                        {volist name='combo' id='vo'}
+                            <li {if ($key+1)%3==0} class='last' {/if}>
+                                <a href="{:url('rite/Rite/comboDetail',['id'=>$vo.id])}" title='{$vo.combo_name}'><img src="{$vo.thumb_image}" alt="{$vo.combo_name}"/></a>
+                                <div class="txt">
+                                    <h2><a href="{:url('rite/Rite/comboDetail',['id'=>$vo.id])}" title='{$vo.combo_name}'>{$vo.combo_name}</a></h2>
+                                    <p>参考价格：<strong>{$vo.platform_price}</strong><span class="yuan">元 / 场</span></p>
+                                    <div class="btn clearfix">
+                                        <a href="{:url('rite/Rite/reservation',['id'=>$vo.id,'type'=>2])}">立即预约</a>
+                                        <a class="zxzx" target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439">在线咨询</a>
+                                    </div>
+                                </div>
+                            </li>
+                        {/volist}
+                        </ul>
+
+                        <!-- 分页 -->
+                        <div class="paging">
+                            <div class="comboPage">
+                                
+                            </div> 
+                        </div><!-- paging 分页 End -->
+                    </div><!-- package 服务套餐列表 End -->
+                </li>
+                {else/}
+                    <li class="cem_details_box etiquette_detail_package" id="tabcem1"><div class="package">暂无数据</div></li>
+                {/notempty}
+                <!-- 服务商简介 -->
+                <li class="cem_details_box" id="tabcem2">
+                    <!-- 服务商简介内容 -->
+                    <div class="cem_detail_intro">
+                        {$data.content}
+                    </div><!-- cem_detail_intro 陵园简介 End -->
+                </li>
+                <!-- 客户评价 -->
+                <li class="cem_details_box" id="tabcem3">
+                    <!-- 评价 -->
+                    <div class="cem_details_remark">
+
+                        <!-- 与描述相符+星星 -->
+                        <div class="cem_details_star clearfix">
+                            <div class="coincide">
+                                <p>综合评价</p>
+                                <h2>{$aveScore.total}<span>分</span></h2>
+                            </div>
+                            <ul>
+                                <li>环境：<span class="pfl" data-value="{$aveScore.environment}"></span>{$aveScore.environment}分</li>
+                                <li class="last">风水：<span class="pfl" data-value="{$aveScore.price}"></span>{$aveScore.price}分</li>
+                                <li>交通：<span class="pfl" data-value="{$aveScore.traffic}"></span>{$aveScore.traffic}分</li>
+                                <li class="last">服务：<span class="pfl" data-value="{$aveScore.service}"></span>{$aveScore.service}分</li>
+                            </ul>
+                            <div class="remark_btn">
+                                <a class="remark_a" href="javascript:void(0);">我要评价</a>
+                            </div>
+                        </div>
+
+                        <!-- 评价数量 -->
+                        <div class="cem_details_evaluate_title clearfix">
+                            <ul>
+                                <li class="led"><img src="_WEB_/images/evaluate_title1.png"/>全部 {$aveScore.commentNum}</li>
+                            </ul>
+                        </div>
+
+                        <!-- 评价内容1 -->
+                        <div id='comment_div'>
+                        {volist name='comment' id='vo'}
+                        <div class="evaluate_main">
+                            <!-- 用户 -->
+                            <div class="evaluate_main_yh">
+                                {$vo.mobile}
+                            </div>
+                            <!-- 评价 -->
+                            <div class="evaluate_main_pj">
+                                <p>{$vo.content}</p>
+                            </div>
+                            <!-- 星星 -->
+                            <div class="evaluate_main_xing">
+                                <!-- <img src="_WEB_/images/cem_detail_star_img5.jpg"/> -->
+                                <span class="pfl" data-value="{$vo.ave}"></span>
+                                <p>{$vo.comment_time}</p>
+                            </div>
+                            <div class="clear"></div>
+                        </div><!-- evaluate_main 评价内容 End -->
+                        {/volist}
+                        </div>
+                        <!-- 分页 -->
+                        <div class="paging">
+                            <div class="commentPage">
+                                
+                            </div> 
+                        </div><!-- paging 分页 End -->
+
+                    </div><!-- cem_details_remark 评价 End -->
+                </li>
+            </ul>
+        </div>
+    </div><!-- leftcontain End -->
+    
+    <!-- 右侧内容 -->
+    <div class="rightcontain">
+        
+        <!-- 附近陵园推荐 -->
+        <div class="recommend cem_margin_bottom">
+            <h2>附近陵园推荐</h2>
+            <ul>
+            {volist name='randcemetery' id='vo'}
+                <li>
+                    <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'>
+                        <img src="{$vo.thumb_image}" alt="{$vo.name}" />
+                        <p>{$vo.name}</p>
+                    </a>
+                </li>
+            {/volist}
+            </ul>
+        </div><!-- recommend 附近陵园推荐 End -->
+        
+        <!--广告位-->
+        <div class="advertising cem_margin_bottom">
+            <a href="{:url('help/Help/joinus')}"><img src="_WEB_/images/advertising_img.jpg"/></a>
+        </div> <!-- advertising 广告位 End-->
+        
+        <!--白事常识-->
+        <div class="policies">
+            <h2>白事常识</h2>
+            <ul>
+            {volist name='$bscs' id='vo'}
+                <li><a href="{:url('article/Article/detail',['id'=>$vo.id])}" title='{$vo.title}'>{$vo.title}</a></li>
+            {/volist}
+            </ul>
+        </div><!-- policies 白事常识 End-->
+
+    </div><!-- leftcontain End -->
+
+    <div class="clear"></div>
+    <input type="hidden" class='comboUrl' value="{:url('rite/Rite/selectCombo')}"> 
+    <input type="hidden" class='selCommentUrl' value="{:url('rite/Rite/selectComment')}"> 
+    <input type="hidden" class='addCommentUrl' value="{:url('rite/Rite/addcomment')}"> 
+    <input type="hidden" class="comtCountPage" value="{$comtCountPage}">
+    <input type="hidden" class="comboCountPage" value="{$comboCountPage}">
+    <input type="hidden" class="storeId" value="{$data.id}">
+</div><!-- contain End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/jquery.page.js"></script>
+<script src="_WEB_/js/raty/jquery.raty.js"></script>
+<script type="text/javascript">
+//添加评星
+    $("#hj").raty({
+    click: function(t, e) {
+        $("input[name='info[environment]']").val(t);
+    }
+}), $("#fs").raty({
+    click: function(t, e) {
+        $("input[name='info[price]']").val(t);
+    }
+}), $("#jt").raty({
+    click: function(t, e) {
+        $("input[name='info[traffic]']").val(t);
+    }
+}), $("#fw").raty({
+    click: function(t, e) {
+        $("input[name='info[service]']").val(t);
+    }
+});
+
+//提交评论
+$('#remark_sub').click(function(){
+    var url = $('.addCommentUrl').val();
+    var dataForm = new FormData(document.getElementById("form-data"));
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: dataForm,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(d) {
+            alert(d.msg);
+            window.location.reload();
+        }
+    });
+});
+
+//评分列表
+$('.pfl').each(function(){
+    var pfvalue = $(this).attr('data-value');
+    $(this).raty({readOnly: true, score: pfvalue});
+});
+
+ /*评论分页开始*/
+var totalPage = $('.comtCountPage').val();
+var storeId = $('.storeId').val();
+
+//点击分页调用
+$(".commentPage").createPage({
+    pageCount:totalPage,
+    current:1,
+    backFn:function(p){
+        commentHtml(p,storeId);
+        $(document).scrollTop(500);
+    }
+});
+//评论内容（HTML）
+function commentHtml(p,storeId){
+    var url = $('.selCommentUrl').val();
+    $.ajax({
+        url:url,
+        type:'post',
+        data:{pageNum:p,storeId:storeId},
+        success:function(d){
+            var result = eval("(" + d + ")");
+            var str = ' ';
+            if(result.flag==1 ){
+                var data = result.data;
+                $.each(data,function(index,item){
+                    str += "<div class='evaluate_main'><div class='evaluate_main_yh'>"+item['mobile']+"</div><div class='evaluate_main_pj'><p>"+item['content']+"</p></div><div class='evaluate_main_xing'><span class='pfl' data-value="+item['ave']+"></span><p>"+item['comment_time']+"</p></div><div class='clear'></div></div>";
+                });   
+            }else{
+                str = '施工中......';
+            }
+            $('#comment_div').empty().append(str);
+            //插入评价star
+            $('.pfl').each(function(){
+                var pfvalue = $(this).attr('data-value');
+                $(this).raty({readOnly: true, score: pfvalue});
+            });
+        }
+    });
+};
+/*评论分页结束*/
+
+/*套餐分页开始*/
+comboPage();
+
+//类型条件过滤
+$('#combo_type').find('li').click(function(){
+    var type = $(this).find('a').attr('combo_type');
+    var type_name = $(this).find('a').html();
+    $('#combo_type').find('.led').removeClass('led');
+    $(this).addClass('led');
+
+    var top_type = $('.criteria').find('#top_type');
+    if($(top_type).length==1){
+        $(top_type).remove();
+    }
+    if(type != ''){
+        $('.sif').next('li').after("<li class='if' id='top_type'>"+type_name+"<span></span></li>");
+    }
+    var price = $('#combo_price').find('.led').find('a').attr('combo_price');
+    comboHtml(1,storeId,type,price);
+    comboPage('false'); // false参数是为了防止分页的绑定事件重复创建,
+});
+
+//价格条件过滤
+$('#combo_price').find('li').click(function(){
+    var price = $(this).find('a').attr('combo_price');
+    var price_name = $(this).find('a').html();
+    $('#combo_price').find('.led').removeClass('led');
+    $(this).addClass('led');
+
+    var top_price = $('.criteria').find('#top_price');
+    if($(top_price).length==1){
+        $(top_price).remove();
+    }
+    if(price != ''){
+        $('.sif').siblings('.number').before("<li class='if' id='top_price'>"+price_name+"<span></span></li>");
+    }
+
+    var type = $('#combo_type').find('.led').find('a').attr('combo_type');
+    comboHtml(1,storeId,type,price);
+    comboPage('false'); // false参数是为了防止分页的绑定事件重复创建,
+});
+
+//顶部过滤
+$('.criteria').on('click','span',function(){
+    var category = $(this).parents('#top_type').attr('id');
+
+    if(category=='top_type'){
+        $('.criteria').find('#top_type').remove();
+        $('#combo_type').find('.led').removeClass('led');
+        var price = $('#combo_price').find('.led').find('a').attr('combo_price');
+        var type = '';
+    }else{
+        $('.criteria').find('#top_price').remove();
+        $('#combo_price').find('.led').removeClass('led');
+        var type = $('#combo_type').find('.led').find('a').attr('combo_type');
+        var price = '';
+    }
+    
+    comboHtml(1,storeId,type,price);
+    comboPage('false'); // false参数是为了防止分页的绑定事件重复创建,
+})
+
+//分页核心
+function comboPage(tag='true'){ 
+    var comboTotalPage = $('.comboCountPage').val();
+    var storeId = $('.storeId').val();
+    
+    $(".comboPage").createPage({
+        pageCount:comboTotalPage,
+        current:1,
+        tag:tag,
+        backFn:function(p){
+            var comboprice = $('#combo_price').find('.led').find('a').attr('combo_price');
+
+            var combotype = $('#combo_type').find('.led').find('a').attr('combo_type');
+            comboHtml(p,storeId,combotype,comboprice);
+            $(document).scrollTop(500);
+        }
+    });
+}
+
+//渲染数据
+function comboHtml(p,storeId,type,price){
+    var url = $('.comboUrl').val();
+    $.ajax({
+        url:url,
+        type:'post',
+        async: false,
+        data:{pageNum:p,storeId:storeId,type:type,price:price},
+        success:function(d){
+            var result = eval("(" + d + ")");
+            var str = ' ';
+            if(result.flag==1 ){
+                var data = result.data;
+
+                $.each(data,function(index,item){
+                    str += "<li";
+                    if(((index+1)%3)==0){
+                        str +=' class=last';
+                    }
+
+                    str += "><a href='/public/rite/combo/"+item['id']+"'><img src="+item['thumb_image']+" alt="+item['combo_name']+"/></a><div class='txt'><h2><a href='/public/rite/combo/"+item['id']+"' title="+item['combo_name']+">"+item['combo_name']+"</a></h2><p>参考价格：<strong>"+item['platform_price']+"</strong><span class='yuan'>元 / 场</span></p><div class='btn clearfix'><a href='javascript:void(0);'>立即预约</a><a class='zxzx' href=javascript:void(0);>在线咨询</a></div></div></li>";
+                });   
+            }else{
+                str = '施工中......';
+            }
+            $('#combo_content').empty().append(str);
+            $('.comboCountPage').val(result.countPage);
+            $('.number').find('span').html(result.comboNum);
+        }
+    });
+};
+</script>
+{/block}

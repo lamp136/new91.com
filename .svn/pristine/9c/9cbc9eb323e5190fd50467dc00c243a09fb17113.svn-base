@@ -1,0 +1,133 @@
+<?php
+namespace web\cemetery\controller;
+use think\Controller;
+use think\Db;
+use think\Cookie;//cookie类
+use web\extra\controller\Base;
+use web\extra\model\Store;
+
+class Cemetery extends Base
+{
+    /**
+     * 陵园列表
+     * @return void
+     */
+    public function index(){
+        $input = input();
+        $province = Cookie::get('ip_region_id');
+        $dataCount = 0;
+        $where['category_id'] = 37;
+        $where['province_id'] = $province;
+        $selectCity = 0;
+        if(!empty($input['city']) && $input['city'] != 0){
+            $selectCity = $input['city'];
+            $where['city_id'] = $selectCity;
+        }
+        $selectPrice = 0;
+        if(!empty($input['price']) && in_array($input['price'],config('price_range'))){
+            $selectPrice = $input['price'];
+            $priceRange = config('price_range');
+            $where['min_price'] = $this->betweenWhere($selectPrice,$priceRange);
+        }
+        $selectDist = 0;
+        if(!empty($input['dist']) && in_array($input['dist'],config('store_length'))){
+            $selectDist = $input['dist'];
+            $storeLength = config('store_length');
+            $where['distance'] = $this->betweenWhere($selectDist,$storeLength);
+        }
+        $rankList = Db::table(['__STORE__' => 's','__ORDER_GRAVE__' => 'o'])->field(['s.id','s.name','s.min_price','count(o.store_id)' => 'count'])->where('s.id = o.store_id and s.province_id = '.$province)->group('o.store_id')->order('count desc')->limit(6)->select();
+        // dump($rankList);exit;
+        $city = [];
+        $seo = $this->getseo(config('seo_type.cemetery_list'));
+        $dataCount = Db::name('store')->where($where)->count();
+        $storeList = Db::name('store')->where($where)->field('id,name,store_sn,image,thumb_image,address,min_price,label,actual_hits,hits,status')->paginate(10,false);
+        $city = Db::name('region')->where('pid',$province)->column('id,name');
+        $page = $storeList->render();
+        $this->assign([
+            'seo'         => $seo,
+            'rankList'    => $rankList,
+            'dataCount'   => $dataCount,
+            'countDist'   => count(config('store_length')),
+            'countRange'  => count(config('price_range')),
+            'selectPrice' => $selectPrice,
+            'selectCity'  => $selectCity,
+            'selectDist'  => $selectDist,
+            'input'       => $input,
+            'list'        => $storeList,
+            'page'        => $page,
+            'city'        => $city
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 获取where区间条件
+     * @param  array $selectData 筛选条件
+     * @param  array $conf 配置常量
+     * @return array
+     */
+    private function betweenWhere($selectData,$conf){
+        $cond = [];
+        $min = current($conf);
+        $max = end($conf);
+        if($selectData == $min){
+            $cond = ['elt',$min];
+        }else if($selectData == $max){
+            $cond = ['egt',$max];
+        }else{
+            $data = explode('-',$selectData);
+            if(is_array($data)){
+                $count = count($data);
+                if($count > 1){
+                    $cond = ['between',[(int)$data[0],(int)$data[1]]];
+                }
+            }
+        }
+
+        return $cond;
+    }
+
+    /**
+     * 详情
+     */
+    public function details(){
+        $input = input();
+        $id = $input['id'];
+        $data = [];
+        $tombZones = [];
+        $total = 0;
+        $seo = [];
+        if($id){
+            $data = Store::with(['tombs','celebrity','landscape'])->where('id',$id)->field('id,name,store_sn,image,thumb_image,address,min_price,label,actual_hits,hits,status,content,longitude,latitude,seo_title,seo_keywords,seo_description,member_status,province_id,city_id,service_time,distance,phone')->find()->toArray();
+            if(!empty($data['landscape'])){
+                foreach ($data['landscape'] as $key => $val) {
+                    unset($data['landscape'][$key]);
+                    $data['landscape']['info'][$val['tomb_zone_id']][] = $val['id'];
+                    $data['landscape']['list'][] = $val;
+                    $total += count($val['id']);
+                    $data['landscape']['total'] = $total;
+                }
+            }
+            $seo = [
+                'seo_title'       => empty($data['seo_title']) ? $data['name'] : $data['seo_title'],
+                'seo_keywords'    => $data['seo_keywords'],
+                'seo_description' => $data['seo_description']
+            ];
+            $tombZones = Db::name('TombZone')->where('store_id',$id)->column('id,zone_name');
+        }
+        $this->assign([
+            'seo'       => $seo,
+            'data'      => $data,
+            'tombZones' => $tombZones
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 预约看墓
+     * @return [type] [description]
+     */
+    public function appoint(){
+
+    }
+}

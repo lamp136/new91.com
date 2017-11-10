@@ -1,0 +1,26 @@
+
+//切换宜忌查询数据
+$('.sele_y').change(function(){
+    var yiji = $('.sele_y').val();
+    var url = $('.url').val();
+    if(yiji != 0){
+        $.ajax({
+            url:url,
+            type:'post',
+            data:{id:yiji},
+            dataType:'json',
+            success:function(d){
+                var data = d.data;
+                if(d.flag==1){
+                    var str ='';
+                    $.each(data,function(index,item){
+                        str += "<option value='" + item + "'>" + item + "</option>";
+                    })
+                    $('#explain').empty().append(str);
+                }
+            }
+        });
+    }else{
+        $('#explain').empty();
+    }
+});

@@ -1,0 +1,217 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">关闭原因</label>
+            <div class="layui-input-block">
+               <textarea placeholder="请输入订单关闭原因" class="layui-textarea" name="delete_reason"></textarea>
+            </div>
+        </div>
+
+        
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="bbs_update_button">提交</div>
+        </div>
+        <input type='hidden' name='id' class="deleteid" value="">
+
+    </form>
+</div>
+
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form id="quickForm" method="get" class="form-horizontal" autocomplete="off" action='{:url("notvip")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+    <table class="layui-table">
+        <colgroup>
+            <col width="10">
+            <col width="100">
+            <col width="120">
+            <col width="150">
+            <col width="150">
+            <col width="120">
+            <col width="100">
+            <col width="60">
+            <col width="180">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+                <th>预约人|电话</th>
+                <th>预约时间</th>
+                <th>商家名称</th>
+                <th>联系人|联系方式</th>
+                <th>下单时间</th>
+                <th>跟踪人</th>
+                <th>跟踪信息</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+         {volist name="data" id="vo"}
+
+            <tr>
+                <td><input type="checkbox"  data-name="choice_id" value=
+                "{$vo.id}" lay-skin="primary"></td>
+                <td>{$vo.reservation_person}<br>{$vo.reservation_phone}<br>{$vo.reservation_landline}</td>
+                <td><neq name="vo['created_time']" value="0">{$vo.appoint_time|date='Y-m-d',###}</neq></td>
+                <td>{$vo.store_name}</td>
+                <td>{$vo.findmember.contact_name}{$vo.findmember.mobile}<br>
+                {$vo.findmember.tel} 
+                </td>
+                <td>{$vo.created_time|date='Y-m-d',###}</td>
+                <td>
+                    {volist name="order_flow" id="flowmans"}
+                        {if condition="$key eq $vo['order_flow_id'] "}{$flowmans}{/if}
+                    {/volist}
+                </td>
+                <td><a href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'reVisit'))}">更新</a></td>
+                <td>
+                     <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-small  cooperatesuccess"  data-orderId="{$vo.id}"><a href="javascript:void(0)"><i class="layui-icon" title="成功">&#xe618;</i></a>
+                        </button>
+                     </div>
+                     <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-small layui-btn-normal appointagain"  data-orderId="{$vo.id}"><a href="javascript:void(0)" title="再次预约"><i class="layui-icon">&#x1002;</i></a>
+                        </button>
+                     </div>
+                     <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-small layui-btn-danger closedorder" delete-id="{$vo.id}"><a href="javascript:void(0)" title="删除"><i class="layui-icon">&#x1006;</i></a>
+                        </button>
+                     </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {$page}
+</div>
+
+{/block}
+{block name='optJS'}
+<script>
+//页面层
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  var start = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday:true
+    ,choose: function(datas){
+      end.min = datas; //开始日选好后，重置结束日的最小日期
+      end.start = datas //将结束日的初始值设定为开始日
+    }
+  };
+  
+  var end = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday: true
+    ,choose: function(datas){
+      start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+  };
+  
+});
+layui.use(['jquery', 'layer','form'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    $(".backspace").bind('click', function(){
+         layer.confirm('您确定要撤回删除该订单吗?', {icon: 3, title:'提示'}, function(index){
+         var id = $('.backspace').attr('data-orderId');
+         $.ajax({
+            url:"{:url('backspace')}",
+            data:'id='+id,
+            type:'post',
+            success:function(d){
+               var result = eval("("+d+")");
+                if(result.flag==1){
+                    layer.msg(result.msg);
+                    window.location.reload();
+                }
+            }
+         });
+         
+       });
+    });
+     //点击再次预约按钮
+    $('.appointagain').click(function(){
+        var orderid = $(this).attr('data-orderId');
+        var url="/orders/Tomb/appointagain/id/"+orderid+"";
+        window.location.href=url;       
+    });
+
+    $(".cooperatesuccess").bind('click', function(){
+         layer.confirm('确定非会员购墓成功?', {icon: 3, title:'提示'}, function(index){
+         var id = $('.cooperatesuccess').attr('data-orderId');
+         $.ajax({
+            url: "{:url('cooperatesuccess')}",
+            data: {'id':id},
+            type: 'post',
+            success: function(result) {
+                var d = eval("(" + result + ")");
+                if (d.flag == 1) {
+                    layer.msg(d.msg);
+                    window.location.reload();
+                } else {
+                    layer.msg(d.msg);
+                }
+            }
+         });
+       });
+    });
+
+    $(".closedorder").bind('click', function(){
+         layer.confirm('确定要将该订单删除吗?', {icon: 3, title:'提示'}, function(index){
+         var id = $(this).attr('delete-id');
+         $('.deleteid').val(id);
+         layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '500px',
+            title: '订单关闭原因',
+            content: $('#close_update_form')
+         })
+       });
+    });
+
+    $('#bbs_update_button').click(function(){
+        var From = $('#update_bbs_info_form').serialize();
+        $.ajax({
+            url: "{:url('cooperatefail')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var d = eval("(" + result + ")");
+                if (d.flag == 1) {
+                    layer.msg(d.msg);
+                    window.location.reload();
+                } else {
+                    layer.msg(d.msg);
+                }
+            }
+        });
+
+    });
+
+     
+});
+
+</script>
+{/block}
+

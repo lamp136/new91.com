@@ -1,0 +1,65 @@
+<?php
+namespace web\login\controller;
+use think\Controller;
+use web\extra\controller\Base;
+use think\Db;
+use think\Request;
+
+/**
+ * 登录注册控制器
+ * author heqingyu;
+ * date   17/7/13 13:30:00;
+ */
+class Login extends Base{  
+    /*
+     * 用户注册
+     * @param   void;
+     * @return  void;
+     */
+    public function register()
+    {
+        if(Request::instance()->isPost()){
+            
+        }else{
+            return $this->fetch();
+        }
+    }
+    /*
+     * 发送手机验证码
+     * @param   void;
+     * @return  string(json);
+     */
+    public function sendmsg(){
+        dump('ok');die;
+        $result = array('flag'=>0,'msg'=>'false');
+        $mobile = input('mobile');
+        
+        if(!empty($mobile)){
+            $data['mobile'] = $mobile;
+            $data['code'] = rand(100000,999999);
+            $data['type'] = config('msg_code')['register'];
+            $data['status'] = config('normal_status');
+            $data['created_time'] = time();
+            dump($data);die;
+            if(Db::name('MsgCode')->data($data)->insert()){
+                $result['flag'] = 1;
+                $result['msg'] = 'ok';
+            }
+        }
+        echo json_encode($result);
+    }
+    /*
+     * 用户登录
+     * @param   void;
+     * @return  void;
+     */
+    public function login()
+    {
+        if(Request::instance()->isPost()){
+            
+        }else{
+            return $this->fetch();
+        }
+    }
+    
+}

@@ -1,0 +1,397 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        <a href="{:url('store/Profiles/proRubbish')}">合同回收列表</a>
+        <a><cite>图片列表</cite></a>
+    </span>
+</div>
+
+<div class="layui-btn-group" style="float:left;margin-top:10px">
+    {php}
+        if(showHandle('store/Profiles/imageAdd')){
+    {/php}
+        <button class="layui-btn imageAdd">添加图片</button>
+    {php}
+        }
+    {/php}
+</div>
+<table class="layui-table">
+    <colgroup>
+        <col width="150">
+        <col width="200">
+        <col>
+    </colgroup>
+    <thead>
+      <tr> 
+        <th width='15%'>
+            <a href="javascript:;" id="delAll">取消</a>&nbsp;
+            <a href="javascript:;" id="antiAll">反选</a>&nbsp;
+            {php}
+                if(showHandle('store/Profiles/imageDel')){
+            {/php}
+                <input type="button" id="batchDel" value="删除" style="cursor:pointer;"/>
+            {php}
+                }
+            {/php}
+            
+        </th>
+        <th width="15%">图片名称</th>
+        <th width='15%'>图片类型</th>
+        <th width='20%'>缩略图片</th>
+        <th width='10%'>排序</th>
+        <th width='10%'>创建时间</th>
+        <th width='15%'>操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+        {volist name='data' id='vo'}
+            <tr>
+                <td style="text-align:center;">
+                    {eq name="vo.status" value="1"}<input name="ID_Dele" type="checkbox" value="{$vo.id}"/>{/eq}
+                </td>
+                <td>{$vo.image_name}</td>
+                <td>
+                    {switch name="vo.type"}
+                        {case value="1"}合同图片{/case}
+                        {case value="2"}价格图片{/case}
+                        {default /}联系开发人员
+                    {/switch}
+                </td>
+                <td>
+                    <img src='{$vo.thumb_image}' width="50px">
+                    <img width="23px" title="放大" src="/public/static/backstage/img/zoomIn.png" class="zoomIn"   data-image="{$vo.image}">
+                </td>
+                <td>{$vo.sort}</td>
+                <td>{$vo.created_time|date="Y-m-d",###}</td>
+                <td>
+                    {php}
+                        if(showHandle('store/Profiles/imageUpdate')){
+                    {/php}
+                        <a href="javascript:;" image_id="{$vo.id}" class=" layui-btn layui-btn-small imageUpdate">编辑</a>
+                    {php}
+                       }
+                        if(showHandle('store/Profiles/imageDel')){
+                    {/php}
+                        {eq name="vo.status" value="1"}
+                            <button href="javascript:;" image_id="{$vo.id}" class="layui-btn layui-btn-small imageDel">删除</button>
+                        {else/} 
+                            <button href="javascript:;" image_id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-normal imageStar">开启</button>
+                        {/eq}
+                            
+                    {php}
+                        }
+                    {/php}
+                </td>
+            </tr>
+        {/volist}
+    </tbody>
+</table>
+<div id="demo1" style="text-align:center"></div>
+{/block}
+
+{block name='layer'}
+<!-- 添加合同图片弹框 -->
+<div id='form-imageAdd' style="display:none">
+    <form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>图片类型</td>
+                    <td>  
+                        <input type="radio" name="info[type]" value="1" title="合同图片" checked>
+                        <input type="radio" name="info[type]" value="2" title="价格图片">
+                    </td>
+                </tr>
+                <tr>
+                    <td>图片名称</td>
+                    <td>  
+                        <input type="text" name="info[image_name]" placeholder="图片名称" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>上传图片</td>
+                    <td id='parents'>  
+                        <div>
+                            <a href='javascript:void(0)' class="hide" data-name="add_plus">[+]</a><input type="file" class="default" name="image[]">
+                        <div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>排序</td>
+                    <td>  
+                      <input type="text" name="info[sort]" placeholder="排序" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <input type='hidden' name="info[profiles_id]" value="{$proId}" >
+                        <button class="layui-btn" id='submitAdd' type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<!-- 编辑相册弹框 -->
+<div id='form-update' style="display:none">
+<form id='data-update' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+        <tbody>
+            <tr>
+                <td>图片类型</td>
+                <td>  
+                    <input type="radio" name="info[type]" value="1" title="合同图片">
+                    <input type="radio" name="info[type]" value="2" title="价格图片">
+                </td>
+            </tr>
+            <tr>
+                <td>图片名称</td>
+                <td>  
+                    <input type="text" name="info[image_name]" placeholder="图片名称" autocomplete="off" class="layui-input">
+                </td>
+            </tr>
+            <tr>
+                <td>图片</td>
+                <td>
+                    <img name='imageurl' src="" alt="" width="80px">
+                </td>
+            </tr>
+            <tr>
+                <td>上传图片</td>
+                <td>  
+                    <div>
+                        <input type="file" class="default" name="image">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>排序</td>
+                <td>  
+                    <input type="text" name="info[sort]" placeholder="排序" autocomplete="off" class="layui-input">
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2' style="text-align: center;">  
+                    <input type='hidden' name='id' value="">
+                    <button class="layui-btn" id='submit-update' type='button'>立即提交</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+</div>
+
+{/block}
+
+
+{block name='optJS'}
+<script>
+
+layui.use(['jquery','form','laypage'],function(){
+    var $= layui.jquery;
+    var form = layui.form();
+    var laypage = layui.laypage;
+            
+    var countPage = '{$countPage}';
+    laypage({
+        cont: 'demo1',
+        pages:countPage, //总页数
+        curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+            var page = location.search.match(/page=(\d+)/);
+            return page ? page[1] : 1;
+        }(), 
+        jump: function(e, first){ //触发分页后的回调
+            if(!first){ //一定要加此判断，否则初始时会无限刷新
+                location.href = '?page='+e.curr;
+            }
+        }
+    });
+    //摸态框
+    $('.imageAdd').click(function(){
+        document.getElementById("data-form").reset();
+        layer.open({
+            closeBtn: 2,
+            type: 1, 
+            area: '500px',
+            title:'添加合同图片',
+            content: $('#form-imageAdd')
+        }); 
+    });
+    //提交添加表单
+    $('#submitAdd').bind('click',function(){
+        layer.open({
+            type:3,
+            success: function(layero, index){ 
+                var dataFrom = new FormData(document.getElementById("data-form"));
+                $.ajax({
+                    url:"{:url('store/Profiles/imageAdd')}",
+                    type:'POST',
+                    data:dataFrom,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    success:function(d){
+                        if(d.flag==1){
+                            layer.closeAll(); //疯狂模式，关闭所有层
+                            layer.alert(d.msg);
+                            window.location.reload();
+                        }else{
+                            layer.msg(d.msg);
+                        }
+                    }
+                });
+            }
+        })
+    });
+     
+    //图片开启
+    $('.imageStar').click(function(){
+        var id = $(this).attr('image_id');
+        $.ajax({
+            url:"{:url('store/Profiles/imageStar')}",
+            type:'post',
+            data:{'id':id},
+            dataType:'json',
+            success : function(e){
+                layer.msg(e.msg,{icon:1});
+                window.location.reload();//刷新当前页面.
+            }
+        });
+    });
+     
+    //单个删除
+    $('.imageDel').click(function(){
+        var id = $(this).attr('image_id');
+        deleteImage(id);
+    });
+    //批量删除
+    $("#batchDel").click(function(){
+        var str = '';
+        $("input[name='ID_Dele']:checked").each(function(){
+            str += ($(this).val()+',');
+        });
+        str=str.substring(0,str.lastIndexOf(','));
+        if(str==''){
+            layer.msg('请选择一张图片');;return;
+        }
+        deleteImage(str);
+    });
+    //删除图片
+    function deleteImage(id){
+        layer.confirm('确定要删除？', {
+          btn: ['确定','取消'] //按钮
+        }, function(){
+          $.ajax({
+                url:"{:url('store/Profiles/imageDel')}",
+                type:'post',
+                data:{'id':id},
+                dataType:'json',
+                success : function(e){
+                    layer.msg(e.msg,{icon:1});
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+        }, function(){
+            layer.closeAll();
+        });
+    }
+
+    //编辑信息
+    $('.imageUpdate').click(function(){
+        var imageId = $(this).attr('image_id');
+        document.getElementById("data-update").reset();
+        $.ajax({
+            url:"{:url('store/Profiles/imageUpdate')}",
+            type:'get',
+            data:{id:imageId},
+            dataType:'json',
+            success:function(d){
+                if(d.flag==1){
+                    var data = d.data;
+                    $("#form-update input[name='info[type]'][value="+data.type+"]").attr('checked',true);
+                    $("#form-update input[name='info[image_name]'").val(data.image_name);
+                    $('#form-update img[name="imageurl"]').attr('src',data.thumb_image);
+                    $("#form-update input[name='info[sort]']").val(data.sort);
+                    $("#form-update input[name='id']").val(data.id);
+                    form.render();
+                    layer.open({
+                      closeBtn: 2,
+                      type: 1, 
+                      area: '500px',
+                      title:'编辑图片',
+                      content: $('#form-update'),
+                    }); 
+                }
+            }
+        });
+    });
+    //提交编辑信息
+    $('#submit-update').bind('click',function(){
+        layer.open({
+            type:3,
+            success: function(layero, index){
+                var dataFrom = new FormData(document.getElementById("data-update"));
+                $.ajax({
+                    url:"{:url('store/Profiles/imageUpdate')}",
+                    type:'POST',
+                    data:dataFrom,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    success:function(d){
+                        if(d.flag==1){
+                            layer.closeAll(); //疯狂模式，关闭所有层
+                            layer.msg(d.msg);
+                            window.location.reload();
+                        }else{
+                            layer.msg(d.msg);
+                        }
+                    }
+                });
+            }
+        })
+    });
+    
+    
+    //取消全选
+    $("#delAll").click(function(){ 
+        $("input[name='ID_Dele']").each(function(){
+            $(this).attr("checked",false);
+        }); 
+    });
+    //反选
+    $("#antiAll").click(function(){
+        $("input[name='ID_Dele']").each(function(){
+            this.checked=!this.checked;              
+        });
+    })
+    //放大图片
+    $('.zoomIn').click(function(){
+        var src = $(this).attr('data-image');
+        layer.open({
+            closeBtn: 2,
+            type: 1, 
+            area: ['500px','500px'],
+            title:'查看图片',
+            content: '<img id="zoomInImage" src="'+src+'" width="100%" height="100%"/>'
+        });
+    });
+    //批量添加
+    $('#parents').on('click','.hide',function(){
+        var a = $(this);
+        var li = $(this).parent();
+        if(a.html()=="[+]"){
+            var newli = li.clone();
+            $(newli).find('a').html("[-]");
+            $(newli).find('input').val("");
+            li.after(newli);
+        }else{
+            li.remove();
+        }
+    })
+});  
+</script>
+{/block}

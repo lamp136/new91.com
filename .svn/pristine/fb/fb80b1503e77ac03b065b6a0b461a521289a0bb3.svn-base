@@ -1,0 +1,80 @@
+{extend name='extra@main' /}
+{block name="body"}
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>添加合同</legend>
+</fieldset>
+<form class="layui-form" method="post" action="" >
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label" >商家名称</label>
+            <div class="layui-input-block">
+                <input name="show_store_name" autocomplete="off" placeholder="商家名称"  class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label">价格区间</label>
+            <div class="layui-input-inline">
+                <input name="min_price" placeholder="最低价" autocomplete="off" class="layui-input" type="text">
+            </div>
+            <div class="layui-form-mid">万—</div>
+            <div class="layui-input-inline">
+                <input name="max_price" placeholder="最高价" autocomplete="off" class="layui-input" type="text">
+            </div>
+            <div class="layui-form-mid">万</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label">商家地址</label>
+            <div class="layui-input-block">
+                <input name="address" lay-verify="title" autocomplete="off" placeholder="商家地址"  class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label">合同名称</label>
+            <div class="layui-input-block">
+                <input name="profile_name" lay-verify="title" autocomplete="off" placeholder="合同名称"  class="layui-input" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label">地区选项</label>
+            <div class="layui-input-inline">
+               <select name="city" lay-verify="required" required>
+                <option value=""></option>
+                <option value="0">北京</option>
+                <option value="1">上海</option>
+                <option value="2">广州</option>
+                <option value="3">深圳</option>
+                <option value="4">杭州</option>
+              </select>
+            </div>
+        </div>
+    </div>
+   
+       
+
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn sub-btn submit" lay-filter="test">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use('form',function(){
+            var form = layui.form();
+              //监听提交
+          form.on('submit(test)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+          });
+        });  
+    </script>
+{/block}

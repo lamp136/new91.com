@@ -1,0 +1,262 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        {if condition="$category_id eq $Think.config.category_cemetery_id"}
+            <a href="{:url('store/Basestore/cemetery')}">陵园列表</a>
+        {elseif condition="$category_id eq $Think.config.category_funeral_id"/}
+            <a href="{:url('store/Basestore/funeral')}">殡仪馆列表</a>
+        {/if}
+        <a href="{:url('store/Basestore/tombs',['id'=>$storeId,'store_name'=>urlencode($store_name),'category_id'=>$category_id])}">{$store_name}  墓地列表</a>
+        <a><cite>添加墓地</cite></a>
+    </span>
+</div>
+
+<form class="layui-form" method="post" style="margin-top: 8px;"  action="{:url('store/Basestore/addtombs')}" enctype="multipart/form-data" >
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red">*</span>墓型分类</label>
+            <div class="layui-input-inline" style="width:220px">
+                <select name="info[category_pid]" lay-filter="category_pid" lay-verify="required">
+                    <option value="0">--请选择--</option>
+                    {volist name="categorytomb" id="vo"}
+                        <option value="{$key}">{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width:220px;">
+                <select name="info[category_id]" lay-filter="category_id" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">选择园区</label>
+            <div class="layui-input-inline" style="width:220px">
+                <select name="info[tomb_zone_id]" lay-filter="tomb_zone_id" lay-verify="required">
+                    <option value="0">--请选择--</option>
+                    {volist name="tomb_zone" id="vo"}
+                        <option value="{$key}">{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red">*</span>墓位名称</label>
+            <div class="layui-input-block" style="width:220px">
+                <input name="info[tomb_name]" lay-verify="title" autocomplete="off" placeholder="墓位名称"  class="layui-input" required type="text">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">墓位图片</label>
+            <div class="layui-input-inline" style="width:220px">
+                <input type="file" class="default" name="image" style="width:260px;margin-top:10px">         
+            </div>
+            <div class="layui-form-mid layui-word-aux">图片尺寸 264*242px</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">墓位编号</label>
+            <div class="layui-input-inline" style="width:220px">
+                <input name="info[tomb_sn]" lay-verify="title" autocomplete="off" placeholder="墓位编号"  class="layui-input"  type="text">         
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">材质</label>
+            <div class="layui-input-block" style="width:220px">
+                <input name="info[material]" lay-verify="title" autocomplete="off" placeholder="材质"  class="layui-input"  type="text">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block"  style='width:220px;'>
+                <input name="info[store_sort]" lay-verify="phone" autocomplete="off" class="layui-input" placeholder="排序" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">大小</label>
+            <div class="layui-input-inline" style="width:220px">
+                <input name="info[size]" lay-verify="title" autocomplete="off" placeholder="大小"  class="layui-input" type="text">         
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">朝向</label>
+            <div class="layui-input-block" style="width:220px">
+                <input name="info[aspect]" lay-verify="title" autocomplete="off" placeholder="朝向"  class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">穴位</label>
+            <div class="layui-input-block" style="width:220px">
+                <input name="info[meridians]" lay-verify="title" autocomplete="off" placeholder="穴位"  class="layui-input" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">市场价</label>
+            <div class="layui-input-inline" style="width:220px">
+                <input name="info[maket_price]" lay-verify="title" autocomplete="off" placeholder="市场价"  class="layui-input" type="text">         
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red">*</span>参考价</label>
+            <div class="layui-input-block" style="width:220px">
+                <input name="info[sales_price]" lay-verify="title" autocomplete="off" placeholder="参考价"  class="layui-input" required type="text">
+            </div>
+        </div>
+         <div class="layui-inline">
+            <label class="layui-form-label"><span style="color:red">*</span>单位</label>
+            <div class="layui-input-inline" style="width:220px">
+                <select name="info[unit]" lay-filter="unit" lay-verify="required">
+                    <option value="0">--请选择--</option>
+                    {volist name="$Think.config.tombs_unit" id="vo"}
+                        <option value="{$vo}" {if condition="$key eq 1"}selected='selected'{/if}>{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">是否推荐</label>
+            <div class="layui-input-block" style='width:230px;'>
+                <input type="radio" name="info[store_show]" value="{$Think.config.normal_status}" title="是" checked>
+                <input type="radio" name="info[store_show]" value="{$Think.config.delete_status}" title="否" >
+            </div>
+        </div>
+        <div class="layui-inline" style='width:300px;'>
+            <label class="layui-form-label">是否显示</label>
+            <div class="layui-input-block" style='width:700px;'>
+                <input type="radio" name="info[status]" value="{$Think.config.normal_status}" title="显示" checked>
+                <input type="radio" name="info[status]" value="{$Think.config.delete_status}" title="不显示" >
+                <input type="radio" name="info[status]" value="{$Think.config.default_status}" title="已售完" >
+            </div>
+        </div> 
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-block">
+            <label class="layui-form-label"><span style="color:red">*</span>SEO标题</label>
+            <div class="layui-input-block">
+                <input name="info[seo_title]" lay-verify="title" autocomplete="off" placeholder="SEO标题"  class="layui-input" required type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-block">
+            <label class="layui-form-label"><span style="color:red">*</span>SEO关键字</label>
+            <div class="layui-input-block">
+                <input name="info[seo_keywords]" lay-verify="title" autocomplete="off" placeholder="SEO关键字"  class="layui-input" required type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label"><span style="color:red">*</span>SEO描述</label>
+        <div class="layui-input-block">
+          <textarea name="info[seo_description]" placeholder="SEO描述" class="layui-textarea" required></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" >
+        <label class="layui-form-label">墓位详情</label>
+        <div class="layui-input-block">
+          <textarea name="info[content]" id='demo1' placeholder="墓位详情" class="layui-textarea"></textarea>
+        </div>
+    </div>
+     <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+          <textarea name="info[remarks]" placeholder="备注" class="layui-textarea" ></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" name="store_sn" value="{$store_sn}">
+            <input type="hidden" name="info[store_id]" value="{$storeId}">
+            <input type="hidden" name="store_name" value="{$store_name}">
+            <input type="hidden" name="category_id" value="{$category_id}">
+            <button class="layui-btn sub-btn submit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+
+{block name='optJS'}
+<script>
+layui.use(['jquery', 'form','layedit'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+    var layedit = layui.layedit;
+    layedit.build('demo1'); //建立编辑器
+    
+    //输入框验证只能输入数字和小数点
+    $("input[name='info[maket_price]']").keyup(function(){
+        var obj = this;
+        checkNum(obj);
+    });
+    $("input[name='info[sales_price]']").keyup(function(){
+        var obj = this;
+        checkNum(obj);
+    });
+    
+    //输入框验证只能输入数字和小数点
+    function checkNum(obj){
+        obj.value = obj.value.replace(/[^\d.]/g, "");//清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/^\./g, "");//验证第一个字符是数字而不是.
+        obj.value = obj.value.replace(/\.{2,}/g, ".");//只保留第一个. 清除多余的.
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g,"").replace("$#$", ".");
+    }
+
+    //表单验证
+    $('.submit').click(function(){ 
+        if($("select[name='info[category_pid]']").val()==0){
+            layer.msg('请选择一个墓型分类');
+            return false;
+        }
+        if($("select[name='info[unit]']").val()==0){
+            layer.msg('请选择一个单位');
+            return false;
+        }
+
+        return true;
+    });
+
+    //获取墓型分类
+    form.on('select(category_pid)', function(data){
+        var category_pid = data.value;
+        $.ajax({
+            url:"{:url('store/Basestore/gettombs')}",
+            type: "POST", // 请求方式
+            data: {'category_pid':category_pid},
+            success:function(d){
+                var result = eval("(" + d + ")");
+                // var str = '<option value="">--请选择--</option>';
+                var str = '';
+                if(result.flag == 1){
+                    var data = result.data;
+                    for(var i in data){
+                        str += "<option value="+i+">"+data[i]+"</option>";
+                    }
+                    $("select[name='info[category_id]']").empty().append(str);
+                }else{
+                    str = "<option value="+category_pid+">--请选择--</option>"
+                    $("select[name='info[category_id]']").empty().append(str);
+
+                }
+                form.render();
+            }
+        });
+    })
+});
+
+
+</script>
+{/block}

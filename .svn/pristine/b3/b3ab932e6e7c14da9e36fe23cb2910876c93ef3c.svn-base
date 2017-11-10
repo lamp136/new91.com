@@ -1,0 +1,126 @@
+{extend name='extra@main' /}
+{block name="body"}
+<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        <a><cite>登陆日志</cite></a>
+    </span>
+</div>
+
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+ 
+    <span class="layui-btn delall" style="float:right;margin-top:-55px;margin-right:10px;margin-bottom:10px;">
+            <i class="layui-icon" >清空</i>
+    </span>
+        
+    <table class="layui-table">
+        <colgroup>
+            <col width="10%">
+            <col width="25%">
+            <col width="20%">
+            <col width="30%">
+            <col width="20%">
+         
+        </colgroup>
+        <thead>
+          <tr> 
+            <th>用户名</th>
+            <th>登录时间</th>
+            <th>浏览器标识</th>
+            <th>IP</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+            {volist name="logs"  id="vo"}
+                <tr>
+                    <td>{$order_flow[$vo.admin_id]}</td>
+                    <td>{$vo.login_time}</td>
+                    <td>{$vo.user_agent}</td>
+                    <td>{$vo.login_ip|long2ip}</td>
+                    <td>
+                        <a href="javascript:void(0)"  data-id="{$vo.id}" title="删除" class="layui-btn layui-btn-small layui-btn-danger  delbill"><i class="layui-icon" >删除</i></a>
+
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {$page}
+</div>
+{/block}
+
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'form','laydate','laypage'],function(){
+         var $= layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form();
+            var laypage = layui.laypage;   
+            // 清空
+        $('.delall').click(function(){
+            layer.confirm('确定清空全部数据?', {icon: 3, title:'提示'}, function(index){
+                 var act = 'delAll';
+                $.ajax({
+                    url: "{:url('delLoginlogs')}",
+                    type: 'post',
+                    data: {
+                        act:act,
+                    },
+                    success: function (d) {
+                        var result = eval("(" + d + ")");
+                         if (result.flag == 1) {
+                             layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                              })
+                        } else {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                             })
+                        }
+                    }
+                });
+            });
+        });
+
+        // 删除
+        $('.delbill').click(function(){
+            var logsId = $(this).attr('data-id');
+            var act = 'del';
+            //获取要编辑的信息
+            $.ajax({
+                url: "{:url('delLoginlogs')}",
+                type: 'POST',
+                data: {
+                    id:logsId,
+                    act:act,
+                },
+                datatype:'json',
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                   if (result.flag == 1) {
+                         layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+                },
+            });
+        });
+        }); 
+    </script>
+{/block}

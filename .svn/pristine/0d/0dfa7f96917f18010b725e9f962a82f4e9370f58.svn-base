@@ -1,0 +1,64 @@
+var flag = true;
+$('.subscribetomb .yubtn').click(function() {
+    if (flag) {
+        var that = $(this),
+            name = trimStr($('.subscribetomb .name').val()),
+            mobile = trimStr($('.subscribetomb .mobile').val()),
+            regName = /^[\u4e00-\u9fa5]{0,}$/,
+            regMobile = /^1((3\d)|(47)|(5[0-35-9])|(7[01789])|(8\d))\d{8}$/;
+        var url = $('.yubtn').attr('data-url');
+        if (!(regName.test(name) && name)) {
+            $('.subscribetomb .name').css({
+                'border': '1px solid red'
+            });
+        } else if (!regMobile.test(mobile)) {
+            $('.subscribetomb .mobile').css({
+                'border': '1px solid red'
+            });
+            $('.subscribetomb .mobile').next('span').text('请输入正确的手机号');
+        } else {
+            flag = false;
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    name: name,
+                    mobile: mobile
+                },
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        setTimeout(function() {
+                            flag = true;
+                        }, 2000);
+                        $('.subscribetomb .mobile').next('span').text(result['msg']);
+                        if (result['code'] == 1) {
+                            $('.subscribetomb .name,.subscribetomb .mobile').val('');
+                        }
+                    }
+                }
+            });
+        }
+    }
+});
+
+$('.subscribetomb .name,.subscribetomb .mobile').focus(function() {
+    $(this).css({
+        'border': ''
+    });
+    $('.subscribetomb .mobile').next('span').text('');
+});
+
+$('.subscribetomb .mobile').keyup(function() {
+    if (this.value.length == 1) {
+        this.value = this.value.replace(/[^1-9]/g, '')
+    } else {
+        this.value = this.value.replace(/\D/g, '')
+    }
+});
+
+//去除字符串两边的空格函数
+function trimStr(str) {
+    return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+   

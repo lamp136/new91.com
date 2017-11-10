@@ -1,0 +1,69 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <!-- <li><a href="index.html">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="cemeteryorders.html">用户中心</a></li>
+                <li class="jt">></li>
+                <li>修改密码</li> -->
+                <li><a href="/">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/upwd')}">个人资料</a></li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+       <!-- 用户中心左侧导航 -->
+        <div class="user_nav">
+            <h2><i></i>用户中心</h2>
+            <ul>
+                <!-- <li><a href="cemetery_orders.html">陵园订单</a></li>
+                <li><a href="etiquette_orders.html">礼仪服务订单</a></li>
+                <li><a href="#">领取返现</a></li>
+                <li><a href="personaldata.html">个人资料</a></li>
+                <li><a class="user_led" href="changepassword.html">修改密码</a></li> -->
+                <li><a href="{:url('/user')}">个人资料</a></li>
+                <li><a class="user_led" href="{:url('/upwd')}">修改密码</a></li>
+            </ul>
+        </div><!-- user_nav用户中心左侧导航 End -->
+        
+        <!-- 用户中心右侧 -->
+        <div class="user_right">
+            
+            <h1>修改密码</h1>
+            <!-- 修改密码 -->
+            <div class="changepassword">
+                <ul>
+                    <li>
+                        <p>原始密码<span class="cha_hint">*</span><font>（请输入原始密码）</font></p>
+                        <input class="cha_tex" type="text"/>
+                    </li>
+                    <li>
+                        <p>新密码<span class="cha_hint">*</span></p>
+                        <input class="cha_tex" type="text"/>
+                    </li>
+                    <li>
+                        <p>请确认<span class="cha_hint">*</span></p>
+                        <input class="cha_tex pers_validate_tex" type="text"/>
+                        <span class="pers_validate"><i></i>提示：两次密码输入不一致</span>
+                    </li>
+                    <li class="yzm clearfix">
+                        <p>验证码<span class="cha_hint">*</span></p>
+                        <input class="cha_tex" type="text"/>
+                        <img class="cha_yzm" src="images/changepassword_yzm.jpg"/>
+                        <a href="#">看不清？换一张</a>
+                    </li>
+                    <li><a class="cha_save" href="#">提交</a></li>
+                </ul>
+            </div><!-- changepassword 修改密码 End -->
+
+        </div><!-- user_right 用户中心右侧 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}

@@ -1,0 +1,280 @@
+{extend name='extra@main' /}
+
+{block name="body"}
+<div class="layui-tab layui-tab-card" lay-filter="opt">
+  <ul class="layui-tab-title">
+    <li class="layui-this" lay-id="11">添加</li>
+    <li lay-id="22">约车</li>
+    <li lay-id="33">新增购买人</li>
+    <li lay-id="44">赠品</li>
+  </ul>
+  <div class="layui-tab-content">
+      
+      
+      
+    <div class="layui-tab-item layui-show">
+        <form class="layui-form layui-form-pane1" method="post" action="{:url('orders/Tomb/addViewTomb')}" >
+                <div class="layui-form-item">
+                    <label class="layui-form-label">交通工具</label>
+                    <div class="layui-input-block"><!--?????-->
+                        <input type="radio"  value="1" title="91班车" checked="">
+                        <input type="radio"  value="2" title="自驾">
+                        <input type="radio"  value="3" title="陵园班车">
+                        <input type="radio"  value="4" title="公交地铁">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址</label>
+                    <div class="layui-input-block">
+                        <input type="text"  autocomplete="off" class="layui-input" placeholder="乘车地址" value="{$appData.riding_address}" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="off" class="layui-input" placeholder="乘车联系人" value="{$appData.appointer}" readonly>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">人数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="off" class="layui-input" placeholder="乘车人数" value="{$appData.rider_number}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="off" class="layui-input" placeholder="乘车联系人手机号" value="{$appData.rider_phone}" readonly>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">预约时间</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="自定义日期格式"  value="{$appData.arrive_time|date='Y-m-d H:i:s',###}"  readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陪同顾问</label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="off" class="layui-input" placeholder="陪同顾问" value="{$appData.company_counselor}" readonly>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陪同人员</label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="off" class="layui-input" placeholder="陪同人员" value="{$appData.company_person}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">车辆</label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="off" class="layui-input" placeholder="车辆信息" value="{$carData.driver}:{$carData.plate_number}" readonly>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园</label>
+                        <div class="layui-input-inline" >
+                            <input type="text" autocomplete="off" class="layui-input" placeholder="车辆信息" value="{$appData.store_names}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    
+                    
+                    
+                    
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>到家属地</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='incar_time' placeholder="到家属地时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" required>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>行程结束</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='over_time' placeholder="看墓行程结束时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" required >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    
+                    <div class="layui-inline">
+                        <label class="layui-form-label">抵达陵园</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='arrive_time' placeholder="抵达陵园时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">离开陵园</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name='leave_time' placeholder="离开陵园时间" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园接待</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="store_reception" autocomplete="off" class="layui-input" placeholder="陵园接待人员">
+                        </div>
+                    </div>
+                   
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>意向</label>
+                        <div class="layui-input-inline">
+                            <select name="purpose" lay-filter="required" required>
+                                <option value="1">一般</option>
+                                <option value="2">不错</option>
+                                <option value="3">很好</option>
+                                <option value="4">不太好</option>
+                                <option value="5">不好</option>
+                                <option value="6">非常不好</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                     <div class="layui-inline">
+                        <label class="layui-form-label">购买人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="buyer" autocomplete="off" class="layui-input" placeholder="购买人" >
+                        </div>
+                    </div>
+                    
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>结果</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="result" value="1" title="成交">
+                            <input type="radio" name="result" value="2" title="未成交" checked>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">墓穴位置</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="location" autocomplete="off" class="layui-input" placeholder="购买墓地的位置">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label"><span style="color:red">*</span>原因</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="reason" autocomplete="off" class="layui-input" placeholder="原因" required>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">墓价</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="total_price" autocomplete="off" class="layui-input" placeholder="墓位价格(万)">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">成交价</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="tomb_price" autocomplete="off" class="layui-input" placeholder="成交价格(万)">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">91折扣</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="91_discount" autocomplete="off" class="layui-input" placeholder="平台折扣(万)">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">陵园折扣</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="store_discount" autocomplete="off" class="layui-input" placeholder="陵园折扣(万)">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">上传图片</label>
+                    <div class="layui-input-block">
+                        <!--<input type="file" name="image" > 
+                        <!--<input name="image" class="layui-upload-file" lay-title="票据合同图片" type="file">-->
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="remark" class="layui-input" title="备注信息">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text" style="text-align:center">
+                    <input type='hidden' name='order_id' value='{$appData.order_id}'>
+                    <input type='hidden' name='appint_car_id' value='{$appData.id}'>
+                    <input type='hidden' name='card_id' value='{$appData.car_id}'>
+                    <input type='hidden' name='store_id' value='{$appData.car_id}'><!--?????-->
+                    
+                    <button class="layui-btn layui-btn-big submit">保存</button>
+                </div>
+            </form>
+    </div>
+      
+      
+      
+    <div class="layui-tab-item">待开发</div>
+  </div>
+</div>
+{/block}
+
+{block name="optJS"}
+<script type="text/javascript">
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  var start = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday:true
+    ,choose: function(datas){
+      end.min = datas; //开始日选好后，重置结束日的最小日期
+      end.start = datas //将结束日的初始值设定为开始日
+    }
+  };
+  
+  var end = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday: true
+    ,choose: function(datas){
+      start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+  };
+  
+});
+
+layui.use('layedit', function(){
+  var layedit = layui.layedit;
+  layedit.build('follow'); //建立编辑器
+});
+layui.use(['form', 'element', 'jquery'], function(){
+    var form = layui.form()
+    //监听指定开关
+    form.on('switch(switchTest)', function(data){
+        layer.tips('温馨提示：'+(this.checked ? '你确认返现么？' : '现在是不返现'), data.othis)
+    });
+    form.on('switch(return)', function(data){
+        layer.tips('温馨提示：'+(this.checked ? '现在需要回访' : '不需要回访'), data.othis)
+    });
+
+    var $ = layui.jquery,element = layui.element();
+
+    var layid = location.hash.replace(/^#opt=/, '');
+    element.tabChange('opt', layid);
+  
+    element.on('tab(opt)', function(elem){
+        location.hash = 'opt='+ $(this).attr('lay-id');
+    });
+});
+</script>
+{/block}

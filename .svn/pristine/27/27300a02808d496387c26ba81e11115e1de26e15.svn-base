@@ -1,0 +1,33 @@
+<?php
+namespace web\cemetery\controller;
+use think\Controller;
+use think\Db;
+use web\extra\controller\Base;
+use web\extra\model\Store;
+
+class Cemetery extends Base
+{
+    /**
+     * 陵园列表
+     * @return void
+     */
+    public function index(){
+        $where = [
+            'category_id' => 37,
+        ];
+        $storeList = Db::name('store')->where($where)->field('id,name,image,thumb_image,address,min_price,label,actual_hits,hits,status')->paginate(10,false);
+        $page = $storeList->render();
+        $this->assign([
+            'list' => $storeList,
+            'page' => $page
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 详情
+     */
+    public function details(){
+        return $this->fetch();
+    }
+}

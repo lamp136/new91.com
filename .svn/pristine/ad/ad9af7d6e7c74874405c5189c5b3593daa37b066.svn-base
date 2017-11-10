@@ -1,0 +1,148 @@
+<?php
+namespace web\article\controller;
+use think\Controller;
+use web\extra\controller\Base;
+use think\Db;
+use think\Request;
+use think\Cookie;//cookie类
+
+/**
+ * 殡葬百科控制器
+ * author heqingyu;
+ * date   17/7/17 17:04:00;
+ */
+class Article extends Base{  
+    
+    public function _initialize(){
+        //百科导航信息
+        $data = array(
+            array( 'id'=> 1,'name' => '91资讯',   'category_id'=>'', 'pid'  => '0'),
+                array( 'id'=> 8,'name' => '91新闻',     'category_id'=>'', 'pid'  => '1'),
+                array( 'id'=> 9,'name' => '合作动态',   'category_id'=>'', 'pid'  => '1'),
+                array( 'id'=> 10,'name' => '企业软文',  'category_id'=>'', 'pid'  => '1'),
+            array( 'id'=> 2,'name' => '业界动态', 'category_id'=>'', 'pid'  => '0'),
+                array( 'id'=> 11,'name' => '行业新闻',  'category_id'=>'', 'pid'  => '2'),
+                array( 'id'=> 12,'name' => '政策法规',  'category_id'=>'', 'pid'  => '2'),
+            array( 'id'=> 3,'name' => '风水文化', 'category_id'=>'79', 'pid'  => '0'),
+            array( 'id'=> 4,'name' => '白事常识', 'category_id'=>'', 'pid'  => '0'),
+            array( 'id'=> 5,'name' => '民俗文化', 'category_id'=>'', 'pid'  => '0'),
+                array( 'id'=> 13,'name' => '传统节日', 'category_id'=>'', 'pid'  => '5'),
+                array( 'id'=> 14,'name' => '祭祀习俗', 'category_id'=>'', 'pid'  => '5'),
+                array( 'id'=> 15,'name' => '丧葬习俗', 'category_id'=>'', 'pid'  => '5'),
+            array( 'id'=> 6,'name' => '生命礼赞', 'category_id'=>'', 'pid'  => '0'),
+                array( 'id'=> 16,'name' => '人生感悟', 'category_id'=>'', 'pid'  => '6'),
+                array( 'id'=> 17,'name' => '陵园故事', 'category_id'=>'', 'pid'  => '6'),
+                array( 'id'=> 18,'name' => '福地名人', 'category_id'=>'', 'pid'  => '6'),
+            array( 'id'=> 7,'name' => '考古',     'category_id'=>'', 'pid'  => '0'),
+        );
+        $articletree = $this->articletree($data,0);
+        $this->assign('articletree',$articletree);
+        
+         //友情链接
+        $this->getfriendlink();
+    }
+    private function articletree($data,$id){
+        $result = array();
+        foreach($data as $val){
+            if($val['pid'] == $id ){
+                $val['child'] = array();
+                $val['child'] = $this->articletree($data,$val['id']);
+                $result[] = $val;
+            }
+            continue;
+        }
+        return $result;
+    }
+    /*
+     * 殡葬百科首页
+     * @param   void;
+     * @return  void;
+     */
+    public function index(){
+        //SEO
+        $seo = $this->getseo(config('seo_type.cemetery_home'));
+        $this->assign('seo',$seo);//???
+        
+        return $this->fetch();
+    }
+    /*
+     * 殡葬百科列表页
+     * @param   void;
+     * @return  void;
+     */
+    public function listbox(){
+        $cid = input('cid');
+        $cid = 68;
+        if(!empty($cid)){
+            //面包屑部分
+            $title = Db::name('category')->where('id',$cid)->field('name')->find();
+            //列表内容
+            $newWhere['category_id'] = $cid;
+            $newWhere['status'] = config('normal_status');
+            $newWhere['published_time'] = array('elt',time());
+            $field = '*';
+            $data = Db::name('News')->where($newWhere)->field($field)->paginate(config('page_size'),false);
+            $page = $data->render();
+            //热门资讯
+            $informationWhere['status'] = config('normal_status');
+            $informationWhere['published_time'] = array('elt',time());
+            $informationdata = Db::name('News')->where($informationWhere)->order('hits DESC')->limit(5)->field('id,title,thumb_url')->select();
+            //dump($informationdata);die;
+            //热门文章
+            $hotWhere['status'] = config('normal_status');
+            $hotWhere['published_time'] = array('elt',time());
+            $hotdata = Db::name('News')->where($hotWhere)->order('hits DESC')->limit(6)->field('id,title')->select();
+            //dump($hotdata);die;
+            //SEO部分
+            $seo = $this->getseo(config('seo_type.cemetery_home'));//???
+            $this->assign([
+                'cid'  =>  $cid,
+                'seo'  =>  $seo,
+                'title'=>  $title,
+                'page' =>  $page,
+                'data' =>  $data,
+                'hotdata' => $hotdata,
+                'informationdata' => $informationdata
+                ]);
+            return $this->fetch();
+        }
+        $this->error('你迷路了!');
+    }
+    
+    /*
+     * 殡葬百科详情页
+     * @param   void;
+     * @return  void;
+     */
+    public function detail(){
+        $id = input('id');
+        $cid = input('cid');
+        if(!empty($id)){
+            //面包屑部分
+            $title = Db::name('category')->where('id',$cid)->field('id,name')->find();
+            //详情
+            $data = Db::name('News')->where('id',$id)->find();
+            //下一篇
+            $where['category_id'] = $cid;
+            $where['status'] = config('normal_status');
+            
+            $where['published_time'] = array('gt',$data['published_time']);
+            $after = Db::name('News')->where($where)->order('published_time desc')->field('title,id')->find();
+            //上一篇
+            $where['published_time'] = array('lt',$data['published_time']);
+            $up = Db::name('News')->where($where)->order('published_time asc')->field('title,id')->find();
+            
+            $seo  = array('seo_title'=>$data['seo_title'],'seo_keywords'=>$data['seo_keywords'],'seo_description'=>$data['seo_description']);
+            //dump($seo);die;
+            $this->assign([
+                'title' => $title,
+                'data'  => $data,
+                'after' => $after,
+                'up'    => $up,
+                'seo'   => $seo,
+            ]);
+            return $this->fetch();
+        }
+        $this->error('你迷路了!');
+    }
+}

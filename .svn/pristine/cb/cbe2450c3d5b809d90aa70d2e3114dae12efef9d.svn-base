@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>91搜墓网</title>
+        <link rel="stylesheet" href="_BACKSTAGE_/layer/css/layui.css">
+        <style type="text/css">
+            .header-demo .logo {
+                left: 18px;
+            }
+            .logo {
+              position: absolute;
+              left: 0;
+              top: 16px;
+              font-size: 22px;
+              color: #fff;
+            }
+
+            .header .layui-nav {
+              position: absolute;
+              left: 202px;
+              top: 0;
+              padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+            <fieldset class="layui-elem-field layui-field-title" >
+                <legend>订单详情</legend>
+            </fieldset>
+            {php}
+                if (showHandle('analysis/Analysis/orderdetailsdown')) {
+            {/php}
+                <form  method="post"  autocomplete="off" action='{:url("Analysis/orderdetailsdown")}'>
+                    <div class="layui-form-item" style="margin-top:-10px;">
+                        {volist name="input" id="vo"}
+                            <input name='{$key}' value="{$vo}" type='hidden'>
+                        {/volist}
+                        <div class="layui-input-block" style="float:right;">
+                            <button class="layui-btn layui-btn-small" lay-submit="" lay-filter="demo1">下载数据</button>
+                        </div>
+                    </div>
+                </form>
+            {php}
+                }
+            {/php}
+            <div style="margin-top:-10px;">
+                <table class="layui-table" lay-skin="line">
+                    <colgroup>
+                        <col width="80">
+                        <col width="100">
+                        <col width="50">
+                        <col width="50">
+                        <col width="20">
+                        <col width="20">
+                        <col width="50">
+                        <col width="80">
+                        <col width="80">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="hidden-phone">主订单号</th>
+                            <th class="hidden-phone">陵园名称</th>
+                            <th class="hidden-phone">购买人</th>
+                            <th class="hidden-phone">购买人手机</th>
+                            <th class="hidden-phone">佣金比</th>
+                            <th class="hidden-phone">佣金额</th>
+                            <th class="hidden-phone">订单跟踪人</th>
+                            <th class="hidden-phone">墓位成交时间</th>
+                            <th class="hidden-phone">预约时间</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        {volist name="orderData" id="vo" }
+                            <tr>
+                                <td>{$vo.order_grave_sn}</td>
+                                <td>{$vo.store_name}</td>
+                                <td>
+                                    {empty name="vo.buyer"}
+                                        {$vo.reservation_person}
+                                    {else /}
+                                        {$vo.buyer}
+                                    {/empty}
+                                </td>
+                                <td>
+                                    {empty name="vo.buyer"}
+                                        {notempty name="vo.reservation_phone"}{$vo.reservation_phone}{/notempty}
+                                    {else /}
+                                        {notempty name="vo.mobile"}{$vo.mobile}{/notempty}
+                                    {/empty}
+                                </td>
+                                <td>{neq name="vo.brokerage_percent" value="0.00"}{$vo.brokerage_percent}{/neq}</td>
+                                <td>{neq name="vo.paid_in_amount" value="0.00"}{$vo.paid_in_amount}{/neq}</td>
+                                <td>{$vo.flowman['name']}</td>
+                                <td>{notempty name="vo.success_time"}{$vo.success_time|date="Y-m-d",###}{/notempty}</td>
+                                <td>{notempty name="vo.appoint_time"}{$vo.appoint_time|date="Y-m-d",###}{/notempty}</td>
+                            </tr>
+                        {/volist}
+                    </tbody>
+                </table>  
+            </div>
+        </div>
+    </body>
+    {$page}
+</html>

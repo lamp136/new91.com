@@ -1,0 +1,390 @@
+<?php
+namespace web\rite\controller;
+use think\Controller;
+use think\Db;
+use think\Request;
+use web\extra\controller\Base;
+use web\extra\model\Store;
+
+/**
+ * 礼仪服务类
+ * author
+ */
+class Rite extends Base{  
+	
+    /*
+     * 礼仪服务列表
+     *
+     */
+    public function lists(){
+        $input = input();
+
+        $regionId = Request::instance()->cookie('ip_region_id');
+
+        $selectCity = 0;
+        if(!empty($input['city']) && $input['city'] != 0){
+            $selectCity = $input['city'];
+            $where['city_id'] = $selectCity;
+        }
+        $selectDist = 0;
+        if(!empty($input['dist']) && in_array($input['dist'],config('store_length'))){
+            $selectDist = $input['dist'];
+            $storeLength = config('store_length');
+            $where['distance'] = $this->betweenWhere($selectDist,$storeLength);
+        }
+
+        $where['category_id'] = config('rite_category');
+        $where['status'] = config('normal_status');
+        $where['province_id'] = $regionId;
+
+        $data = Store::withCount(array('OrderGrave'),false)->where($where)->field('thumb_image,name,address,phone,hits,id,category_id')->order('created_time desc')->paginate(config('page_size'),false,['query' => $input]);
+        $page = $data->render();
+
+        $countData = Db::name('store')->where($where)->count();
+        //获取白事常识
+        $bscs = $this->article(config('category_sense'),6);
+        
+
+        //获取地区
+        $region['pid'] = $regionId;
+        $city = Db::name('region')->where($region)->column('id,name');
+
+        
+        //排行榜商家
+        if(!empty($where['distance'])){
+            unset($where['distance']);
+        }
+        $store =Store::withCount(array('OrderGrave'),false)->where($where)->field('id,name')->select();
+
+        $countNum = count($store);
+        for ($i=1; $i <$countNum ; $i++) { 
+            for ($j=0; $j <$countNum-$i ; $j++) { 
+                if($store[$j]['order_grave_count'] < $store[$j+1]['order_grave_count']){
+                    $tmp = $store[$j];
+                    $store[$j] = $store[$j+1];
+                    $store[$j+1] = $tmp;
+                }
+            }
+        }
+
+        //seo
+        $seo = $this->getseo(config('seo_type.cemetery_home'));
+
+        $this->assign('selectCity',$selectCity);
+        $this->assign('selectDist',$selectDist);
+        $this->assign('input',$input);
+        $this->assign('countDist',count(config('store_length')));
+        $this->assign('seo',$seo);
+        $this->assign('store',$store);
+        $this->assign('bscs',$bscs);
+        $this->assign('city',$city);
+        $this->assign('page',$page);
+        $this->assign('data',$data);
+        $this->assign('countData',$countData);
+        return $this->fetch();
+    }
+
+      /**
+     * 获取where区间条件
+     * @param  array $selectData 筛选条件
+     * @param  array $conf 配置常量
+     * @return array
+     */
+    private function betweenWhere($selectData,$conf){
+        $cond = [];
+        $min = current($conf);
+        $max = end($conf);
+        if($selectData == $min){
+            $cond = ['elt',$min];
+        }else if($selectData == $max){
+            $cond = ['egt',$max];
+        }else{
+            $data = explode('-',$selectData);
+            if(is_array($data)){
+                $count = count($data);
+                if($count > 1){
+                    $cond = ['between',[(int)$data[0],(int)$data[1]]];
+                }
+            }
+        }
+
+        return $cond;
+    }
+
+    /**
+     * 礼仪服务详情页
+     */
+    public function detail(){
+        $id = input('id');
+        $get = input('get.');
+        $data =Store::withCount(array('OrderGrave'),false)->where('id',$id)->field('id,content,name,phone,hits,address,thumb_image,province_id,city_id')->find();
+        
+        //获取评论
+        $comtwhere['store_id'] = $id;
+        $comtwhere['comment_status'] = config('normal_status');
+
+        $comment = Db::name('comment')->where($comtwhere)->order('created_time desc')->limit(0,config('page_size'))->select();
+       
+        //总数据 和 总页数
+        $commentNum = Db::name('comment')->where($comtwhere)->count();
+        $comtCountPage = ceil($commentNum/config('page_size'));
+
+        //计算分数平均值
+        $serviceScore = 0;
+        $environmentScore =0;
+        $priceScore =0;
+        $trafficScore =0;
+        foreach($comment as $key=>$value){
+            $serviceScore += $value['service'];
+            $environmentScore += $value['environment'];
+            $priceScore += $value['price'];
+            $trafficScore += $value['traffic'];
+            $comment[$key]['ave'] = ceil(($value['service']+$value['environment']+$value['price']+$value['traffic'])/4);
+            $comment[$key]['mobile'] = substr_replace($comment[$key]['mobile'],'****',3,4);
+        }
+        $aveScore['service'] = 0;
+        $aveScore['environment'] = 0;
+        $aveScore['price'] =0;
+        $aveScore['traffic'] = 0;
+        $aveScore['total'] = 0;
+        $aveScore['commentNum'] = 0;
+        if($commentNum != 0){
+            $aveScore['service'] = round($serviceScore/$commentNum);
+            $aveScore['environment'] = round($environmentScore/$commentNum);
+            $aveScore['price'] = round($priceScore/$commentNum);
+            $aveScore['traffic'] = round($trafficScore/$commentNum);
+            $total = $aveScore['service']+$aveScore['environment']+$aveScore['price']+$aveScore['traffic'];
+            $aveScore['total'] = round($total/4);
+            $aveScore['commentNum'] = $commentNum;
+        }
+
+        //获取套餐
+        // $combo = Db::name('etiquette_combo')->where('store_id',$id)->field('id,store_id,combo_sn,combo_name,combo_price,platform_price,thumb_image')->paginate(config('page_size'),false,['query' => $get]);
+        // $page = $combo->render();
+        $comboWhere['store_id'] = $id;
+        $comboWhere['status'] = config('normal_status');
+
+        $combo = Db::name('etiquette_combo')->where($comboWhere)->field('id,store_id,combo_sn,combo_name,combo_price,platform_price,thumb_image')->limit(0,config('page_size'))->order('created_time desc')->select();
+
+        //总数据 和 总页数
+        $comboNum = Db::name('etiquette_combo')->where($comboWhere)->count();
+        $comboCountPage = ceil($comboNum/config('page_size'));
+
+        //附近陵园
+        $where['province_id'] = $data['province_id'];
+        // $where['city_id'] = $data['city_id']; ??是否带市
+        $where['category_id'] = config('category_cemetery_id');
+        $where['member_status'] = array('gt',0);
+        $where['status'] = config('normal_status');
+        $cemetery = Db::name('store')->where($where)->field('id,name,thumb_image')->select();
+        //随机取6个
+        if(count($cemetery) > 3){ 
+            $rand = array_rand($cemetery,3);
+            foreach ($rand as $key => $value) {
+                $randcemetery[] = $cemetery[$value];
+            }
+        }else{
+            $randcemetery = $cemetery;
+        }
+
+        //获取白事常识
+        $bscs = $this->article(config('category_sense'),6);
+        
+        $seo = $this->getseo(config('seo_type.cemetery_home'));
+
+        $this->assign('seo',$seo);
+        $this->assign('data',$data);
+        $this->assign('bscs',$bscs);
+        $this->assign('randcemetery',$randcemetery);
+        // $this->assign('page',$page);
+        $this->assign('comboNum',$comboNum);             //套餐总条数
+        $this->assign('comboCountPage',$comboCountPage); //套餐总页数
+        $this->assign('combo',$combo);
+        $this->assign('comtCountPage',$comtCountPage);  //评论总页数
+        $this->assign('comment',$comment);
+        $this->assign('aveScore',$aveScore);
+        return $this->fetch();
+    }
+
+    /**
+     * 服务套餐详情
+     */
+    public function comboDetail(){
+        $id = input('id');
+        $combo = Db::name('etiquette_combo')->where('id',$id)->find();
+        $combo['content'] = explode('/', $combo['content']);
+        
+        $store = Db::name('store')->where('id',$combo['store_id'])->field('address,phone')->find();
+
+        //seo
+        $seo = $this->getseo(config('seo_type.cemetery_home'));
+
+        $this->assign('seo',$seo);
+        $this->assign('store',$store);
+        $this->assign('combo',$combo);
+        return $this->fetch('combodetail');
+    }
+
+    /**
+     * 添加评论
+     * @return   string(json)
+     */
+    public function addcomment(){
+        $data = input('post.');
+        $info = $data['info'];
+        $result = array('flag'=>0,'msg'=>'添加评论失败');
+        if($info){
+            $info['member_id'] = 889;
+            if($info['member_id']){
+                $member = Db::name('member')->where('id',$info['member_id'])->field('name,mobile')->find();
+                $info['member_name'] = $member['name'];
+                $info['mobile'] = $member['mobile'];
+            }
+            $info['comment_status'] = config('default_status');
+            $info['created_time'] = time();
+            $info['comment_time'] = date('Y-m-d H:i:s');
+            $res = Db::name('comment')->insert($info);
+            if($res){
+                $result = array('flag'=>1,'msg'=>'添加评论成功');
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 点击分页获取评论内容
+     * @return   [string](json)
+     */
+    public function selectComment(){
+        $result = array('flag'=>0,'data'=>'');
+        $storeId = input('storeId');  
+        $pageNum = input('pageNum');
+
+        $commentNum = ($pageNum-1)*config('page_size');
+        if(!(empty($pageNum)&&empty($storeId))){
+            $commentWhere['store_id'] = $storeId;
+            $commentWhere['comment_status'] = config('normal_status');
+            $commentData =  Db::name('comment')->where($commentWhere)->order('created_time desc')->limit($commentNum,config('page_size'))->select();
+
+            $commentNum = count($commentData);
+            for($i=0;$i<$commentNum;$i++){
+                $commentData[$i]['mobile'] = substr_replace($commentData[$i]['mobile'],'****',3,4);
+                $commentData[$i]['ave'] =ceil(($commentData[$i]['service']+$commentData[$i]['environment']+$commentData[$i]['traffic']+$commentData[$i]['price'])/4);
+                // $arrayId[] = $commentData[$i]['id'];
+            }
+            $result['flag'] = 1;
+            $result['data'] = $commentData;;
+            // dump($commentData);die;
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 点击分页获取套餐
+     */
+    public function selectCombo(){
+        $result = array('flag'=>0,'data'=>'','countPage'=>'');
+        $storeId = input('storeId');  
+        $pageNum = input('pageNum');
+        $type = input('type');
+        $price = input('price');
+
+        if(!empty($price)){   
+            $priceArr = explode('-',$price);
+            $arrlength = count($priceArr);
+            if($arrlength>1){
+                $comboWhere['platform_price'] = array('between',$priceArr);
+            }else{
+                $comboWhere['platform_price'] = array('lt',$priceArr[0]);
+            }
+        }
+        if(!empty($type)){
+            $comboWhere['combo_type'] = $type;
+        }
+        // dump($storeId);die;
+        $comboNum = ($pageNum-1)*config('page_size');
+        if(!(empty($pageNum)&&empty($storeId))){
+            $comboWhere['store_id'] = $storeId;
+            $comboWhere['status'] = config('normal_status');
+            $comboData =  Db::name('etiquette_combo')->where($comboWhere)->order('created_time desc')->limit($comboNum,config('page_size'))->select();
+
+            if($comboData){
+                $result['flag'] = 1;
+                $result['data'] = $comboData;
+            }
+            //算出总页数
+            $comboNum = Db::name('etiquette_combo')->where($comboWhere)->count();
+            $comboCountPage = ceil($comboNum/config('page_size'));
+            $result['countPage'] = $comboCountPage;
+            $result['comboNum'] = $comboNum;
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 预约服务商
+     */
+    public function appoint(){
+        $input = input('post.');
+        $result = ['code' => 0,'msg' => '预约失败'];
+        $name = $input['name'];
+        $mobile = $input['mobile'];
+        $date = date('Y-m-d').' 00:00:00';
+        $time = strtotime($date);
+        $where = [
+            'mobile' => $mobile,
+            'category_id' => config('category_etiquette_id'),
+            'created_time' => ['gt',$time]
+        ];
+        $count = Db::name('appoint')->where($where)->count();
+        if($count > 0){
+            $result = ['code' => 0,'msg' => '您已预约过了'];
+        }else{
+            $email = weeksEmail();
+
+            $info['type'] = array_search('预约服务商',config('business_email_msg'));
+            $info['email_address'] = $email['email_address'];
+            $emailSheet = Db::name('EmailSheet')->where($info)->whereOr(['type' => array_search('预约服务商',config('email_msg'))])->field('email_address')->select();
+            if(!empty($emailSheet)){
+                $content = '预约时间：'.date('Y-m-d H:i:s',time()).'，预约人：'.$name.' 预约人手机号：'.$mobile.' 请及时联系！本邮件系统自动发送请忽回复！';
+                foreach ($emailSheet as $val) {
+                    $emails[] = $val['email_address'];
+                }
+                $status = 0;
+                $send_time = '';
+                if(sendMail($emails,'预约服务商',$content)){
+                    $status = 1;
+                    $send_time = date('Y-m-d H:i:s');
+                }
+                foreach ($emails as $v) {
+                    $emailLog[] = [
+                        'type'          => $info['type'],
+                        'email_address' => $v,
+                        'title'         => '预约服务商',
+                        'content'       => $content,
+                        'status'        => $status,
+                        'send_time'     => $send_time,
+                        'creat_time'    => date('Y-m-d H:i:s')
+                    ];
+                }
+                Db::name('EmailLog')->insertAll($emailLog);
+                $appointData = [
+                    'ip'           => request()->ip(1),
+                    'buyer'        => $name,
+                    'mobile'       => $mobile,
+                    'created_time' => time(),
+                    'updated_time' => time(),
+                    'category_id'  => config('category_etiquette_id'),
+                    'status'       => config('default_status')
+                ];
+                $appoint = Db::name('appoint')->data($appointData)->insert();
+                if($appoint){
+                    $result = ['code' => 1,'msg' => '亲爱的 '.$name.' 您好,信息保存成功,稍后我们的客服人员会联系您！'];
+                }
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+}

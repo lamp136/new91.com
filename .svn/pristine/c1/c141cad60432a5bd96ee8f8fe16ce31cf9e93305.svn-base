@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>91搜墓网</title>
+<link rel="stylesheet" href="_BACKSTAGE_/layer/css/layui.css">
+<style type="text/css">
+
+  .header-demo .logo {
+      left: 18px;
+  }
+  .logo {
+    position: absolute;
+    left: 0;
+    top: 16px;
+    font-size: 22px;
+    color: #fff;
+  }
+
+  .header .layui-nav {
+    position: absolute;
+    left: 202px;
+    top: 0;
+    padding: 0;
+  }
+</style>
+</head>
+{block name="layer"}{/block}
+
+<body>
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header header header-demo">
+    <div class="layui-main">
+        <a class="logo" href="/">
+          91管理后台
+        </a>
+        <ul class="layui-nav topmeuFather">
+            {volist name='menuData' id='vo'}
+                <li class="layui-nav-item {eq name='vo.id' value='$currentpriId'} layui-this{/eq} topmemu" data-menuid='{$vo.id}'><a href="javascript:;">{$vo.title}</a></li>
+            {/volist}
+        </ul>
+        <ul style="left:92%;" class="layui-nav">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">个人中心</a>
+                    <dl class="layui-nav-child">
+                      <dd><a href="">选项1</a></dd>
+                      <dd><a href="{:url('login/Login/logout')}">退出</a></dd>
+                    </dl>
+                </li>
+          </ul>
+    </div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    
+  </div>
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll" id="sidebar">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+            {volist name='menuData' id='vo'}
+                {volist name='vo.child' id='v1' key="m"}
+                    <li class="layui-nav-item layui-nav-itemed has-sub  child-menu{$vo.id}" {neq name='vo.id' value='$currentpriId'} style="display:none;" {/neq}>
+                        <a class="" href="javascript:;">{$v1.title}</a>
+                        <dl class="layui-nav-child sub"  {neq name='memuId' value='$v1.id'}style="display:none;"{/neq}>
+                            {volist name='v1.child' id='v2'}
+                                <dd><a href="{:url($v2.name)}">{$v2.title}</a></dd>
+                            {/volist}
+                        </dl>
+                    </li>
+                {/volist}
+            {/volist}
+        </ul>
+         <ul style="left:92%;" class="layui-nav">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">个人中心</a>
+                    <dl class="layui-nav-child">
+                      <dd><a href="">选项1</a></dd>
+                      <dd><a href="{:url('login/Login/logout')}">退出</a></dd>
+                    </dl>
+                </li>
+          </ul>
+    </div>
+  </div>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    
+{block name="body"}
+  
+  <p style="font-size:20px; color:red;">{$data.msg}</p>
+  {/block}
+  </div>
+  <!-- <div class="layui-footer"> -->
+    <!-- 底部固定区域 -->
+  <!-- </div> -->
+</div>
+<script src="_BACKSTAGE_/layer/layui.js"></script>
+<script>
+
+layui.use(['element','jquery','form',], function() {
+    var element = layui.element();
+    var $= layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+
+        //点击头部菜单，显示不同的按钮
+        $('.topmeuFather').on('click','.topmemu',function(){
+            var menuid = $(this).attr('data-menuid');
+            $('.has-sub').hide();
+            $('.child-menu'+menuid).show();
+            $('.child-menu'+menuid).eq(0).find(".sub").show();
+        });
+        
+              //左侧菜单点击
+        var handleMainMenu = function () {
+            $('#sidebar .has-sub > a').click(function () {
+                $('.sub').slideUp(200);
+                var last = $('.has-sub.open', $('#sidebar'));
+                last.removeClass("open");
+                $('.arrow', last).removeClass("open");
+                $('.sub', last).slideUp(200);
+                var sub = $(this).next();
+                if (sub.is(":visible")) {
+                    $('.arrow', $(this)).removeClass("open");
+                    $(this).parent().removeClass("open");
+                    sub.slideUp(200);
+                } else {
+                    $('.arrow', $(this)).addClass("open");
+                    $(this).parent().addClass("open");
+                    sub.slideDown(200);
+                }
+            });
+        };
+        handleMainMenu();
+}); 
+
+
+</script>
+
+<!-- JavaScript代码区域 -->
+{block name="optJS"}
+
+{/block}
+</body>
+</html>

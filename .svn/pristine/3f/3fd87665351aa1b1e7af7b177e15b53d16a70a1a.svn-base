@@ -1,0 +1,195 @@
+<?php
+namespace web\ucenter\controller;
+use think\Controller;
+use think\Db;
+use web\extra\controller\Base;
+use think\Session;
+use web\extra\model\Member;
+use web\extra\model\OrderGrave;
+use think\captcha\Captcha;
+
+class User extends Base
+{
+    public function _initialize(){
+        parent::_initialize();
+        if(!Session::has('_uid')){
+            $this->redirect(url('/login'));
+        }
+    }
+    /**
+     * 用户资料
+     * @return void
+     */
+    public function users(){
+        $mobile = decode(Session::get('_yos'));
+        $member = [];
+        if($mobile){
+            $member = Member::with('bank')->where('mobile',$mobile)->field('id,name,mobile')->find();
+        }
+        $seo = $this->getseo();
+        $this->assign([
+            'member' => $member,
+            'seo'    => $seo
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 修改用户信息
+     * @return json
+     */
+    public function alter(){
+        $input = input('post.');
+        $result = ['code' => 0,'msg' => '操作失败'];
+        $user = $input['member'];
+        $bank = $input['bank'];
+        $user['updated_time'] = date('Y-m-d H:i:s');
+        $saveUser = Db::name('member')->update($user);
+        if($saveUser){
+            Session::set('name',encode($user['name']));
+            $result = ['code' => 1,'msg' => '修改成功'];
+            if(!empty($bank['bank_type']) && $bank['bank_type'] != 0){
+                if(strpos($bank['bank_account'], '**') !== false){
+                    unset($bank['bank_account']);
+                }
+                $bankData = $bank;
+                $bankType = explode('-',$bank['bank_type']);
+                $bankData['bank_type'] = $bankType[0];
+                $bankData['bank'] = $bankType[1];
+                $bankData['status'] = config('normal_status');
+                $bankCount = Db::name('MemberBank')->where(['member_id' => $user['id'],'status' => config('normal_status')])->count();
+                if($bankCount > 0){
+                    $handleBank = Db::name('MemberBank')->where('member_id',$user['id'])->update($bankData);
+                }else{
+                    $bankData['created_time'] = date('Y-m-d H:i:s');
+                    $bankData['member_id'] = $user['id'];
+                    $bankData['region_ip'] = request()->ip(1);
+                    $handleBank = Db::name('MemberBank')->insert($bankData);
+                }
+                if($handleBank){
+                    $result = ['code' => 1,'msg' => '修改成功'];
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 修改密码
+     * @return void
+     */
+    public function change(){
+        $mobile = decode(Session::get('_yos'));
+        $user['id'] = '';
+        if($mobile){
+            $user = Db::name('member')->where('mobile',$mobile)->field('id')->find();
+        }
+        $seo = $this->getseo();
+        $this->assign([
+            'userId' => $user['id'],
+            'seo' => $seo
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 修改密码
+     * @return json
+     */
+    public function alterpwd(){
+        $input = input('post.');
+        $result = ['code' => 0,'msg' => '操作失败'];
+        if($input['id']){
+            $captcha = new Captcha;
+            $check = $captcha->check($input['code']);
+            if(!$check){
+                $result = ['code' => 2,'msg' => '验证码错误'];
+            }else{
+                $oldPwd = encryptHome($input['old_pwd']);
+                $member = Db::name('member')->where('id',$input['id'])->field('password')->find();
+                if(empty($member) || $oldPwd != $member['password']){
+                    $result = ['code' => 3,'msg' => '原始密码错误'];
+                }else{
+                    $data = [
+                        'id' => $input['id'],
+                        'password' => encryptHome($input['new_pwd'])
+                    ];
+                    $savePwd = Db::name('member')->data($data)->update();
+                    if($savePwd){
+                        Session::delete('name');
+                        Session::delete('_yos');
+                        $result = ['code' => 1,'msg' => '修改成功'];
+                    }
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 陵园订单
+     * @return void
+     */
+    public function cemeteryorders(){
+        $seo = $this->getseo();
+        $orderList = [];
+        if(Session::has('_uid')){
+            $uid = decode(Session::get('_uid'));
+            $where = [
+                'member_id' => $uid,
+                'state' => config('normal_status')
+            ];
+            $orderList = OrderGrave::with('store')->where($where)->field('id,order_grave_sn,member_id,store_id,store_name,reservation_person,reservation_phone,buyer,mobile,appoint_time,status')->order('appoint_time desc')->paginate(10,false);
+            $page = $orderList->render();
+        }
+        $orderStatus = config('order_status_change');
+        $this->assign([
+            'orderStatus' => $orderStatus,
+            'page' => $page,
+            'orderList' => $orderList,
+            'seo' => $seo,
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 前台删除订单
+     * @return json
+     */
+    public function delorder(){
+        $id = input('get.id');
+        $result = ['code' => 0,'msg' => '删除失败'];
+        if($id){
+            $ret = Db::name('OrderGrave')->where('id',$id)->setField('state',config('order_front_delete'));
+            if($ret){
+                $result = ['code' => 1,'msg' => '删除成功'];
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 礼仪服务订单
+     * @return void
+     */
+    public function etiquetteorders(){
+        $seo = $this->getseo();
+        $this->assign([
+            'seo' => $seo,
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 购墓订单评论
+     * @return [type] [description]
+     */
+    public function orderseval(){
+        $seo = $this->getseo();
+        $this->assign([
+            'seo' => $seo,
+        ]);
+        return $this->fetch();
+    }
+}

@@ -1,0 +1,150 @@
+{extend name='extra@main' /}
+{block name='body'}   
+<!-- 安葬吉日 -->
+<div class="bury">
+    <div class="contain bury_box">
+        <!-- 安葬吉日内容 -->
+        <div class="bury_main clearfix">
+
+            <!-- 安葬吉日左侧 -->
+            <div class="bury_main_left">
+
+                <!-- 查询条件 -->
+                <div class="bury_main_query">
+                    <h2>安葬吉日查询</h2>
+                    <ul>
+                        <li>
+                            <select class="sele">
+                                <option>2017年</option>
+                                <option>2016年</option>
+                                <option>2015年</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select class="sele">
+                                <option>06月</option>
+                                <option>07月</option>
+                                <option>08月</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select class="sele sele_y">
+                                <option>宜</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select class="sele">
+                                <option>入土</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn" href="#">查询</a>
+                        </li>
+                    </ul>
+                </div><!-- bury_main_query 查询条件 End -->
+                
+                <!-- 日历 -->
+                <div class="bury_main_calendar">
+                    <ul class="week clearfix">
+                        <li>星期日</li>
+                        <li>星期一</li>
+                        <li>星期二</li>
+                        <li>星期三</li>
+                        <li>星期四</li>
+                        <li>星期五</li>
+                        <li>星期六</li>
+                    </ul>
+
+                    <ul class="day clearfix">
+                        <li><a href="#"></a></li>
+                        <li><a href="#"></a></li>
+                        <li><a href="#"></a></li>
+                        <li><a href="#"></a></li>
+                        <li><a href="#">01<span>儿童节</span></a></li>
+                        <li><a href="#">02<span>初八</span></a></li>
+                        <li><a href="#">03<span>初九</span></a></li>
+                        <li><a href="#">04<span>初十</span></a></li>
+                        <li><a href="#">05<span>初八</span></a></li>
+                        <li><a href="#">06<span>初九</span></a></li>
+                        <li><a href="#">07<span>环境日</span></a></li>
+                        <li><a href="#">08<span>十一</span></a></li>
+                        <li><a class="led" href="#">09<span>十二</span></a></li>
+                        <li><a href="#">10<span>十三</span></a></li>
+                        <li><a href="#">11<span>十四</span></a></li>
+                        <li><a href="#">12<span>十五</span></a></li>
+                        <li><a href="#">13<span>十六</span></a></li>
+                        <li><a href="#">14<span>十七</span></a></li>
+                        <li><a href="#">15<span>十八</span></a></li>
+                        <li><a href="#">16<span>十九</span></a></li>
+                        <li><a href="#">17<span>二十</span></a></li>
+                        <li><a class="led" href="#">18<span>二十一</span></a></li>
+                        <li><a href="#">19<span>二十二</span></a></li>
+                        <li><a href="#">20<span>二十三</span></a></li>
+                        <li><a href="#">21<span>二十四</span></a></li>
+                        <li><a href="#">22<span>二十五</span></a></li>
+                        <li><a href="#">23<span>二十六</span></a></li>
+                        <li><a href="#">24<span>夏至</span></a></li>
+                        <li><a href="#">25<span>二十八</span></a></li>
+                        <li><a href="#">26<span>二十九</span></a></li>
+                        <li><a href="#">27<span>六月小</span></a></li>
+                        <li><a href="#">28<span>初二</span></a></li>
+                        <li><a href="#">29<span>初三</span></a></li>
+                        <li><a href="#">30<span>初四</span></a></li>
+                        <li><a href="#"></a></li>
+                    </ul>
+                </div><!-- bury_main_calendar 日历 End -->
+
+            </div><!-- bury_main_left 安葬吉日左侧 End -->
+            
+            <!-- 安葬吉日右侧 -->
+            <div class="bury_main_right">
+                <p class="data">2017-06-13&nbsp;&nbsp;星期三</p>
+                <div class="day">
+                    <p>13</p>
+                </div>
+                <!-- 农历 -->
+                <ul class="lunarcalendar">
+                    <li class="first">农历&nbsp;五月十八</li>
+                    <li>丁酉鸡年 丙午月 辛未日</li>
+                    <li>无节日纪念日</li>
+                </ul>
+                <!-- 宜 忌 -->
+                <div class="shouldavoid clearfix">
+                    <div class="shouldavoid_main">
+                        <h2>宜</h2>
+                        <ul class="clearfix">
+                            <li>入土</li>
+                            <li>祭祀</li>
+                            <li>开光</li>
+                            <li>祈福</li>
+                            <li>求嗣</li>
+                            <li>安门</li>
+                            <li>扫舍</li>
+                            <li>安葬</li>
+                            <li>动土</li>
+                            <li>修造</li>
+                        </ul>
+                    </div>
+                    <div class="shouldavoid_main">
+                        <h2>忌</h2>
+                        <ul class="clearfix">
+                            <li>入土</li>
+                            <li>祭祀</li>
+                            <li>开光</li>
+                            <li>祈福</li>
+                            <li>求嗣</li>
+                            <li>安门</li>
+                            <li>扫舍</li>
+                        </ul>
+                    </div>
+                </div><!-- shouldavoid 宜 忌 End -->
+            </div><!-- bury_main_right 安葬吉日右侧 End -->
+
+        </div><!-- bury_main 安葬吉日内容 End -->
+
+    </div><!-- contain End -->
+</div><!-- bury 安葬吉日 End -->
+{/block}
+
+    
+    

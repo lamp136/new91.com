@@ -1,0 +1,264 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/Datatrace/index')}">数据列表</a>
+        <a href="javascript:void(0);">添加跟踪数据</a>
+    </span>
+</div>
+<div class="site-text site-block" style="margin-top: 8px;">
+    <form class="layui-form" method="post" id="addDatatraceForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司名称<span style="color:red;">*</span></label>
+            <div class="layui-input-inline" style="width: 390px;">
+                <input type="text" name="info[company]" required lay-verify="required" placeholder="公司名称" autocomplete="off" class="layui-input" value=""/>
+            </div>
+            <div class="layui-input-inline">
+                <select name="info[category_id]" required lay-verify="required">
+                    <option value="">--公司类型--</option>
+                    <option value="">--公司类型--</option>
+                    {volist name=":config('business_type')" id="cate"}
+                        <option value="{$key}">{$cate}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">录入时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[input_time]" class="layui-input" onclick="layui.laydate({elem: this, festival: true})" placeholder="录入时间" value="{:date('Y-m-d')}"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所在地区<span style="color:red;">*</span></label>
+            <div class="layui-input-inline">
+                <select name="info[province_id]" lay-filter="province_id" required lay-verify="required">
+                    <option value="">--选择省份--</option>
+                    <option value="">--选择省份--</option>
+                    {notempty name="province"}
+                        {volist name="province" id="vo"}
+                            <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="info[city_id]" lay-filter="city_id" required lay-verify="required">
+                    <option value="">--选择市区--</option>
+                    <option value="">--选择市区--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司状况<span style="color:red;">*</span></label>
+            <div class="layui-input-inline">
+                <select name="info[intention]" required lay-verify="required">
+                    <option value="">--意向类型--</option>
+                    <option value="">--意向类型--</option>
+                    {volist name=":config('intention_type')" id="type"}
+                        <option value="{$key}">{$type}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="info[is_system]" required lay-verify="required">
+                    <option value="">--系统情况--</option>
+                    <option value="">--系统情况--</option>
+                    {volist name=":config('is_system')" id="sys"}
+                        <option value="{$key}">{$sys}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">决策人</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[decision_maker]" placeholder="姓名" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[decision_position]" placeholder="职务" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[decision_phone]" placeholder="电话" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">决策影响人</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[affect_maker]" placeholder="姓名" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[affect_position]" placeholder="职务" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[affect_phone]" placeholder="电话" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">其他联系人<span style="color:red;">*</span></label>
+            <div class="layui-input-block" style="width: 700px">
+                <textarea name="info[other_contacts]" id="otherContacts" required lay-verify="required" placeholder="其他联系人" class="layui-textarea">
+                    <p>姓名：</p>
+                    <p>职务：</p>
+                    <p>电话：</p>
+                </textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司规模</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[scale]" class="layui-input" placeholder="陵园/殡仪馆规模">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[amount]" class="layui-input" placeholder="陵园入住量，殡仪馆火花量">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="info[status]" value="{:config('normal_status')}" title="开启"/>
+                <input type="radio" name="info[status]" value="{:config('delete_status')}" title="关闭"/>
+                <input type="radio" name="info[status]" value="{:config('default_status')}" title="审核" checked/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">跟踪信息<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <textarea name="track[message]" required lay-verify="required" placeholder="跟踪信息" style="width: 900px;" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <span class="layui-btn" lay-submit lay-filter="addDatatrace">立即提交</span>
+            </div>
+        </div>
+    </form>   
+</div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'laydate', 'form','layedit'], function() {
+            var $ = layui.jquery,
+                form = layui.form(),
+                layedit = layui.layedit,
+                laydate = layui.laydate,
+                returnUrl = "{:url('store/Datatrace/index',['page' => $params.page,'search_company' => $params.search_company,'search_province' => $params.search_province,'search_city' => $params.search_city,'search_category_id' => $params.search_category_id,'search_intention' => $params.search_intention,'search_is_system' => $params.search_is_system,'search_flow_man' => $params.search_flow_man])}";
+                
+            form.on('select(province_id)', function(data) {
+                var provinceId = data['value'];
+                var data = {
+                    provinceId: provinceId
+                };
+                loadCity(provinceId);
+            });
+            
+
+            $('input[name="info[company]"]').on({
+                blur:function(){
+                    var company = $(this).val();
+                    if(company.length > 0){
+                        var data = {
+                            company:company
+                        };
+                        checkName(data);
+                    }
+                },
+            });
+
+            /**
+             * 检测商家名称重复
+             * @param  {object} info ajax数据
+             * @return {json}
+             */
+            var checkName = function(info){
+                $.ajax({
+                    url:"{:url('store/Datatrace/checkRepeat')}",
+                    type:'get',
+                    data:info,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            if(result['code'] == 1){
+                                $('input[name="info[company]"]').val('');
+                                layer.msg('公司已存在');
+                            }
+                        }
+                    }
+                })
+            }
+
+            /**
+             * 获取市区列表
+             * @param  {string} id 省份id
+             */
+            function loadCity(id) {
+                $.ajax({
+                    url: "{:url('store/Basestore/getRegion')}",
+                    type: 'get',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        var t = '<option value="0">--选择市区--</option>';
+                        if (result) {
+                            if (result['code'] == 1) {
+                                var data = result['data'];
+                                $.each(data, function(key, val) {
+                                    t += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        $('select[name="info[city_id]"]').empty().append(t);
+                        form.render();
+                    }
+                });
+            }
+
+            var tools = [
+                'strong' //加粗
+                ,'italic' //斜体
+                ,'underline' //下划线
+                ,'del' //删除线
+              
+                ,'|' //分割线
+              
+                ,'left' //左对齐
+                ,'center' //居中对齐
+                ,'right' //右对齐
+                ,'link' //超链接
+                ,'unlink' //清除链接
+                ,'face' //表情
+                ,'help' //帮助
+            ];
+            
+            var pickUpAddress = layedit.build('otherContacts',{
+                tool: tools,
+                width: 400,
+                height: 200
+            });
+
+            form.on('submit(addDatatrace)',function(){
+                var formFields = $('#addDatatraceForm').serializeArray();
+                $.ajax({
+                    url:"{:url('store/Datatrace/add')}",
+                    type:'post',
+                    data:formFields,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if(result['code'] == 1){
+                                    window.location.href = returnUrl;
+                                }
+                            });
+                        }
+                    }
+                });
+            })
+        });
+    </script>
+{/block}

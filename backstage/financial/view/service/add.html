@@ -1,0 +1,253 @@
+{extend name='extra@main' /}
+
+{block name="body"}
+<div class="layui-tab layui-tab-card" lay-filter="opt">
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+       <form class="layui-form layui-form-pane1" method="post" action="{:url('financial/Service/add')}">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>客户名称</label>
+                    <div class="layui-input-inline">
+                         {empty name="order.reservation_person"}
+                              <input type="text" name="info[reservation_person]" autocomplete="off" class="layui-input" placeholder="客户名称" lay-verify="required" value="" required>
+                        {else /}
+                             <input type="text" name="info[reservation_person]" autocomplete="off" class="layui-input" placeholder="客户名称" lay-verify="required" value="{$order.reservation_person}" required>
+                        {/empty}
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>订单来源</label>
+                    <div class="layui-input-inline">
+                        <select name="info[order_type]" lay-verify="required" lay-search="">
+                            <option value="">选择订单来源</option>
+                            {volist name='Think.config.order_type' id='vo'}
+                                <option value="{$key}">{$vo}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span style="color:red">*</span>手机</label>
+                    <div class="layui-input-inline">
+                          {empty name="order.reservation_phone"}
+                        <input type="tel" name="info[reservation_phone]" autocomplete="off" class="layui-input" placeholder="请填写手机号">
+                        {else /}
+                        <input type="tel" name="info[reservation_phone]" autocomplete="off" class="layui-input" placeholder="请填写手机号" value="{$order.reservation_phone}">
+                        {/empty}
+                    </div>
+                </div>
+                 <div class="layui-inline">
+                    <label class="layui-form-label">预约时间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="info[appoint_time]" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color:red">*</span>地区商家</label>
+                <div class="layui-input-inline">
+                    <select name="info[province_id]" lay-filter="province_id">
+                        <option value="">请选择省</option>
+                        {volist name="province" id="vo"}
+                            <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="info[city_id]" lay-filter="city_id">
+                        <option value="">--选择市区--</option>
+                    </select>
+
+                </div>
+                <div class="layui-input-inline">
+                    <select name="info[store_id]" lay-filter="store_id">
+                        <option value="">请选择商家</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="info[goods_id]" lay-filter="goods_id">
+                        <option value="">请选择商品</option>
+                    </select>
+                </div>
+            </div>
+        
+            <div class="layui-form-item layui-form-text" style="text-align:center">
+                <button class="layui-btn layui-btn-big" id='save'>保存</button>
+            </div>
+       </form>
+    </div>
+    
+</div>
+{/block}
+
+{block name="optJS"}
+<script type="text/javascript">
+layui.use(['form', 'element', 'jquery','layedit','laydate'], function(){
+    var form = layui.form()
+    var $ = layui.jquery,element = layui.element();
+    var layedit = layui.layedit;
+    var laydate = layui.laydate;
+    
+    var start = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday:true
+        ,choose: function(datas){
+          end.min = datas; //开始日选好后，重置结束日的最小日期
+          end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+  
+  var end = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday: true
+        ,choose: function(datas){
+          start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+
+
+   
+
+    var layid = location.hash.replace(/^#opt=/, '');
+    element.tabChange('opt', layid);
+  
+    element.on('tab(opt)', function(elem){
+        location.hash = 'opt='+ $(this).attr('lay-id');
+    });
+    
+    //选择省获取市
+    form.on('select(province_id)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('select[name="info[city_id]"]');
+
+        $('select[name="info[store_id]"]').empty().append('<option value="">--选择商家--</option>');
+        getcity(provinceId,obj);
+        
+    });
+
+    //获取陵园列表
+    form.on('select(city_id)', function(data) {
+        var provinceId = $('select[name="info[province_id]"]').val();
+        var cityId = data['value'];
+        var obj =  $('select[name="info[store_id]"]');
+        getcemetery(provinceId,cityId,obj);
+        
+    });
+
+    //获取陵园信息
+    form.on('select(store_id)', function(data) {
+        var storeId = data['value'];
+        var goodobj =  $('select[name="info[goods_id]"]');
+
+        getcemeterygoods(storeId,goodobj);
+        
+    });
+
+    //获取礼仪服务公司列表
+    function getcemetery(provinceId,cityId,obj){
+        $.ajax({
+            url: "{:url('getcemetery')}",
+            type: 'post',
+            data: {provinceId: provinceId,cityId:cityId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择商家--</option>';
+                if (result['flg'] == 1) {
+                    var data = result['data'];
+                    $.each(data, function(key, val) {
+                        var code = ''
+                        if(val['member_status'] != 0){
+                            code = "(会)";
+                        }
+                        t += '<option value="' + val['id'] + '">' + val['name']+code+'</option>';
+                    })
+                }
+                $(obj).empty().append(t);
+                form.render();
+                
+            }
+        });
+    }
+
+    //获取市区列表
+    function getcity(provinceId,obj){
+        $.ajax({
+            url: "{:url('orders/Tomb/getcity')}",
+            type: 'get',
+            data: {pid: provinceId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择市区--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + key + '">' + val + '</option>';
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render();
+            }
+        });
+    }
+
+    //获取陵园下的商品
+    function getcemeterygoods(storeId,goodobj){
+        $.ajax({
+            url: "{:url('getcemeterygoods')}",
+            type: 'get',
+            data: {storeId: storeId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择商品--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + key + '">' + val + '</option>';
+                        })
+                    }
+                }
+                $(goodobj).empty().append(t);
+                form.render();
+
+            }
+        });
+    }
+
+    
+
+    //表单验证
+    $('#save').click(function(){
+        var com = $("select[name='info[order_type]']").val();
+        var store = $("select[name='info[store_id]']").val();
+        var mobile = $("input[name='info[member_contact]']").val();
+
+        if(!com){
+            layer.msg('请填写订单来源');
+            return false;
+        }
+
+        if(mobile.length<1){
+            layer.msg('请填写联系方式');
+            return false;
+        }
+        if(!store){
+            layer.msg('请填写商家');
+            return false;
+        }
+        
+    })
+
+  
+});
+</script>
+{/block}

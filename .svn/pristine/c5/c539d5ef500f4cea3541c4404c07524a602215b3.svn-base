@@ -1,0 +1,33 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+/**
+ * 主要是车辆、司机管理
+ */
+class Car extends Controller 
+{
+	/**
+	 * 司机、车辆列表页
+	 * 
+	 * @return void
+	 */
+	public function index() {
+		return $this->fetch('index');
+	}
+	/**
+	 * 添加司机、车辆信息
+	 *
+	 * @return void
+	 */
+	public function add() {
+		return $this->fetch('add');
+	}
+	/**
+	 * 和继续合作的司机以及车辆
+	 * 
+	 * @return void
+	 */
+	public function recycle() {
+		return $this->fetch('recycle');
+	}
+}

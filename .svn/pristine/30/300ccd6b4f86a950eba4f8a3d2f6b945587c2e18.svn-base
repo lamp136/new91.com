@@ -1,0 +1,90 @@
+<!-- 帮助中心 nav -->
+<div class="help_nav">
+    <div class="help_nav_main">
+        <!-- LOGO -->
+        <div class="help_nav_logo">
+            <img src="_WEB_/images/help_nav_logo.png" alt="LOGO" />
+        </div><!-- help_nav_logo End -->
+        <div id="help_nav_list" class="help_nav_list">
+            <h2 {in name="action" value="serviceprocess,contactus"} class="active" {/in}>
+                <span>91搜墓网<i class="down"></i></span>
+            </h2>
+            <ul {in name="action" value="serviceprocess,contactus"} class="show" {/in}>
+                <li>
+                    <a href="{:url('/help/aboutus','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title='关于我们'>关于我们</a>
+                </li>
+                <li {eq name="action" value="serviceprocess"} class="led" {/eq}>
+                    <a href="{:url('/help/serviceprocess','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title='服务流程'>服务流程</a>
+                </li>
+                <li {eq name="action" value="contactus"} class="led" {/eq}>
+                    <a href="{:url('/help/contactus','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title='联系我们'>联系我们</a>
+                </li>
+            </ul>
+            <h2 {in name="action" value="tombnotes,buyart,tombprocess,tombnotesDetails"} class="active" {/in}>
+                <span>购墓指南<i class="down"></i></span>
+            </h2>
+            <ul {in name="action" value="tombnotes,buyart,tombprocess,tombnotesDetails"} class="show" {/in}>
+                <li {in name="action" value="tombnotes,tombnotesDetails"} class="led" {/in}>
+                    <a  href="{:url('/help/tombnotes','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="购墓须知">购墓须知</a>
+                </li>
+                <li {eq name="action" value="buyart"} class="led" {/eq}>
+                    <a  href="{:url('/help/buyart','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="购墓技巧">购墓技巧</a>
+                </li>
+                <li {eq name="action" value="tombprocess"} class="led" {/eq}>
+                    <a  href="{:url('/help/tombprocess','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="购墓流程">购墓流程</a>
+                </li>
+            </ul>
+            <h2 {in name="action" value="tombagelimit,tombflower,tombflowerdetails,wasburied,movetomb,movetombdetails"} class="active" {/in}>
+                <span>常见问题<i class="down"></i></span>
+            </h2>
+            <ul {in name="action" value="tombagelimit,tombflower,tombflowerdetails,wasburied,movetomb,movetombdetails"} class="show" {/in}>
+                <li {eq name="action" value="tombagelimit"} class="led" {/eq}>
+                    <a href="{:url('/help/tombagelimit','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="公墓年限">公墓年限</a>
+                </li>
+                <li {in name="action" value="tombflower,tombflowerdetails"} class="led" {/in}>
+                    <a href="{:url('/help/tombflower','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="鲜花祭品">鲜花祭品</a>
+                </li>
+                <li {eq name="action" value="wasburied"} class="led" {/eq}>
+                    <a href="{:url('/help/wasburied','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="落葬讲究">落葬讲究</a>
+                </li>
+                <li {in name="action" value="movetomb,movetombdetails"} class="led" {/in}>
+                    <a href="{:url('/help/movetomb','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="迁坟讲究">迁坟讲究</a>
+                </li>
+            </ul>
+            <h2 {in name="action" value="bury,ghost,ghostdetails"} class="active" {/in}>
+                <span>殡葬文化<i class="down"></i></span>
+            </h2>
+            <ul {in name="action" value="bury,ghost,ghostdetails"} class="show" {/in}>
+                <li {eq name="action" value="bury"} class="led" {/eq}>
+                    <a href="{:url('/help/bury','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="安葬吉日">安葬吉日</a>
+                </li>
+                <li>
+                    <a href="{:url('article/Article/listbox',['cid'=>$Think.config.article_fengshui_culture],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="墓地风水">墓地风水</a>
+                </li>
+                <li>
+                    <a href="{:url('/help/epigraphic','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="碑文挽联">碑文挽联</a>
+                </li>
+                <li {in name="action" value="ghost,ghostdetails"} class="led" {/in}>
+                    <a href="{:url('/help/ghost','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="三大鬼节">三大鬼节</a>
+                </li>
+            </ul>
+            <h2 {in name="action" value="copyright,disclaimer,law,privacy"} class="active" {/in}>
+                <span>平台声明<i class="down"></i></span>
+            </h2>
+            <ul {in name="action" value="copyright,disclaimer,law,privacy"} class="show" {/in}>
+                <li {eq name="action" value="copyright"} class="led" {/eq}>
+                    <a href="{:url('/help/copyright','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="版权声明">版权声明</a>
+                </li>
+                <li {eq name="action" value="disclaimer"} class="led" {/eq}>
+                    <a href="{:url('/help/disclaimer','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="免责条款">免责条款</a>
+                </li>
+                <li {eq name="action" value="law"} class="led" {/eq}>
+                    <a href="{:url('/help/law','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="法律声明">法律声明</a>
+                </li>
+                <li {eq name="action" value="privacy"} class="led" {/eq}>
+                    <a href="{:url('/help/privacy','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title="隐私条款">隐私条款</a>
+                </li>
+            </ul>
+        </div><!-- help_nav_list End -->
+    </div><!-- help_nav_main End -->
+</div><!-- help_nav 帮助中心 nav End -->

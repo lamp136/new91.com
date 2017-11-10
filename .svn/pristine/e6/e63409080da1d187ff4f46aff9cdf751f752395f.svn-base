@@ -1,0 +1,144 @@
+//获取验证码
+$(function(){
+    /*仿刷新：检测是否存在cookie*/
+    if($.cookie("mobilecode")){
+        var count = $.cookie("mobilecode");
+        var btn = $('#getting');
+        btn.val(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
+        var resend = setInterval(function(){
+            count--;
+            if (count > 0){
+                btn.val(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
+                $.cookie("mobilecode", count, {path: '/', expires: (1/86400)*count});
+            }else {
+                clearInterval(resend);
+                btn.val("获取验证码").removeClass('disabled').removeAttr('disabled style');
+            }
+        }, 1000);
+    }
+    /*点击改变按钮状态，已经简略掉ajax发送短信验证的代码*/
+    $('#getting').click(function(){
+        //手机号
+        var phone = $('.phone').val().replace(/(^\s*)|(\s*$)/g, "");
+        if(phone.length == 0){
+            $('.log_phone').empty().html('提示：请输入您的手机号').show(); 
+            return false;
+        }
+        var mobiletest = /^(1[3|4|5|7|8]\d{9})$/;
+        if(!mobiletest.test(phone)){
+            $('.log_phone').empty().html('提示：请确认手机号是否正确').show(); 
+            return false;
+        }
+
+        //提交信息
+        var url=$(this).attr('data-url');
+        $.ajax({
+            url:url,
+            type:'post',
+            data:{'mobile':phone},
+            dataType:'json',
+            success:function(result){
+                console.log(result.code);
+                if(result.flag == 0){
+                    $('.reg_code').empty().html('提示：请重新发送').show(); 
+                }
+            }
+        });
+
+        var btn = $(this);
+        var count = 60;
+        var resend = setInterval(function(){
+            count--;
+            if (count > 0){
+                btn.val(count+"秒后可重新获取");
+                $.cookie("mobilecode", count, {path: '/', expires: (1/86400)*count});
+            }else {
+                clearInterval(resend);
+                btn.val("获取验证码").removeAttr('disabled style');
+            }
+        }, 1000);
+        btn.attr('disabled',true).css('cursor','not-allowed');
+    });
+});
+//动态登录start
+$('#moblogin').click(function(){
+    var code = $('.code').val().replace(/(^\s*)|(\s*$)/g, "");
+    var phone = $('.phone').val().replace(/(^\s*)|(\s*$)/g, "");
+    var url = $(this).attr('data-url');
+    var myreg = /^(1[3|4|5|7|8]\d{9})$/;
+    if(phone == ''){
+        $('.log_phone').empty().html('提示：请输入手机号').show();
+        return false;
+    }
+    if(!myreg.test(phone)){
+        $('.log_phone').empty().html('提示：手机号不正确').show();
+        return false;
+    }
+    if(code == ''){
+        $('.log_code').empty().html('提示：验证码不能为空').show();
+        return false;
+    }
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:{'mobile':phone,'code':code} ,
+        success: function (d) {
+            var result = eval("(" + d + ")");
+            if (result.flag == 1) {
+                $('.log_code').addClass('log_validate_lv');
+                $('.log_code').empty().html('提示:登录成功!').show();
+                window.location.href = '/';
+            } else if (result.flag == 0) {
+                $('.log_code').empty().html(result.msg).show();
+            }
+        }
+    });
+});
+//手机号
+$('.phone').focus(function(){
+    $('.log_phone').hide();
+});
+//验证码
+$('.code').focus(function(){
+    $('.log_code').hide();
+});
+//动态登录end
+
+//正常登录start
+$('#sublogin').click(function(){
+    var password = $('.password').val().replace(/(^\s*)|(\s*$)/g, "");
+    var mobile = $('.mobile').val().replace(/(^\s*)|(\s*$)/g, "");
+    var url = $(this).attr('data-url');
+    if(mobile == ''){
+        $('.log_mobile').empty().html('请输入账号').show();
+        return false;
+    }
+    if(password == ''){
+        $('.log_password').empty().html('密码不能为空').show();
+        return false;
+    }
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:{'mobile':mobile,'password':password} ,
+        success: function (d) {
+            var result = eval("(" + d + ")");
+            if (result.flag == 1) {
+                $('.log_password').addClass('log_validate_lv');
+                $('.log_password').empty().html('提示:登录成功!').show();
+                window.location.href = '/';
+            } else if (result.flag == 0) {
+                $('.log_password').empty().html(result.msg).show();
+            }
+        }
+    });
+});
+//手机号
+$('.mobile').focus(function(){
+    $('.log_mobile').hide();
+});
+//密码
+$('.password').focus(function(){
+    $('.log_password').hide();
+});
+//正常登录end

@@ -1,0 +1,17 @@
+<a class="logo" href="{:url('index/Index/index')}">
+    91管理后台
+</a>
+<ul class="layui-nav topmeuFather">
+    {volist name='menuData' id='vo'}
+        <li class="layui-nav-item {eq name='vo.id' value='$currentpriId'} layui-this{/eq} topmemu" data-menuid='{$vo.id}'><a href="javascript:;">{$vo.title}</a></li>
+    {/volist}
+</ul>
+ <ul style="left:92%;" class="layui-nav">
+    <li class="layui-nav-item">
+        <a href="javascript:;">{$Think.session.login_name}</a>
+        <dl class="layui-nav-child">
+           <dd><a href="{:url('index/Index/personCenter')}">个人中心</a></dd>
+           <dd><a href="{:url('login/Login/logout')}">退出</a></dd>
+        </dl>
+    </li>
+</ul>

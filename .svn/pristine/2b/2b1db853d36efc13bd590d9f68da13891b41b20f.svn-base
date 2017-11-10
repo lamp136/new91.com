@@ -1,0 +1,478 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id='form-add' style="display:none">
+<form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+        <tr>
+            <td>是否设置封面</td>
+            <td>
+                <input type="radio" name="info[set_photo_album_status]" value="{$Think.config.normal_status}" title="是" checked>
+                <input type="radio" name="info[set_photo_album_status]" value="{$Think.config.default_status}" title="否" >
+            </td>
+        </tr>
+        <tr>
+            <td>相册类型</td>
+            <td>  
+                <input type="radio" name="info[type]" value="{$Think.config.store_img_scenery}" title="景观" checked>
+                <input type="radio" name="info[type]" value="{$Think.config.store_img_qualification}" title="资质">
+            </td>
+        </tr>
+        <tr>
+            <td>园区</td>
+            <td>
+                <select name="info[tomb_zone_id]">
+                    <option value=""></option>
+                    <option value="">--选择园区--</option>
+                    {volist name="tombZone" id="zone"}
+                        <option value="{$key}">{$zone}</option>
+                    {/volist}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>名称</td>
+            <td>  
+                <input type="text" name="info[title]" placeholder="名称" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>链接地址</td>
+            <td>  
+                <input type="text" name="info[image_link]" placeholder="链接地址" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                上传图片
+                <div class="layui-form-mid layui-word-aux">图片尺寸 264*242px</div>
+            </td>
+            <td id='parents'>  
+                <div>
+                    <a href='javascript:void(0)' class="hide" data-name="add_plus">[+]</a><input type="file" class="default" name="image[]">
+                <div>
+            </td>
+        </tr>
+        <tr>
+            <td>是否可用</td>
+            <td>
+                <input type="radio" name="info[state]" value="{$Think.config.normal_status}" title="是" checked>
+                <input type="radio" name="info[state]" value="{$Think.config.delete_status}" title="否">
+            </td>
+        </tr>
+        <tr>
+        <td>排序</td>
+            <td>  
+                <input type="text" name="info[sort]" placeholder="排序" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' style="text-align: center;">  
+                <button class="layui-btn" id='submit' type='button'>立即提交</button>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+    <input type='hidden' name='info[store_id]' value={$storeId}>
+    <input type="hidden" name="info[store_sn]" value="{$storeSn}"/>
+</form>
+</div>
+<!-- 编辑相册弹框 -->
+<div id='form-update' style="display:none">
+<form id='data-update' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+        <tr>
+            <td>是否设置封面</td>
+            <td>
+                <input type="radio" name="info[set_photo_album_status]" value="{$Think.config.normal_status}" title="是">
+                <input type="radio" name="info[set_photo_album_status]" value="{$Think.config.default_status}" title="否" >
+            </td>
+        </tr>
+        <tr>
+            <td>相册类型</td>
+            <td>  
+                <input type="radio" name="info[type]" value="{$Think.config.store_img_scenery}" title="景观" checked>
+                <input type="radio" name="info[type]" value="{$Think.config.store_img_qualification}" title="资质">
+            </td>
+        </tr>
+        <tr>
+            <td>园区</td>
+            <td>
+                <select name="info[tomb_zone_id]">
+                    <option value=""></option>
+                    <option value="">--选择园区--</option>
+                    {volist name="tombZone" id="zone_name"}
+                        <option value="{$key}">{$zone_name}</option>
+                    {/volist}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>名称</td>
+            <td>  
+                <input type="text" name="info[title]" placeholder="名称" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+         <td>链接地址</td>
+            <td>  
+                <input type="text" name="info[image_link]" placeholder="链接地址" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>图片</td>
+            <td>
+                <img name='imageurl' src="" alt="" width="80px">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                上传图片<br/>
+                <div class="layui-form-mid layui-word-aux">图片尺寸 264*242px</div>
+            </td>
+            <td>
+                <div class="layui-box layui-upload-button">
+                    <input type="file" name="image" lay-type="images" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>是否可用</td>
+            <td>
+                <input type="radio" name="info[state]" value="{$Think.config.normal_status}" title="是">
+                <input type="radio" name="info[state]" value="{$Think.config.delete_status}" title="否" checked>
+            </td>   
+        </tr>
+        <tr>
+            <td>排序</td>
+            <td>  
+                <input type="text" name="info[sort]" placeholder="排序" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' style="text-align: center;">  
+                <button class="layui-btn" id='submit-update' type='button'>立即提交</button>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+    <input type='hidden' name='image_id' value="">
+</form>
+</div>
+{/block}
+
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+<span class="layui-breadcrumb" style="font-size:20px">
+    <a href="">首页</a>
+    {if condition="$category_id eq $Think.config.category_cemetery_id"}
+        <a href="{:url('store/Basestore/cemetery')}">陵园列表</a>
+    {elseif condition="$category_id eq $Think.config.category_funeral_id"/}
+        <a href="{:url('store/Basestore/funeral')}">殡仪馆列表</a>
+    {/if}
+    <a><cite>{$store_name}相册列表</cite></a>
+</span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    {php}
+        if(showHandle('store/Basestore/saveAlbum')){
+    {/php}
+        <div class="layui-inline">
+            <span class="layui-btn add">
+                <i class="layui-icon">&#xe608;</i>添加
+            </span>
+        </div>
+    {php}
+        }
+    {/php}
+
+    <table class="layui-table layui-form">
+        <colgroup>
+            <col width="150">
+            <col width="150">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="80">
+            <col width="120">
+            <col>
+        </colgroup>
+        <thead>
+            <tr> 
+                <th>
+                    <input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose">
+                    {php}
+                        if(showHandle('store/Basestore/delstart')){
+                    {/php}
+                        <a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger" id="batchDel"/>删除<a/>
+                    {php}
+                        }
+                    {/php}
+                </th>
+                <th>图片名称</th>
+                <th>园区</th>
+                <th>设置封面</th>
+                <th>图片类型</th>
+                <th>是否显示</th>
+                <th>排序</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name='list' id='vo'}
+            <tr>
+                <td>
+                    {neq name="vo.state" value="$Think.config.delete_status"}
+                        <input name="ID_Dele" type="checkbox" lay-skin="primary" value="{$vo.id}"/>&nbsp;
+                    {else/}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {/neq}
+                    <img src='{$vo.thumb_image}' width="50px">
+                    <img width="23px" title="放大" src="/public/static/backstage/img/zoomIn.png" class="zoomIn"   data-image="{$vo.thumb_image}">
+                </td>
+                <td>{$vo.title}</td>
+                <td>
+                    {notempty name="vo.tomb_zone_id"}
+                        {if array_key_exists($vo.tomb_zone_id,$tombZone)}
+                            {$tombZone[$vo.tomb_zone_id]}
+                        {/if}
+                    {/notempty}
+                </td>
+                <td>
+                    {if condition="$vo.set_photo_album_status eq $Think.config.normal_status"}是{else/}否{/if}
+                </td>
+                <td>
+                    {if condition="$Think.config.store_img_scenery eq $vo.type"}景观
+                        {elseif condition="$Think.config.store_img_qualification eq $vo.type" /}资质
+                    {/if}
+                </td>
+                <td>
+                    {if condition="$vo.state eq $Think.config.normal_status"}是{else/}<span style="color:red">已删除</span>{/if}
+                </td>
+                <td>{$vo.sort}</td>
+                <td>
+                    {php}
+                        if(showHandle('store/Basestore/editImage')){
+                    {/php}
+                        <a href="javascript:;" image_id="{$vo.id}" class="layui-btn layui-btn-small update">编辑</a>
+                    {php}
+                        }
+                        if(showHandle('store/Basestore/delstart')){
+                    {/php}
+                        <a href="javascript:;" image_id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-danger del">删除</a>
+                    {php}
+                        }
+                    {/php}
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {$page}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+
+layui.use(['jquery', 'form'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+    //摸态框
+    $('.add').click(function() {
+        layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '500px',
+            title: '添加图片',
+            content: $('#form-add'),
+        });
+    });
+      //放大图片
+    $('.zoomIn').click(function(){
+        var src = $(this).attr('data-image');
+        layer.open({
+            closeBtn: 2,
+            type: 1, 
+            area: ['225','200px'],
+            title:'查看图片',
+            content: "<img src="+src+" width='100%' height='100%'>"
+        });
+    });
+
+    //添加表单提交
+    $('#submit').bind('click', function() {
+        //加载层
+        layer.open({
+            type:3,
+            success: function(layero, index){    
+                var dataForm = new FormData(document.getElementById("data-form"));
+                $.ajax({
+                    url: "{:url('saveAlbum')}",
+                    type: 'POST',
+                    data: dataForm,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(d) {
+                        layer.close(index);
+                        if (d.flg == 1) {
+                            layer.msg(d.msg, {
+                                icon: 1
+                            });
+                            window.location.reload();
+                        } else {
+                            layer.msg(d.msg, {
+                                icon: 1
+                            });
+                        }
+                    }
+                });
+            }
+        });     
+    });
+
+    //修改图片
+    $('.update').click(function() {
+        var image_id = $(this).attr('image_id');
+        $.ajax({
+            url: "{:url('editImage')}",
+            type: 'get',
+            data: {
+                id: image_id
+            },
+            dataType: 'json',
+            success: function(d) {
+                if (d.flg == 1) {
+                    var data = d.msg;
+                    $("#form-update input[name='info[set_photo_album_status]'][value=" + data.set_photo_album_status + "]").attr('checked', true);
+                    $("#form-update input[name='info[type]'][value=" + data.type + "]").attr('checked', true);
+                    $("#form-update input[name='info[title]']").val(data.title);
+                    $('#form-update select[name="info[tomb_zone_id]"]').val(data.tomb_zone_id);
+                    $("#form-update input[name='info[image_link]']").val(data.image_link);
+                    $("#form-update input[name='info[state]'][value=" + data.state + "]").attr('checked', true);
+                    $("#form-update input[name='info[sort]']").val(data.sort);
+                    $('#form-update img[name="imageurl"]').attr('src', data.thumb_image);
+                    $("input[name='image_id']").val(data.id);
+                    form.render();
+
+                    layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: '500px',
+                        title: '添加图片',
+                        content: $('#form-update'),
+                    });
+                }
+            }
+        });
+    });
+
+    //修改表单提交
+    $('#submit-update').bind('click', function() {
+        layer.open({
+            type:3,
+            success: function(layero, index){  
+                var dataForm = new FormData(document.getElementById("data-update"));
+                $.ajax({
+                    url: "{:url('updateImage')}",
+                    type: 'POST',
+                    data: dataForm,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(d) {
+                        layer.close(index);
+                        if (d.flg == 1) {
+                            layer.msg(d.msg, {
+                                icon: 1
+                            });
+                        } else {
+                            layer.msg(d.msg, {
+                                icon: 1
+                            });
+                        }
+                        // layer.closeAll(); //疯狂模式，关闭所有层
+                        window.location.reload();
+                    }
+                });
+            }
+        })
+    });
+
+    //单个删除
+    $('.del').click(function() {
+        var id = $(this).attr('image_id');
+        deleteImage(id);
+    });
+
+    //批量删除
+    $("#batchDel").click(function() {
+        var str = '';
+        $("input[name='ID_Dele']:checked").each(function() {
+            str += ($(this).val() + ',');
+        });
+        str = str.substring(0, str.lastIndexOf(','));
+        if (str == '') {
+            layer.msg('请选择一张图片');;
+            return;
+        }
+        deleteImage(str);
+    });
+
+    //删除相册
+    function deleteImage(id) {
+        layer.confirm('确定要删除？', {
+            btn: ['确定', '取消'], //按钮
+            icon: 3,
+            title: '提示'
+        }, function() {
+            $.ajax({
+                url: "{:url('delstart')}",
+                type: 'post',
+                data: {'id': id},
+                dataType: 'json',
+                success: function(e) {
+                    if (e.flg == 1) {
+                        layer.msg(e.msg, {icon: 1});
+                    } else {
+                        layer.msg(e.msg, {icon: 1});
+                    }
+                    window.location.reload(); //刷新当前页面.
+                }
+
+            });
+        }, function() {
+            layer.closeAll();
+        });
+    }
+
+    //全选
+    form.on('checkbox(allChoose)', function(data){
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+        child.each(function(index, item){
+          item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    })
+
+    //批量添加
+    $('#parents').on('click', '.hide', function() {
+        var a = $(this);
+        var li = $(this).parent();
+
+        if (a.html() == "[+]") {
+            var newli = li.clone();
+            $(newli).find('a').html("[-]");
+            $(newli).find('input').val("");
+            li.after(newli);
+        } else {
+            li.remove();
+        }
+    })
+});
+</script>
+{/block}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <!-- header -->
+    <div class="header login_header">
+        <div class="contain">
+
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png"/></a>
+            </div>
+            <h1>欢迎登录</h1>
+            
+            <div class="login_register"><a href="register.html">还没有账号？快来免费注册</a></div>
+
+        </div><!-- contain End -->
+    </div><!-- header End -->
+
+    <!-- 登录 -->
+    <div class="login_main">
+        <div class="contain clearfix">
+            <!-- 登录banner -->
+            <div class="logbanner">
+                <img src="images/login_banner.jpg"/>
+            </div>
+            <!-- 登录内容 -->
+            <div class="login">
+                <h1><a href="#">账号登录</a></h1>
+                <ul>
+                    <li>
+                        <input class="login_tex" type="text" placeholder="手机号"/>
+                        <span class="log_validate">请输入账号和密码</span>
+                    </li>
+                    <li>
+                        <input class="login_tex" type="password" placeholder="输入密码"/>
+                        <span class="log_validate">请输入账号和密码</span>
+                    </li>
+                    <li class="clearfix">
+                        <p class="log_check"><input class="check" type="checkbox"/>自动登录</p>
+                        <p class="log_forget"><a href="#">忘记密码？</a></p>
+                    </li>
+                    <li class="login_btn">
+                        <a href="#">立即登录</a>
+                    </li>
+                    <li class="log_register"><a href="register.html">还没有账号？快来免费注册</a></li>
+                </ul>
+            </div><!-- login登录内容 End -->
+        </div><!-- contain -->
+    </div><!-- login_main 登录 End -->
+
+    <!-- 版权 -->
+    <div class="copyright login_copyright">
+        <ul>
+            <li><a href="aboutus.html">关于我们</a></li>
+            <li><a href="help_contactus.html">联系我们</a></li>
+            <li><a href="websitemap.html">网站地图</a></li>
+            <li><a href="#">加盟合作</a></li>
+            <li><a href="#">手机站</a></li>
+            <li>热线：<span>400-618-9191</span></li>
+        </ul>
+        <p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;91搜墓网版权所有</p>
+        <p>CopyRight (C)2015-2016 Huigeyuan Technology Allrights</p>
+    </div><!-- copyright版权结束 -->
+
+</body>
+</html>
+    

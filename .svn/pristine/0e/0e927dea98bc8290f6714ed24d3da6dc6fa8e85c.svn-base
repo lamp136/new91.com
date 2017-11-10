@@ -1,0 +1,154 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/Ecology/index')}">生态葬列表</a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form action="{:url('store/Ecology/index')}">
+        <div class="layui-form-item">
+            {php}
+                if(showHandle('store/Ecology/add')){
+            {/php}
+                <div class="layui-inline">
+                    <a href="" class="layui-btn">增加</a>
+                </div>
+            {php}
+                }
+            {/php}
+            <div class="layui-inline">
+                <select name="province" lay-filter="province">
+                    <option value="0">--生态葬类型--</option>
+                    {volist name="ecologyTombs" id="e"}
+                        <option value="{$e.id}">{$e.name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <select name="province" lay-filter="province">
+                    <option value="0">请选择省</option>
+                    {notempty name="province"}
+                        {volist name="province" id="p"}
+                            <option value="{$key}" {eq name="Think.get.province" value="$key"} selected="selected" {/eq}>{$p}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <select name="city">
+                    <option value="0">请选择市</option>
+                    {notempty name="city"}
+                        {volist name="city" id="c"}
+                            <option value="{$key}" {eq name="Think.get.city" value="$key"} selected="selected" {/eq}>{$c}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+    {notempty name="list"}
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col width="100">
+                <col width="50">
+                <col width="100">
+                <col width="150">
+                <col>
+            </colgroup>
+            <thead>
+                <tr> 
+                    <th>商家名称</th>
+                    <th>商家地址</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr> 
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        {$page}
+    {/notempty}
+</div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form'], function() {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                data,
+                form = layui.form();
+            form.on('select(province)', function(data) {
+                var provinceId = data['value'];
+                $.ajax({
+                    url: "{:url('getRegion')}",
+                    type: 'get',
+                    data: {
+                        id: provinceId
+                    },
+                    dataType: 'json',
+                    success: function(jsonData) {
+                        var c = '<option value="">请选择市</option>';
+                        if (jsonData) {
+                            if (jsonData['code'] == 1) {
+                                var data = jsonData['data'];
+                                $.each(data, function(key, val) {
+                                    c += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        $('select[name="city"]').empty().append(c);
+                        form.render();
+                    }
+                })
+            });
+            $('.del_btn').on('click', function() {
+                var id = $(this).data('id'),
+                    status = $(this).data('status');
+                layer.confirm('確定要禁用？', {
+                    icon: 3,
+                    title: '提示'
+                }, function(index) {
+                    data = {
+                        id: id,
+                        status: status
+                    };
+                    _del(data);
+                });
+            });
+
+            $('.enb_btn').on('click', function() {
+                var id = $(this).data('id'),
+                    status = $(this).data('status');
+                data = {
+                    id: id,
+                    status: status
+                };
+                _del(data);
+            })
+
+            function _del(info) {
+                $.ajax({
+                    url: "{:url('store/Basestore/delete')}",
+                    type: 'get',
+                    data: info,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            if (result['code'] == 1) {
+                                window.location.reload();
+                            }
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+{/block}

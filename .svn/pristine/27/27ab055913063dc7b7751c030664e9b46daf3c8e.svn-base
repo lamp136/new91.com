@@ -1,0 +1,209 @@
+{extend name='extra@main'/}
+{block name='layer'}
+<div style="display:none" id='show'>
+<div class="layui-tab-item layui-show">  
+    <table class="layui-table" id='detail'>
+        <tr>
+            <th>司机名称</th><td name='driver'></td>
+            <th>司机电话</th><td name='driver_phone'></td>
+            <th>地区</th><td name='province'></td>
+            <th>详细地址</th><td name='address'></td>
+        </tr>
+        <tr>
+            <th>生活照</th><td colspan="3"><img name='photo' src="" width="120px"></td>
+            <th>身份证</th><td colspan="3"><img name='id_card' src="" width="120px"></td>
+        </tr>
+        <tr>
+            <th>车型</th><td name='models'></td>
+            <th>车牌号</th><td name='plate_number'></td>
+            <th>出车次数</th><td name='frequency'></td>
+            <th>级别</th><td name='level'></td>
+        </tr>
+        <tr>
+            <th>车辆照片</th><td colspan="7"><img  name='models_image' src="" width="120px"></td>
+        </tr>
+
+        <tr>
+            <th>覆盖陵园</th><td colspan="7" name='store'></td>
+        </tr>
+        <tr>
+            <th>备注</th><td colspan="7" name='remarks'></td>
+        </tr>
+    </table> 
+</div>
+</div>
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;"> 
+<form  method="get"  autocomplete="off" action='{:url("recycle")}'>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <input type="text" name="driver" autocomplete="off" placeholder="司机姓名" value="{$Think.get.driver}" class="layui-input">
+        </div> 
+        <div class="layui-input-inline">
+            <input type="text" name="driver_phone" autocomplete="off" placeholder="手机号" value="{$Think.get.driver_phone}" class="layui-input">
+        </div>
+        <div class="layui-input-inline">
+            <select name="province_id" lay-filter="province_id" >
+                <option value=" ">--选择省--</option>
+                {volist name='province' id='vo'}
+                    <option value="{$key}" {eq name='$key' value='$Think.get.province_id'} selected {/eq}>{$vo}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="city_id" lay-filter="city_id" >
+                <option value=" ">--选择市区--</option>
+                {notempty name='$city'}
+                {volist name='city' id='ci'}
+                    <option value="{$key}" {eq name='$key' value='$Think.get.city_id'} selected {/eq}>{$ci}</option>
+                {/volist}
+                {/notempty}
+            </select>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn">搜索</button>
+        </div>
+    </div>
+</form>
+ 
+<table class="layui-table" lay-even="" lay-skin="row">
+  <colgroup>
+    <col width="120">
+    <col width="200">
+    <col width="120">
+    <col width="60">
+    <col width="100">
+    <col width="150">
+    <col width="120">
+    <col width="120">
+    <col width="120">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>地区</th>
+      <th>司机</th>
+      <th>电话</th>
+      <th>级别</th>
+      <th>出车次数</th>
+      <th>车型</th>
+      <th>车牌</th>
+      <th>加入时间</th>
+      <th>退出时间</th>
+      <th>操作</th>
+    </tr> 
+  </thead>
+  <tbody>
+    {volist name='list' id='vo'}
+    <tr>
+        <td>{$vo.province_name}/{$vo.city_name}</td>
+        <td>{$vo.driver}<img width="23px" title="查看图片" src="/public/static/backstage/img/zoomIn.png" class="zoomIn"   data-image="{$vo.photo}"></td>
+        <td>{$vo.driver_phone}</td>
+        <td>{$vo.level}</td>
+        <td>{$vo.frequency}</td>
+        <td>{$vo.models}<img width="23px" title="查看图片" src="/public/static/backstage/img/zoomIn.png" class="zoomIn"   data-image="{$vo.models_image}"></td>
+        <td>{$vo.plate_number}</td>
+        <td>{$vo.created_time|date='Y-m-d',###}</td>
+        <td>{$vo.updated_time|date='Y-m-d',###}</td>
+        <td>
+            {php}
+                if(showHandle('plugin/Car/details')){
+            {/php}
+               <button href="javascript:;" id="{$vo.id}" class="layui-btn layui-btn-small details" region_name={$vo.province_name}/{$vo.city_name}>详情</button>
+            {php}
+                }
+            {/php}
+        </td>
+    </tr>
+    {/volist}
+  </tbody>
+</table> 
+{$page}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'form'], function() {
+        var $ = layui.jquery;
+        var form=layui.form();
+        $('.details').click(function(){
+            var region = $(this).attr('region_name');
+  
+            var id = $(this).attr('id');
+            $.ajax({
+                url:"{:url('details')}",
+                type:'post',
+                data:{'id':id},
+                dataType:'json',
+                success : function(e){
+                    if(e.flg==1){
+                        var data = e.data,
+                            photo = '{$Think.config.public_path}' + data.photo,
+                            idCard = '{$Think.config.public_path}' + data.id_card,
+                            modelsImage = '{$Think.config.public_path}' + data.models_image;
+                        $("#detail td[name='driver']").html(data.driver);
+                        $("#detail td[name='driver_phone']").html(data.driver_phone);
+                        $("#detail td[name='province']").html(region);
+                        $("#detail td[name='address']").html(data.address);
+                        $("#detail td img[name='photo']").attr('src',photo);
+                        $("#detail td img[name='id_card']").attr('src',idCard);
+                        $("#detail td[name='models']").html(data.models);
+                        $("#detail td[name='plate_number']").html(data.plate_number);
+                        $("#detail td[name='frequency']").html(data.frequency);
+                        $("#detail td[name='level']").html(data.level);
+                        $("#detail td img[name='models_image']").attr('src',modelsImage);
+                        $("#detail td[name='store']").html(data.cemeteryName);
+                        $("#detail td[name='remarks']").html(data.remarks);
+                    }
+                    layer.open({
+                        closeBtn: 2,
+                        type: 1,
+                        area: '900px',
+                        title: '车辆详细',
+                        content: $('#show'),
+                    });
+                }
+            });
+        });
+
+         //放大图片
+        $('.zoomIn').click(function(){
+            var src = $(this).attr('data-image');
+            layer.open({
+                closeBtn: 2,
+                type: 1, 
+                area: ['400px','400px'],
+                title:'查看图片',
+                content: "<img src="+src+" width='100%' height='100%'>"
+            });
+        });
+
+        form.on('select(province_id)', function(data) {
+            var provinceId = data['value'];
+            var obj = $('select[name=city_id');
+            $.ajax({
+                url: "{:url('Car/getcarcity')}",
+                type: 'get',
+                data: {provinceId: provinceId},
+                dataType: 'json',
+                success: function(result) {
+                    var t = '<option value=" ">--选择市区--</option>';
+                    if (result) {
+                        if (result['code'] == 1) {
+                            var data = result['data'];
+                            $.each(data, function(key, val) {
+                                t += '<option value="' + key + '">' + val + '</option>';
+                            })
+                        }
+                    }
+                    $(obj).empty().append(t);
+                    form.render();
+                }
+            });
+            
+        });
+    });
+</script>
+{/block}

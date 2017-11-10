@@ -1,0 +1,184 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="{:url('index/Index/index')}">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('funeral/Funeral/funeral')}">殡仪馆</a></li>
+                <li class="jt">></li>
+                <li>殡仪馆详情</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+        <!-- 殡仪馆详情介绍 -->
+        <div class="funeralparlour_detail_main clearfix">
+
+            <!-- 图片 -->
+            <div class="funeralparlour_detail_main_img">
+                <img src="{$data.image}"  alt="{$data.name}"/>
+            </div>
+            <!-- 详情 -->
+            <div class="funeralparlour_detail_main_text">
+                <h2>{$data.name}</h2>
+                <div class="txt">
+                    <p>{$data.summary}</p>
+                </div>
+                <ul>
+                    <li><p>等级：<span>{$Think.config.funeral_level[$data.level]}</span></p></li>
+                    <li><p>浏览量：{$data.hits}</p></li>
+                    {notempty name="data.phone"}
+                        <li><p>咨询热线：<span class="phone">{$data.phone}</span></p></li>
+                    {/notempty}
+                    <li><p>地址：{$data.address}</p></li>
+                </ul>
+            </div>
+
+        </div><!-- funeralparlour_detail_main 殡仪馆详情介绍 End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain ">
+            
+            <div class="funeralparlour_detail">
+                <h2><i class="funeralparlour_introduce_icon"></i>殡仪馆介绍</h2>
+                <div class="funeralparlour_detail_text">
+                    {$data.content}
+                </div>
+                <h2><i class="funeralparlour_traffic_icon"></i>交通信息</h2>
+                <div class="funeralparlour_detail_map" id="Bmap"></div>
+                
+            </div>
+
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <!-- 附近陵园推荐 -->
+            <div class="recommend cem_margin_bottom">
+                <h2>附近陵园推荐</h2>
+                <ul>
+                    {volist name="cemetery" id="vo"}
+                        <li>
+                            <a href="{:url('cemetery/Cemetery/details',['id' => $vo.id])}">
+                                <img src="{$vo.thumb_image}" alt="{$vo.name}" />
+                                <p>{$vo.name}</p>
+                            </a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- recommend 附近陵园推荐 End -->
+
+            <!-- 附近殡仪服务公司推荐 -->
+            <div class="recommend cem_margin_bottom">
+                <h2>附近殡仪服务公司推荐</h2>
+                <ul>
+                    {volist name="etiquette" id="vo"}
+                        <li>
+                            <a href="????">
+                                <img src="{$vo.thumb_image}" alt="{$vo.name}" />
+                                <p>{$vo.name}</p>
+                            </a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- recommend 附近殡仪服务公司推荐 End -->
+            
+             <!--白事常识-->
+            <div class="policies">
+                <h2>白事常识</h2>
+                <ul>
+                    {volist name="sense" id="vo"}
+                        <li><a href="????">{$vo.title}</a></li>
+                    {/volist}
+                </ul>
+            </div><!-- policies 白事常识 End-->
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+    
+{/block}
+{block name="js"}
+    <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170705114645"></script>
+    <script type="text/javascript">
+       function layout() {
+            $(".tombmaps_list").css("max-height", $(window).height() - $(".area").outerHeight(true) - 146);
+            $(".tombmaps_map_main").css("max-height", $(window).height() - 152);
+        }
+        layout();
+        $(window).resize(function() {
+            layout();
+        });
+
+        var map = new BMap.Map("Bmap"); // 创建地图实例  
+
+        map.addControl(new BMap.NavigationControl({
+            type: BMAP_NAVIGATION_CONTROL_LARGE
+        }));
+
+        map.enableScrollWheelZoom(); //启用地图滚轮放大缩小
+        var jsonData = <?php echo !empty($location) ? $location : '' ?>;
+        console.log(jsonData);//???
+        _loadData(jsonData);
+
+        function _addLabel(pos, stores) {
+            var options = {
+                position: pos, // 指定文本标注所在的地理位置
+                offset: new BMap.Size(-40, -20) //设置文本偏移量
+            };
+            var label = new BMap.Label('<span data-name="' + stores['name'] + '">' + stores['name'] + '</span>', options); // 创建文本标注对象
+            label.setStyle({
+                position: 'absolute',
+                top: '30px',
+                left: '100px',
+                padding: '0 16px',
+                background: '#2b916b',
+                color: '#fff',
+                lineHeight: '28px',
+                border: "1px solid white",
+                cursor: 'pointer'
+            });
+
+            
+
+            var sContent = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>" + stores['name'] + "</h4><img style='float:right;margin:4px' id='imgDemo' src='http://www.91soumu.com" + stores['thumb_image'] + "' width='139' height='104' title='" + stores['name'] + "'/><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + stores['address'] + "</p></div>";
+            var infoWindow = new BMap.InfoWindow(sContent);
+
+            label.addEventListener('click', function() {
+                map.openInfoWindow(infoWindow,
+                    pos
+                );
+            });
+            setTimeout(function() {
+                map.panTo(stores.longitude, stores.latitude);
+            }, 500);
+            map.addOverlay(label);
+        }
+
+       
+        function _loadData(datas) {
+            var pointArr = [],
+                s = '';
+            $.each(datas, function(index,val) {
+                s += '<div class="tombmaps_list_main"><h2><a href="javascript:void(0);">' + val['name'] + '</a></h2></div>';
+                //point = new BMap.Point(val['longitude'], val['latitude']);
+                point = new BMap.Point('116.331398', '39.897445');
+                pointArr.push(point);
+                _addLabel(point, val);
+            });
+            $('.tombmaps_list').empty().append(s);
+            var view = map.getViewport(pointArr),
+            level = view.zoom, // 缩放级别
+            zoomCenter = view.center; // 中心位置
+            map.centerAndZoom(zoomCenter, level);
+        }
+    </script>
+{/block}
+    

@@ -1,0 +1,346 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id='form-add' style="display:none">
+<form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+        <tr>
+            <td width="30%">联系人</td>
+            <td>
+              <input type="text" name="info[contact_name]" placeholder="联系人" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>手机号</td>
+            <td>
+              <input type="text" name="info[mobile]" id='m' placeholder="手机号" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>固话</td>
+            <td>  
+              <input type="text" name="info[tel]" placeholder="固话" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>是否默认联系人</td>
+            <td>
+              <input type="radio" name="info[default_person]" value="{$Think.config.normal_status}" title="是">
+              <input type="radio" name="info[default_person]" value="{$Think.config.default_status}" title="否" checked>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>  
+              <textarea name="info[remark]" placeholder="备注" class="layui-textarea"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <input type='hidden' name='info[store_id]' value={$storeId}>
+            <input type='hidden' name='info[store_sn]' value={$store_sn}>
+            <td colspan='2' style="text-align: center;">  
+              <button class="layui-btn" id='submit' type='button'>立即提交</button>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+</form>
+</div>
+<!-- 编辑商家联系人弹框 -->
+<div id='form-update' style="display:none">
+<form id='data-update' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+        <tr>
+            <td width="30%">联系人</td>
+            <td>
+              <input type="text" name="info[contact_name]" placeholder="联系人"  autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>手机号</td>
+            <td>
+              <input type="text" name="info[mobile]" placeholder="手机号" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>固话</td>
+            <td>  
+              <input type="text" name="info[tel]" placeholder="固话" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>是否默认联系人</td>
+            <td>
+              <input type="radio" name="info[default_person]" value="{$Think.config.normal_status}" title="是">
+              <input type="radio" name="info[default_person]" value="{$Think.config.default_status}" title="否" checked>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>  
+                <textarea name="info[remark]" placeholder="备注" class="layui-textarea"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <input type='hidden' name='contact_id' value=''>
+            <td colspan='2' style="text-align: center;">  
+              <button class="layui-btn" id='submit-update' type='button'>立即提交</button>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+</form>
+</div>
+{/block}
+
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        {if condition="$category_id eq $Think.config.category_cemetery_id"}
+            <a href="{:url('store/Basestore/cemetery')}">陵园列表</a>
+        {elseif condition="$category_id eq $Think.config.category_funeral_id"/}
+            <a href="{:url('store/Basestore/funeral')}">殡仪馆列表</a>
+        {/if}
+        <a><cite>{$store_name}  联系人列表</cite></a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    {php}
+        if(showHandle('store/Basestore/saveContact')){
+    {/php}
+        <div class="layui-inline">
+            <button class="layui-btn add">
+                <i class="layui-icon">&#xe608;</i>添加联系人
+            </button>
+        </div>
+    {php}
+        }
+    {/php}
+    <table class="layui-table">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr> 
+                <th width='10%'>联系人</th>
+                <th width="10%">手机号</th>
+                <th width='10%'>固话</th>
+                <th width='10%'>创建时间</th>
+                <th width='10%'>默认联系人</th>
+                <th width='10%'>备注</th>
+                <th width='20%'>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name='list' id='vo'}
+            <tr>
+                <td>{$vo.contact_name}</td>
+                <td>{$vo.mobile}</td>
+                <td>{$vo.tel}</td>
+                <td>{$vo.created_time|date="Y-m-d",###}</td>
+                <td>
+                    {if condition="$vo.default_person eq $Think.config.normal_status"}是{else/}否{/if}
+                </td>
+                <td>{$vo.remark}</td>
+                <td>
+                    {php}
+                        if(showHandle('store/Basestore/editContact')){
+                    {/php}
+                        <a href="javascript:;" contact_id="{$vo.id}" class=" layui-btn layui-btn-small update">编辑</a>
+                    {php}
+                        }
+                        if(showHandle('store/Basestore/delContact')){
+                    {/php}
+                        {if condition="$vo.status eq $Think.config.normal_status"}
+                            <button href="javascript:;" contact_id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-danger del">删除</button>
+                        {else/}
+                            <button href="javascript:;" contact_id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-normal  start">启用</button>
+                        {/if}
+                    {php}
+                        }
+                    {/php}
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+    layui.use(['jquery','form','layer'],function(){
+        var $=layui.jquery;
+        var form = layui.form(); 
+
+        //摸态框
+        $('.add').click(function(){
+            layer.open({
+              closeBtn: 2,
+              type: 1, 
+              area: '500px',
+              title:'添加联系人',
+              content: $('#form-add'),
+            }); 
+        });
+        
+        //添加联系人表单提交
+        $('#submit').bind('click',function(){
+            var name = $("#data-form input[name='info[contact_name]']").val();
+            var mobile = $("#data-form input[name='info[mobile]']").val();
+            var tel = $("#data-form input[name='info[tel]']").val();
+            if(name.length<1){
+                layer.msg('联系人不能为空');
+                return false;
+            }
+            if(mobile.length<1 && tel.length<1){
+                layer.msg('请填写一个联系方式');
+                return false;
+            }
+             //加载层
+            layer.open({
+                type:3,
+                success: function(layero, index){
+                    var dataFrom = new FormData(document.getElementById("data-form"));
+                    $.ajax({
+                        url:"{:url('saveContact')}",
+                        type:'POST',
+                        data:dataFrom,
+                        processData: false,
+                        contentType: false,
+                        dataType:'json',
+                        success:function(d){
+                            layer.close(index);
+                            if(d.flag==1){
+                                layer.msg(d.msg,{icon:1});
+                                window.location.reload(); 
+                            }else{
+                                layer.msg(d.msg,{icon:1});
+                            } 
+                        }
+                    });
+                }
+            }); 
+        });
+
+        //编辑商家联系人
+        $('.update').click(function(){
+            var id = $(this).attr('contact_id');
+            $.ajax({
+                url:"{:url('editContact')}",
+                type:'get',
+                data:{id:id},
+                dataType:'json',
+                success:function(d){
+                    if(d.flg==1){
+                        var data = d.msg;
+                        $("#form-update input[name='info[contact_name]']").val(data.contact_name);
+                        $("#form-update input[name='info[mobile]']").val(data.mobile);
+                        $("#form-update input[name='info[tel]']").val(data.tel);
+                        $("#form-update input[name='info[default_person]'][value="+data.default_person+"]").attr('checked',true);
+                        $("#form-update textarea[name='info[remark]']").val(data.remark);
+                        $("input[name='contact_id']").val(data.id);
+                        form.render();
+
+                        layer.open({
+                          closeBtn: 2,
+                          type: 1, 
+                          area: '500px',
+                          title:'添加图片',
+                          content: $('#form-update'),
+                        }); 
+                    }
+                }
+            });
+        });
+
+        //提交修改
+        $('#submit-update').click(function(){
+             //加载层
+            layer.open({
+                type:3,
+                success: function(layero, index){ 
+                    var dataFrom = new FormData(document.getElementById("data-update"));
+                    $.ajax({
+                        url:"{:url('updateContact')}",
+                        type:'POST',
+                        data:dataFrom,
+                        processData: false,
+                        contentType: false,
+                        dataType:'json',
+                        success:function(d){
+                            layer.close(index);
+                            if(d.flg==1){
+                                layer.msg(d.msg,{icon:1});
+                            }else{
+                                layer.msg(d.msg,{icon:1});
+                            }
+                            window.location.reload();
+                        }
+                    });
+                }
+            })
+        });
+
+        //删除商家联系人
+        $('.del').click(function(){
+            var id = $(this).attr('contact_id');
+            layer.confirm('确定要删除？', {
+              btn: ['确定','取消'], //按钮
+              icon:3,
+              title:'提示'
+            }, function(){
+                $.ajax({
+                    url:"{:url('delContact')}",
+                    type:'post',
+                    data:{'id':id,'token':'del'},
+                    dataType:'json',
+                    success : function(e){
+                        if(e.flg ==1){
+                            layer.msg(e.msg,{icon:1});
+                        }else{
+                            layer.msg(e.msg,{icon:1});
+                        }
+                        window.location.reload();//刷新当前页面.
+                    }
+                });
+            }, function(){
+                layer.closeAll();
+            });
+        });
+
+        //启用商家联系人
+        $('.start').click(function(){
+            var id = $(this).attr('contact_id');
+
+            $.ajax({
+                url:"{:url('delContact')}",
+                type:'post',
+                data:{'id':id,'token':'start'},
+                dataType:'json',
+                success : function(e){
+                    if(e.flg ==1){
+                        layer.msg(e.msg,{icon:1});
+                    }else{
+                        layer.msg(e.msg);
+                    }
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+        })
+
+           //手机号验证
+        $("input[name='info[mobile]']").keyup(function(){
+            if(this.value.length==1){
+                this.value=this.value.replace(/[^1-9]/g,'');
+            }else{
+                this.value=this.value.replace(/\D/g,'');
+            } 
+        });
+    });
+</script>
+{/block}

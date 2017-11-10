@@ -1,0 +1,14 @@
+<?php
+namespace web\index\model;
+use think\Model;
+
+class Store extends Model{
+    /**查询评论**/
+    public function Comment(){
+        return $this->HasMany('Comment','store_id','id')->field('store_id');
+    }
+    /**查询预约**/
+    public function OrderGrave(){
+        return $this->HasMany('OrderGrave','store_id','id')->field('store_id');
+    }
+}

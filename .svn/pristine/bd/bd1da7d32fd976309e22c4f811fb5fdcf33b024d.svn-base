@@ -1,0 +1,122 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+    <!-- banner -->
+    <div class="help_banner"></div>
+
+    <div class="contain clearfix contain_pdsize">
+        
+        <!-- 帮助中心 nav -->
+        <!-- 帮助中心 nav -->
+    <div class="help_nav">
+        <div class="help_nav_main">
+            <!-- LOGO -->
+            <div class="help_nav_logo">
+                <img src="_WEB_/images/help_nav_logo.png" alt="LOGO" />
+            </div><!-- help_nav_logo End -->
+            <div id="help_nav_list" class="help_nav_list">
+                <h2 class="active"><span>91搜墓网<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/aboutus')}">关于我们</a></li>
+                    <li><a href="{:url('help/Help/serviceprocess')}">服务流程</a></li>
+                    <li><a href="{:url('help/Help/contactus')}">联系我们</a></li>
+                </ul>
+                <h2><span>购墓指南<i class="down"></i></span></h2>
+                <ul class="show">
+                    <li><a href="{:url('help/Help/tombnotes')}">购墓须知</a></li>
+                    <li><a href="#">购墓技巧</a></li>
+                    <li class="led"><a href="{:url('help/Help/tombprocess')}">购墓流程</a></li>
+                </ul>
+                <h2><span>常见问题<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="#">墓型选择</a></li>
+                    <li><a href="{:url('help/Help/tombagelimit')}">公墓年限</a></li>
+                    <li><a href="#">鲜花祭品</a></li>
+                    <li><a href="{:url('help/Help/wasburied')}">落葬讲究</a></li>
+                    <li><a href="#">迁坟讲究</a></li>
+                </ul>
+                <h2><span>殡葬文化<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/bury')}">安葬吉日</a></li>
+                    <li><a href="{:url('article/Article/listbox',['cid'=>$Think.config.article_fengshui_culture],$Think.config.assign_suffix,$Think.config.assign_domain)}">墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}">碑文挽联</a></li>
+                    <li><a href="#">三大鬼节</a></li>
+                    <li><a href="#">殡葬礼仪</a></li>
+                </ul>
+                <h2><span>平台声明<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/copyright')}">版权声明</a></li>
+                    <li><a href="{:url('help/Help/disclaimer')}">免责条款</a></li>
+                    <li><a href="{:url('help/Help/law')}">法律声明</a></li>
+                    <li><a href="{:url('help/Help/privacy')}">隐私条款</a></li>
+                </ul>
+            </div><!-- help_nav_list End -->
+        </div><!-- help_nav_main End -->
+    </div><!-- help_nav 帮助中心 nav End -->
+        
+        <!-- 帮助中心右侧 -->
+        <div class="help_right help_tombprocess">
+            
+            <!-- 购墓流程 -->
+            <div class="help_tombprocess_main">
+                <h2>购墓流程</h2>
+                <div class="help_tombprocess_text">
+                    <h3 class="help_tombprocess_text_h31"><span>01</span>准备相关证件</h3>
+                    <p>凭证件购墓时请携带购墓人本人身份证及逝者相关证件到业务厅由专业的业务接待员带您选购墓穴。</p>
+                    <h3 class="help_tombprocess_text_h32"><span>02</span>选择墓穴</h3>
+                    <p>客户在陵园营销人员的陪同下，实地勘察墓区，选择合适的墓型、墓址（几区几排几号），确定价格。客户在确定墓址后，请到业务厅，填写有关详细资料，预订人须到场。</p>
+                    <h3 class="help_tombprocess_text_h33"><span>03</span>交付全额或订金</h3>
+                    <p>客户在填写好表格后，支付墓穴定金，余款须在墓园规定期限内付清。选定墓穴后，预定人须至少交纳墓价款的10%作为定金，十五日内（自定金交付日起）交齐全款；逾期不交全款，墓位将不予保留。</p>
+                    <h3 class="help_tombprocess_text_h34"><span>04</span>制作碑文小样</h3>
+                    <p>您可以在交款当天和墓地销售人员确定墓碑碑文、样式,或者请至少于"安葬日"之前15天办理碑文刻字及预约安葬日、礼仪服务等相关手续，避免影响骨灰安葬的正常进行。</p>
+                    <h3 class="help_tombprocess_text_h35"><span>05</span>确定安放时间及礼仪</h3>
+                    <p>客户确定亲人安葬具体日期后，选择对应的安葬仪式，服务，确认安葬流程。请通知陵园，由陵园派专人做好各项安葬事宜，如有变动请及时提前通知陵园。</p>
+                    <h3 class="help_tombprocess_text_h36"><span>06</span>选择配套附属商品</h3>
+                    <p>配套附属商品一般包括：骨灰盒，防潮盒，棺床，守灵狮，香炉，相框，守灵牛，守灵象，麒麟等墓地摆件。可根据需要购买。</p>
+                    <h3 class="help_tombprocess_text_h37"><span>07</span>碑文刻字</h3>
+                    <p>碑文刻字一般在安葬前10天左右通知墓地方，把当初确认的碑文文字按照当初定的碑文小样刻到墓碑上，碑文字体，贴金还是描金，大字小字，价格从5元/字-50元/字都不等。</p>
+                    <h3 class="help_tombprocess_text_h38"><span>08</span>落葬仪式</h3>
+                    <p>落葬在整个丧葬仪式中也是相当重要的。我们往往把它看做是整个仪式的休止符。生活中，人们总是习惯先挑选个适宜落葬的良辰吉日，再将逝者落葬于土中。</p>
+                </div>
+            </div><!-- help_tombprocess_main 购墓流程 End -->
+
+        </div><!-- help_right 帮助中心右侧 End -->
+
+    </div><!-- contain End -->
+    
+    <!-- 优势 -->
+    <div class="home_advantage aboutus_advantage">
+        <div class="contain">
+            <ul>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img1.png"/>
+                    <h2>信息透明</h2>
+                    <P>陵园信息全面，价格透明</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img2.png"/>
+                    <h2>预约服务</h2>
+                    <P>线上咨询，电话服务</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img3.png"/>
+                    <h2>专业服务</h2>
+                    <P>专业咨询团队，资深企业</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img4.png"/>
+                    <h2>多重优惠</h2>
+                    <P>多种礼品，享受独家优惠</P>
+                </li>
+                <li class="last">
+                    <img src="_WEB_/images/home_advantage_img5.png"/>
+                    <h2>诚信保障</h2>
+                    <P>诚信商家，保障服务</P>
+                </li>
+            </ul>
+        </div><!-- contain End -->
+    </div><!-- 优势 home_advantage End -->
+{/block}            
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}

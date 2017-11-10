@@ -1,0 +1,627 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/Ecology/index')}">生态葬列表</a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form id="ecologyListForm" action="{:url('store/Ecology/index')}">
+        <div class="layui-form-item">
+            {php}
+                if(showHandle('store/Ecology/add')){
+            {/php}
+                <div class="layui-inline">
+                    <span class="layui-btn add">增加</span>
+                </div>
+            {php}
+                }
+            {/php}
+            <div class="layui-inline">
+                <select name="province" lay-filter="listProvince">
+                    <option value="0">--选择省--</option>
+                    {volist name="province" id="name"}
+                        <option value="{$key}" {eq name="Think.get.province" value="$key"} selected="selected" {/eq}>{$name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <select name="city">
+                    <option value="0">选择市</option>
+                    {volist name="city" id="cname"}
+                        <option value="{$key}" {eq name="Think.get.city" value="$key"} selected="selected" {/eq}>{$cname}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+                <input type="hidden" name="type" value="{$params.type}"/>
+            </div>
+        </div>
+    </form>
+    <table class="layui-table" id="ecologyList">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title" id="ecologyListTab">
+                <li data-href="{:url('store/Ecology/index')}" {empty name="params.type"} class="layui-this" {/empty}>全部</li>
+                {volist name="ecologyTombs" id="v"}
+                    {if array_key_exists($key,$ecologyTombs)}
+                        <li data-href="{:url('store/Ecology/index',['type' => $key,'province' => $params.province,'city' => $params.city])}" {eq name="params.type" value="$key"} class="layui-this" {/eq}>
+                            {$v}
+                        </li>
+                    {/if}
+                {/volist}
+            </ul>
+            {notempty name="ecologyList"}
+                <thead>
+                    <tr> 
+                        <th width="25%">商家</th>
+                        <th width="15%">地区</th>
+                        <th width="15%">是否推荐</th>
+                        <th width="25%">创建时间</th>
+                        <th width="20%">操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {volist name="ecologyList" id="vl"}
+                        <tr>
+                            <td>{$vl.store.name}</td>
+                            <td>{$vl.province.name} / {$vl.city.name}</td>
+                            <td>
+                                {if $vl.recommend == config('normal_status')}
+                                    是
+                                {else/}
+                                    否
+                                {/if}
+                            </td>
+                            <td>
+                                {notempty name="vl.created_time"}
+                                    {$vl.created_time|date="Y-m-d H:i:s",###}
+                                {/notempty}
+                            </td>
+                            <td>
+                                {if showHandle('store/Ecology/edit')}
+                                    <span data-id="{$vl.id}" class="layui-btn layui-btn-small edit">编辑</span>
+                                {/if}
+                                {if showHandle('store/Ecology/delete')}
+                                    <span data-id="{$vl.id}" class="layui-btn layui-btn-small layui-btn-danger del_btn">删除</span>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>
+            {/notempty}
+        </div>
+    </table>
+    {$page}
+</div>
+{/block}
+{block name='layer'}
+    <div id="addEcology" style="display: none;">
+        <form class="layui-form layui-form-pane" style="margin-left: 25px;margin-top: 20px;" id="addEcologyForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-inline">
+                    <select name="info[type]" lay-filter="addType">
+                        <option value="0">--生态葬类型--</option>
+                        {volist name="ecologyTombs" id="name"}
+                            <option value="{$key}">{$name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地区</label>
+                <div class="layui-inline">
+                    <select name="info[province]" lay-filter="addProvince">
+                        <option value="0">选择省</option>
+                        {notempty name="province"}
+                            {volist name="province" id="p"}
+                                <option value="{$key}">{$p}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="info[city]">
+                        <option value="0">选择市</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择陵园</label>
+                <div class="layui-inline">
+                    <select lay-filter="storeProvince">
+                        <option value="0">选择省</option>
+                        {notempty name="province"}
+                            {volist name="province" id="p"}
+                                <option value="{$key}">{$p}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="storeCity" lay-filter="storeCity">
+                        <option value="0">选择市</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="choice_store" lay-filter="addStoreId">
+                        <option value="0">--选择陵园--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-inline">
+                    <input type="text" name="info[sort]" autocomplete="off" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn" lay-submit lay-filter="addEcology">立即提交</span>
+                    <input type="hidden" name="store_ids" value=""/>
+                    <input type="hidden" name="store_sn" value=""/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="stores">
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="editEcology" style="display: none;">
+        <form class="layui-form layui-form-pane" style="margin-left: 25px;margin-top: 20px;" id="editEcologyForm">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-inline">
+                        <select name="info[type]" lay-filter="editType">
+                            <option value="0">--生态葬类型--</option>
+                            {volist name="ecologyTombs" id="name"}
+                                <option value="{$key}">{$name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地区</label>
+                <div class="layui-inline">
+                    <select name="info[province_id]" lay-filter="editProvince">
+                        <option value="0">选择省</option>
+                        {notempty name="province"}
+                            {volist name="province" id="p"}
+                                <option value="{$key}">{$p}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="info[city_id]">
+                        <option value="0">选择市</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择陵园</label>
+                <div class="layui-inline">
+                    <select name="editStoreProvince" lay-filter="editStoreProvince">
+                        <option value="0">选择省</option>
+                        {notempty name="province"}
+                            {volist name="province" id="p"}
+                                <option value="{$key}">{$p}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="editStoreCity" lay-filter="editStoreCity">
+                        <option value="0">选择市</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="info[store_id]">
+                        <option value="0">--选择陵园--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-inline">
+                    <input type="text" name="info[sort]" autocomplete="off" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn" lay-submit lay-filter="editEcology">立即提交</span>
+                    <input type="hidden" name="info[id]" value=""/>
+                </div>
+            </div>
+        </form>
+    </div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form'], function() {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                data,
+                form = layui.form(),
+                addEcology,
+                editEcology,
+                storeProvince,
+                editStoreProvince;
+
+            $('#ecologyListTab li').on('click', function() {
+                var href = $(this).data('href');
+                window.location.href = href;
+            });
+            form.on('select(addProvince)', function(data) {
+                var provinceId = data['value'];
+                if (provinceId) {
+                    _city(provinceId, $('#addEcologyForm select[name="info[city]"]'));
+                }
+            });
+
+            form.on('select(listProvince)', function(data) {
+                var provinceId = data['value'];
+                if (provinceId) {
+                    _city(provinceId, $('#ecologyListForm select[name="city"]'));
+                }
+            });
+
+            form.on('select(storeProvince)', function(data) {
+                $('#addEcologyForm select[name="choice_store"]').empty().append('<option value="0">--选择陵园--</option>');
+                storeProvince = data['value'];
+                if (storeProvince) {
+                    _city(storeProvince, $('#addEcologyForm select[name="storeCity"]'));
+                }
+            });
+
+            form.on('select(editProvince)', function(data) {
+                var provinceId = data['value'];
+                if (provinceId) {
+                    _city(provinceId, $('#editEcologyForm select[name="info[city_id]"]'));
+                }
+            });
+
+            form.on('select(editStoreProvince)', function(data) {
+                $('#editEcologyForm select[name="info[store_id]"]').empty().append('<option value="0">--选择陵园--</option>');
+                editStoreProvince = data['value'];
+                if (editStoreProvince) {
+                    _city(editStoreProvince, $('#editEcologyForm select[name="editStoreCity"]'));
+                }
+            });
+
+            $('.del_btn').on('click', function() {
+                var id = $(this).data('id'),
+                    status = $(this).data('status');
+                layer.confirm('确定要删除？', {
+                    icon: 3,
+                    title: '提示'
+                }, function(index) {
+                    data = {
+                        id: id
+                    };
+                    layer.close(index);
+                    _del(data);
+                });
+            });
+
+            $('.unfold').on('click', function() {
+                var othis = $(this),
+                    type = othis.data('type');
+                if (type) {
+                    $('tbody[data-ptype="' + type + '"]').toggle();
+                    if ($('tbody[data-ptype="' + type + '"]').is(':hidden')) {
+                        othis.find('i').html('&#xe602;');
+                    } else {
+                        othis.find('i').html('&#xe61a;');
+                    }
+                }
+            });
+
+            function _del(info) {
+                $.ajax({
+                    url: "{:url('store/Ecology/delete')}",
+                    type: 'get',
+                    data: info,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            $('.add').on('click', function() {
+                $('#addEcologyForm')[0].reset();
+                $('#addEcologyForm .stores').empty();
+                addEcology = layer.open({
+                    type: 1,
+                    area: ['820px', '550px'],
+                    title: '添加生态葬',
+                    content: $('#addEcology')
+                });
+            });
+
+            form.on('select(editType)', function(data) {
+                var type = data.value;
+                if (type) {
+                    _getStores(type, $('#editEcologyForm select[name="info[store_id]"]'));
+                }
+            });
+
+            form.on('select(addStoreId)', function(data) {
+                var stores = $('#addEcologyForm .stores').find('span'),
+                    type = $('#addEcologyForm select[name="info[type]"]').val(),
+                    v = data.value.split('-'),
+                    id = v[0],
+                    name = v[1];
+                $.ajax({
+                    url: "{:url('store/Ecology/isRepeat')}",
+                    type: 'get',
+                    data: {
+                        store_id: id,
+                        type: type
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            if (result['code'] == 1) {
+                                layer.msg('已添加');
+                                return false;
+                            } else {
+                                if (id) {
+                                    if (stores.length > 0) {
+                                        for (var j = 0, lens = stores.length; j < lens; j++) {
+                                            if ($(stores[j]).data('sid') == id) {
+                                                layer.msg('已存在');
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                    var spans = '<span class="layui-input" data-sid="' + id + '" data-sname="' + name + '">' + name + '<i class="layui-icon" style="float: right;margin-right: 10px;cursor: pointer;">&#x1006;</i></span>';
+                                    stores.push(spans);
+                                    _storeAppend(stores);
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+
+            var _city = function(province, cityBox) {
+                $.ajax({
+                    url: "{:url('store/Basestore/getRegion')}",
+                    type: 'get',
+                    data: {
+                        id: province
+                    },
+                    dataType: 'json',
+                    success: function(jsonData) {
+                        var c = '<option value="">选择市</option>';
+                        if (jsonData) {
+                            if (jsonData['code'] == 1) {
+                                var data = jsonData['data'];
+                                $.each(data, function(key, val) {
+                                    c += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        cityBox.empty().append(c);
+                        form.render();
+                    }
+                });
+            }
+
+            form.on('select(storeCity)', function(data) {
+                var city = data.value;
+                if (city) {
+                    var d = {
+                        province: storeProvince,
+                        city: city
+                    };
+                    _getStores(d, $('#addEcologyForm select[name="choice_store"]'));
+                }
+            });
+
+            form.on('select(editStoreCity)', function(data) {
+                var editStoreCity = data.value;
+                if (editStoreCity) {
+                    var d = {
+                        province: editStoreProvince,
+                        city: editStoreCity
+                    };
+                    _getStores(d, $('#editEcologyForm select[name="info[store_id]"]'));
+                }
+            });
+
+            var _getStores = function(ajaxData, storeBox) {
+                $.ajax({
+                    url: "{:url('getstores')}",
+                    type: 'get',
+                    data: ajaxData,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            var l = '<option value="0">--选择陵园--</option>';
+                            if (result['code'] == 1) {
+                                var data = result['data'];
+                                $.each(data, function(key, val) {
+                                    l += '<option value="' + val['id'] + '-' + val['name'] + '">' + val['name'] + '</option>';
+                                });
+                            }
+                            storeBox.empty().append(l);
+                            form.render();
+                        }
+                    }
+                });
+            }
+
+            var _storeAppend = function(storeData) {
+                if (storeData.length > 0) {
+                    $('#addEcologyForm .stores').empty();
+                }
+                var i = 0,
+                    div = '',
+                    ids = '';
+                $.each(storeData, function(key, val) {
+                    var vsid = $(val).data('sid'),
+                        vsname = $(val).data('sname'),
+                        vsn = $(val).data('sn');
+                    ids += (vsid + ',');
+                    if (i % 4 == 0) {
+                        div += '<div class="layui-input-inline" style="width:220px;">';
+                    }
+                    div += '<span class="layui-input" data-sid="' + vsid + '" data-sname="' + vsname + '">' + vsname + '<i class="layui-icon" style="float: right;margin-right: 10px;cursor: pointer;">&#x1006;</i></span>';
+                    if (i % 4 == 3 || i == storeData.length - 1) {
+                        div += '</div>';
+                    }
+                    i++;
+                });
+                ids = ids.substring(0, ids.lastIndexOf(','));
+                $('#addEcologyForm input[name="store_ids"]').val(ids);
+                $('#addEcologyForm .stores').append(div);
+            }
+
+            $(document).on('click', '#addEcologyForm .stores span i', function() {
+                var obj = $(this);
+                obj.parent('span').remove();
+                var spans = $('#addEcologyForm .stores').find('span');
+                _storeAppend(spans);
+            });
+
+            form.on('submit(addEcology)', function(data) {
+                var fields = data.field;
+                $.ajax({
+                    url: "{:url('store/Ecology/add')}",
+                    type: 'post',
+                    data: fields,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    layer.close(addEcology);
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            });
+
+            $('#ecologyList .edit').on('click', function() {
+                var id = $(this).data('id');
+                $('#editEcologyForm')[0].reset();
+                if (id) {
+                    $.ajax({
+                        url: "{:url('store/Ecology/edit')}",
+                        type: 'get',
+                        data: {
+                            id: id
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                var s = '<option value="0">--选择陵园--</option>';
+                                if (result['code'] == 1) {
+                                    var data = result['data'];
+                                    $('#editEcologyForm input[name="info[id]"]').val(data['id']);
+                                    if (result['stores']) {
+                                        var stores = result['stores'];
+                                        if (stores['list']) {
+                                            $.each(stores['list'], function(k, v) {
+                                                if (v['id'] == data['store_id']) {
+                                                    s += '<option value="' + v['id'] + '-' + v['name'] + '" selected="selected">' + v['name'] + '</option>';
+                                                } else {
+                                                    s += '<option value="' + v['id'] + '-' + v['name'] + '">' + v['name'] + '</option>';
+                                                }
+                                            });
+                                        }
+                                        $('#editEcologyForm select[name="editStoreProvince"]').val(stores['province']);
+                                        if (stores['citylist']) {
+                                            var storeCitys = stores['citylist'];
+                                            _handleCity(storeCitys, stores['city'], $('#editEcologyForm select[name="editStoreCity"]'));
+                                        }
+                                    }
+                                    if (result['city']) {
+                                        var citys = result['city'];
+                                        _handleCity(citys, data['city_id'], $('#editEcologyForm select[name="info[city_id]"]'));
+                                    }
+                                    $('#editEcologyForm select[name="info[type]"]').val(data['type']);
+                                    $('#editEcologyForm select[name="info[province_id]"]').val(data['province_id']);
+                                    var recommend = $('#editEcologyForm input[name="info[recommend]"]');
+                                    for (var i = 0, length = recommend.length; i < length; i++) {
+                                        if (data['recommend'] == recommend[i].value) {
+                                            recommend[i].checked = true;
+                                            break;
+                                        }
+                                    }
+                                    $('#editEcologyForm input[name="info[sort]"]').val(data['sort']);
+                                }
+                                $('#editEcologyForm select[name="info[store_id]"]').empty().append(s);
+
+                                form.render();
+                                editEcology = layer.open({
+                                    type: 1,
+                                    area: ['820px', '400px'],
+                                    title: '编辑生态葬',
+                                    content: $('#editEcology')
+                                });
+                            }
+                        }
+                    })
+                }
+            });
+
+            var _handleCity = function(cityData, cid, cityBox) {
+                var c = '<option value="0">--选择市--</option>';
+                $.each(cityData, function(id, name) {
+                    if (id == cid) {
+                        c += '<option value="' + id + '" selected="selected">' + name + '</option>';
+                    } else {
+                        c += '<option value="' + id + '">' + name + '</option>';
+                    }
+                });
+                cityBox.empty().append(c);
+            }
+
+            form.on('submit(editEcology)', function(data) {
+                var value = data.field;
+                $.ajax({
+                    url: "{:url('store/Ecology/edit')}",
+                    type: 'post',
+                    data: value,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    layer.close(editEcology);
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+{/block}

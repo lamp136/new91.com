@@ -1,0 +1,209 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="{:url('index/Index/index')}">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('funeral/Funeral/funeral')}">殡仪馆</a></li>
+                <li class="jt">></li>
+                <li>殡仪馆详情</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+        <!-- 殡仪馆详情介绍 -->
+        <div class="funeralparlour_detail_main clearfix">
+
+            <!-- 图片 -->
+            <div class="funeralparlour_detail_main_img">
+                <img src="{$data.image}"  alt="{$data.name}"/>
+            </div>
+            <!-- 详情 -->
+            <div class="funeralparlour_detail_main_text">
+                <h2>{$data.name}</h2>
+                <div class="txt">
+                    <p>{$data.summary}</p>
+                </div>
+                <ul>
+                    <li><p>等级：<span>{$Think.config.funeral_level[$data.level]}</span></p></li>
+                    <li><p>浏览量：{$data.hits}</p></li>
+                    {notempty name="data.phone"}
+                        <li><p>咨询热线：<span class="phone">{$data.phone}</span></p></li>
+                    {/notempty}
+                    <li><p>地址：{$data.address}</p></li>
+                </ul>
+            </div>
+
+        </div><!-- funeralparlour_detail_main 殡仪馆详情介绍 End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain ">
+            
+            <div class="funeralparlour_detail">
+                <h2><i class="funeralparlour_introduce_icon"></i>殡仪馆介绍</h2>
+                <div class="funeralparlour_detail_text">
+                    {$data.content}
+                </div>
+                <h2><i class="funeralparlour_traffic_icon"></i>交通信息</h2>
+                <div class="funeralparlour_detail_map" id="Bmap"></div>
+                
+            </div>
+
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            {notempty name="cemetery"}
+                <!-- 附近陵园推荐 -->
+                <div class="recommend cem_margin_bottom">
+                    <h2>附近陵园推荐</h2>
+                    <ul>
+                        {volist name="cemetery" id="vo"}
+                            <li>
+                                <a href="{:url('cemetery/Cemetery/details',['id' => $vo.id])}">
+                                    <img src="{$vo.thumb_image}" alt="{$vo.name}" />
+                                    <p>{$vo.name}</p>
+                                </a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- recommend 附近陵园推荐 End -->
+            {/notempty}
+            <!-- 附近殡仪服务公司推荐 -->
+            <div class="recommend cem_margin_bottom">
+                <h2>附近殡仪服务公司推荐</h2>
+                <ul>
+                    {volist name="etiquette" id="vo"}
+                        <li>
+                            <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'>
+                                <img src="{$vo.thumb_image}" alt="{$vo.name}" />
+                                <p>{$vo.name}</p>
+                            </a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- recommend 附近殡仪服务公司推荐 End -->
+            
+             <!--白事常识-->
+            <div class="policies">
+                <h2>白事常识</h2>
+                <ul>
+                    {volist name="sense" id="vo"}
+                        <li><a href="{:url('article/Article/detail',['id'=>$vo.id])}" title='{$vo.title}'>{$vo.title}</a></li>
+                    {/volist}
+                </ul>
+            </div><!-- policies 白事常识 End-->
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+    
+{/block}
+{block name="js"}
+    <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170705114645"></script>
+    <script type="text/javascript">
+        var jsonData = <?php echo !empty($location) ? $location : '' ?>;
+        console.log(jsonData);//???
+        var longitude  = jsonData['longitude'];
+        var latitude  = jsonData['latitude'];
+        var store_name = jsonData['name'];
+        var address = jsonData['address'];
+            //创建和初始化地图函数：
+	    function initMap(){
+	        createMap();//创建地图
+	        setMapEvent();//设置地图事件
+	        addMapControl();//向地图添加控件
+	        addMarker();//向地图中添加marker
+	    }
+	    //创建地图函数：
+	    function createMap(){
+	        var map = new BMap.Map("Bmap");//在百度地图容器中创建一个地图
+	        var point = new BMap.Point(longitude, latitude);//定义一个中心点坐标
+	        map.centerAndZoom(point,12);//设定地图的中心点和坐标并将地图显示在地图容器中
+	        window.map = map;//将map变量存储在全局
+	    }
+	    //地图事件设置函数：
+	    function setMapEvent(){
+	        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+	        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+	        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+	        map.enableKeyboard();//启用键盘上下左右键移动地图
+	    }
+	    //地图控件添加函数：
+	    function addMapControl(){
+	        //向地图中添加缩放控件
+		var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+		map.addControl(ctrl_nav);
+	        //向地图中添加缩略图控件
+		var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+		map.addControl(ctrl_ove);
+	     //向地图中添加比例尺控件
+		var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+		map.addControl(ctrl_sca);
+	    }
+	    //标注点数组
+	    var markerArr = [{title:store_name,content:address,point:longitude+"|"+latitude,isOpen:0,icon:{w:23,h:25,l:0,t:275,x:6,lb:5}}
+			 ];
+	    //创建marker
+	    function addMarker(){
+	        for(var i=0;i<markerArr.length;i++){
+	            var json = markerArr[i];
+	            var p0 = json.point.split("|")[0];
+	            var p1 = json.point.split("|")[1];
+	            var point = new BMap.Point(p0,p1);
+				var iconImg = createIcon(json.icon);
+	            var marker = new BMap.Marker(point,{icon:iconImg});
+				var iw = createInfoWindow(i);
+				var label = new BMap.Label(json.title,{"offset":new BMap.Size(json.icon.lb-json.icon.x+10,-20)});
+				marker.setLabel(label);
+	            map.addOverlay(marker);
+	            label.setStyle({
+	                        borderColor:"#808080",
+	                        color:"#333",
+	                        cursor:"pointer"
+	            });
+				
+				(function(){
+					var index = i;
+					var _iw = createInfoWindow(i);
+					var _marker = marker;
+					_marker.addEventListener("click",function(){
+					    this.openInfoWindow(_iw);
+				    });
+				    _iw.addEventListener("open",function(){
+					    _marker.getLabel().hide();
+				    })
+				    _iw.addEventListener("close",function(){
+					    _marker.getLabel().show();
+				    })
+					label.addEventListener("click",function(){
+					    _marker.openInfoWindow(_iw);
+				    })
+					if(!!json.isOpen){
+						label.hide();
+						_marker.openInfoWindow(_iw);
+					}
+				})()
+	        }
+	    }
+	    //创建InfoWindow
+	    function createInfoWindow(i){
+	        var json = markerArr[i];
+	        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>"+json.content+"</div>");
+	        return iw;
+	    }
+	    //创建一个Icon
+	    function createIcon(json){
+	        var icon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
+	        return icon;
+	    } 
+	    initMap();//创建和初始化地图
+    </script>
+{/block}
+    

@@ -1,0 +1,491 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+    <table  class="layui-table">
+    <tbody>
+       <tr>
+            <td>
+                <input type="radio"  name="status" value="1" title="审核通过" lay-filter="fan" checked="checked" >
+                <input type="radio"  name="status " value="-1" title="不通过" lay-filter="fan">
+            </td>
+        </tr>
+    </tbody>
+    </table>
+        
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="bbs_update_button">提交</div>
+        </div>
+        <input type='hidden' name='id' class="deleteid" value="">
+
+    </form>
+</div>
+<!--导入EXCEL开始-->
+
+<div id="import_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="importForm" autocomplete="off" enctype="multipart/form-data">
+    <table  class="layui-table">
+    <tbody>
+       <tr>
+           <td >
+               <input type="text"  value="Excel格式:商家id/用户名称/手机号/ 评论内容/环境评分/服务评分/价格评分/交通评分/评论时间/创建时间" disabled="disabled"  style="width:650px;">
+           </td>
+       </tr>
+       <tr>
+            <td>
+               <input type="file" name="flow_file">
+            </td>
+        </tr>
+    </tbody>
+    </table>
+        
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="import_button">提交</div>
+        </div>
+
+    </form>
+</div>
+<!--导入EXCEL结束-->
+
+
+<!--添加评论开始-->
+    <form id='viewaudit' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>选择商家</td>
+                    <td>  
+                        <div class="layui-input-inline">
+                            <select name="info[province_id]" lay-filter="province_id">
+                                <option value="">请选择省</option>
+                                {volist name="province" id="vo"}
+                                    <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="info[city_id]" lay-filter="city_id">
+                                <option value="">--选择市区--</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="info[store_id]" lay-filter="store_id">
+                                <option value="">请选择商家</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="info[goods_id]" lay-filter="goods_id">
+                                <option value="">请选择商品</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>用户名称</td>
+                    <td>  
+                        <input type="text" name="info[member_name]" placeholder="用户名称" autocomplete="off" class="layui-input" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>手机号</td>
+                    <td>  
+                        <input type="text" name="info[mobile]" placeholder="手机号" autocomplete="off" class="layui-input" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>评论内容</td>
+                    <td>  
+                        <textarea name="info[content]" style="width:650px;height:100px;" placeholder="评论内容"></textarea>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>环境分数(最高5分)</td>
+                    <td>  
+                        <input type="text" name="info[environment]" placeholder="例如:5" autocomplete="off" class="layui-input" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>服务分数(最高5分)</td>
+                    <td>  
+                        <input type="text" name="info[service]" placeholder="例如:4" autocomplete="off" class="layui-input" >
+                    </td>
+                </tr>
+                
+                <tr >
+                    <td>价格分数(最高5分)</td>
+                    <td>
+                        <input type="text" name="info[price]" placeholder="例如:5" autocomplete="off" class="layui-input" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>交通分数(最高5分)</td>
+                    <td>  
+                        <input type="text" name="info[traffic]" placeholder="例如:5" autocomplete="off" class="layui-input" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>评论时间</td>
+                    <td>  
+                        <input class="layui-input" name="info[comment_time]" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <button class="layui-btn" id='subaudit' type='button'>立即提交</button>
+                        <input type="hidden" name="store_id" value=""  id="orderid">
+                        <input type="hidden" name="goods_id" value=""  id="goodsid">
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <!--添加评论 end-->
+
+<!--查看评论内容开始-->
+<div id="update_comment_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_comment_form">
+        <div class="layui-form-item">
+               <textarea  disabled="disabled" class="layui-textarea closereason" name="reason"></textarea>
+        </div>
+    </form>
+</div>
+
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+   
+    <form action="{:url('basic/Commentinfo/index')}" method="get">
+       <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <select name="comment_status">
+                    <option value="0">--审核状态--</option>
+                     <option value="{$Think.config.comment_status.unpass}"{if condition="$getMap eq -1"}selected="selected"{/if}>未通过</option>
+
+                     <option value="{$Think.config.comment_status.pass}"{if condition="$getMap eq 1"}selected="selected"{/if}>已通过</option>  
+                </select>
+            </div> 
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div style="float:right;margin-top:-60px;margin-right:10px;">
+    <button class="layui-btn add">
+        <i class="layui-icon" >&#xe608;</i>添加评论
+    </button>
+    <button class="layui-btn import">
+        <i class="layui-icon" >&#xe608;</i>导入excel表信息
+    </button>
+    </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="220">
+            <col width="120">
+            <col width="220">
+            <col width="150">
+            <col width="160">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>陵园名称</th>
+                <th>评论人</th>
+                <th>手机号</th>
+                <th>内容</th>
+                <th>环境</th>
+                <th>服务</th>
+                <th>价格</th>
+                <th>交通</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {notempty name="data"}
+                {volist name="data" id="vo"}
+                <tr>
+                    <td>{$vo.findstore.name}</td>
+                    <td>
+                        {$vo.member_name}
+                    </td>
+                    <td>{$vo.mobile}</td>
+                    <td>
+                    <button class="layui-btn layui-btn-small layui-btn-danger lookreason"  delete-id="{$vo.id}"><i class="layui-icon"></i>查看</button>
+                    </td>
+                    <td>{$vo.environment}分</td>
+                    <td>{$vo.service}分</td>
+                    <td>{$vo.price}分</td>
+                    <td>{$vo.traffic}分</td>
+                    <td>{$vo.created_time|date='Y-m-d',###}</td>
+                       
+                    <td>
+                        {if $vo['comment_status'] == '0'}
+                        <span class="layui-btn layui-btn-small layui-btn-danger check" data-id={$vo.id}  data-memberid={$vo.member_id}><i class="layui-icon"></i>待审核</span>
+                        {elseif $vo['comment_status'] == '1'}
+                        <span class="layui-btn layui-btn-small layui-btn-danger">审核通过</span>
+                        {elseif $vo['comment_status'] == '-1'}
+                        <span class="layui-btn layui-btn-small layui-btn-danger">未通过</span>
+                        {/if}
+
+                    </td>
+                </tr>
+                {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+//页面层
+layui.use(['jquery', 'layer', 'form','laydate'], function() {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        form = layui.form();
+        var laydate = layui.laydate;
+    
+    var start = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday:true
+        ,choose: function(datas){
+          end.min = datas; //开始日选好后，重置结束日的最小日期
+          end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+  
+
+    $(".check").bind('click', function(){
+         var id = $(this).attr('data-id');
+         $('.deleteid').val(id);
+         layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '500px',
+            title: '审核留言订单',
+            content: $('#close_update_form')
+         })
+    });
+
+    $('#bbs_update_button').click(function(){
+    var From = $('#update_bbs_info_form').serialize();
+        $.ajax({
+            url: "{:url('changestatus')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var d = eval("(" + result + ")");
+                layer.msg(d.msg);
+                if (d.flag == 1) {
+                    window.location.reload();
+                }
+            }
+        });
+    });
+
+    //上传excel表单模态框
+    $(".import").bind('click', function(){
+         layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '800px',
+            title: '上传excel文件',
+            content: $('#import_update_form')
+         })
+    });
+
+    //上传文件
+    $('#import_button').click(function(){
+        var importData = new FormData(document.getElementById('importForm'));
+        $.ajax({
+            url:"{:url('uploadFile')}",
+            type:'post',
+            data:importData,
+            processData: false,
+            contentType: false,
+            success:function(d){
+                var result = eval("("+d+")");
+                layer.msg(result['msg']);
+                if(result['flag'] == 1){
+                    window.location.reload();
+                }
+            }
+        })
+    });
+
+    //添加评论
+    $('.add').click(function(){
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-demo', //样式类名
+            area: ['50%','75%'], //宽高
+            closeBtn: 2, //不显示关闭按钮
+            anim: 2,
+            title:"后台添加评论",
+            content: $('#viewaudit')
+         })
+    });
+
+    //选择省获取市
+    form.on('select(province_id)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('select[name="info[city_id]"]');
+        $('select[name="info[store_id]"]').empty().append('<option value="">--选择商家--</option>');
+        getcity(provinceId,obj);
+    });
+
+    //获取陵园列表
+    form.on('select(city_id)', function(data) {
+        var provinceId = $('select[name="info[province_id]"]').val();
+        var cityId = data['value'];
+        var obj =  $('select[name="info[store_id]"]');
+        getcemetery(provinceId,cityId,obj);
+    });
+
+    //获取陵园信息
+    form.on('select(store_id)', function(data) {
+        var storeId = data['value'];
+        $('#orderid').val(storeId);
+        var obj = $('select[name="info[goods_id]"]');
+        $('select[name="info[goods_id]"]').empty().append('<option value="">--选择商品--</option>');
+        getgoodsinfo(storeId,obj)
+    });
+
+   
+
+
+    //获取商家下商品信息
+    function getgoodsinfo($storeId,obj){
+        var storeId = $storeId;
+        $.ajax({
+            url: "{:url('getgoodsinfo')}",
+            type: 'post',
+            data: {store_id:storeId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择商品--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + val['id'] + '">' + val['goods_name'] + '</option>';
+                            $('#goodsid').val(val['id']);
+
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render();
+            }
+        });
+    }
+
+    //获取陵园列表
+    function getcemetery(provinceId,cityId,obj){
+        $.ajax({
+            url: "{:url('orders/Tomb/getcemetery')}",
+            type: 'post',
+            data: {provinceId: provinceId,cityId:cityId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择商家--</option>';
+                if (result['flg'] == 1) {
+                    var data = result['data'];
+                    $.each(data, function(key, val) {
+                        var code = ''
+                        if(val['member_status'] != 0){
+                            code = "(会)";
+                        }
+                        t += '<option value="' + val['id'] + '">' + val['name']+code+'</option>';
+                    })
+                }
+                $(obj).empty().append(t);
+                form.render();
+                
+            }
+        });
+    }
+
+    //获取市区列表
+    function getcity(provinceId,obj){
+        $.ajax({
+            url: "{:url('orders/Tomb/getcity')}",
+            type: 'get',
+            data: {pid: provinceId},
+            dataType: 'json',
+            success: function(result) {
+                var t = '<option value="">--选择市区--</option>';
+                if (result) {
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += '<option value="' + key + '">' + val + '</option>';
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render();
+            }
+        });
+    }
+
+
+    //提交添加评论
+    $('#subaudit').click(function(){
+        var From = $('#viewaudit').serialize();
+        $.ajax({
+            url:"{:url('addcomment')}",
+            data:From,
+            type:'post',
+            success:function(result){
+                var d = eval("(" + result + ")");
+                layer.msg(d.msg);
+                if (d.flag == 1) {
+                    window.location.reload();
+                }
+            }
+        });
+    });
+
+    //查看评论内容
+    $(".lookreason").bind('click', function(){
+         var id = $(this).attr('delete-id');
+         $.ajax({
+            url:"{:url('lookreason')}",
+            data:{'id':id},
+            type:'post',
+            success:function(d){
+                var result = eval("("+d+")");
+                if(result.flag==1){
+                   $('.closereason').html(result.data);
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '查看评论内容',
+                    content: $('#update_comment_form')
+                 })
+            }
+
+         });   
+         
+    });
+
+
+});
+</script>
+{/block}
+

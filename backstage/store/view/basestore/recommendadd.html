@@ -1,0 +1,197 @@
+{extend name='extra@main' /}
+
+{block name='body'}
+    <div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+        <span class="layui-breadcrumb" style="font-size:20px">
+            <a href="/">首页</a>
+            <a href="{:url('recommendlist')}">推荐列表</a>
+            <a><cite>添加推荐</cite></a>
+        </span>
+    </div>
+    <div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+        <form class="layui-form" action="{:url('recommendadd')}" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color:red;">*</span>商家类型:</label>
+                <div class="layui-input-inline" >
+                    <select  name="category_id">
+                        {volist name="category" id="vo"}
+                            <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">推荐位置:</label>
+                <div class="layui-input-inline" >
+                    <select  name="feature">
+                        <option value="">--推荐位置--</option>
+                        {volist name="recommend" id="vo"}
+                            <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+             <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color:red;">*</span>归属地区:</label>
+                <div class="layui-input-inline" >
+                    <select  name="province_id" lay-filter="province">
+                        <option value="">请选择省</option>
+                        {volist name="province" id="vo"}
+                            <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="layui-input-inline" style="display:none;"> 
+                    <select  name="city_id">
+                        <option value="">--选择市区--</option>
+                    </select>
+                </div>
+            </div>  
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color:red;">*</span>选择商家:</label>
+                <div class="layui-input-inline" >
+                    <select  lay-filter="provinceadd">
+                        <option value="">请选择省</option>
+                        {volist name="province" id="vo"}
+                            <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="layui-input-inline"> 
+                    <select  id="city_id" lay-filter="cityadd">
+                        <option value="">--选择市区--</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline" id='cemetery'>
+                </div>
+                <div class="layui-input-inline"  id='show' style="width: 220px;">
+                   <a class="layui-input" style="display:none">--已选列表--</a> 
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序:</label>
+                <div class="layui-input-inline" >
+                     <input type="text" name='sort' class="layui-input" placeholder="排序">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                    <button class="layui-btn" lay-submit="" lay-filter="submit">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{/block}
+{block name='optJS'}
+    <script type="text/javascript">
+        layui.use(['jquery', 'layer', 'form'], function() {
+            var $ = layui.jquery,layer = layui.layer,form = layui.form();
+            //归属省市联动
+            form.on('select(province)', function(data) {
+                var provinceId = data['value'];
+                if(provinceId){
+                    $.ajax({
+                        url: "{:url('getRegion')}",
+                        type: 'get',
+                        data: {id:provinceId},
+                        dataType: 'json',
+                        success: function(jsonData) {
+                            var c = '<option value="">请选择市</option>';
+                            if (jsonData) {
+                                if (jsonData['code'] == 1) {
+                                    var data = jsonData['data'];
+                                    $.each(data, function(key, val) {
+                                        c += '<option value="' + key + '">' + val + '</option>';
+                                    });
+                                }
+                            }
+                            $('select[name="city_id"]').empty().append(c);
+                            form.render();
+                        }
+                    });
+                }else {
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+            
+            
+            //添加陵园省市联动
+            form.on('select(provinceadd)', function(data) {
+                var provinceId = data['value'];
+                if(provinceId){
+                    $.ajax({
+                        url: "{:url('getRegion')}",
+                        type: 'get',
+                        data: {id:provinceId},
+                        dataType: 'json',
+                        success: function(jsonData) {
+                            var c = '<option value="">请选择市</option>';
+                            if (jsonData) {
+                                if (jsonData['code'] == 1) {
+                                    var data = jsonData['data'];
+                                    $.each(data, function(key, val) {
+                                        c += '<option value="' + key + '">' + val + '</option>';
+                                    });
+                                }
+                            }
+                            $('#city_id').empty().append(c);
+                            form.render();
+                        }
+                    });
+                }else {
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+            //获取陵园列表
+            form.on('select(cityadd)', function(data){
+                var cityId = data['value'];
+                if(cityId){
+                    $.ajax({
+                        url: "{:url('getcemetery')}",
+                        type: 'post',
+                        data: {cityId:cityId},
+                        success: function(d) {
+                            var result = eval("(" + d + ")");
+                            var t ='<a class="layui-input">--陵园列表--</a>' ;
+                            if (result) {
+                                if (result['flg'] == 1) {
+                                    var data = result['data'];
+                                    $.each(data, function(key,val) {
+                                        t += "<span class='layui-input' storeId="+key+":"+val['store_sn']+">"+val['name']+"</span>";
+                                    });
+                                }
+                            }
+                            $('#cemetery').empty().append(t);
+                            form.render();
+                        }
+                    });
+                }else{
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+            //选中陵园显示
+            $('#cemetery').on('click','span',function(){
+                var storeId = $(this).attr('storeId');
+                var storeName = $(this).html();
+
+                if($('#show').find('span').length >0){
+                    var arr = $('#show').find('span');
+                    for (var i =0; i<arr.length; i++) {
+                        if($(arr[i]).attr('storeId')==storeId){
+                            layer.msg('陵园已添加');return false;
+                        }
+                    }
+                }
+                var t = '';
+                t = "<span class='layui-input' storeId="+storeId+">"+storeName+"<i class='layui-icon' style='float: right;margin-right: 10px;cursor: pointer;'>&#x1006;</i><input type='hidden' name='storeId[]' value="+storeId+"></span>";
+                $('#show').find('a').show();
+                $('#show').append(t);
+            });
+            //删除选中陵园
+            $('#show').on('click','i',function(){
+                $(this).parents('span').remove();
+            });
+        });
+    </script>
+{/block}

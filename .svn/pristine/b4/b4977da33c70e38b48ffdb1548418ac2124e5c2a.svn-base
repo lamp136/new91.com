@@ -1,0 +1,89 @@
+<?php
+namespace back\orders\controller;
+use think\Controller;
+/**
+ * 墓地订单 订单控制器
+ */
+class Tomb extends Controller
+{	
+	/**
+	 * 新增订单
+	 *
+	 * @return void
+	 */
+	public function add() {
+		return $this->fetch('add');
+	}
+	/**
+	 * 预约订单
+	 * 
+	 * @return void
+	 */
+	public function appoint() {
+		return $this->fetch('appoint');
+	}
+	/**
+	 * 订单详情
+	 * 
+	 * @return void
+	 */
+	public function detail() {
+		return $this->fetch('detail');
+	}
+	/**
+	 * 订单编辑
+	 * 
+	 * @return void
+	 */
+	public function edit() {
+		return $this->fetch('edit');
+	}
+	/**
+	 * 有意向订单列表
+	 * 
+	 * @return void
+	 */
+	public function interst() {
+		return $this->fetch('interst');
+	}
+	/**
+	 * 预交定金列表
+	 * 
+	 * @return void
+	 */
+	public function deposit() {
+		return $this->fetch('deposit');
+	}
+	/**
+	 * 审核订单列表
+	 * 
+	 * @return void
+	 */
+	public function check() {
+		return $this->fetch('check');
+	}
+	/**
+	 * 陵园支付
+	 * 
+	 * @return void
+	 */
+	public function storepay() {
+		return $this->fetch('storepay');
+	}
+	/**
+	 * 待返现订单列表
+	 * 
+	 * @return void
+	 */
+	public function returnpay() {
+		return $this->fetch('returnpay');
+	}
+
+	public function compelete() {
+		return $this->fetch('compelete');
+	}
+
+	public function callbacks() {
+		return $this->fetch('callbacks');
+	}
+}

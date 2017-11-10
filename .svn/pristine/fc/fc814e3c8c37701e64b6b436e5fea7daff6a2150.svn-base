@@ -1,0 +1,41 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: liu21st <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+return [
+
+    '/'                 => 'index/Index/index',//网站首页
+    'register$'         => 'login/Login/register',//用户注册
+    'login$'            => 'login/Login/login',//用户登录
+
+    'map/:province' => 'cemetery/Map/index?province=:province',
+    'map' => 'cemetery/Map/index',
+
+	'rite/[:city]/[:length]$'     => ['rite/Rite/lists',['method'=>'get'],['city'=>'\d+'],['length'=>'\w+']],         //服务列表
+	'rite/detail/:id$'       => 'rite/Rite/detail',        //服务详情
+	'rite/combo/:id$' => 'rite/Rite/comboDetail',   //服务套餐详细
+	'contactus$'      => 'help/Help/contactus',     //联系我们
+	'serviceprocess$' => 'help/Help/serviceprocess',//服务流程
+	'privacy$'        => 'help/Help/privacy',       //隐私条款
+	'tombagelimit$'   => 'help/Help/tombagelimit',  //公墓年限
+	'tombnotes$'      => 'help/Help/tombnotes',     //购墓须知
+	'wasburied$'      => 'help/Help/wasburied',     //落葬讲解
+	'aboutus$'        => 'help/Help/aboutus',       //关于我们
+	'bury$'           => 'help/Help/bury',          //安葬吉日
+	'epigraphic$'     => 'help/Help/epigraphic',    //碑文大全
+	
+
+
+
+    'cemetery' => 'cemetery/Cemetery/index',
+
+    'cemdetail/:id' => ['cemetery/Cemetery/details',['method' => 'get'], ['id' => '\d+']], 
+
+];

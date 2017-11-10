@@ -1,0 +1,61 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/upwd')}">修改密码</a></li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+        {include file="extra@ucenter_left" /}
+        
+        <!-- 用户中心右侧 -->
+        <div class="user_right">
+            
+            <h1>修改密码</h1>
+            <!-- 修改密码 -->
+            <div class="changepassword">
+                <form id="changePwdForm">
+                    <ul>
+                        <li>
+                            <p>原始密码<span class="cha_hint">*</span><font>（请输入原始密码）</font></p>
+                            <input name="old_pwd" class="cha_tex" type="text"/>
+                        </li>
+                        <li>
+                            <p>新密码<span class="cha_hint">*</span></p>
+                            <input name="new_pwd" class="cha_tex" type="text"/>
+                        </li>
+                        <li>
+                            <p>请确认<span class="cha_hint">*</span></p>
+                            <input name="new_pwd_2" class="cha_tex" type="text"/>
+                            <!-- <span class="pers_validate"><i></i>提示：两次密码输入不一致</span> -->
+                        </li>
+                        <li class="yzm clearfix">
+                            <p>验证码<span class="cha_hint">*</span></p>
+                            <input name="code" class="cha_tex" type="text"/>
+                            <img class="cha_yzm varify_code" src="{:captcha_src()}" alt="captcha" title="点击刷新"/>
+                            <!-- <a href="javascript:;">看不清？换一张</a> -->
+                        </li>
+                        <li><a class="cha_save" data-url="{:url('ucenter/User/alterpwd')}"  href="javascript:void(0);">提交</a></li>
+                    </ul>
+                </form>
+            </div><!-- changepassword 修改密码 End -->
+
+        </div><!-- user_right 用户中心右侧 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+{block name="js"}
+    <!--私有JS -->
+    <script type="text/javascript">
+        var userId = {$userId};
+    </script>
+    <script type="text/javascript" src="_WEB_/js/change.js"></script>
+{/block}

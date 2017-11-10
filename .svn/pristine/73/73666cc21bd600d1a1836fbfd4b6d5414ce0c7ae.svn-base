@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>91搜墓网</title>
+        <link rel="stylesheet" href="_BACKSTAGE_/layer/css/layui.css">
+        <style type="text/css">
+            .header-demo .logo {
+                left: 18px;
+            }
+            .logo {
+              position: absolute;
+              left: 0;
+              top: 16px;
+              font-size: 22px;
+              color: #fff;
+            }
+
+            .header .layui-nav {
+              position: absolute;
+              left: 202px;
+              top: 0;
+              padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+            <fieldset class="layui-elem-field layui-field-title" >
+                <legend>访客足迹详情</legend>
+            </fieldset>
+            
+            <div style="margin-top:-10px;">
+                <table class="layui-table" lay-skin="line">
+                    <colgroup>
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="100">
+                        <col width="20">
+                        <col width="20">
+                        <col width="50">
+                        <col width="60">
+                        <col width="60">
+                        <col width="50">
+                        <col width="50">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>访客名称</th>
+                            <th>访客电话</th>
+                            <th>访客来源</th>
+                            <th>搜索词</th>
+                            <th>开始访问时间</th>
+                            <th>访客IP</th>
+                            <th>访客IP说明</th>
+                            <th>省份</th>
+                            <th>市区</th>
+                            <th>初始访问地址</th>
+                            <th>当前客服</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                          {volist name="data" id="vo"}
+                            <tr>
+                                <td>{notempty name="vo.caller_name"}
+                                {$vo.caller_name}
+                                {/notempty}
+                                </td>
+                                <td>{notempty name="vo.caller_id"}
+                                {$vo.caller_id}
+                                {/notempty}</td>
+                                <td>{$vo.access_source}</td>
+                                <td>{$vo.search_key}</td>
+                                <td>{$vo.start_time|date="Y-m-d H:i:s",###}</td>
+                                <td>{$vo.ip}</td>
+                                <td>{$vo.ip_description}</td>
+                                <td>{$vo.province_name}</td>
+                                <td>{$vo.city_name}</td>
+                                <td>{$vo.initiai_ip}</td>
+                                <td>{notempty name="vo.now_server"}{$vo.now_server}{/notempty}</td>
+                            </tr>
+                        {/volist}
+                    </tbody>
+                </table>  
+            </div>
+        </div>
+    </body>
+</html>

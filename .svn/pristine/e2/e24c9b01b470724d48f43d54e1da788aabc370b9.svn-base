@@ -1,0 +1,44 @@
+<?php
+namespace web\ucenter\controller;
+use think\Controller;
+use think\Db;
+use web\extra\controller\Base;
+use think\Cookie;
+
+class User extends Base
+{
+    /**
+     * 用户资料
+     * @return void
+     */
+    public function users(){
+        if(Cookie::has('name')){
+            $mobile = Cookie::get('_yos');
+            $member = [];
+            if($mobile){
+                // $member = Db::name('member')->where('mobile',$mobile)->field('id,name,mobile,')
+                $member = Db::table('__MEMBER__ m,__MEMBER_BANK__ b')->where('m.id = b.member_id and m.mobile ='.$mobile)->field('m.id,m.name,m.mobile,b.bank_type,b.bank,b.bank_account,b.bank_member')->find();
+            }
+            $seo = $this->getseo();
+            $this->assign([
+                'member' => $member,
+                'seo' => $seo
+            ]);
+            return $this->fetch();
+        }else{
+            $this->redirect(url('/login'));
+        }
+    }
+
+    /**
+     * 修改密码
+     * @return [type] [description]
+     */
+    public function change(){
+        $seo = $this->getseo();
+        $this->assign([
+            'seo' => $seo
+        ]);
+        return $this->fetch();
+    }
+}

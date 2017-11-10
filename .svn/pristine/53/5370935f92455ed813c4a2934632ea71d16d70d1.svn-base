@@ -1,0 +1,62 @@
+{extend name='extra@main' /}
+{block name='body'}
+<!-- banner -->
+<div class="epigraphic_banner"></div>
+
+<!-- 碑文大全内容 -->
+<div class="epigraphic_box">
+    <div class="contain contain_pdsize">
+
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+
+            <!-- 碑文 -->
+            <div class="epigraphic">
+
+                <!-- 父亲碑文 -->
+                <div class="epigraphic_main">
+                    <h2><img src="_WEB_/images/{$Think.config.epitaph_category[$category]}.png"/></h2>
+                    <ul>
+                    {volist name='data' id='vo'}
+                        <li><a href="javascript:void(0);">{$vo.content}</a></li>
+                    {/volist}
+                    </ul>
+                </div><!-- epigraphic_main End -->
+
+            </div><!-- epigraphic End -->
+
+        </div><!-- leftcontain 左侧内容 End -->
+
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+
+            {volist name='bscs' id='vo' offset="0" length='1'}
+            <div class="epigraphic_style cem_margin_bottom">
+                <a href="{:url('article/Article/detail',['id'=>$vo['id']],$Think.config.assign_suffix,$Think.config.assign_domain)}" title='{$vo.title}'>
+                    <img src="{$vo.thumb_url}" alt="{$vo.title}" title="{$vo.title}"/>
+                    <p>{$vo.title}</p>
+                </a>
+            </div><!-- epigraphic_style 碑文的写法 End -->
+            {/volist}
+            <!--相关文章-->
+            <div class="policies cem_margin_bottom">
+                <h2>相关文章</h2>
+                <ul>
+                    {volist name='bscs' id='data' offset="1"}
+                    <li><a href="{:url('article/Article/detail',['id'=>$data['id']],$Think.config.assign_suffix,$Think.config.assign_domain)}" title='{$vo.title}'>{$data.title}</a></li>
+                    {/volist}
+                </ul>
+            </div><!-- policies 相关文章 End-->
+
+            <!--广告位-->
+            <div class="advertising advborder">
+                <img src="_WEB_/images/epigraphic_img1.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+
+        </div><!-- leftcontain 右侧内容 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+</div><!-- epigraphic_box 碑文大全内容 End -->
+{/block}

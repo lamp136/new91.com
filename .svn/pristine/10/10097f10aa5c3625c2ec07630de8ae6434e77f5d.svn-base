@@ -1,0 +1,108 @@
+{extend name='extra@main' /}
+{block name='body'}
+<!-- banner -->
+<div class="aboutus_banner"></div>
+
+<!-- 面包屑导航 -->
+<div class="breadcrumb">
+    <div class="contain">
+        <ul>
+            <li><a href="/" title='91搜墓网'>首页</a></li>
+            <li class="jt">></li>
+            <li><a href="{:url('help/Help/contactus')}" title='帮助中心'>帮助中心</a></li>
+            <li class="jt">></li>
+            <li>关于我们</li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- breadcrumb End -->
+
+<!-- 我们是谁 -->
+<div class="aboutus_who">
+    <div class="contain">
+        <!-- title -->
+        <div class="aboutus_title">
+            <img src="_WEB_/images/aboutus_title1.png" alt="我们是谁title" />
+        </div>
+        <!-- 我们是谁内容 -->
+        <div class="aboutus_who_main clearfix">
+            <img src="_WEB_/images/aboutus_who_img.jpg" alt="公司图片" />
+            <div class="aboutus_who_main_text">
+                <p>91搜墓网隶属于卉格苑(北京)科技有限公司，是领先的互联网殡葬服务平台，在这里，我们为您提供墓地选购、殡仪馆查询、殡仪服务、葬仪服务、祭祀服务等其他与殡葬相关的各项服务。专业的1对1购墓讲解、墓地风水、安葬风俗讲解，亲人的身后事，交给我们，让您安心、省心、放心。</p>
+                <p>我们郑重向您承诺：信息全面、公开、透明，您的满意，是我们不懈努力的方向！</p>
+            </div>
+        </div><!-- aboutus_who_main 我们是谁内容 End -->
+    </div><!-- contain End -->
+</div><!-- aboutus_who 我们是谁 End -->
+
+<!-- 提供哪些服务 -->
+<div class="aboutus_service"></div>
+
+<!-- 为什么选择我们 -->
+<div class="aboutus_promise">
+    <div class="contain">
+        <!-- title -->
+        <div class="aboutus_title">
+            <img src="_WEB_/images/aboutus_title3.png" alt="为什么选择我们title" />
+        </div>
+        <ul class="clearfix">
+            <li>
+                <img src="_WEB_/images/aboutus_img1.jpg"/>
+                <p>为您提供全面的墓地信息，涵盖各陵园的环境、墓型、交通等，每天实时更新，100%真实有效。我们致力于打造一个专业化的墓地信息平台，让您足不出户即可了解墓地相关信息。</p>
+            </li>
+            <li>
+                <img src="_WEB_/images/aboutus_img2.jpg"/>
+                <p>客户直接和陵园签订正规购墓合同，墓地价格以陵园挂牌价格为准，通过平台成功预订，可获得平台的返现优惠，整个过程公开透明。购买的同时按照我们的补贴规则即可获得补贴，我们只为客户省钱，不收取任何其他费用。</p>
+            </li>
+            <li>
+                <img src="_WEB_/images/aboutus_img3.jpg"/>
+                <p>我们有专业的客服团队，为您提供任何与购墓有关的信息，拨打我们的咨询热线，就可免费获得一对一购墓指导，涵盖陵园详情、购墓流程等信息的提供和相关指导。</p>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/aboutus_img4.jpg"/>
+                <p>我们已和多家陵园建立合作关系，尽最大可能为客户省钱。我们承诺给予客户最高补贴，截止到目前已累计为客户节省超过上百万元，在行业中处于领先地位。</p>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- aboutus_promise 为什么选择我们 End -->
+
+<!-- 我们的成绩 -->
+<div class="aboutus_result"></div>
+
+<!-- 用户有话说 -->
+<div class="aboutus_word"></div>
+
+<!-- 优势 -->
+<div class="home_advantage aboutus_advantage">
+    <div class="contain">
+        <ul>
+            <li>
+                <img src="_WEB_/images/home_advantage_img1.png"/>
+                <h2>信息透明</h2>
+                <P>陵园信息全面，价格透明</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img2.png"/>
+                <h2>预约服务</h2>
+                <P>线上咨询，电话服务</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img3.png"/>
+                <h2>专业服务</h2>
+                <P>专业咨询团队，资深企业</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img4.png"/>
+                <h2>多重优惠</h2>
+                <P>多种礼品，享受独家优惠</P>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/home_advantage_img5.png"/>
+                <h2>诚信保障</h2>
+                <P>诚信商家，保障服务</P>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- 优势 home_advantage End -->
+{/block}
+    
+    

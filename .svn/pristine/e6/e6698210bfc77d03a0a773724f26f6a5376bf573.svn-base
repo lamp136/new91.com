@@ -1,0 +1,104 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+<!-- banner -->
+<div class="help_banner"></div>
+
+<div class="contain clearfix contain_pdsize">
+    
+    <!-- 帮助中心 nav -->
+    <div class="help_nav">
+        <div class="help_nav_main">
+            <!-- LOGO -->
+            <div class="help_nav_logo">
+                <img src="_WEB_/images/help_nav_logo.png" alt="LOGO" />
+            </div><!-- help_nav_logo End -->
+            <div id="help_nav_list" class="help_nav_list">
+                <h2><span>91搜墓网<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/aboutus')}" title='关于我们'>关于我们</a></li>
+                    <li><a href="{:url('help/Help/serviceprocess')}" title='服务流程'>服务流程</a></li>
+                    <li><a href="{:url('help/Help/contactus')}" title='联系我们'>联系我们</a></li>
+                </ul>
+                <h2><span>购墓指南<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/tombnotes')}" title="购墓须知">购墓须知</a></li>
+                    <li><a href="{:url('help/Help/buyart')}" title="购墓技巧">购墓技巧</a></li>
+                    <li><a href="{:url('help/Help/tombprocess')}" title="购墓流程">购墓流程</a></li>
+                </ul>
+                <h2><span>常见问题<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/tombagelimit')}" title="公墓年限">公墓年限</a></li>
+                    <li><a href="{:url('help/Help/tombflower')}" title="鲜花祭品">鲜花祭品</a></li>
+                    <li><a href="{:url('help/Help/wasburied')}" title="落葬讲究">落葬讲究</a></li>
+                    <li><a href="{:url('help/Help/movetomb')}" title="迁坟讲究">迁坟讲究</a></li>
+                </ul>
+                <h2><span>殡葬文化<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/bury')}" title="安葬吉日">安葬吉日</a></li>
+                    <li><a href="{:url('article/Article/listbox',['cid'=>$Think.config.article_fengshui_culture],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="墓地风水">墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}" title="碑文挽联">碑文挽联</a></li>
+                    <li><a href="{:url('help/Help/ghost')}" title="三大鬼节">三大鬼节</a></li>
+                </ul>
+                <h2 class="active"><span>平台声明<i class="down"></i></span></h2>
+                <ul class="show">
+                    <li><a href="{:url('help/Help/copyright')}" title="版权声明">版权声明</a></li>
+                    <li class="led"><a href="{:url('help/Help/disclaimer')}" title="免责条款">免责条款</a></li>
+                    <li><a href="{:url('help/Help/law')}" title="法律声明">法律声明</a></li>
+                    <li><a href="{:url('help/Help/privacy')}" title="隐私条款">隐私条款</a></li>
+                </ul>
+            </div><!-- help_nav_list End -->
+        </div><!-- help_nav_main End -->
+    </div><!-- help_nav 帮助中心 nav End -->
+    
+    <!-- 帮助中心右侧 -->
+    <div class="help_right help_statement">
+        
+        <!-- 平台声明 -->
+        <div class="help_statement_main">
+            <p>除91搜墓网注明之服务条款外，其它因使用91搜墓网而引致之任何意外、疏忽、合约毁坏、诽谤、版权或知识 产权侵犯及其所造成的各种损失(包括因下载而感染电脑病毒)，91搜墓网概不负责，亦不承担任何法律责任。</p>
+            <p>任何透过91搜墓网网页而链接及得到之资讯、产品及服务，91搜墓网概不负责，亦不负任何法律责任。</p>
+            <p>91搜墓网内所有内容并不反映任何91搜墓网之意见及观点。</p>
+            <p>91搜墓网认为，一切网民在进入91搜墓网主页及各层页面时已经仔细看过本条款并完全同意。 敬请谅解。</p>
+        </div><!-- help_statement_main 平台声明 End -->
+
+    </div><!-- help_right 帮助中心右侧 End -->
+
+</div><!-- contain End -->
+
+<!-- 优势 -->
+<div class="home_advantage aboutus_advantage">
+    <div class="contain">
+        <ul>
+            <li>
+                <img src="_WEB_/images/home_advantage_img1.png"/>
+                <h2>信息透明</h2>
+                <P>陵园信息全面，价格透明</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img2.png"/>
+                <h2>预约服务</h2>
+                <P>线上咨询，电话服务</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img3.png"/>
+                <h2>专业服务</h2>
+                <P>专业咨询团队，资深企业</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img4.png"/>
+                <h2>多重优惠</h2>
+                <P>多种礼品，享受独家优惠</P>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/home_advantage_img5.png"/>
+                <h2>诚信保障</h2>
+                <P>诚信商家，保障服务</P>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- 优势 home_advantage End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}

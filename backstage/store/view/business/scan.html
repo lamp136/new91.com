@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>91搜墓网</title>
+        <link rel="stylesheet" href="_BACKSTAGE_/layer/css/layui.css">
+    </head>
+    <body>
+        <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+            <legend>{$store_name}</legend>
+        </fieldset>  
+        <textarea name="preview" id="editor" style="width: 900px;margin: 0 auto">
+            {$preview}
+        </textarea>
+        <div class="layui-form-item" style="width: 100px;margin: 0 auto;">
+            <div class="layui-input-inline">
+                <span class="layui-btn subPreview">立即提交</span>
+            </div>
+        </div>
+        <script src="_BACKSTAGE_/layer/layui.js"></script>
+        <script src="_BACKSTAGE_/ueditor/ueditor.config.js"></script>
+        <script src="_BACKSTAGE_/ueditor/ueditor.all.min.js"></script>
+        <script>
+            var id = '{$id}',
+                preview;
+            layui.use(['jquery','form','layedit','layer'],function(){
+                var $ = layui.jquery,
+                    layer = layui.layer,
+                    layedit = layui.layedit,
+                    form = layui.form();
+
+                var ue = UE.getEditor('editor',{
+                    toolbars:[
+                        toolBars
+                    ],
+                    autoHeightEnabled: true,
+                    autoFloatEnabled: true
+                });
+                $('.subPreview').on('click',function(){
+                    preview = ue.getContent();
+                    if(id){
+                        $.ajax({
+                            url:"{:url('scan')}",
+                            type:'post',
+                            data:{
+                                id:id,
+                                preview:preview
+                            },
+                            dataType:'json',
+                            success:function(result){
+                                if(result){
+                                    if(result['code'] == 1){
+                                        layer.msg('修改成功');
+                                        window.location.reload();
+                                    }
+                                }
+                            }
+                        })
+                    }
+                });
+            });
+
+            var toolBars = [
+                'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'music', 'insertvideo', 'attachment', 'pagebreak', '|', 'inserttable', '|', 'horizontal', 'date', 'time', 'spechars', '|', 'insertrow', 'insertcol', 'mergeright', 'mergedown','deleterow', 'deletecol', 'splittorows', 'splittocols', 'splittocells','deletecaption', 'inserttitle', 'mergecells', 'deletetable', 'cleardoc', 'insertparagraphbeforetable',
+            ];
+        </script>
+    </body>
+</html>

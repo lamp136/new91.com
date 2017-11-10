@@ -1,0 +1,343 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left:10px">
+    <form  method="get"  autocomplete="off" action='{:url("storepaylist")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="80"> 
+            <col width="150">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>购买人|电话</th>
+                <th>商家名称</th>
+                <th>合同签订时间</th>
+                <th>佣金金额</th>
+                <th>跟踪人</th>
+                <th>跟踪信息</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+         {volist name="data" id="vo"}
+            <tr>     
+                <td>
+                    {notempty name='vo.buyer'}
+                        {$vo.buyer} <br/> 
+                        {$vo.mobile}
+                    {else/}
+                        {$vo.reservation_person}<br/>   
+                        {$vo.reservation_phone}
+                    {/notempty}
+                </td>
+
+                <td>{notempty name='vo.store_fact_name'}
+                            {$vo.store_fact_name} 
+                        {else/}
+                            {$vo.store_name} 
+                        {/notempty}
+                    {notempty name="vo.store_status"}
+                    {volist name="storeMember" id="flagmember"}
+                            {eq name="vo.store_status" value="$key"}
+                            <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$flagmember}" alt="{$flagmember}">
+                            {/eq}
+                        {/volist}
+                    {/notempty}
+
+        
+                <td>{$vo.contract_time|date='Y-m-d H:i:s',###}</td>
+                <td>{$vo.brokerage_money}</td>
+                <td>{$member[$vo.order_flow_id]}</td>
+                <td>
+                    <button class="layui-btn layui-btn-mini ordermsglist check_message" data-id='{$vo.id}'>查看信息</button>
+                </td>
+                <td>
+                    <a  title='支付完成' class='paysuccess' data-id='{$vo.id}' style="margin-left:10px" data-sn='{$vo.order_grave_sn}' data-money='{$vo.brokerage_money}'>
+                        <button class="layui-btn layui-btn-small  layui-btn-normal" ><i class="layui-icon">&#xe618;</i></button>
+                    </a>
+                    <a  title='票据' class='image' data-id='{$vo.id}' style="margin-left:10px">
+                        <button class="layui-btn layui-btn-small  layui-btn-warm" ><i class="layui-icon">票</i></button>
+                    </a>
+                    <a  title='添加跟踪信息' class='add_message' data-id='{$vo.id}' data-sn='{$vo.order_grave_sn}' style="margin-left:10px">
+                        <button class="layui-btn layui-btn-small" ><i class="layui-icon">&#xe654;</i></button>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table> 
+    {$page}
+</div>
+
+{/block}
+{block name='layer'}
+<table class="layui-table" style="display:none;" id='checkmessage'>
+  <colgroup>
+    <col width="120">
+    <col width="80">
+    <col width='300'>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>时间</th>
+      <th>跟踪人</th>
+      <th>跟踪信息</th>
+    </tr> 
+  </thead>
+  <tbody id='table_check'>
+    
+  </tbody>
+</table>
+<form class="layui-form layui-form-pane" id='reviest_form' style="display:none;">
+    <div class="layui-form-item layui-form-text">
+        <div class="layui-input-block">
+          <textarea placeholder="请输入跟踪信息" class="layui-textarea" name='info[content]'></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" name="info[order_id]" value="">
+            <input type="hidden" name="info[order_sn]" value="">
+            <button class="layui-btn reviest" type="button">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<form id='data-form' class="layui-form" method="post" style="display:none;" enctype="multipart/form-data">
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">实收佣金</label>
+        <div class="layui-input-inline">
+            <input type='text' class="layui-input" placeholder="实收佣金" name='info[paid_in_amount]'>
+        </div>
+        <div id='sholdmoney' style="color:red;height::38px;line-height:38px">123</div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">支付时间</label>
+        <div class="layui-input-inline">
+             <input class="layui-input" name='info[payfor_us_time]' placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付票据</label>
+        <div class="layui-input-inline">
+           <input type="file" name="image" placeholder="名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" name='order_id' value=''>
+            <input type="hidden" name='type' value=1>
+            <button class="layui-btn" id='savesuccess' type="button">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<!--查看票据 start-->
+<div id="images" style="display:none">
+    <div>
+    </div>
+</div>
+{/block}
+
+
+
+
+
+{block name='optJS'}
+<script>
+//页面层
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  var start = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday:true
+    ,choose: function(datas){
+      end.min = datas; //开始日选好后，重置结束日的最小日期
+      end.start = datas //将结束日的初始值设定为开始日
+    }
+  };
+  
+  var end = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday: true
+    ,choose: function(datas){
+      start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+  };
+  
+});
+
+layui.use(['jquery', 'layer'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    
+    //查看跟踪信息
+    $('.check_message').click(function(){
+        var id = $(this).attr('data-id');
+        $.ajax({
+            url:"{:url('checkmessage')}",
+            type:'post',
+            data:{'id':id},
+            dataType:'json',
+            success : function(e){
+                if(e.flag==1){
+                    var data = e.data;
+                    var str = '';
+                    $.each(data,function(key, val) {
+                        str += "<tr><td>"+val['created_time']+"</td><td>"+val['admin_name']+"</td><td>"+val['content']+"</td></tr>";
+                    })
+                    $('#table_check').empty().append(str);
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '700px',
+                    title: '查看跟踪信息',
+                    content: $('#checkmessage'),
+                });
+            }
+        });
+    });
+
+    //添加跟踪信息
+    $('.add_message').click(function(){
+        var id = $(this).attr('data-id');
+        var sn = $(this).attr('data-sn');
+        $("#reviest_form input[name='info[order_id]']").val(id);
+        $("#reviest_form input[name='info[order_sn]']").val(sn);
+        var add = layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '700px',
+            title: '添加跟踪信息',
+            content: $('#reviest_form'),
+        });
+    });
+
+    $('.reviest').click(function(){
+        var cont = $('#reviest_form textarea').val();
+        if(cont.length < 1){
+            layer.msg('请填写回访信息!');
+            return false;
+        }
+        var Form = $('#reviest_form').serialize();
+        $.ajax({
+            url: "{:url('addmessage')}",
+            data: Form,
+            type: 'post',
+            dataType:'json',
+            success: function(result) {
+                if(result.flag==1){
+                    layer.closeAll(); 
+                    layer.msg(result.msg);
+                }else{
+                    layer.msg(result.msg);
+                }
+            }
+        });
+    });
+
+
+    //支付完成
+    $('.paysuccess').click(function(){
+        var smoney = $(this).attr('data-money');
+        var id = $(this).attr('data-id');
+        var sn = $(this).attr('data-sn');
+        $("#data-form input[name='order_id']").val(id);
+        $("#data-form input[name='info[paid_in_amount]']").val(smoney);
+        $('#sholdmoney').html(smoney);
+        layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '500px',
+            title: '支付完成',
+            content: $('#data-form'),
+        });
+    });
+
+    //支付完成提交
+    $('#savesuccess').click(function() {
+        var form = new FormData(document.getElementById("data-form"));
+        $.ajax({
+            url:"{:url('payforsuccess')}",
+            type:'POST',
+            data: form,
+            dataType:'json',
+            processData: false,
+            contentType: false,
+            success:function(d){
+                if(d.flag==1){
+                    layer.closeAll();
+                    layer.msg(d.msg);
+                    window.location.reload();
+                }else{
+                    layer.msg(d.msg);
+                }
+            }
+        });
+    });
+    
+     //查看票据
+    $(".image").bind('click', function(){
+        var order_id = $(this).attr('data-id');
+        layer.open({
+            type:3,
+            success: function(layero, indexs){  
+                $.ajax({
+                    url:"{:url('orders/Tomb/getbill')}",
+                    type:'post',
+                    data:{'order_id':order_id},
+                    dataType:'json',
+                    success:function(result){
+                        layer.closeAll(); //疯狂模式，关闭所有层
+                        if(result.flag==1){
+                            var data = result.data;
+                            var str = '';
+                            for(var item in data) {
+                               str += "<img src="+data[item]['bill_image']+" title="+data[item]['type']+"><br/>";
+                            }
+                            $('#images div').empty().append(str);
+                            layer.open({
+                                type: 1,
+                                skin: 'layui-layer-demo', //样式类名
+                                closeBtn: 2, //不显示关闭按钮
+                                anim: 2,
+                                area: ['900px','500px'], //宽高
+                                title:"查看票据",
+                                content: $('#images')
+                            });
+                        }else{
+                            layer.msg(result.msg);
+                        }
+                    }
+                });
+            }
+        });
+    });  
+});
+
+</script>
+{/block}
+

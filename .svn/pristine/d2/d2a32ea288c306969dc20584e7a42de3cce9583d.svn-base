@@ -1,0 +1,29 @@
+<!-- 顶部 -->
+<div class="navbar_top">
+    <div class="contain">
+        <div class="greet">
+            <span>您好，欢迎来到91搜墓网</span>
+            {notempty name="$member_name"}
+                <a class="login" href="javascript:;" title='{$member_name}'>{$member_name}</a>
+                <i>|</i>
+                <a href="{:url('login/Login/loginout')}" title='退出'>退出</a>
+            {else/}
+                <a class="login" href="{:url('login/Login/login')}" title='登录'>登录</a>
+                <i>|</i>
+                <a href="{:url('login/Login/register')}" title='免费注册'>免费注册</a>
+            {/notempty}
+            
+        </div>
+        <div class="nav_top">
+            <ul>
+                <li class="scan"><a href="{:url('/orders')}" title='我的订单'>我的订单<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                <!--<li class="gwc"><a href="javascript:;">购物车<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>-->
+                <li><a href="{:url('/orders')}" title='个人中心'>个人中心<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                <li><a href="{:url('help/Help/contactus','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title='帮助中心'>帮助中心</a>|</li>
+                <li><a href="{:url('intro/Sitemap/index')}" title='网站地图'>网站地图</a><!--|</li>
+                <li class="last"><a href="javascript:;" title='商家后台'>商家后台</a></li>-->
+            </ul>
+        </div>
+        <div style="clear:both;"></div>
+    </div>  
+</div><!-- navbar_top 顶部 End -->

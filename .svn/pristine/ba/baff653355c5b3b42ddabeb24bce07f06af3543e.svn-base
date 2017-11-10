@@ -1,0 +1,4 @@
+{extend name='extra@main' /}
+{block name="body"}
+    <p style="font-size:20px; color:red;">{$data.msg}</p>
+{/block}

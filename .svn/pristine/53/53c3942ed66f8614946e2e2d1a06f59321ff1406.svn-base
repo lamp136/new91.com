@@ -1,0 +1,48 @@
+<ul class="layui-nav layui-nav-tree"  lay-filter="test">
+  <li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="javascript:;">合同档案</a>
+    <dl class="layui-nav-child">
+      <dd><a href="{:url('store/Contract/index')}">合同档案</a></dd>
+      <dd><a href="javascript:;">过期档案</a></dd>
+    </dl>
+  </li>
+  <li class="layui-nav-item">
+    <a href="javascript:;">商家基础信息</a>
+    <dl class="layui-nav-child">
+      <dd><a href="javascript:;">陵园</a></dd>
+      <dd><a href="javascript:;">殡仪馆</a></dd>
+      <dd><a href="">殡葬服务</a></dd>
+    </dl>
+  </li>
+  <li class="layui-nav-item">
+    <a href="javascript:;">商家查询</a>
+    <dl class="layui-nav-child">
+      <dd><a href="{:url('store/business/index')}">商务查询</a></dd>
+    </dl>
+  </li>
+   <li class="layui-nav-item">
+    <a href="javascript:;">订单信息</a>
+    <dl class="layui-nav-child">
+      <dd><a href="{:url('orders/tomb/add')}">添加订单</a></dd>
+      <dd><a href="{:url('orders/tomb/appoint')}">预约订单</a></dd>
+      <dd><a href="{:url('orders/tomb/interst')}">有意向订单</a></dd>
+      <dd><a href="{:url('orders/tomb/deposit')}">预交定金订单</a></dd>
+      <dd><a href="{:url('orders/tomb/check')}">审核订单</a></dd>
+      <dd><a href="{:url('orders/tomb/storePay')}">佣金订单</a></dd>
+      <dd><a href="{:url('orders/tomb/returnPay')}">返现订单（删除）</a></dd>
+      <dd><a href="{:url('orders/tomb/callbacks')}">待回访订单</a></dd>
+      <dd><a href="{:url('orders/tomb/compelete')}">完成订单</a></dd>
+      <dd><a href="{:url('orders/tomb/notvip')}">非会员订单</a></dd>
+      <dd><a href="{:url('orders/tomb/share')}">订单委派</a></dd>
+      <dd><a href="{:url('orders/tomb/index')}">订单回收站</a></dd>
+    </dl>
+  </li>
+  <li class="layui-nav-item">
+    <a href="javascript:;">车辆管理</a>
+    <dl class="layui-nav-child">
+      <dd><a href="{:url('plugin/car/add')}">添加车辆</a></dd>
+      <dd><a href="{:url('plugin/car/index')}">车辆管理</a></dd>
+      <dd><a href="{:url('plugin/car/recycle')}">车辆回收</a></dd>
+    </dl>
+  </li>
+</ul>

@@ -1,0 +1,154 @@
+{extend name='extra@main' /}
+{block name='layer'}
+
+<!--导入EXCEL开始-->
+
+<div id="import_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="importForm" autocomplete="off" enctype="multipart/form-data">
+    <table  class="layui-table">
+    <tbody>
+     
+       <tr>
+            <td>
+               <input type="file" name="flow_file">
+            </td>
+        </tr>
+    </tbody>
+    </table>
+        
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="import_button">提交</div>
+        </div>
+
+    </form>
+</div>
+<!--导入EXCEL结束-->
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <div style="float:right;margin-bottom:10px;margin-right: 10px;">
+    <button class="layui-btn import">
+        <i class="layui-icon" >&#xe608;</i>导入excel表信息
+    </button>
+    </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>访客名称</th>
+                <th>访客电话</th>
+                <th>访客来源</th>
+                <th>搜索词</th>
+                <th>开始访问时间</th>
+                <th>访客IP</th>
+                <th>访客IP说明</th>
+                <th>省份</th>
+                <th>市区</th>
+                <th>初始访问地址</th>
+                <th>当前客服</th>
+            </tr> 
+        </thead>
+        <tbody>
+        {notempty name="data"}
+            {volist name="data" id="vo"}
+                <tr>
+                    <td>{notempty name="vo.caller_name"}
+                    {$vo.caller_name}
+                    {/notempty}
+                    </td>
+                    <td>{notempty name="vo.caller_id"}
+                    {$vo.caller_id}
+                    {/notempty}</td>
+                    <td>{$vo.access_source}</td>
+                    <td>{$vo.search_key}</td>
+                    <td>{$vo.start_time|date="Y-m-d H:i:s",###}</td>
+                    <td>{$vo.ip}</td>
+                    <td>{$vo.ip_description}</td>
+                    <td>{$vo.province_name}</td>
+                    <td>{$vo.city_name}</td>
+                    <td>{$vo.initiai_ip}</td>
+                    <td>{notempty name="vo.now_server"}{$vo.now_server}{/notempty}</td>
+                </tr>
+            {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+//页面层
+layui.use(['jquery', 'layer', 'form','laydate'], function() {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        form = layui.form();
+        var laydate = layui.laydate;
+    
+    var start = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday:true
+        ,choose: function(datas){
+          end.min = datas; //开始日选好后，重置结束日的最小日期
+          end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+  
+
+ 
+
+    //上传excel表单模态框
+    $(".import").bind('click', function(){
+         layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '800px',
+            title: '上传excel文件',
+            content: $('#import_update_form')
+         })
+    });
+
+    //上传文件
+    $('#import_button').click(function(){
+        var importData = new FormData(document.getElementById('importForm'));
+        $.ajax({
+            url:"{:url('uploadFile')}",
+            type:'post',
+            data:importData,
+            processData: false,
+            contentType: false,
+            success:function(d){
+                var result = eval("("+d+")");
+                layer.msg(result['msg']);
+                if(result['flag'] == 1){
+                    window.location.reload();
+                }
+            }
+        })
+    });
+
+  
+
+
+});
+</script>
+{/block}
+

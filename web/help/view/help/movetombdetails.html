@@ -1,0 +1,68 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+    <!-- banner -->
+    <div class="help_banner"></div>
+
+    <div class="contain clearfix contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/help/contactus','',$Think.config.assign_suffix,$Think.config.assign_domain)}">帮助中心</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/help/movetomb','',$Think.config.assign_suffix,$Think.config.assign_domain)}">鲜花祭品</a></li>
+                <li class="jt">></li>
+                <li>{$data.title}</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        {include file="extra@help_left"}
+        <!-- 帮助中心右侧 -->
+        <div class="help_right help_tombnotes_detail kindedit_td kindedit_strong">
+            
+           <h2>{$data.title}</h2>
+           <p class="source"><i></i>{$data.hits}</p>
+           <p>{$data.content}</p>
+
+        </div><!-- help_right 帮助中心右侧 End -->
+
+    </div><!-- contain End -->
+    
+    <!-- 优势 -->
+    <div class="home_advantage aboutus_advantage">
+        <div class="contain">
+            <ul>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img1.png"/>
+                    <h2>信息透明</h2>
+                    <P>陵园信息全面，价格透明</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img2.png"/>
+                    <h2>预约服务</h2>
+                    <P>线上咨询，电话服务</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img3.png"/>
+                    <h2>专业服务</h2>
+                    <P>专业咨询团队，资深企业</P>
+                </li>
+                <li>
+                    <img src="_WEB_/images/home_advantage_img4.png"/>
+                    <h2>多重优惠</h2>
+                    <P>多种礼品，享受独家优惠</P>
+                </li>
+                <li class="last">
+                    <img src="_WEB_/images/home_advantage_img5.png"/>
+                    <h2>诚信保障</h2>
+                    <P>诚信商家，保障服务</P>
+                </li>
+            </ul>
+        </div><!-- contain End -->
+    </div><!-- 优势 home_advantage End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}

@@ -1,0 +1,497 @@
+<?php
+namespace web\cemetery\controller;
+use think\Controller;
+use think\Db;
+use think\Cookie;//cookie类
+use think\Session;//session类
+use web\extra\controller\Base;
+use web\extra\model\Store;
+use web\extra\model\MsgCode;
+
+class Cemetery extends Base
+{
+    /**
+     * 陵园列表
+     * @return void
+     */
+    public function index(){
+        $input = input();
+        $province =decode(Cookie::get('ip_region_id'));
+        $dataCount = 0;
+        $where['category_id'] = 37;
+        $where['province_id'] = $province;
+        $where['status'] = config('normal_status');
+        $selectCity = 0;
+        if(!empty($input['city']) && $input['city'] != 0){
+            $selectCity = $input['city'];
+            $where['city_id'] = $selectCity;
+        }
+        $selectPrice = 0;
+        if(!empty($input['price']) && in_array($input['price'],config('price_range'))){
+            $selectPrice = $input['price'];
+            $priceRange = config('price_range');
+            $where['min_price'] = $this->betweenWhere($selectPrice,$priceRange);
+        }
+        $selectDist = 0;
+        if(!empty($input['dist']) && in_array($input['dist'],config('store_length'))){
+            $selectDist = $input['dist'];
+            $storeLength = config('store_length');
+            $where['distance'] = $this->betweenWhere($selectDist,$storeLength);
+        }
+        // $rankList = Db::table(['__STORE__' => 's','__ORDER_GRAVE__' => 'o'])->field(['s.id','s.name','s.min_price','count(o.store_id)' => 'count'])->where('s.id = o.store_id and s.province_id = '.$province)->group('o.store_id')->order('count desc')->limit(6)->select();
+        $rankList = Db::name('store')->where(['province_id' => $province,'status' => config('normal_status'),'category_id' => config('category_cemetery_id')])->field('id,name,min_price')->order('system_score desc')->limit(6)->select();
+        $city = [];
+        $seo = $this->getseo(config('seo_type.cemetery_list'));
+        $dataCount = Db::name('store')->where($where)->count();
+        $storeList = Db::name('store')->where($where)->field('id,name,store_sn,image,thumb_image,address,min_price,label,actual_hits,hits,status')->paginate(10,false);
+        $city = Db::name('region')->where('pid',$province)->column('id,name');
+        $page = $storeList->render();
+
+        $this->hmzc();
+        $this->assign([
+            'seo'         => $seo,
+            'rankList'    => $rankList,
+            'dataCount'   => $dataCount,
+            'countDist'   => count(config('store_length')),
+            'countRange'  => count(config('price_range')),
+            'selectPrice' => $selectPrice,
+            'selectCity'  => $selectCity,
+            'selectDist'  => $selectDist,
+            'input'       => $input,
+            'list'        => $storeList,
+            'page'        => $page,
+            'city'        => $city
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 获取where区间条件
+     * @param  array $selectData 筛选条件
+     * @param  array $conf 配置常量
+     * @return array
+     */
+    private function betweenWhere($selectData,$conf){
+        $cond = [];
+        $min = current($conf);
+        $max = end($conf);
+        if($selectData == $min){
+            $cond = ['elt',$min];
+        }else if($selectData == $max){
+            $cond = ['egt',$max];
+        }else{
+            $data = explode('-',$selectData);
+            if(is_array($data)){
+                $count = count($data);
+                if($count > 1){
+                    $cond = ['between',[(int)$data[0],(int)$data[1]]];
+                }
+            }
+        }
+
+        return $cond;
+    }
+
+    /**
+     * 详情
+     */
+    public function details(){
+        $input = input();
+        $isMap = !empty($input['map']) ? $input['map'] : 0;
+        $id = $input['id'];
+        $data = [];
+        $tombZones = [];
+        $total = 0;
+        $seo = [];
+        $storeNews = [];
+        if($id){
+            Db::name('store')->where('id', $id)->setInc('actual_hits');
+            $data = Store::with(['tombs','celebrity','landscape','comments'])->withCount('comments',false)->where('id',$id)->field('id,name,store_sn,image,thumb_image,address,min_price,label,actual_hits,hits,status,content,longitude,latitude,seo_title,seo_keywords,seo_description,member_status,province_id,city_id,service_time,distance,phone')->find()->toArray();
+            if($data['hits'] == 0){
+                $hits = config('page_view');//???
+                $data['hits'] = $hits;
+                Db::name('store')->where('id',$id)->update(['hits' => $hits]);
+            }
+            
+            if(!empty($data['landscape'])){
+                foreach ($data['landscape'] as $key => $val) {
+                    unset($data['landscape'][$key]);
+                    $data['landscape']['info'][$val['tomb_zone_id']][] = $val['id'];
+                    $data['landscape']['list'][] = $val;
+                    $total += count($val['id']);
+                    $data['landscape']['total'] = $total;
+                }
+            }
+            $environment = 0;
+            $service = 0;
+            $price = 0;
+            $traffic = 0;
+            $average = [];
+            if(!empty($data['comments'])){
+                foreach ($data['comments'] as $k => $v) {
+                    $data['comments'][$k]['avg'] = ceil(($v['environment'] + $v['service'] + $v['price'] + $v['traffic']) / 4);
+                    $environment += $v['environment'];
+                    $service += $v['service'];
+                    $price += $v['price'];
+                    $traffic += $v['traffic'];
+                }
+            }
+
+            $average['environment'] = $environment > 0 ? round($environment / $data['comments_count']) : 0;
+            $average['service']     = $service > 0 ? round($service / $data['comments_count']) : 0;
+            $average['price']       = $price > 0 ? round($price / $data['comments_count']) : 0;
+            $average['traffic']     = $traffic > 0 ? round($traffic / $data['comments_count']) : 0;
+
+            $total = $average['environment'] + $average['service'] + $average['price'] + $average['traffic'];
+            $average['total'] = round($total / 4);
+            $seo = [
+                'seo_title'       => empty($data['seo_title']) ? $data['name'] : $data['seo_title'],
+                'seo_keywords'    => $data['seo_keywords'],
+                'seo_description' => $data['seo_description']
+            ];
+            $tombZones = Db::name('TombZone')->where('store_id',$id)->column('id,zone_name');
+            $storeNews = Db::name('news')->where(['store_id' => $id,'category_id' => config('category_store_dynamic'),'status' => config('normal_status')])->field('id,title')->order('sort desc,created_time desc')->limit(8)->select();
+
+        }
+        $this->hmzc();
+        $this->assign([
+            'is_map'    => $isMap,
+            'average'   => $average,
+            'storeNews' => $storeNews,
+            'seo'       => $seo,
+            'data'      => $data,
+            'tombZones' => $tombZones
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 预约看墓(列表页)
+     */
+    public function appoint(){
+        $input = input('post.');
+        $result = ['code' => 0,'msg' => '预约失败'];
+        $name = $input['name'];
+        $mobile = $input['mobile'];
+        $date = date('Y-m-d').' 00:00:00';
+        $time = strtotime($date);
+        $where = [
+            'mobile'       => $mobile,
+            'category_id'  => config('category_cemetery_id'),
+            'created_time' => ['gt',$time]
+        ];
+        $count = Db::name('appoint')->where($where)->count();
+        if($count > 0){
+            $result = ['code' => 0,'msg' => '您已预约过了'];
+        }else{
+            $email = weeksEmail();
+            $info['type'] = array_search('预约看墓',config('business_email_msg'));
+            $info['email_address'] = $email['email_address'];
+            $emailSheet = Db::name('EmailSheet')->where($info)->whereOr(['type' => array_search('预约看墓',config('email_msg'))])->field('email_address')->select();
+            if(!empty($emailSheet)){
+                $content = '预约时间：'.date('Y-m-d H:i:s',time()).'，预约人：'.$name.' 预约人手机号：'.$mobile.' 请及时联系！本邮件系统自动发送请忽回复！';
+                foreach ($emailSheet as $val) {
+                    $emails[] = $val['email_address'];
+                }
+                $status = 0;
+                $send_time = '';
+                if(sendMail($emails,'预约看墓',$content)){
+                    $status = 1;
+                    $send_time = date('Y-m-d H:i:s');
+                }
+                foreach ($emails as $v) {
+                    $emailLog[] = [
+                        'type'          => $info['type'],
+                        'email_address' => $v,
+                        'title'         => '预约看墓',
+                        'content'       => $content,
+                        'status'        => $status,
+                        'send_time'     => $send_time,
+                        'creat_time'    => date('Y-m-d H:i:s')
+                    ];
+                }
+                Db::name('EmailLog')->insertAll($emailLog);
+                $appointData = [
+                    'ip'           => request()->ip(1),
+                    'category_id'  => config('category_cemetery_id'),
+                    'buyer'        => $name,
+                    'mobile'       => $mobile,
+                    'created_time' => time(),
+                    'updated_time' => time(),
+                    'status'       => config('default_status')
+                ];
+                $appoint = Db::name('appoint')->data($appointData)->insert();
+                if($appoint){
+                    $result = ['code' => 1,'msg' => '亲爱的 '.$name.',稍后会有客服人员联系您！'];
+                }
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 预约看墓
+     * @return void
+     */
+    public function subscribe(){
+        $id = input('id');
+        $store = [];
+        if($id){
+            $store = Db::name('store')->where('id',$id)->field('id,name')->find();
+        }
+        $seo = $this->getseo();
+        $this->assign([
+            'seo' => $seo,
+            'store' => $store
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 提交预约看墓
+     * @return json
+     */
+    public function putscribe(){
+        if(request()->isPost()){
+            $result = ['code' => 0,'msg' => ''];
+            $input = input('post.');
+            $name = $input['name'];
+            $mobile = $input['mobile'];
+            $storeId = $input['store_id'];
+            $storeInfo = Store::with('contactmsg')->where('id',$storeId)->field('id,name,province_id,city_id,member_status')->find()->toArray();
+            if(!empty($storeInfo)){
+                $date = date("Y-m-d").' 00:00:00';
+                $time = strtotime($date);
+                $orderWhere = [
+                    'mobile'       => $mobile,
+                    'store_id'     => $storeId,
+                    'buyer'        => $name,
+                    'created_time' => ['gt',$time]
+                ];
+                $appStoreNum = Db::name('OrderGrave')->where($orderWhere)->count();
+                if($appStoreNum > 0){
+                    $result = ['code' => 0,'msg' => '亲,该陵园您已预约稍后会有工作人员给你联系！'];
+                }else{
+                    $countAppNum = Db::name('OrderGrave')->where(['mobile' => $mobile,'created_time' => ['gt',$time]])->count();
+                    if($countAppNum >= config('book_every_ip_num')){
+                        $result = ['code' => 0,'msg' => '预约失败，今天预约次数过多'];
+                    }else{
+                        // if(!Session::has('name') || Session::get('_yos') != $mobile){
+                        //     $code = $input['code'];
+                        //     $type = config('msgcode_type.appoint');
+                        //     $codeObj = new MsgCode;
+                        //     $codeResult = $codeObj->checkMessageCode($type,$mobile,$code);
+                        //     if(!$codeResult){
+                        //         $result = ['code' => 0,'msg' => '验证码错误'];
+                        //         echo json_encode($result);die;
+                        //     }
+                        // }
+                        $memberId = getMemberId($mobile,$name);
+                        if(Session::has('name')){
+                            $member = Db::name('member')->where('mobile',$mobile)->field('id')->find();
+                            $memberId = $member['id'];
+                        }
+                        $email = weeksEmail();
+                        if(!empty($email)){
+                            $orderData = [
+                                'order_grave_sn' => makeSn(),
+                                'order_type'     => config('order_type_front'),
+                                'store_id'       => $storeInfo['id'],
+                                'store_name'     => $storeInfo['name'],
+                                'province_id'    => $storeInfo['province_id'],
+                                'city_id'        => $storeInfo['city_id'],
+                                'member_id'      => $memberId,
+                                'buyer'          => $name,
+                                'mobile'         => $mobile,
+                                'appoint_time'   => time(),
+                                'client_ip'      => request()->ip(1,true),
+                                'created_time'   => time(),
+                                'store_status'   => $storeInfo['member_status'],
+                                'order_flow_id'  => $email['admin_id']
+                            ];
+                            $addOrder = Db::name('OrderGrave')->insertGetId($orderData);
+                            // $addOrder = true;
+                            if($addOrder){
+                                $contacts = '';
+                                $contactMsg = $storeInfo['contactmsg'];
+                                if(!empty($contactMsg)){
+                                    foreach($contactMsg as $key => $val){
+                                        if($val['default_person'] == config('normal_status')){
+                                            $contacts =  '陵园联系人：'.$val['contact_name']; 
+                                            if(!empty($val['mobile'])){
+                                                $contacts .= ' 手机号：'.$val['mobile'];
+                                            }
+                                            if(!empty($val['tel'])){
+                                                $contacts .= ' 电话：'.$val['tel'];
+                                            }
+                                        }else{
+                                            $contacts =  '陵园联系人：'.$val['contact_name']; 
+                                            if(!empty($val['mobile'])){
+                                                $contacts .= ' 手机号：'.$val['mobile'];
+                                            }
+                                            if(!empty($val['tel'])){
+                                                $contacts .= ' 电话：'.$val['tel'];
+                                            }
+                                        }
+                                    }
+                                    $info['type'] = array_search('预约看墓',config('business_email_msg'));
+                                    $info['email_address'] = $email['email_address'];
+                                    $emailSheet = Db::name('EmailSheet')->where($info)->whereOr(['type' => array_search('预约看墓',config('email_msg'))])->field('email_address,phone')->select();
+                                    $emails = [];
+                                    $phones = [];
+                                    if(!empty($emailSheet)){
+                                        foreach ($emailSheet as $k => $v) {
+                                            $emails[] = $v['email_address'];
+                                            $phones[] = $v['phone'];
+                                        }
+                                        $allMember = getStoreMember();
+                                        if($storeInfo['member_status'] == 0){
+                                            $member = '非会员';
+                                        }else{
+                                            if(array_key_exists($storeInfo['member_status'], $allMember)){
+                                                $member = $allMember[$storeInfo['member_status']];
+                                            }
+                                        }
+                                        //发送邮件
+                                        $content = '预约时间：'.date('Y-m-d H:i:s',time()).'  预约人：'.$name.'   预约人手机号：'.$mobile.'   预约陵园:'.$storeInfo['name'].'('.$member.'),'.$contacts;
+                                        $status = 0;
+                                        $send_time = '';
+                                        if(sendMail($emails,'预约看墓',$content)){
+                                            $status = 1;
+                                            $send_time = date('Y-m-d H:i:s');
+                                        }
+                                        foreach ($emails as $v) {
+                                            $emailLog[] = [
+                                                'type'          => $info['type'],
+                                                'email_address' => $v,
+                                                'title'         => '预约看墓',
+                                                'content'       => $content,
+                                                'status'        => $status,
+                                                'send_time'     => $send_time,
+                                                'creat_time'    => date('Y-m-d H:i:s')
+                                            ];
+                                        }
+                                        Db::name('EmailLog')->insertAll($emailLog);
+                                    }
+                                    $this->_sendToBusiness($addOrder, $name, $mobile, $storeInfo['name'],$contacts,$phones);
+                                }
+                                $result = ['code' => 1,'msg' => '预约成功'];
+                            }else{
+                                $result = ['code' => 0,'msg' => '预约失败'];
+                            }
+                        }
+                    }
+                }
+            }
+
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * 发送给固定的商务部人员
+     *
+     * @return bool
+     */
+    private function _sendToBusiness($orderId, $uname, $tel, $storename,$content=null,$phone) {
+        if (empty($uname) || empty($tel) || empty($storename)) {
+            return false;
+        }
+        $mobile = implode(",", $phone);
+        $msg = '亲,您有一条来自91搜墓网的客户预约信息,客户：'.$uname.'，电话：'.$tel.'，商家名称：'.$storename.'，'.$content.'请及时关注【91搜墓网】';
+        $sendMsg = new \common\sendmsg\SendMsg;
+        $mobiles = explode(",", $mobile);
+        $count = count($mobiles);
+        for($i = 0; $i < $count; $i++) {
+            $sendMsg->sendMsg($mobile,$msg);
+            $data['order_id']     = $orderId;
+            $data['classify']     = config('platform_num');
+            $data['msg']          = $msg;
+            $data['mobile']       = $mobiles[$i];
+            $data['status']       = config('msg_send_status');
+            $data['created_time'] = time();
+            $data['send_time']    = time();
+        }
+        Db::name('MsgLog')->insertAll($data);
+    }
+
+    /**
+     * 获取验证码
+     * @return json
+     */
+    public function verifyCode(){
+        $input = input('post.');
+        $result = ['code' => 0,'msg' => ''];
+        $mobile = $input['mobile'];
+        $msgCode = new MsgCode;
+        $maxNum = $msgCode->isMaxSendNum($mobile);
+        if($maxNum){
+            $result = ['code' => 0,'msg' => '请不要恶意点击'];
+        }else{
+            $randCode = rand(100000,999999);
+            $message = "动态验证码 " . $randCode . " 工作人员不会向你索要，请勿向任何人泄露。" . date("Y-m-d H:i:s", time()) . "【91搜墓网】";
+            $msgObj = new \common\sendmsg\SendMsg;
+            $send = true;
+            // $send = $msgObj->sendMsg($mobile,$message);
+            $result = ['code' => 0,'msg' => '验证码发送失败'];
+            if($send){
+                $codeData = [
+                    'mobile'       => $mobile,
+                    'code'         => $randCode,
+                    'type'         => config('msgcode_type.appoint'),
+                    'created_time' => time()
+                ];
+                $addCodeMsg = Db::name('MsgCode')->data($codeData)->insert();
+                if($addCodeMsg){
+                    $msgLogData = [
+                        'classify'     => config('msg_log_appoint'),
+                        'mobile'       => $mobile,
+                        'msg'          => $message,
+                        'status'       => config('msg_send_status'),
+                        'created_time' => time(),
+                        'send_time'    => time()
+                    ];
+                    $msgLog = Db::name('MsgLog')->data($msgLogData)->insert();
+                    if($msgLog){
+                        $result = ['code' => 1,'msg' => $randCode];
+                    }
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 添加评论
+     * @return json
+     */
+    public function addcomment(){
+        $input = input('post.');
+        $result = ['code' => 0,'msg' => '评论失败'];
+        if($input['store_id']){
+            $mobile = decode(Session::get('_yos'));
+            $info['environment'] = !empty($input['hj']) ? $input['hj'] : 0;
+            $info['service'] = !empty($input['fw']) ? $input['fw'] : 0;
+            $info['price'] = !empty($input['jg']) ? $input['jg'] : 0;
+            $info['traffic'] = !empty($input['jt']) ? $input['jt'] : 0;
+            if($mobile){
+                $member = Db::name('member')->where('mobile',$mobile)->field('id,name,mobile')->find();
+                if(!empty($member)){
+                    $info['member_id'] = $member['id'];
+                    $info['member_name'] = $member['name'];
+                    $info['mobile'] = $member['mobile'];
+                }
+                $info['comment_status'] = config('default_status');
+                $info['created_time'] = time();
+                $info['comment_time'] = date('Y-m-d H:i:s');
+                $res = Db::name('comment')->insert($info);
+                if($res){
+                    $result = ['code' => 1,'msg' => '评论成功'];
+                }
+            }
+        }
+
+        echo json_encode($result);
+    }
+}

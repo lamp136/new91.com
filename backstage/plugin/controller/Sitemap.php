@@ -1,0 +1,80 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+use think\Db;
+use back\extra\controller\XmlModel;
+
+/**
+ * Xml生成文件
+ */
+class Sitemap extends XmlModel
+{
+	public function index(){
+		return $this->fetch();
+	}
+
+    //创建xml文件
+    public function createXml(){
+    	$res = array('flag'=>0,'msg'=>'创建失败');
+        $arr = array();
+        $conUrl = config('xml_url');
+        $where['status'] = config('normal_status');
+        $where['level'] = config('normal_status');
+        $region = Db::name('region')->where($where)->column('id,abbreviate');
+
+        foreach ($region as $key => $value) {
+            $arr[] = "http://".strtolower($value).".91soumu.com";
+        }
+
+        $arr = array_merge($arr,$conUrl);
+
+        $site = new Sitemap(); 
+        foreach ($arr as $key => $value) {               
+            $site->AddItem($value, 1);
+        }     
+        $data = $site->SaveToFile('./public/sitemap.xml');
+        if($data){
+        	$res = array('flag'=>1,'msg'=>'创建成功');
+        }
+
+        echo json_encode($res);
+    }
+
+    //上传xml文件
+    public function uploadFile(){
+        $res = array('flag'=>0,'msg'=>'上传失败');
+        if($_FILES['images']['error'] == 0 && !empty($_FILES['images']['tmp_name'])){
+            $maxSize = (int) Config('max_size');
+            $umf = (int) ini_get('upload_max_filesize');
+            $readSize = min($umf, $maxSize)* 1024 * 1024;
+             // 获取表单上传文件
+            $file = request()->file('images');
+            $info = $file->validate(['size'=>$readSize,'ext'=>'xml'])->move(ROOT_PATH . 'public','sitemap1.xml');
+            if($info){
+                $res = array('flag'=>1,'msg'=>'上传成功');
+            }
+        }
+        echo json_encode($res);
+    }
+
+    //上传txt文件
+    public function uploadTxtFile(){
+        $res = array('flag'=>0,'msg'=>'上传失败');
+        if($_FILES['xurl']['error'] == 0 && !empty($_FILES['xurl']['tmp_name'])){
+            $fname = $_FILES['xurl']['tmp_name'];
+            $str = file_get_contents($fname);
+            $strs = str_replace(' ', '',htmlspecialchars($str));
+            $arr = explode("\r\n", rtrim($strs,"\r\n"));
+            $site = new Sitemap(); 
+            foreach ($arr as $key => $value) {               
+                $site->AddItem($value, 1);
+            }     
+            $data = $site->SaveToFile('./public/sitemap.xml');
+            if($data){
+                $res = array('flag'=>1,'msg'=>'创建成功');
+            }
+
+            echo json_encode($res);
+        }
+    }
+}

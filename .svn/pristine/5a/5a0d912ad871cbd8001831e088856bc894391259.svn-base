@@ -1,0 +1,24 @@
+<?php
+namespace back\index\controller;
+use think\Controller;
+
+class Index extends Controller
+{
+    public function index()
+    {	
+    	$data = array('msg'=>'使用thinkPHP5框架作为管理后台', 'menu'=>'菜单');
+        $this->assign('data', $data);
+		return $this->fetch('index');
+    }
+
+    public function login() {
+    	return $this->fetch('login');
+    }
+
+    public function checkform() {
+    	return $this->fetch('checkform');
+    }
+    public function test() {
+    	return $this->fetch('test');
+    }
+}

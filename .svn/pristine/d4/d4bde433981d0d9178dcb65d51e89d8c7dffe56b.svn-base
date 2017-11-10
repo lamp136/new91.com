@@ -1,0 +1,215 @@
+//获取验证码
+$(function(){
+    /*仿刷新：检测是否存在cookie*/
+    if($.cookie("captcha")){
+        var count = $.cookie("captcha");
+        var btn = $('#getting');
+        btn.val(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
+        var resend = setInterval(function(){
+            count--;
+            if (count > 0){
+                btn.val(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
+                $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
+            }else {
+                clearInterval(resend);
+                btn.val("获取验证码").removeClass('disabled').removeAttr('disabled style');
+            }
+        }, 1000);
+    }
+    /*点击改变按钮状态，已经简略掉ajax发送短信验证的代码*/
+
+    $('#getting').click(function(){
+        //手机号
+        var mobile = $('.mobile').val().replace(/(^\s*)|(\s*$)/g, "");
+        if(mobile.length == 0){
+            $('.reg_mobile').empty().html('提示：请输入您的手机号码').show(); 
+            return false;
+        }
+        var mobiletest = /^(1[3|4|5|7|8]\d{9})$/;
+        if(!mobiletest.test(mobile)){
+            $('.reg_mobile').empty().html('提示：请确认手机号是否正确').show(); 
+            return false;
+        }
+
+        //提交信息
+        var url=$(this).attr('data-url');
+        $.ajax({
+            url:url,
+            type:'post',
+            data:{'mobile':mobile},
+            dataType:'json',
+            success:function(result){
+                if(result.flag == 0){
+                    $('.reg_code').empty().html('提示：请重新发送').show(); 
+                }
+            }
+        });
+        //倒计时
+        var btn = $(this);
+        var count = 60;
+        var resend = setInterval(function(){
+            count--;
+            if (count > 0){
+                btn.val(count+"秒后可重新获取");
+                $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
+            }else {
+                clearInterval(resend);
+                btn.val("获取验证码").removeAttr('disabled style');
+            }
+        }, 1000);
+        btn.attr('disabled',true).css('cursor','not-allowed');
+    });
+
+    //点击我已阅读了搜墓网的《用户协议》—— 弹出协议内容 
+    $(".igree_click").click(function(event){
+        $(".igree_box").css({"display":"block"});
+        $(".igree_box_bg").css({"display":"block"});
+    });
+    $(".tooltip_cloce").click(function(event){
+        $(".igree_box").css({"display":"none"});
+        $(".igree_box_bg").css({"display":"none"});
+    });
+
+    //点击提交信息
+    $('.register_btn').click(function(){
+        //判断用户协议
+        var bool = $('.reg_check').is(':checked');
+        if(!bool){
+            $('.reg_check_msg').show();
+            return false;
+        }
+        //用户名不能为空
+        var name= $('.name').val().replace(/(^\s*)|(\s*$)/g, "");
+        if(name.length == 0){
+            $('.reg_name').empty().html('提示：请输入您的姓名').show();
+            return false;
+        }
+        var nametest = /^[\u4E00-\u9FA5]+$/;
+        if(!nametest.test(name)){
+            $('.reg_name').empty().html('提示：请输入汉字').show();
+            return false;
+        }
+        //手机号
+        var mobile = $('.mobile').val().replace(/(^\s*)|(\s*$)/g, "");
+        if(mobile.length == 0){
+            $('.reg_mobile').empty().html('提示：请输入您的手机号码').show();  
+            return false;
+        }
+        var mobiletest = /^(1[3|4|5|7|8]\d{9})$/;
+        if(!mobiletest.test(mobile)){
+            $('.reg_mobile').empty().html('提示：请确认手机号是否正确').show(); 
+            return false;
+        }
+        //验证码不能为空
+        var code = $('.code').val().replace(/(^\s*)|(\s*$)/g, "");
+        if(code.length == 0){
+            $('.reg_code').empty().html('提示：验证码不能为空').show(); 
+            return false;
+        }
+        var codetest = /^[0-9]*$/;
+        if(!codetest.test(code)){
+            $('.reg_code').empty().html('提示：验证码不正确').show(); 
+            return false;
+        }
+
+        //密码部分
+        var password = $('.password').val();
+        var repassword = $('.repassword').val();
+        if(password.length == 0){
+            $('.reg_password').empty().html('提示：输入密码不能为空').show();
+            return false;
+        }
+        if(repassword.length == 0){
+            $('.reg_repassword').empty().html('提示：再次输入密码不能为空').show();
+            return false;
+        }
+        if(password != repassword){
+            $('.reg_repassword').empty().html('提示：请确认两次密码是否一致').show();
+            return false;
+        }
+        //提交信息
+        var url=$(this).attr('data-url');
+        $.ajax({
+            url:url,
+            type:'post',
+            data:{'name':name,'code':code,'password':password,'mobile':mobile},
+            success:function(d){
+                var result= eval("(" + d + ")");
+                if(result.flag == 1){
+                    $('.reg_code').empty().html('提示：验证失败请重新验证').show();
+                }else if(result.flag == 2){
+                    window.location.href = '/';
+                }else if(result.flag == 0){
+                    alert('操作失败!');//???
+                }
+            }
+        });
+
+    });
+    //用户协议
+    $('.reg_check').click(function(){
+        if($('.reg_check').is(':checked')){
+            $('.reg_check_msg').hide();
+        }
+    });
+    //用户名
+    $('.name').focus(function(){
+        $('.reg_name').hide();
+    });
+    //手机号
+    $('.mobile').focus(function(){
+        $('.reg_mobile').hide();
+    });
+    //验证码
+    $('.code').focus(function(){
+        $('.reg_code').hide();
+    });
+    //密码部分
+    $('.password').focus(function(){
+        $('.reg_password').hide();
+    });
+    $('.repassword').focus(function(){
+        $('.reg_repassword').hide();
+    });
+
+
+    //用户名唯一验证
+    $('.name').blur(function(){
+        var name= $(this).val().replace(/(^\s*)|(\s*$)/g, "");
+        var url = $(this).attr('data-url');
+        if(name.length != 0){
+            $.ajax({
+                url:url,
+                type:'post',
+                data:{'name':name},
+                success:function(d){
+                    var result= eval("(" + d + ")");
+                    if(result.flag == 1){
+                        $('.name').val('');
+                        $('.reg_name').empty().html('提示：该用户名已注册').show();
+                    }
+                }
+            });
+        }
+    });
+
+    //手机号唯一验证
+    $('.mobile').blur(function(){
+        var mobile= $(this).val().replace(/(^\s*)|(\s*$)/g, "");
+        var url = $(this).attr('data-url');
+        if(mobile.length != 0){
+            $.ajax({
+                url:url,
+                type:'post',
+                data:{'mobile':mobile},
+                success:function(d){
+                    var result= eval("(" + d + ")");
+                    if(result.flag == 1){
+                        $('.mobile').val('');
+                        $('.reg_mobile').empty().html('提示：该用手机号已注册').show();
+                    }
+                }
+            });
+        }
+    });
+});

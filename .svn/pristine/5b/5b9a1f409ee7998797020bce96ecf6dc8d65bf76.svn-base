@@ -1,0 +1,163 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<form id='editForm' style="display:none" class="layui-form" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>添加分数</td>
+                    <td>
+                        <input type="text" class="input" style="width:300px;height:30px;" value='' name="score" >
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <input type="hidden" name="id" class="store_id">
+                        <input type="hidden" name="total_score" class="scroe">
+                        <button class="layui-btn" id='editsubmit' type='button'>立即提交</button>
+                    </td>
+               </tr>
+            </tbody>
+        </table>
+    </form>
+
+{/block}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+   
+    <form id="quickForm" method="get" class="form-horizontal" autocomplete="off" action='{:url("index")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+           
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div style="float:right;margin-top:-60px;margin-right:10px;">
+    {php}
+        if(showHandle('basic/Hotstore/makehotdata')){
+    {/php}
+    <button class="layui-btn makesystem">
+        <i class="layui-icon" >&#xe608;</i>生成系统得分
+    </button>
+    {php}}{/php}
+    
+    
+    </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="220">
+            <col width="120">
+            <col width="120">
+            <col width="120">
+            <col width="200">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>陵园名称</th>
+                <th>系统评分</th>
+                <th>总分数</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {notempty name="data"}
+                {volist name="data" id="vo"}
+                <tr>
+                    <td>{$vo.name}</td>
+                    <td>
+                        {$vo.system_score}
+                    </td>
+                    <td>{$vo.total_score}</td>
+                    <td>
+                         {php}
+                            if(showHandle('basic/Hotstore/changescore')){
+                        {/php}
+                         <a href="javascript:void(0)" class="layui-btn layui-btn-small layui-btn-normal edit" data-scroe="{$vo.total_score}" data-id="{$vo.id}"  style="margin-left:10px" title='修改'>修改总分数
+                        
+                        </a>
+                        {php}}{/php}
+                    </td>
+                       
+
+                </tr>
+                {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+//页面层
+layui.use(['jquery', 'layer', 'form'], function() {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+    
+        //生成系统分数数据
+        $('.makesystem').click(function(){
+            $.ajax({
+                url: "{:url('makehotdata')}",
+                type: 'post',
+                data: '',
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                        })
+                    }
+                }
+            });
+        });
+
+
+
+        //点击弹出生成系统分数模态框
+        $('.edit').click(function(){
+            var id = $(this).attr('data-id');
+            var scroe = $(this).attr('data-scroe');
+            $('.store_id').val(id)
+            $('.scroe').val(scroe)
+            layer.open({
+                closeBtn: 2,
+                type: 1,
+                area: '500px',
+                title: '修改总分数模态框',
+                content: $('#editForm'),
+            });
+         });
+
+        //提交修改系统分数
+        $('#editsubmit').click(function(){
+            var From = $('#editForm').serialize();
+            $.ajax({
+                url: "{:url('changescore')}",
+                type: 'post',
+                data: From,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.flag == 1) {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                              window.location.reload();//刷新当前页面.
+                        })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                        })
+                    }
+                }
+            });
+        });
+
+
+});
+</script>
+{/block}
+

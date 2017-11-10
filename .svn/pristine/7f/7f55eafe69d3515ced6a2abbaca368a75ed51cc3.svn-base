@@ -1,0 +1,224 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form  method="get"  autocomplete="off" action='{:url("storepay")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+   
+    <table class="layui-table">
+        <colgroup>
+            <col width="120">
+            <col width="110">
+            <col width="150">
+            <col width="150">
+            <col width="90">
+            <col width="100">
+            <col width="110">
+            <col width="300">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>购买人|电话</th>
+                <th>预约时间</th>
+                <th>商家名称</th>
+                <th>购墓金额|比例|应收</th>
+                <th>跟踪人</th>
+                <th>跟踪信息</th>
+                <th>下单时间</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name='$data' id='vo'}
+            <tr>
+                <td>
+                    {notempty name='vo.buyer'}
+                        {$vo.buyer}  {$vo.mobile}
+                    {else/}
+                        {$vo.reservation_person}  {$vo.reservation_phone}
+                    {/notempty}
+                    
+                </td>
+                <td>
+                    {neq name='vo.appoint_time' value='0'}
+                        {$vo.appoint_time|date='Y-m-d H:i:s',###}
+                    {/neq}
+                </td>
+                <td>{notempty name='vo.store_fact_name'}
+                            {$vo.store_fact_name} 
+                        {else/}
+                            {$vo.store_name} 
+                        {/notempty}</td>
+                <td>{$vo.tomb_price}|{$vo.brokerage_percent}|{$vo.brokerage_money}</td>
+                <td>{$order_flow[$vo.order_flow_id]}</td>
+                <td><a class="layui-btn layui-btn-small" href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'reVisit'))}">更新</a><br/>  {notempty name="vo['degree']"}
+                    {$Think.config.degree[$vo.degree]}
+                    {/notempty}
+
+                </td>
+                <td><a href="#">{$vo.created_time|date='Y-m-d H:i:s',###}</a></td>
+                <td>
+                    <div class="layui-btn-group">
+                    
+                        <a href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'orderDetail'))}"  title='详细信息'>
+                            <button class="layui-btn layui-btn-small" ><i class="layui-icon">&#xe615;</i></button>
+                        </a>
+                        <a  title='票据' class='image' order_id='{$vo.id}' style="margin-left:10px">
+                            <button class="layui-btn layui-btn-small  layui-btn-warm" ><i class="layui-icon">票</i></button>
+                        </a>
+                         {php}
+                            
+                            if(showHandle('orders/Tomb/checkback')){
+                        {/php}
+                            <a  title='退单' class='checkback' order_id='{$vo.id}' style="margin-left:10px">
+                                <button class="layui-btn layui-btn-small layui-btn-danger" ><i class="layui-icon">退</i></button>
+                            </a>
+                        {php}
+                            }
+                        {/php}
+                        <a  title='赠品' style="margin-left:10px">
+                            <button class="layui-btn layui-btn-small  layui-btn-normal" ><i class="layui-icon">赠</i></button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+
+{block name='layer'}
+<!--查看票据 start-->
+    <div id="images" style="display:none">
+        <div>
+        </div>
+    </div>
+     <!--退单 start-->
+    <form id='backorder' style="display:none" class="layui-form" method="post" >
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>  
+                        <textarea name="back_reason" placeholder="退单原因" class="layui-textarea" required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <span class="layui-btn backsubmit" type='button'>立即提交</span>
+                        <input type='hidden' name='id' />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <!--退单 end-->
+{/block}
+
+{block name='optJS'}
+<script>
+
+//页面层
+layui.use(['jquery', 'layer'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+      //查看票据
+    $(".image").bind('click', function(){
+        var order_id = $(this).attr('order_id');
+        layer.open({
+            type:3,
+            success: function(layero, indexs){  
+                $.ajax({
+                    url:"{:url('orders/Tomb/getbill')}",
+                    type:'post',
+                    data:{'order_id':order_id},
+                    dataType:'json',
+                    success:function(result){
+                        layer.closeAll(); //疯狂模式，关闭所有层
+                        if(result.flag==1){
+                            var data = result.data;
+                            var str = '';
+                            for(var item in data) {
+                               str += "<img src="+data[item]['bill_image']+" title="+data[item]['type']+"><br/>";
+                            }
+                            $('#images div').empty().append(str);
+                            layer.open({
+                                type: 1,
+                                skin: 'layui-layer-demo', //样式类名
+                                closeBtn: 2, //不显示关闭按钮
+                                anim: 2,
+                                area: ['900px','500px'], //宽高
+                                title:"查看票据",
+                                content: $('#images')
+                            });
+                        }else{
+                            layer.msg(result.msg);
+                        }
+                    }
+                });
+            }
+        });
+    }); 
+    
+    //退单
+    $('.checkback').click(function(){
+        var order_id = $(this).attr('order_id');
+        if(order_id){
+            $("#backorder input[name='id']").val(order_id);
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-demo', //样式类名
+                closeBtn: 2, //不显示关闭按钮
+                anim: 2,
+                area: ['30%','35%'], //宽高
+                title:"退单原因",
+                content: $('#backorder')
+            });
+        }
+    });
+    
+    //提交退单原因
+    $('.backsubmit').click(function(){
+        var order_id = $("#backorder input[name='id']").val();
+        var back_reason = $('#backorder textarea[name="back_reason"]').val().replace(/(^\s*)|(\s*$)/g, "");
+        if(!back_reason){
+            layer.msg('请填写退单原因');
+            return false;
+        }
+        layer.open({
+            type:3,
+            success: function(layero, indexs){ 
+                $.ajax({
+                    url: "{:url('checkback')}",
+                    data: {'orderId':order_id,'back_reason':back_reason},
+                    type: 'post',
+                    success: function(res){
+                        var d = eval("(" + res + ")");
+                        if(d.flag == 1){
+                            window.location.reload();
+                        }else{
+                            layer.alert(d.msg);
+                        }
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
+{/block}
+

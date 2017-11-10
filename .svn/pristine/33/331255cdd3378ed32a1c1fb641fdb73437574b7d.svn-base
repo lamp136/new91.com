@@ -1,0 +1,273 @@
+{extend name='extra@main' /}
+{block name='popups'}
+<!-- 我要评价 -->
+<form method="post" id='form-data'>
+    <div class="tooltip_box"></div>
+    <div class="tooltip tooltip_remark">
+        <h2>我的评价</h2>
+        <div class="pf clearfix">
+            <span class="title">评分：</span>
+             <ul>
+                <li>策划：<span id='hj'></span></li>
+                <li>服务：<span id='fw'></span></li>
+                <li>价格：<span id='fs'></span></li>
+                <!--<li>交通：<span id='jt'></span></li>-->
+            </ul>
+        </div>
+        <div class="ms">
+            <span class="title">描述：</span>
+            <textarea class="ms_tarea" name='info[content]' placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+        </div>
+        <div class="remark_btn">
+            <a href="javascript:;" id='remark_sub'>提交评价</a>
+        </div>
+        <input type="hidden" name='info[environment]' value=""> 
+        <input type="hidden" name='info[price]' value=""> 
+        <input type="hidden" name='info[service]' value=""> 
+        <input type="hidden" name='info[traffic]' value=""> 
+        <input type="hidden" name='info[store_id]' value='{$data.id}'>
+        <div class="tooltip_remark_close"></div>
+    </div><!-- tooltip_remark 我要评价 End -->
+</form>
+{/block}
+{block name='body'}
+    
+<!-- contain -->
+<div class="contain contain_pdsize">
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <ul>
+            <li><a href="/" title='91搜墓网'>首页</a></li>
+            <li class="jt">></li>
+            <li><a href="{:url('rite/Rite/lists')}" title="殡葬礼仪">殡葬礼仪</a></li>
+            <li class="jt">></li>
+            <li>{$data.name}</li>
+        </ul>
+    </div><!-- breadcrumb End -->
+
+    <!-- 殡葬礼仪详情介绍 -->
+    <div class="etiquette_detail_main clearfix">
+        <!-- 图片 -->
+        <div class="etiquette_detail_main_img">
+            <img {empty name="data.thumb_image"}  src="{$data.image}" {else /} src="{$data.thumb_image}" {/empty}alt="{$data.name}" />
+        </div>
+        <!-- 详情内容介绍 -->
+        <div class="etiquette_detail_main_text">
+            <h2>{$data.name}</h2>
+            <p class="clearfix"><span class="fwqy">服务区域：</span><span class="dq">{volist name="data.service_city" id="vo"}{$vo}&nbsp;&nbsp;{/volist}</span></p>
+            <p><span>服务热线：</span><font>{$data.phone}</font></p>
+            <p><span>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：</span>{$data.address}</p>
+            <p class="num"><span class="first">浏&nbsp;&nbsp;览&nbsp;&nbsp;量：</span>{$data.actual_hits + $data.hits} <span>预约量：</span>{$data.order_service_count}<span>客户评价：</span>{$aveScore.commentNum}</p>
+        </div>
+        <!-- 立即预约 在线咨询 -->
+        <div class="etiquette_detail_main_btn">
+            <a class="buttonlv" href="{:url('rite/Rite/reservation',['id'=>$data.id,'type'=>1])}">立即预约</a>
+            <a class="buttonbai" target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439">在线咨询</a>
+        </div>
+    </div><!-- cemetery_detail_main 殡葬礼仪详情介绍 End -->
+    
+    <!-- 左侧内容 -->
+    <div class="leftcontain">
+        <div class="cem_detail">
+            <!-- 定位导航头部 -->
+            <div class="cem_detail_title" id="cem_detail_title">
+                <ul>
+                    <li class="thistab"><a href="javascript:void(0);" tab="tabcem1">服务套餐</a></li>
+                    <li><a href="javascript:void(0);" tab="tabcem2">服务商简介</a></li>
+                    <li><a href="javascript:void(0);" tab="tabcem3">客户评价</a></li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <ul>
+                <!-- 服务套餐 -->
+                {notempty name='$combo'}
+                <li  class="cem_details_box etiquette_detail_package" id="tabcem1">
+                    <!-- 筛选条件 -->
+                    <div class="sifting">
+
+                        <!-- 筛选条件结果显示 -->
+                        <div class="criteria">
+                            <ul>
+                                <li class="sif">所有分类</li>
+                                <li>></li>
+                                
+                                
+                                <li class="number">共<span> {$comboNum} </span>结果</li>
+                            </ul>
+                        </div>
+
+                        <!--服务类别 -->
+                        <div class="sifting_main clearfix">
+                            <span>服务类别：</span>
+                            <ul id='combo_type'>
+                                <li class="led"><a href="javascript:void(0);" combo_type=''>不限</a></li>
+                                {volist name='Think.config.combo_type' id='vo'}
+                                <li ><a href="javascript:void(0);" combo_type='{$key}'>{$vo}</a></li>
+                                {/volist}
+                            </ul>
+                        </div>
+
+                        <!-- 价格区间 -->
+                        <div class="sifting_main clearfix">
+                            <span>价格区间：</span>
+                            <ul id='combo_price'>
+                                <li class="led"><a href="javascript:void(0);" combo_price=''>不限</a></li>
+                                {volist name='Think.config.combo_price' id='vo'}
+                                <li ><a href="javascript:void(0);" combo_price='{$vo}'>{$key}</a></li>
+                                {/volist}
+                            </ul>                   
+                        </div>
+                        
+                    </div><!-- sifting筛选条件结束 -->
+                    
+                    <!-- 服务套餐列表 -->
+                    <div class="package">
+                        <ul class="packageul clearfix" id='combo_content'>
+                        {volist name='combo' id='vo'}
+                            <li {if ($key+1)%3==0} class='last' {/if}>
+                                <a href="{:url('rite/Rite/comboDetail',['id'=>$vo.id])}" title='{$vo.combo_name}'><img src="{$vo.thumb_image}" alt="{$vo.combo_name}"/></a>
+                                <div class="txt">
+                                    <h2><a href="{:url('rite/Rite/comboDetail',['id'=>$vo.id])}" title='{$vo.combo_name}'>{$vo.combo_name}</a></h2>
+                                    <p>参考价：<strong>{eq name="vo.platform_price" value="0.00"}--{else/}{$vo.platform_price}{/eq}</strong><span class="yuan">元</span></p>
+                                    <div class="btn clearfix">
+                                        <a href="{:url('rite/Rite/reservation',['id'=>$vo.id,'type'=>2])}">立即预约</a>
+                                        <a class="zxzx" target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439">在线咨询</a>
+                                    </div>
+                                </div>
+                            </li>
+                        {/volist}
+                        </ul>
+
+                        <!-- 分页 -->
+                        <div class="paging">
+                            <div class="comboPage">
+                                
+                            </div> 
+                        </div><!-- paging 分页 End -->
+                    </div><!-- package 服务套餐列表 End -->
+                </li>
+                {else/}
+                    <li class="cem_details_box etiquette_detail_package" id="tabcem1"><div class="package">暂无数据</div></li>
+                {/notempty}
+                <!-- 服务商简介 -->
+                <li class="cem_details_box" id="tabcem2">
+                    <!-- 服务商简介内容 -->
+                    <div class="cem_detail_intro">
+                        {$data.content}
+                    </div><!-- cem_detail_intro 陵园简介 End -->
+                </li>
+                <!-- 客户评价 -->
+                <li class="cem_details_box" id="tabcem3">
+                    <!-- 评价 -->
+                    <div class="cem_details_remark">
+
+                        <!-- 与描述相符+星星 -->
+                        <div class="cem_details_star clearfix">
+                            <div class="coincide">
+                                <p>综合评价</p>
+                                <h2>{$aveScore.total}<span>分</span></h2>
+                            </div>
+                            <ul>
+                                <li>策划：<span class="pfl" data-value="{$aveScore.environment}"></span>{$aveScore.environment}分</li>
+                                <li class="last">服务：<span class="pfl" data-value="{$aveScore.service}"></span>{$aveScore.service}分</li>
+                                <li >价格：<span class="pfl" data-value="{$aveScore.price}"></span>{$aveScore.price}分</li>
+                            </ul>
+                            <!--<div class="remark_btn">
+                                <a class="remark_a" href="javascript:void(0);">我要评价</a>
+                            </div>-->
+                        </div>
+                        {gt name="aveScore.commentNum" value="0"}
+                            <!-- 评价数量 -->
+                            <div class="cem_details_evaluate_title clearfix">
+                                <ul>
+                                    <li class="led"><img src="_WEB_/images/evaluate_title1.png"/>全部 {$aveScore.commentNum}</li>
+                                </ul>
+                            </div>
+
+                            <!-- 评价内容1 -->
+                            <div id='comment_div'>
+                            {volist name='comment' id='vo'}
+                            <div class="evaluate_main">
+                                <!-- 用户 -->
+                                <div class="evaluate_main_yh">
+                                    {$vo.mobile}
+                                </div>
+                                <!-- 评价 -->
+                                <div class="evaluate_main_pj">
+                                    <p>{$vo.content}</p>
+                                </div>
+                                <!-- 星星 -->
+                                <div class="evaluate_main_xing">
+                                    <!-- <img src="_WEB_/images/cem_detail_star_img5.jpg"/> -->
+                                    <span class="pfl" data-value="{$vo.ave}"></span>
+                                    <p>{$vo.comment_time}</p>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!-- evaluate_main 评价内容 End -->
+                            {/volist}
+                            </div>
+                            <!-- 分页 -->
+                            <div class="paging">
+                                <div class="commentPage">
+                                    
+                                </div> 
+                            </div><!-- paging 分页 End -->
+                        {/gt}
+
+                    </div><!-- cem_details_remark 评价 End -->
+                </li>
+            </ul>
+        </div>
+    </div><!-- leftcontain End -->
+    
+    <!-- 右侧内容 -->
+    <div class="rightcontain">
+        
+        <!-- 附近陵园推荐 -->
+        <div class="recommend cem_margin_bottom">
+            <h2>附近陵园推荐</h2>
+            <ul>
+            {volist name='randcemetery' id='vo'}
+                <li>
+                    <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}'>
+                        <img {empty name="vo.image"} src="_WEB_/images/cemetery_tmp_image.jpg" {else/}src="{$vo.image}"{/empty} alt="{$vo.name}" />
+                        <p>{$vo.name}</p>
+                    </a>
+                </li>
+            {/volist}
+            </ul>
+        </div><!-- recommend 附近陵园推荐 End -->
+        
+        <!--广告位-->
+        <div class="advertising cem_margin_bottom">
+            <a href="{:url('/help/joinus','',$Think.config.assign_suffix,$Think.config.assign_domain)}"><img src="_WEB_/images/advertising_img.jpg"/></a>
+        </div> <!-- advertising 广告位 End-->
+        
+        <!--白事常识-->
+        <div class="policies">
+            <h2>白事常识</h2>
+            <ul>
+            {volist name='$bscs' id='vo'}
+                <li><a href="{:url('article/Article/detail',['id'=>$vo.id],$Think.config.assign_suffix,$Think.config.assign_domain)}" title='{$vo.title}'>{$vo.title}</a></li>
+            {/volist}
+            </ul>
+        </div><!-- policies 白事常识 End-->
+
+    </div><!-- leftcontain End -->
+
+    <div class="clear"></div>
+    <input type="hidden" class='comboUrl' value="{:url('rite/Rite/selectCombo')}"> 
+    <input type="hidden" class='selCommentUrl' value="{:url('rite/Rite/selectComment')}"> 
+    <input type="hidden" class='addCommentUrl' value="{:url('rite/Rite/addcomment')}"> 
+    <input type="hidden" class="comtCountPage" value="{$comtCountPage}">
+    <input type="hidden" class="comboCountPage" value="{$comboCountPage}">
+    <input type="hidden" class="storeId" value="{$data.id}">
+</div><!-- contain End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/jquery.page.js"></script>
+<script src="_WEB_/js/raty/jquery.raty.js"></script>
+<!--私有JS -->
+<script type="text/javascript" src="_WEB_/js/ritedetail.js"></script>
+{/block}

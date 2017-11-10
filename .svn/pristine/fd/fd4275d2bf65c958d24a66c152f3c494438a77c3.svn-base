@@ -1,0 +1,124 @@
+{extend name='extra@main' /}
+{block name="layer"}
+
+
+{/block}
+{block name="body"}
+	<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        <a><cite>陵园合作列表</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <form  action="{:url('member/Handtohand/index')}" method="get">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+               <input type="text" name="mobile" autocomplete="off" class="layui-input" placeholder="请输入手机号或名字" value="{$Think.get.mobile}"/>
+            </div>
+            <div class="layui-inline">
+                <select name="flow_id" lay-filter="flow_id">
+                    <option value="0">--跟踪人--</option>
+                    
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="10%">
+            <col width="12%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="38%">
+        </colgroup>
+        <thead>
+          <tr> 
+            <th>陵园名称</th>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>IP地址</th>
+            <th>状态</th>
+            <th>时间</th>
+            <th>跟踪人</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+            {volist name="list" id="vo"}
+	        <tr>
+	        	<td>{$vo.cemetery}</td>
+	        	<td>{$vo.name}</td>
+	        	<td>{$vo.mobile}</td>
+	        	<td>{$vo.ip}</td>
+	        	<td>{switch name="vo.status" }
+                    {case value="-1"}<span style="color:red;">删除</span>
+                    {/case}
+                    {case value="0" }<span style="color:blue;">待处理</span>{/case}
+                    {case value="1" }<span style="color:green;">成功</span>
+                    {/case}
+                    {case value="2" }<span style="color:red;">失败</span>
+                    {/case}
+                    {default /}其他情况
+                {/switch}</td>
+                <td>{$vo.created_time|date='Y-m-d H:i:s',###}</td>
+                <td></td>
+                <td>{notempty name="vo.remark"}
+                    <a title="{$vo.remark}" class="layui-btn layui-btn-small layui-btn-normal lookremark" data-id="{$vo.id}" href="javascript:void(0)">查看</a>
+                    {/notempty}</td>
+	        	<td>
+                     <a class="layui-btn layui-btn-small layui-btn-normal add" href="javascript:void(0)" flow-man="{$vo.flow_man}" id-num="{$vo.id}"><i class="icon-pencil icon-white"></i>跟踪人
+                     {eq name="vo.status" value="0"}
+                                <a class="layui-btn layui-btn-small layui-btn-normal edit"  href="javascript:void(0)" data-id="1" id-num="{$vo.id}"> 成功</a>
+                                <a class="layui-btn layui-btn-small layui-btn-normal edit"  href="javascript:void(0)" data-id="2" id-num="{$vo.id}"> 失败</a>
+                                {if condition="$vo.status eq 0"}
+                                    <a class="layui-btn layui-btn-small layui-btn-normal edit"  href="javascript:void(0)" data-id="-1" id-num="{$vo.id}"> 删除</a>
+                                {elseif condition="$vo.status eq -1"/}
+                                    <a href="javascript:void(0)" data-id="0" class="layui-btn layui-btn-small layui-btn-normal enable" id-num="{$vo.id}">
+                                    启用</a>
+                                {/if}
+                        {/eq}   
+                </td>
+	        </tr>
+            {/volist}
+        </tbody>
+       </table>
+       {$page}
+{/block}
+{block name="optJS"}
+<script>
+ layui.use(['jquery', 'form','laydate','laypage'],function(){
+    var $= layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    var laypage = layui.laypage;
+
+   
+		
+
+});
+
+</script>
+{/block}

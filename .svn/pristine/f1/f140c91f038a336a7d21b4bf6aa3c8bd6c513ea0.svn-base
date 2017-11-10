@@ -1,0 +1,82 @@
+{extend name='extra@main' /}
+{block name='body'}    
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/" title="首页">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('cemetery/Cemetery/index')}" title="陵园墓地">陵园墓地</a></li>
+                <li class="jt">></li>
+                <li><a title="{$celebrity['store']['name']}" href="{:url('cemetery/Cemetery/details',['id' => $celebrity.store_id])}">{$celebrity['store']['name']}</a></li>
+                <li class="jt">></li>
+                <li><a href="javascript:void(0);" title="名人墓地">名人墓地</a></li>
+                <li class="jt">></li>
+                <li>{$celebrity.name}</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+           
+            <!-- 名人墓地详情 -->
+            <div class="celebrities_details">
+                <h1>生平经历</h1>
+                <div class="celebrities_details_main">
+                    <!-- 摘要 -->
+                    <p class="abstract">
+                        {$celebrity.summary}
+                        <span></span>
+                    </p>
+                    <!-- 图片 -->
+                    <div class="celebrities_details_img">
+                        <img alt="{$celebrity.name}" src="{$celebrity.image_url}"/>
+                        <p>{$celebrity.name}</p>
+                    </div>
+                    <div class="p_main">
+                        {$celebrity.content}
+                    </div>
+                </div>
+            </div><!-- celebrities_details 名人墓地详情 End -->
+
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <div class="celebrities_details_right">
+                <!-- 名人简介+陵园图片 -->
+                <div class="resume">
+                    <h1>{$celebrity.name}</h1>
+                    <p>生卒：{$celebrity.born_in}-{$celebrity.died_in}</p>
+                    <p>葬入陵园：<span>{$celebrity['store']['name']}</span></p>
+                    <img width="250" height="130" alt="{$celebrity['store']['name']}" {notempty name="celebrity['store']['thumb_image']"} src="{$celebrity['store']['thumb_image']}" {else/} src="{$celebrity['store']['image']}" {/notempty}/>
+                </div>
+                <!-- 葬入此陵园其他名人 -->
+                <div class="other">
+                    <h2>葬入此陵园其他名人</h2>
+                    <ul>
+                        {volist name="otherCelebrity" id="other"}
+                            <li><a target="_blank" title="{$other.name}" href="{:url('cemetery/Cemetery/celebrity',['id' => $other.id])}">{$other.name}</a><span><i></i>{$other.born_in}-{$other.died_in}</span></li>
+                        {/volist}
+                    </ul>
+                </div>
+                <!-- 大家都在关注 -->
+                <div class="other attention">
+                    <h2>大家都在关注</h2>
+                    <ul>
+                        {volist name="attentionCelebrity" id="att"}
+                            <li><a title="{$att.name}" href="{:url('cemetery/Cemetery/celebrity',['id' => $att.id])}">{$att.name}</a><span><i></i>{$att.born_in}-{$att.died_in}</span></li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}

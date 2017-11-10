@@ -1,0 +1,157 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+<span class="layui-breadcrumb" style="font-size:20px">
+    <a href="">首页</a>
+    {if condition="$store.category_id eq $Think.config.category_cemetery_id"}
+        <a href="{:url('store/Basestore/cemetery')}">陵园列表</a>
+    {elseif condition="$store.category_id eq $Think.config.category_funeral_id"/}
+        <a href="{:url('store/Basestore/funeral')}">殡仪馆列表</a>
+    {/if}
+    <a href="{:url('store/Basestore/celebrityList',['id'=>$storeId,'store_name'=>urlencode($store.name),'category_id'=>$store.category_id])}">{$store.name}  名人墓地列表</a>
+    <a><cite>添加名人墓地</cite></a>
+</span>
+</div>
+
+<form class="layui-form" method="post" style="margin-top: 8px;" action="{:url('store/Basestore/addCelebrity')}" enctype="multipart/form-data" >
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:40%;'>
+            <label class="layui-form-label"><span style="color:red">*</span>姓名</label>
+            <div class="layui-input-block">
+                <input name="info[name]" lay-verify="title" autocomplete="off" placeholder="姓名"  class="layui-input" required type="text">
+            </div>
+        </div>
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="info[sex]" value="1" title="男" checked>
+                <input type="radio" name="info[sex]" value="2" title="女" >
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:40%;'>
+            <label class="layui-form-label">生平信息</label>
+            <div class="layui-input-block">
+                <input type="text" name="info[life_info]" value="" class="layui-input" placeholder="xxx艺术家，xxx一级演员，出演过xxx"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <span class="layui-form-mid layui-word-aux">
+                <font color="red">与名人相关的职业信息等</font>
+            </span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:40%;'>
+            <label class="layui-form-label">名人图片</label>
+            <div class="layui-box layui-upload-button layui-input-inline">
+                <input type="file" name="image_url" lay-type="images" class="layui-upload-file"/>
+                <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+            </div>
+            <!-- <div class="layui-form-mid layui-word-aux" style="margin-top:3px">注：用于前端名人墓地列表封面处</div> -->
+        </div>
+        <div class="layui-inline" style='width:50%;'>
+            <label class="layui-form-label"><span style="color:red">*</span>生卒于</label>
+            <div class="layui-input-inline">
+                <input name="info[born_in]" placeholder="生于(如:2014)" autocomplete="off" class="layui-input" required type="text">
+            </div>
+            <div class="layui-form-mid">—</div>
+            <div class="layui-input-inline">
+                <input name="info[died_in]" placeholder="卒于(如:2015)" autocomplete="off" class="layui-input" required type="text">
+            </div> 
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:40%;'>
+            <label class="layui-form-label">来源</label>
+            <div class="layui-input-block">
+                <input name="info[source]" lay-verify="title" autocomplete="off" placeholder="来源"  class="layui-input"  type="text">
+            </div>
+        </div>
+        <div class="layui-inline" style='width:50%;'>
+            <label class="layui-form-label">来源地址</label>
+            <div class="layui-input-block">
+                <input name="info[source_url]" lay-verify="phone" autocomplete="off" class="layui-input" placeholder="来源地址" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:40%;'>
+            <label class="layui-form-label">是否发布</label>
+            <div class="layui-input-block">
+                 <input type="radio" name="info[status]" value="{$Think.config.normal_status}" title="是" checked>
+                <input type="radio" name="info[status]" value="{$Think.config.delete_status}" title="否" >
+            </div>
+        </div>
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label">是否推荐</label>
+            <div class="layui-input-block">
+                <input type="radio" name="info[recommended]" value="{$Think.config.normal_status}" title="是" checked>
+                <input type="radio" name="info[recommended]" value="{$Think.config.default_status}" title="否" >
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style="width:1128px">
+            <label class="layui-form-label"><span style="color:red">*</span>SEO标题</label>
+            <div class="layui-input-block">
+                <input name="info[seo_title]" lay-verify="title" autocomplete="off" placeholder="SEO标题"  class="layui-input" required type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style="width:1128px">
+            <label class="layui-form-label"><span style="color:red">*</span>SEO关键字</label>
+            <div class="layui-input-block">
+                <input name="info[seo_keywords]" lay-verify="title" autocomplete="off" placeholder="SEO关键字"  class="layui-input" required type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="width:1128px">
+        <label class="layui-form-label"><span style="color:red">*</span>SEO描述</label>
+        <div class="layui-input-block">
+          <textarea name="info[seo_description]" placeholder="SEO描述" class="layui-textarea" required></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="width:1128px">
+        <label class="layui-form-label"><span style="color:red">*</span>摘要</label>
+        <div class="layui-input-block">
+          <textarea name="info[summary]" placeholder="SEO描述" class="layui-textarea" required></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="width:1128px">
+        <label class="layui-form-label"><span style="color:red">*</span>简介</label>
+        <div class="layui-input-block">
+          <textarea name="info[content]" id='demo1' placeholder="摘要" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style='width:48%;'>
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input name="info[sort]" lay-verify="phone" autocomplete="off" class="layui-input" placeholder="排序" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" name="info[store_id]" value="{$storeId}">
+            <input type="hidden" name="info[store_sn]" value="{$store['store_sn']}"/>
+            <button class="layui-btn sub-btn submit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'form','layedit'], function() {
+        var layedit = layui.layedit;
+        var $ = layui.jquery;
+        layedit.build('demo1'); //建立编辑器
+    });
+</script>
+{/block}

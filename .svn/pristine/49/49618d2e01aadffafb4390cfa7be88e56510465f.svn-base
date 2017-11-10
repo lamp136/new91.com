@@ -1,0 +1,69 @@
+<?php
+namespace web\cemetery\controller;
+use think\Controller;
+use think\Db;
+use web\extra\controller\Base;
+use web\extra\model\Store;
+use think\Cookie;//cookie类
+
+class Map extends Base
+{
+    public function index(){
+        $input = input();
+        $stores = [];
+        $city = [];
+        $province = 3;
+        if(input('?cookie.ip_region_id')){
+            $province = decode(Cookie::get('ip_region_id'));
+        }
+        $where['province'] = $province;
+        $stores = $this->_stores($where);
+        $city = Db::name('region')->where('pid',$province)->column('id,name');
+        $this->assign([
+            'provinceId' => $province,
+            'city'       => $city,
+            'stores'     => $stores,
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 获取陵园
+     * @param  integer $query 省|市条件
+     * @return array
+     */
+    private function _stores($query = []){
+        $data = '';
+        $where['category_id'] = 37;
+        $province = 3;
+        $where['longitude'] = ['neq',''];
+        if(!empty($query['province'])){
+            $province = $query['province'];
+        }
+        $where['province_id'] = $province;
+        if(!empty($query['city'])){
+            $where['city_id'] = $query['city'];
+        }
+        $stores = Store::with(['province','city'])->where($where)->field('id,name,province_id,city_id,address,image,thumb_image,longitude,latitude,min_price')->select();
+        if(!empty($stores)){
+            $data = $stores;
+        }
+        return $data;
+    }
+
+    /**
+     * 获取商家
+     * @return json
+     */
+    public function merchant(){
+        $input = input('get.');
+        $result = ['code' => 0,'data' => []];
+        $storeData = $this->_stores($input);
+        $count = 0;
+        if(!empty($storeData)){
+            $result = ['code' => 1,'data' => $storeData];
+        }
+
+        echo json_encode($result);
+    }
+}

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {include file="extra@head"/}
+        {block name="link"}{/block}
+    </head>
+    <body>
+        {block name='popups'}{/block}
+        {include file="extra@topup"/}
+        {include file="extra@topdown"/}
+        {block name="body"}{/block}
+        {include file="extra@footup"/}
+        {include file="extra@footdown"/}
+        <!-- 搜索提示 -->
+        <script type="text/javascript" src="_WEB_/js/hit.js"></script>
+        <!-- 轮播jquery.touchSlider.js -->
+        <script type="text/javascript" src="_WEB_/js/jquery.touchSlider.js"></script>
+        <script type="text/javascript" src="_WEB_/js/slide.js"></script>
+        {include file="extra@publicjs"/}
+        {block name="js"}{/block}
+    </body>
+</html>
+    
+    
+

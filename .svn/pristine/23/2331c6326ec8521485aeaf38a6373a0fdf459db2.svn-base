@@ -1,0 +1,94 @@
+<?php
+namespace web\extra\controller;
+use think\Controller;
+use think\Request;//请求类
+use think\Session;//session类
+use think\Db;
+
+
+class Base extends Controller 
+{
+
+    public function _initialize(){
+        $regions = Db::name('region')->where(['status' => 1])->field('id,name,pid,flag')->select();
+        $province = [];
+        $city = [];
+        if($regions){
+            foreach ($regions as $val) {
+                if($val['pid'] == 2){
+                    // 省份
+                    $province[$val['flag']][$val['id']] = $val['name'];
+                }else if(isset($input['province']) && !empty($input['province'])){
+                    if($val['pid'] == $input['province']){
+                        // 市区
+                        $city[] = $val;
+                    }
+                }
+            }
+        }
+
+        $this->assign([
+            'province' => $province,
+            'city'     => $city
+        ]);
+        
+        
+        //友情链接
+        $this->getfriendlink();
+    }
+
+    /**
+     *获取友情链接
+     *@input void;
+     *@return void;
+     */
+    protected function getfriendlink(){
+        $provinceId = session('ip_region_id');//????
+        $provinceId = 2;//????
+        $where['status'] = config('normal_status');
+        $link = Db::name('Friendlink')->field('name,url,province_id')->where($where)->order('sort DESC')->select(); 
+        $friendlinks = array();
+        foreach ($link as $value) {
+            $province_id = explode(',',$value['province_id']);
+            if(in_array($provinceId,$province_id)){
+                $friendlinks[] = $value;
+            }
+        }
+        $this->assign('friendlinks',$friendlinks);
+    }
+    /**
+     *获取百科数据
+     *@input $categoryId;//分类ID
+     *@input $num;//信息数量
+     *@return array;
+     */
+    public function article($categoryId,$num=6){
+        $data = array();
+        $num = (int)$num;
+        $cateWhere['is_show'] = config('normal_status');
+        $categorydata = Db::name('category')->field('id,pid')->where($cateWhere)->select();
+        $category = $this->getcategoryId($categorydata,$categoryId);
+        $category[] = $categoryId;
+        $where['category_id'] = array('in',$category);
+        $where['status'] = config('normal_status');
+        $data = Db::name('News')->where($where)->field('id,title')->order('recommend DESC,sort DESC,published_time DESC')->limit($num)->select();
+        return $data;
+    }
+    /**
+     *获取该分类下子所有分类ID
+     *@input $data;//分类数据
+     *@input $pid;//分类ID
+     *@return array;
+     */
+    private function getcategoryId($data,$pid){
+        static $result = array();
+        foreach($data as $val){
+            if($val['pid'] == $pid){
+                $result[] = $val['id'];
+                $this->getcategoryId($data,$val['id']);
+            }
+        }
+        return $result;
+    }
+    
+}

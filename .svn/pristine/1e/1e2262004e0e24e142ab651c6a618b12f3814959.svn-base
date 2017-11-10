@@ -1,0 +1,163 @@
+<?php 
+namespace back\operate\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+
+/**
+ * 百度访客统计数据
+ */
+class Baiduvisite extends Base
+{
+	/**
+	 * 列表
+	 */
+	public function index(){
+		$getdata = input('get.');
+        $pageSize = Config('page_size');
+		$data =Db::name('BaiduVisitor')->order('start_time' ,'desc')->paginate($pageSize,false,['query' => $getdata]);
+        $page = $data->render();
+        $this->assign('data',$data);
+        $this->assign('page',$page);
+		return $this->fetch();
+	}
+
+	/**
+	 * 将年月日转换为-
+	 */
+	public function myReplace($str)
+	{
+	    $pat = array("年", "月", "日", "时", "分","秒");
+	    $string = array("-", "-", "", ":", ":", "");
+	    return str_replace($pat, $string, $str);
+	}
+
+	/**
+	 * 将省名字转化为ID
+	 */
+	public function proReplace($str){
+		$where['level'] = config('normal_status');
+		$where['status'] = config('normal_status');
+		$region  = Db::name('Region')->where($where)->field('id,name')->select();
+		foreach($region as $k=>$v){
+			$name[$v['id']] = $v['name'];
+		}
+		$province_id = array_search($str,$name);
+		return $province_id;
+	}
+
+	/**
+	 * 将省名字转化为ID
+	 */
+	public function cityReplace($str){
+		$where['level'] = '2';
+		$where['status'] = config('normal_status');
+		$where['name'] = ['like','%'.$str.'%'];
+		$region  = Db::name('Region')->where($where)->field('id')->select();
+		$city = $region[0]['id'];
+		
+		return $city;
+	}
+
+
+	/**
+	 * 导入数据
+	 */
+	public function uploadFile(){
+		if(Request::instance()->isPost()){
+	        $files = request()->file('flow_file'); 
+	        $path = './public/uploadfile/baiduvisitor/'; // 获取表单提交过来的文件   
+	        $error = $_FILES['flow_file']['error'];
+	        if(!$error){  
+	          $dir = $path;  
+	          // 验证文件并移动到框架应用根目录/public/uploads/ 目录下  
+	          $info = $files->validate(['size'=>3145728,'ext'=>'xls,xlsx,csv'])->rule('uniqid')->move($dir); 
+	          /*判断是否符合验证*/  
+	          if($info){    //  符合类型  
+	            $ext = $info->getExtension();// 获取后缀
+	            $filename = $path.$info->getSaveName();// 文件保存名字
+
+	            // vendor('PHPExcel.PHPExcel');
+	            vendor('PHPExcel.PHPExcel.IOFactory');
+	            vendor('PHPExcel.PHPExcel.Reader.Excel5');// Excel5:xls;Excel2007:xlsx;
+	            vendor('PHPExcel.PHPExcel.Reader.Excel2007');// Excel5:xls;Excel2007:xlsx;
+	            $reader = \PHPExcel_IOFactory::createReader('Excel5');//设置以Excel5格式
+	            if($ext == 'xlsx'){
+	                $reader = \PHPExcel_IOFactory::createReader('Excel2007');//设置以Excel2007格式
+	            }
+	            $PHPExcel = $reader->load($filename); // 载入excel文件  
+	            $sheet = $PHPExcel->getSheet(0); // 读取第一個工作表  
+	            $highestRow = $sheet->getHighestRow(); // 取得总行数  
+	            $highestColumm = $sheet->getHighestColumn(); // 取得总列数  
+	               /** 循环读取每个单元格的数据 */  
+	                for ($row = 5; $row <= $highestRow; $row++){//行数是以第1行开始，这里示例中excel有3列字段  
+	                  $start_time = $sheet->getCell('B'.$row)->getValue(); 
+	                  $this_visitpage = $sheet->getCell('G'.$row)->getValue(); 
+	                  $browser = $sheet->getCell('AI'.$row)->getValue();  
+	                  $system = $sheet->getCell('AH'.$row)->getValue();  
+	                  $zone = $sheet->getCell('AC'.$row)->getValue();  
+	                  $ip = $sheet->getCell('AA'.$row)->getValue();  
+	                  $ip_description = $sheet->getCell('AB'.$row)->getValue();
+
+	                  $searchkey = $sheet->getCell('W'.$row)->getValue();  
+	                  $access_source = $sheet->getCell('U'.$row)->getValue();  
+	                  $initiai_ip = $sheet->getCell('V'.$row)->getValue();  
+	                  $call_id = $sheet->getCell('R'.$row)->getValue();  
+	                  $caller_name = $sheet->getCell('Q'.$row)->getValue();  
+	                  $remark = $sheet->getCell('S'.$row)->getValue();  
+	                  $now_server = $sheet->getCell('L'.$row)->getValue();
+	                  $prozone= explode('_',$zone);
+	                  //省名字
+	                  $proname = $prozone[0];
+	                  //市名字
+					  $cityname =  substr(strrchr($zone, "_"), 1);
+	                  //将带汉字的时间转换为date
+	                  $timeinfo = $this->myReplace($start_time);
+	                  //获取省份ID
+	                  $province_id = $this->proReplace($proname);
+	                  //获取市级ID
+	                  $city_id = $this->cityReplace($cityname);
+	                  $data = array();  
+	                  $data = array(  
+	                      'start_time'  =>   strtotime($timeinfo),  
+	                      'this_visitpage'  =>  $this_visitpage,  
+	                      'browser'    =>  $browser,  
+	                      'system'    =>  $system,  
+	                      'province_id'    =>  $province_id,  
+	                      'province_name'    =>  $proname,  
+	                      'city_id'    =>  $city_id,  
+	                      'city_name'    =>  $cityname,  
+	                      'ip'    =>  $ip,  
+	                      'ip_description'    =>  $ip_description,  
+	                      'search_key'    =>  $searchkey,  
+	                      'access_source'    =>  $access_source,  
+	                      'initiai_ip'    =>  $initiai_ip,  
+	                      'caller_id'    =>  $call_id,  
+	                      'caller_name'    =>  $caller_name,  
+	                      'remark'    =>  $remark,  
+	                      'now_server'    =>  $now_server,  
+	                    );
+	                   $ret =  Db::name('BaiduVisitor')->insert($data);  
+	                }  
+	                if($ret){
+	                    // unlink($filename);
+	                    $result['flag'] = 1;
+	                    $result['msg'] = '数据上传成功';
+	                }else{
+	                	$result['flag'] = 0;
+	                    $result['msg'] = '数据上传失败';
+	                } 
+	              } else{ //  不符合类型业务  
+	                $result['flag'] = 2;
+	                $result['msg'] = '请选择上传3MB内的excel表格文件...';
+	              }  
+	            }else{  
+	              $result['flag'] = 3;
+	              $result['msg'] = '请选择需要上传的文件...';  
+	            }  
+	            echo json_encode($result);
+	        }  
+    }  
+}

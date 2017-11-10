@@ -1,0 +1,148 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: 流年 <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+// 应用公共文件
+
+/**
+ * 主要用于首页和导航的URL拼接
+ *
+ * @param string $prefix
+ *
+ * @return String
+ */
+function getHomeUrl($prefix='') {
+    $abbr = strtolower(Session::get('ip_region_abbr'));
+    $qgAbbr = strtolower(C('CHINA_ABBR'));
+    if (empty($abbr) || $abbr == $qgAbbr) {
+        if ($prefix) {
+            $url = '/'.$prefix;
+        } else {
+            $url = '/';
+        }
+
+    } else {
+        if ($prefix) {
+            $url = '/'.$prefix.'/'.$abbr;
+        } else {
+            $url = '/'.$abbr;
+        }
+    }
+
+    return url($url);
+}
+/**
+ * 前台密码加密
+ * @param string $pwd 用户输入的数据
+ * @return string
+ */
+function encryptHome($pwd) {
+    $prefix = substr(md5(config('h_prefix')), 0, 16);
+    $suffix = substr(md5(config('h_suffix')), 0, 16);
+    $encryptHPwd = md5($prefix.md5($pwd).$suffix);
+    return $encryptHPwd;
+}
+
+/**
+* 字符串截取，支持中文和其他编码
+* @static
+* @access public
+* @param string $str 需要转换的字符串
+* @param int      $start 开始位置
+* @param int      $length 截取长度
+* @param string $charset 编码格式
+* @param string $suffix 截断显示字符
+*
+* @return string
+*/
+function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=false) {
+    if(function_exists("mb_substr"))
+       $slice = mb_substr($str, $start, $length, $charset);
+    elseif(function_exists('iconv_substr')) {
+       $slice = iconv_substr($str,$start,$length,$charset);
+    }else{
+       $re['utf-8']   = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
+       $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
+       $re['gbk']    = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
+       $re['big5']   = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
+       preg_match_all($re[$charset], $str, $match);
+       $slice = join("",array_slice($match[0], $start, $length));
+    }
+    if(mb_strlen($str,'UTF-8') < $length){
+        return $slice;
+    }else{
+        return $slice.'...';
+    }
+}
+
+/**
+ * 获取排班邮箱
+ * @return array
+ */
+function weeksEmail(){
+    //判断时间 如果当前时间大于19:00 则直接更改今天的天数
+    $hours = date("G");
+    $today = date('w');
+    $where = [];
+    $where['week'] = $today;
+    if($hours > 19){
+        $where['week'] = $today + 1;
+        if($today == '6'){
+            $where['week'] = '0';
+        }
+    }
+    $email  = think\Db::name('weekends')->where($where)->field('email_address,admin_id')->find();
+
+    return $email;
+}
+
+/*
+ * 邮件发送函数
+ * @input $to|邮箱地址（群发为数组）;
+ * @input $subject|邮件标题;
+ * @input $content|邮件内容;
+ * @return boolean;
+ */
+
+function sendMail($to, $subject, $content) {
+    Vendor('PHPMailer.classphpmailer');
+    $mail = new PHPMailer();
+    // 装配邮件服务器
+    if (config('mail_smtp')) {
+        $mail->IsSMTP();
+    }
+    $mail->Host = config('mail_host');
+    $mail->SMTPAuth = config('mail_smtpauth');
+    $mail->Username = config('mail_username');
+    $mail->Password = config('mail_password');
+    $mail->CharSet = config('mail_charset');
+    // 装配邮件头信息
+    $mail->From = config('mail_username');
+    //判断是否为群以邮件
+    if(is_array($to)){
+        $to_num = count($to);
+        for($i = 0; $i < $to_num; $i++){
+            $mail->AddAddress($to[$i]);
+        }
+    }else{
+        $mail->AddAddress($to);
+    }
+    $mail->FromName = config('mail_fromname');
+    $mail->IsHTML(config('mail_ishtml'));
+    // 装配邮件正文信息
+    $mail->Subject = $subject;
+    $mail->Body = $content;
+    // 发送邮件
+    if (!$mail->Send()) {
+        return false;
+    } else {
+        return true;
+    }
+}

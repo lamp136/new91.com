@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {include file="extra@head" /}
+        {block name="link"}{/block}
+    </head>
+    <body>
+        {block name="modal"}{/block}
+        {include file="extra@top" /}
+        {block name="body"}{/block}
+        {include file="extra@foot" /}
+        <!-- 搜索提示 -->
+        <script type="text/javascript" src="_WEB_/js/hit.js"></script>
+        <!-- 轮播jquery.touchSlider.js -->
+        <script type="text/javascript" src="_WEB_/js/jquery.touchSlider.js"></script>
+        <script type="text/javascript" src="_WEB_/js/slide.js"></script>
+        {include file="extra@publicjs"/}
+        {block name="js"}{/block}
+    </body>
+</html>
+    
+

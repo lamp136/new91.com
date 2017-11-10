@@ -1,0 +1,535 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/Basestore/cemetery')}">陵园列表</a>
+        <a href="{:url('store/Basestore/addcemetery')}">添加陵园</a>
+    </span>
+</div>
+<div class="site-text site-block" style="margin-top: 8px;">
+    <form class="layui-form" method="post" id="addForm" action="{:url('store/Basestore/addcemetery')}" enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择地区<span style="color:red;">*</span></label>
+            <div class="layui-input-inline">
+                <select name="info[province_id]" lay-filter="province_id" lay-verify="required" required>
+                    <option value="">--选择省份--</option>
+                    {volist name="province" id="vo"}
+                        <option value="{$key}">{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="info[city_id]" lay-filter="city_id" lay-verify="required" required>
+                    <option value="">--选择市区--</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">合同档案</label>
+                <div class="layui-input-inline" style="width: 300px;">
+                    <select name="info[profiles_id]" lay-filter="profiles_id" lay-search>
+                        <option value="0">--选择合同--</option>
+                    </select>
+                </div>
+            </div>
+        </div>    
+        <div class="layui-form-item">
+            <label class="layui-form-label">陵园名称<span style="color:red;">*</span></label>
+            <div class="layui-input-inline" style="width: 390px;">
+                <input type="text" name="info[name]" required lay-verify="required" placeholder="商家名称" autocomplete="off" class="layui-input" />
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">集团所属</label>
+                <div class="layui-input-inline">
+                    <select name="info[category_pid]">
+                        <option value="0">--选择集团--</option>
+                        {volist name="group" id="g"}
+                        <option value="{$g.id}">{$g.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">经营性质</label>
+            <div class="layui-input-inline">
+                <select name="info[business_type]" lay-verify="required" required>
+                    <option value="0">--性质--</option>
+                    <option value="1">公益性</option>
+                    <option value="2">经营性</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">会员类型<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                {volist name="storeMember" id="s"}
+                <input type="radio" name="info[member_status]" value="{$key}" title="{$s}">
+                {/volist}
+                <input type="radio" name="info[member_status]" data-id="default" value="0" title="否" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">服务时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[service_time]" placeholder="00:00至00:00" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">价格区间<span style="color:red;">*</span></label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="number" step="0.01" name="info[min_price]" placeholder="最小值" autocomplete="off" class="layui-input" />
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="number" step="0.01" name="info[max_price]" required lay-verify="required" placeholder="最大值" autocomplete="off" class="layui-input" />
+            </div>
+            <span class="layui-form-mid layui-word-aux">万</span>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">陵园图片<span style="color:red;">*</span></label>
+            <div class="layui-box layui-upload-button layui-input-inline">
+                <input type="file" name="image" lay-type="images" required lay-verify="required" class="layui-upload-file"/>
+                <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+            </div>
+            <span class="layui-form-mid layui-word-aux">
+                <font color="red">图片尺寸：{$Think.config.store_image_size.original}</font>
+            </span>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">陵园特色</label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="info[feature]" placeholder="陵园特色" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="info[address]" required lay-verify="required" class="layui-input" placeholder="陵园地址" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="info[status]" value="{$Think.config.normal_status}" title="开启"/>
+                <input type="radio" name="info[status]" value="{$Think.config.delete_status}" title="关闭"/>
+                <input type="radio" name="info[status]" value="{$Think.config.default_status}" title="审核" checked/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">距市区距离</label>
+            <div class="layui-input-block">
+                <input type="text" name="info[distance]" style="width: 50%;" placeholder="公里" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">seo标题<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 900px;" name="info[seo_title]" placeholder="seo标题" class="layui-input" required lay-verify="required"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">seo关键字<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 900px;" name="info[seo_keywords]" placeholder="seo关键字" class="layui-input" required lay-verify="required"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">seo描述<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <textarea name="info[seo_description]" placeholder="seo描述" style="width: 900px;" class="layui-textarea" required lay-verify="required"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">陵园简介<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <textarea name="info[content]" style="width: 900px;height: 300px;" id="editor" required lay-verify="required"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签属性<span style='color:red;'>*</span></label>
+            <div class="layui-input-block">
+                <input type="text" name="info[label]" style="width: 900px;" placeholder="标签属性，规则：“标签1,标签2”，以“,”分隔" class="layui-input" required lay-verify="required"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">优缺点</label>
+            <div class="layui-input-block">
+                <input type="text" name="info[advantage]" placeholder="优点" style="width: 900px;" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="text" name="info[disadvantage]" placeholder="缺点" style="width: 900px;" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">经纬度</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[longitude]" placeholder="经度" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[latitude]" placeholder="纬度" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系人<span style="color:red;">*</span></label>
+            <div class="layui-input-inline">
+                <input type="text" name="contact[contact_name]" required lay-verify="required" placeholder="姓名" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="contact[mobile]" required lay-verify="required" placeholder="手机" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="contact[tel]" required lay-verify="required" placeholder="座机" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">评分</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="info[review_price]" placeholder="价格" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="info[review_traffic]" placeholder="交通" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="info[review_ambient]" placeholder="环境" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="info[review_service]" placeholder="服务" class="layui-input"/>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                (评论级别为1-5)
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否有车</label>
+            <div class="layui-input-block">
+                <input type="radio" name="info[have_car]" value="0" title="无" checked/>
+                {volist name="Think.config.have_car" id="car"}
+                    <input type="radio" name="info[have_car]" value="{$key}" title="{$car}"/>
+                {/volist}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">交通路线</label>
+            <div class="layui-input-block">
+                <textarea name="info[pick_up_address]" style="width: 900px;height: 300px;" id="pickUpAddress">
+                    <p>地铁：</p>
+                    <p>自驾：</p>
+                    <p>班车：</p>
+                    <p>公交：</p>
+                </textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">其他项目<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <textarea name="info[other_project]" style="width: 900px;height: 300px;" id="otherEditor" required lay-verify="required">
+                    <p>1) 安葬费</p>
+                    <p>2) 刻字费、描金、贴金费用</p>
+                    <p>3) 管理费</p>
+                    <p>4) 礼仪费用</p>
+                </textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">市区办事处</label>
+            <div class="layui-input-block">
+                <textarea name="info[urban_office]" style="width: 900px;height: 300px;" id="urbanOffice">
+                    <p>电话：</p>
+                    <p>职责：</p>
+                    <p>地址：</p>
+                </textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">官方网站</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[official_website]" placeholder="官方网站" value="http://" class="layui-input"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[phone]" placeholder="园区电话" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[sort]" placeholder="排序" value="0" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="info[remarks]" placeholder="商家备注" style="width: 900px" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                <input type="hidden" name="sname" value="{$jump['store_name']}"/>
+                <input type="hidden" name="spage" value="{$jump['nowPage']}"/>
+                <input type="hidden" name="sprovince" value="{$jump['province']}"/>
+                <input type="hidden" name="scity" value="{$jump['city']}"/>
+                <input type="hidden" name="smember_status" value="{$jump['member_status']}"/>
+            </div>
+        </div>
+    </form>   
+</div>
+{/block}
+{block name="optJS"}
+    <script src="_BACKSTAGE_/ueditor/ueditor.config.js"></script>
+    <script src="_BACKSTAGE_/ueditor/ueditor.all.min.js"></script>
+    <script>
+        var $,
+            form,
+            provinceId,
+            cityId,
+            profilesData,
+            editor,
+            otherEditor,
+            layedit;
+
+        layui.use(['jquery', 'form', 'layedit'], function() {
+            $ = layui.jquery;
+            form = layui.form();
+            layedit = layui.layedit;
+            form.on('select(province_id)', function(data) {
+                provinceId = data['value'];
+                var data = {
+                    provinceId: provinceId
+                };
+                loadProfiles(data);
+                loadCity(provinceId);
+            });
+
+            /**
+             * 获取市区列表
+             * @param  {string} id 省份id
+             */
+            function loadCity(id) {
+                $.ajax({
+                    url: "{:url('Basestore/getRegion')}",
+                    type: 'get',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        var t = '<option value="">--选择市区--</option>';
+                        if (result) {
+                            if (result['code'] == 1) {
+                                var data = result['data'];
+                                $.each(data, function(key, val) {
+                                    t += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        $('select[name="info[city_id]"]').empty().append(t);
+                        form.render();
+                    }
+                });
+
+                form.on('select(city_id)', function(data) {
+                    cityId = data['value'];
+                    if (cityId != 0) {
+                        var data = {
+                            provinceId: provinceId,
+                            cityId: cityId
+                        };
+                        loadProfiles(data);
+                    }
+                })
+            }
+
+            /**
+             * 加载合同列表
+             * @param  {object} info ajax参数
+             */
+            function loadProfiles(info) {
+                $.ajax({
+                    url: "{:url('Basestore/getProfiles')}",
+                    type: 'get',
+                    data: info,
+                    dataType: 'json',
+                    success: function(result) {
+                        var o = '<option value="0">--选择合同--</option>';
+                        if (result) {
+                            if (result['code'] == 1) {
+                                profilesData = result['profilesData'];
+                                $.each(profilesData, function(key, val) {
+                                    o += '<option value="' + val['id'] + '">' + val['profile_name'] + '</option>';
+                                });
+                            }
+                        }
+                        $('select[name="info[profiles_id]"]').empty().append(o);
+                        form.render();
+                    }
+                });
+
+                form.on('select(profiles_id)', function(data) {
+                    var profilesId = data['value'];
+                    var profile = '';
+                    $.each(profilesData, function(key,val) {
+                        if (profilesId == val['id']) {
+                            profile = val;
+                        }
+                    });
+                    setProfileVal(profile);
+                });
+            }
+
+            /**
+             * 合同赋值input
+             * @param {object} value 合同数组
+             */
+            function setProfileVal(value) {
+                emptyValue();
+                if (value) {
+                    var member = $('input[name="info[member_status]"]');
+                    $('input[name="info[name]"]').val(value['show_store_name']);
+                    $('input[name="info[min_price]"]').val(value['min_price']);
+                    $('input[name="info[max_price]"]').val(value['max_price']);
+                    $('input[name="info[address]"]').val(value['address']);
+                    $('input[name="contact[contact_name]"]').val(value['contact_man']);
+                    $('input[name="contact[mobile]"]').val(value['mobile']);
+                    $('input[name="contact[tel]"]').val(value['telephone']);
+                    $('input[name="info[remarks]"]').val(value['remarks']);
+                    if (value['member_status']) {
+                        for (var i = 0, lens = member.length; i < lens; i++) {
+                            if (member[i].value == value['member_status']) {
+                                member[i].checked = true;
+                                break;
+                            }
+                        }
+                    }
+                    $('select[name="info[category_pid]"]').val(value['category_group_id']);
+                    form.render();
+                }
+            }
+
+            $('input[name="info[name]"]').on({
+                blur:function(){
+                    var name = $(this).val(),
+                        category = {$Think.config.category_cemetery_id};
+                    if(name.length > 0){
+                        var data = {
+                            category:category,
+                            name:name
+                        };
+                        checkName(data);
+                    }
+                },
+            });
+
+            /**
+             * 检测商家名称重复
+             * @param  {object} info ajax数据
+             * @return {json}
+             */
+            var checkName = function(info){
+                $.ajax({
+                    url:"{:url('isRepeatName')}",
+                    type:'get',
+                    data:info,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            if(result['code'] == 1){
+                                emptyValue();
+                                layer.msg('商家已存在');
+                            }
+                        }
+                    }
+                })
+            }
+
+            // 手机和座机必填一项
+            $('input[name="contact[mobile]"],input[name="contact[tel]"]').on({
+                mousemove:function(){
+                    mobileAndTel();
+                },
+                blur:function(){
+                    mobileAndTel();
+                }
+            })
+
+            var mobileAndTel = function() {
+                var mobile = $('input[name="contact[mobile]"]').val(),
+                    tel = $('input[name="contact[tel]"]').val();
+                if (mobile.length != '' || tel.length != '') {
+                    $('input[name="contact[mobile]"],input[name="contact[tel]"]').removeAttr('required lay-verify');
+                    if (mobile.length != '') {
+                        $('input[name="contact[mobile]"]').attr({
+                            'lay-verify': 'phone',
+                        });
+                    }
+                } else if (mobile.length == '' && tel.length == '') {
+                    $('input[name="contact[mobile]"],input[name="contact[tel]"]').attr({
+                        'lay-verify': 'required',
+                        'required': true
+                    });
+                }
+            }
+
+            /**
+             * 清空input框内数据
+             */
+            function emptyValue() {
+                $('input[name="info[min_price]"],input[name="info[max_price]"],input[name="info[name]"],input[name="info[feature]"],input[name="info[address]"],input[name="info[distance]"],input[name="info[seo_title]"],input[name="info[seo_keywords]"],input[name="info[label]"],input[name="info[advantage]"],input[name="info[disadvantage]"],input[name="info[longitude]"],input[name="info[latitude]"],input[name="contact[contact_name]"],input[name="contact[mobile]"],input[name="contact[tel]"],input[name="info[review_price]"],input[name="info[review_traffic]"],input[name="info[review_ambient]"],input[name="info[review_service]"],input[name="info[pick_up_address]"],input[name="info[urban_office_address]"],input[name="info[urban_office_duty]"],input[name="info[urban_office_phone]"],input[name="info[official_website]"],input[name="info[phone]"],input[name="info[remarks]"],select[name="info[category_pid]"]').val('');
+                $('textarea[name="info[seo_description]"],textarea[name="info[remarks]"]').text('');
+                $('input[name="contact[mobile]"],input[name="contact[tel]"]').removeAttr('required lay-verify');
+                editor.setContent('');
+                $('input[data-id="default"]')[0].checked = true;
+                form.render();
+            }
+            
+            var toolBars = [
+                'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'music', 'insertvideo', 'attachment', 'pagebreak', '|', 'inserttable', '|', 'horizontal', 'date', 'time', 'spechars',
+            ];
+            // 文本编辑器
+            var editor = UE.getEditor('editor', {
+                toolbars: [
+                    toolBars
+                ],
+                autoHeightEnabled: true,
+                autoFloatEnabled: true
+            });
+            var tools = [
+                'strong' //加粗
+                ,'italic' //斜体
+                ,'underline' //下划线
+                ,'del' //删除线
+              
+                ,'|' //分割线
+              
+                ,'left' //左对齐
+                ,'center' //居中对齐
+                ,'right' //右对齐
+                ,'link' //超链接
+                ,'unlink' //清除链接
+                ,'face' //表情
+                ,'help' //帮助
+            ];
+
+            var otherEditor = layedit.build('otherEditor',{
+                tool: tools
+            });
+
+            var pickUpAddress = layedit.build('pickUpAddress',{
+                tool: tools
+            });
+
+            var urbanOffice = layedit.build('urbanOffice',{
+                tool:tools
+            })
+        });
+
+    </script>
+{/block}

@@ -1,0 +1,6 @@
+{extend name='extra@main' /}
+{block name="body"}
+	{notempty name="data"}
+    <p style="font-size:20px; color:red;">{$data.msg}</p>
+	{/notempty}
+{/block}

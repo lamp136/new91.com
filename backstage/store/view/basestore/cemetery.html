@@ -1,0 +1,245 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/Basestore/cemetery')}">陵园列表</a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form action="{:url('store/Basestore/cemetery')}">
+        <div class="layui-form-item">
+            {php}
+                if(showHandle('store/Basestore/addcemetery')){
+            {/php}
+                <div class="layui-inline">
+                    <a href="{:url('store/Basestore/addcemetery',['nowPage' => $jump['nowPage'],'store_name' => $jump['store_name'],'province' => $jump['province'],'city' => $jump['city'],'member_status' => $jump['member_status']])}" class="layui-btn">增加</a>
+                </div>
+            {php}
+                }
+            {/php}
+            <div class="layui-inline">
+                <input type="text" name="store_name" lay-verify="title" autocomplete="off" placeholder="请输入商家名称" value="{$Think.get.store_name}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <select name="province" lay-filter="province">
+                    <option value="0">请选择省</option>
+                    {notempty name="province"}
+                        {volist name="province" id="p"}
+                            <option value="{$p.id}" {eq name="Think.get.province" value="$p.id"} selected="selected" {/eq}>{$p.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <select name="city">
+                    <option value="">请选择市</option>
+                    {notempty name="city"}
+                        {volist name="city" id="c"}
+                            <option value="{$c.id}" {eq name="Think.get.city" value="$c.id"} selected="selected" {/eq}>{$c.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <select name="member_status" lay-filter="aihao">
+                    <option value="0">选择商家状态</option>
+                    {notempty name="storeMember"}
+                        {volist name="storeMember" id="member"}
+                            <option value="{$key}" {eq name="Think.get.member_status" value="$key"} selected="selected" {/eq}>{$member}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+    {notempty name="store"}
+        <table class="layui-table">
+            <colgroup>
+                <col width="13%">
+                <col width="10%">
+                <col width="5%">
+                <col width="5%">
+                <col width="5%">
+                <col width="15%">
+                <col width="40%">
+                <col>
+            </colgroup>
+            <thead>
+                <tr> 
+                    <th>商家名称</th>
+                    <th>商家地址</th>
+                    <th>状态</th>
+                    <th>类型</th>
+                    <th>是否有车</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr> 
+            </thead>
+            <tbody>
+                {volist name="store" id="s"}
+                    <tr>
+                        <td>{$s.name}</td>
+                        <td>{$s.province.name} / {$s.city.name}</td>
+                        <td>
+                            {switch name="s.status"}
+                                {case value="$Think.config.normal_status"}开启{/case}
+                                {case value="$Think.config.default_status"}审核{/case}
+                                {case value="$Think.config.delete_status"}删除{/case}
+                            {/switch}
+                        </td>
+                        <td>
+                            {notempty name="s.member_status"}
+                                {eq name="s.member_status" value="$Think.config.store_member_v"}
+                                    <img width="28px" src="_BACKSTAGE_/img/vip_{$Think.config.store_member}.png" title="{$Think.config.store_member_msg}" alt="{$Think.config.store_member_msg}">
+                                {else/}
+                                    {volist name="storeMember" id="member"}
+                                        {eq name="key" value="$s.member_status"}
+                                            <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                                        {/eq}
+                                    {/volist}
+                                {/eq}
+                            {else/}
+                                否
+                            {/notempty}
+                        </td>
+                        <td>
+                            {neq name="s.have_car" value="0"}
+                                {$haveCar[$s.have_car]}
+                            {else/}
+                                无
+                            {/neq}
+                        </td>
+                        <td>
+                            {notempty name="s.created_time"}
+                                {$s.created_time|date="Y-m-d H:i:s",###}
+                            {/notempty}
+                        </td>
+                        <td>
+                            {php}
+                                if(showHandle('store/Basestore/editcemetery')){
+                            {/php}
+                                <a href="{:url('store/Basestore/editcemetery',['id' => $s.id,'nowPage' => $jump['nowPage'],'store_name' => $jump['store_name'],'province' => $jump['province'],'city' => $jump['city'],'member_status' => $jump['member_status']])}" class="layui-btn layui-btn-small" style="background-color: #4b5cc4;">编辑</a>
+                            {php}
+                                }
+                                if(showHandle('store/Basestore/delete')){
+                            {/php}
+                                {if($s.status == 1)}
+                                    <span class="layui-btn layui-btn-small layui-btn-danger del_btn" data-id="{$s.id}" data-status="-1">禁用</span>
+                                {elseif($s.status == -1)/}
+                                    <span class="layui-btn layui-btn-small enb_btn" data-id="{$s.id}" data-status="1" style="background-color: #00e079;">启用</span>
+                                {/if}
+                            {php}
+                                }
+                                if(showHandle('store/Basestore/storealbum')){
+                            {/php}
+                                <a href="{:url('store/Basestore/storealbum',['id' => $s.id,'store_name'=>urlencode($s.name),'category_id'=>$s.category_id])}" class="layui-btn layui-btn-normal layui-btn-small">相册</a>
+                            {php}
+                                }
+                                if(showHandle('store/Basestore/storeContact')){
+                            {/php}
+                                <a href="{:url('store/Basestore/storeContact',['id'=>$s.id,'store_name'=>urlencode($s.name),'category_id'=>$s.category_id])}" class="layui-btn  layui-btn-warm layui-btn-small">联系人</a>
+                            {php}
+                                }
+                                if(showHandle('store/Basestore/celebrityList')){
+                            {/php}
+                                <a href="{:url('store/Basestore/celebrityList',['id'=>$s.id,'store_name'=>urlencode($s.name),'category_id'=>$s.category_id])}" class="layui-btn layui-btn-small" style="background-color: purple;">名人</a>
+                            {php}
+                                }
+                                if(showHandle('store/Basestore/tombzone')){
+                            {/php}
+                                <a href="{:url('store/Basestore/tombzone',['id'=>$s.id,'store_name'=>urlencode($s.name),'category_id'=>$s.category_id])}" class="layui-btn layui-btn-small" style="background-color: #0c8918;">园区</a>
+                            {php}
+                                }
+                                if(showHandle('store/Basestore/tombs')){
+                            {/php}
+                                <a href="{:url('store/Basestore/tombs',['id'=>$s.id,'store_name'=>urlencode($s.name),'category_id'=>$s.category_id])}" class="layui-btn layui-btn-small" style="background-color: #ff7500;">墓位</a>
+                            {php}
+                                }
+                            {/php}
+                        </td>
+                    </tr>
+                {/volist}
+            </tbody>
+        </table>
+    {/notempty}
+    {$page}
+</div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form'], function() {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                data,
+                form = layui.form();
+            form.on('select(province)', function(data) {
+                var provinceId = data['value'];
+                $.ajax({
+                    url: "{:url('getRegion')}",
+                    type: 'get',
+                    data: {
+                        id: provinceId
+                    },
+                    dataType: 'json',
+                    success: function(jsonData) {
+                        var c = '<option value="">请选择市</option>';
+                        if (jsonData) {
+                            if (jsonData['code'] == 1) {
+                                var data = jsonData['data'];
+                                $.each(data, function(key, val) {
+                                    c += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        $('select[name="city"]').empty().append(c);
+                        form.render();
+                    }
+                })
+            });
+            $('.del_btn').on('click', function() {
+                var id = $(this).data('id'),
+                    status = $(this).data('status');
+                layer.confirm('確定要禁用？', {
+                    icon: 3,
+                    title: '提示'
+                }, function(index) {
+                    data = {
+                        id: id,
+                        status: status
+                    };
+                    _del(data);
+                });
+            });
+
+            $('.enb_btn').on('click', function() {
+                var id = $(this).data('id'),
+                    status = $(this).data('status');
+                data = {
+                    id: id,
+                    status: status
+                };
+                _del(data);
+            });
+
+            function _del(info) {
+                $.ajax({
+                    url: "{:url('store/Basestore/delete')}",
+                    type: 'get',
+                    data: info,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            if (result['code'] == 1) {
+                                window.location.reload();
+                            }
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+{/block}

@@ -1,0 +1,293 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+               <textarea placeholder="请输入订单关闭原因" class="layui-textarea" name="reason"></textarea>
+
+        <div class="layui-form-item" style="text-align: right;">
+            <div    class="layui-btn" id="bbs_update_button">提交</div>
+        </div>
+        <input type='hidden' name='id' class="deleteid" value="">
+
+    </form>
+</div>
+
+
+ <!--审核 start-->
+    <form id='audit' style="display:none" class="layui-form" method="post" enctype="multipart/form-data">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>套餐总金额</td>
+                    <td>  
+                        <input type="text" name="price" placeholder="套餐总金额" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+               
+               
+                <tr>
+                    <td colspan='2' style="text-align: center;">  
+                        <input type='hidden' name='order_id' class="orderId">
+                        <button class="layui-btn" id='subaudit' type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <!--审核 end-->
+
+
+{/block}
+{block name='body'}
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <form id="quickForm" method="get" class="form-horizontal" autocomplete="off" action='{:url("check")}'>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="order_service_sn" autocomplete="off" placeholder="订单SN" value="{$Think.get.order_service_sn}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="member_contact" autocomplete="off" placeholder="手机号" value="{$Think.get.member_contact}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+
+   
+    
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="60">
+            <col width="70">
+            <col width="90">
+            <col width="100">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="100">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+               
+                <th>预约人|电话</th>
+                <th>订单SN</th>
+                <th>商家名称</th>
+                <th>商品名称</th>
+                <th>商品总价</th>
+                <th>创建时间</th>
+                <th>跟踪人</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+         {volist name="data" id="vo"}
+            <tr>
+               
+                <td>
+                    {$vo.member_name}|{$vo.member_contact}
+                </td>
+                <td>
+                    {$vo.order_service_sn}
+                </td>
+                  <td>
+                    {$vo.store_name}
+                    {notempty name="vo.store_status"}
+                    {volist name="storeMember" id="member"}
+                            {eq name="vo.store_status" value="$key"}
+                            <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                            {/eq}
+                        {/volist}
+                    {/notempty}
+                </td>
+                <td>
+                    {$vo.combo_name}
+                </td>
+                <td>
+                    {notempty name="vo.price"}
+                        {$vo.price}
+                    {/notempty}
+                </td>
+                <td>{notempty name="vo.created_time"}
+                {$vo.created_time|date='Y-m-d',###}
+                {/notempty}
+                </td>
+                <td>
+                    {volist name="order_flow" id="flowmans"}
+                        {if condition="$key eq $vo['order_flow_id'] "}{$flowmans}{/if}
+                    {/volist}
+                </td>
+                <td>
+                    <span  style="margin-left:10px" title='删除'>
+                        <button class="layui-btn layui-btn-small layui-btn-danger closedorder"  delete-id="{$vo.id}"><i class="layui-icon">&#x1006;</i></button>
+                    </span>
+                    {eq name="$vo.status" value="$Think.config.order_status['ok']"}
+                        <a herf="javascript:;" class='audit' data-id="{$vo.id}"  title='待审核' style="margin-left:10px">
+                            <button class="layui-btn layui-btn-small  layui-btn-warm" ><i class="layui-icon">需审核</i></button>
+                        </a>
+                    {/eq}
+                    {eq name="$vo.status" value="$Think.config.order_status['check_success']"}
+                        <a herf="javascript:;"  title='查看审核' style="margin-left:10px">
+                            <button class="layui-btn layui-btn-small  layui-btn-warm" ><i class="layui-icon">已审核</i></button>
+                        </a>
+                    {/eq}
+                    {eq name="$vo.status" value="$Think.config.order_status['check_success']"}
+                            <a  title='推送财务' order_id='{$vo.id}' class="pushfinance" style="margin-left:10px">
+                                <button class="layui-btn layui-btn-small layui-btn-danger" >推财</button>
+                        </a>
+                    {/eq}
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table> 
+
+    
+   
+   
+</div>
+<div style="margin-left: 10px;">
+{$page}
+</div>
+{/block}
+
+
+{block name='optJS'}
+<script>
+
+
+//页面层
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  var start = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday:true
+    ,choose: function(datas){
+      end.min = datas; //开始日选好后，重置结束日的最小日期
+      end.start = datas //将结束日的初始值设定为开始日
+    }
+  };
+  
+  var end = {
+    min: laydate.now()
+    ,max: '2099-06-16 23:59:59'
+    ,istoday: true
+    ,choose: function(datas){
+      start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+  };
+  
+});
+layui.use(['jquery', 'layer','form'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    $(".closedorder").bind('click', function(){
+         var id = $(this).attr('delete-id');
+         $('.deleteid').val(id);
+         layer.confirm('确定要将该订单删除吗?', {icon: 3, title:'提示'}, function(index){
+         layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '500px',
+            title: '订单关闭原因',
+            content: $('#close_update_form')
+         })
+       });
+    });
+
+    $('#bbs_update_button').click(function(){
+        var From = $('#update_bbs_info_form').serialize();
+        $.ajax({
+            url: "{:url('cooperatefail')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var result = eval("(" + result + ")");
+                if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+            }
+        });
+
+    });
+
+
+       
+    $(".audit").bind('click', function(){
+                var orderId = $(this).attr('data-id');
+                $('.orderId').val(orderId)
+                 layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '套餐审核',
+                    content: $('#audit')
+        });    
+    });
+
+    $('#subaudit').click(function(){
+        var From = $('#audit').serialize();
+        $.ajax({
+            url: "{:url('checkinfo')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var result = eval("(" + result + ")");
+                if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          })
+                    } else {
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                         })
+                    }
+            }
+        });
+
+    });
+
+
+
+     //推送给财务
+        $('.pushfinance').click(function(){
+            var orderid = $(this).attr('order_id');
+                layer.confirm('确定推送财务吗?', {icon: 3, title:'提示'}, 
+                function(index){
+                    layer.open({
+                        type:3,
+                        success: function(layero, indexs){  
+                            $.ajax({
+                                url: "{:url('pushfinance')}",
+                                data: {'orderId':orderid},
+                                type: 'post',
+                                success: function(res){
+                                    var d = eval("(" + res + ")");
+                                    if(d.flag == 1){
+                                        layer.msg('操作成功!',{time:1000},function(){
+                                            window.location.reload();
+                                        });
+                                    }else{
+                                        layer.alert(d.msg);
+                                    }
+                                }
+                            });
+                        }
+                    });    
+                });
+         });
+   
+});
+
+</script>
+{/block}
+

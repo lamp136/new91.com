@@ -1,0 +1,136 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        {if condition="$category_id eq $Think.config.category_cemetery_id"}
+            <a href="{:url('store/Basestore/cemetery')}">陵园列表</a>
+        {elseif condition="$category_id eq $Think.config.category_funeral_id"/}
+            <a href="{:url('store/Basestore/funeral')}">殡仪馆列表</a>
+        {/if}
+        <a><cite>{$store_name}  墓位列表</cite></a>
+    </span>
+</div>
+{php}
+    if(showHandle('store/Basestore/addtombs')){
+{/php}
+    <div style='margin-top:8px;float:left;'>
+        <a href="{:url('addtombs',['id'=>$storeId,'store_name'=>urlencode($store_name),'category_id'=>$category_id])}" style="color:white">
+            <button class="layui-btn add">
+                <i class="layui-icon">&#xe608;</i>添加墓位
+            </button>
+        </a>
+    </div>
+{php}
+    }
+{/php}
+<table class="layui-table">
+    <colgroup>
+        <col width="150">
+        <col width="200">
+        <col>
+    </colgroup>
+    <thead>
+        <tr> 
+            <th width='15%'>墓位名称</th>
+            <th width="10%">墓位分类</th>
+            <th width='10%'>发布时间</th>
+            <th width='10%'>店铺推荐</th>
+            <th width='10%'>状态</th>
+            <th width='10%'>操作</th>
+        </tr> 
+    </thead>
+    <tbody>
+    {volist name='list' id='vo'}
+    <tr>
+        <td>{$vo.tomb_name}</td>
+        <td>{$categorytomb[$vo.category_id]}</td>
+        <td>{$vo.created_time|date="Y-m-d",###}</td>
+        <td>{eq name="vo.store_show" value="$Think.config.normal_status"}是{else/}否{/eq}</td>
+        <td>
+            {if condition="$vo.status eq  $Think.config.normal_status"}显示
+            {elseif condition="$vo.status eq  $Think.config.default_status"/}已售空
+            {else/}删除
+            {/if}
+        </td>
+        <td>
+            {php}
+                if(showHandle('store/Basestore/edittombs')){
+            {/php}
+                <a href="{:url('edittombs',['id'=>$vo.id,'store_id'=>$vo.store_id,'store_name'=>urlencode($store_name),'category_id'=>$category_id])}" class=" layui-btn layui-btn-small">编辑</a>
+            {php}
+                }
+                if(showHandle('store/Basestore/deltombs')){
+            {/php}
+                {if condition="$vo.status neq $Think.config.delete_status"}
+                    <button href="javascript:;" id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-danger del">删除</button>
+                {else/}
+                    <button href="javascript:;" id="{$vo.id}" class="layui-btn layui-btn-small layui-btn-normal start">启用</button>
+                {/if}
+            {php}
+                }
+            {/php}
+        </td>
+    </tr>
+    {/volist}
+  </tbody>
+</table>
+
+
+<div style="text-align:center">{$page}</div>
+{/block}
+
+{block name='optJS'}
+<script>
+layui.use(['jquery','form','layer','laypage'],function(){
+    var $=layui.jquery;
+
+    //删除商家联系人
+    $('.del').click(function(){
+        var id = $(this).attr('id');
+        layer.confirm('确定要删除？', {
+          btn: ['确定','取消'], //按钮
+          icon:3,
+          title:'提示'
+        }, function(){
+            $.ajax({
+                url:"{:url('deltombs')}",
+                type:'post',
+                data:{'id':id,'token':'del'},
+                dataType:'json',
+                success : function(e){
+                    if(e.flg ==1){
+                        layer.msg(e.msg,{icon:1});
+                    }else{
+                        layer.msg(e.msg,{icon:1});
+                    }
+                    window.location.reload();//刷新当前页面.
+                }
+            });
+        }, function(){
+            layer.closeAll();
+        });
+    });
+
+    //启用商家联系人
+    $('.start').click(function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url:"{:url('deltombs')}",
+            type:'post',
+            data:{'id':id,'token':'start'},
+            dataType:'json',
+            success : function(e){
+                if(e.flg ==1){
+                    layer.msg(e.msg,{icon:1});
+                }else{
+                    layer.msg(e.msg);
+                }
+                window.location.reload();//刷新当前页面.
+            }
+        });
+    });
+});
+</script>
+{/block}

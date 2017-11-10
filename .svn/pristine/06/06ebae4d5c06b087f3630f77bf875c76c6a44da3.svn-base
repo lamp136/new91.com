@@ -1,0 +1,32 @@
+{extend name='extra@main' /}
+
+{block name='body'} 
+<div style='margin:20px 0px 0px 20px'>
+    <span class="layui-btn add">
+        <i class="layui-icon" >&#xe608;</i>点击创建Xml文件
+    </span>
+</div>
+{/block}
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'form'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+    $('.add').click(function(){
+        $.ajax({
+            url:"{:url('createXml')}",
+            type:'post',
+            dataType:'json',
+            success : function(e){
+                if(e.flg ==1){
+                    layer.msg(e.msg,{icon:1});
+                }else{
+                    layer.msg(e.msg);
+                }
+                window.location.reload();//刷新当前页面.
+            }
+        });
+    })
+});
+</script>
+{/block}

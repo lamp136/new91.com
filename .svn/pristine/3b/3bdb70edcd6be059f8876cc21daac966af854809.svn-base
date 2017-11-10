@@ -1,0 +1,173 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+
+//首页关键词推荐	
+class Introduce extends Base
+{
+	/**首页关键词列表页**/
+	public function index(){
+            $getSearch = input('get.');
+            $getProvince = '';
+            $getName = '';
+            $inwhere = '';
+            if(!empty($getSearch['province'])){
+                $inwhere['province_id'] = array('like','%,'.$getSearch['province'].',%');
+                $getProvince = $getSearch['province'];
+            }
+            if(!empty($getSearch['name'])){
+                $inwhere['name'] = array('like','%'.$getSearch['name'].'%');
+                $getName = $getSearch['name'];
+            }
+
+            $introduceModel = Db::name('Introduce');
+            $pageSize = Config('page_size');
+            $list = $introduceModel->where($inwhere)->field('id,name,province_id,city_id,url')->order('created_time desc')->paginate($pageSize,false,['query'=>$getSearch]);
+            $data = $introduceModel->where($inwhere)->field('id,name,province_id,city_id,url')->order('created_time desc')->select();
+            $where['pid'] = array('in',"0,".config('china_num'));
+            $where['status'] = config('normal_status');
+            $province = $this->getRegionData($where,array('id,name'),'',true);
+            //获取省名称
+            foreach ($data as $key => $value) {
+                $province_name='';
+                // $province_id = explode(',',$value['province_id']);
+                $province_id = explode(',',trim($value['province_id'],','));
+                foreach ($province_id as $k => $v) {
+                    if(!empty($province[$v])){
+                            $province_name.=$province[$v].',';
+                            $data[$key]['province_id'] =rtrim($province_name,','); 
+                    }
+                }
+            }
+            $page = $list->render();
+            // var_dump($data);
+            $this->assign('list',$list);
+            $this->assign('data',$data);
+            $this->assign('page',$page);
+            $this->assign('province',$province);
+            $this->assign('getProvince',$getProvince);
+            $this->assign('getName',$getName);
+            return $this->fetch();
+	}
+
+	/**
+	 * 添加首页推荐词
+	 */
+	public function add(){
+        $result = array('flag'=>0,'msg'=>'操作失败');
+		if(Request::instance()->isPost()){
+            $postData = input('post.');
+            var_dump($postData);
+            // $postData['province_id'] = rtrim(implode(',',$postData['province_id']),',');
+            $postData['province_id'] = ','.implode(',',$postData['province_id']).',';
+            $postData['created_time'] = time();
+            unset($postData['check_all']);
+            $IntroduceModel = Db::name('Introduce');
+            if($IntroduceModel->insert($postData)){
+                $result = array('flag'=>1,'msg'=>'添加成功');
+            }
+        }else{
+            $regionWhere['pid'] = array('in',"0,".config('china_num'));
+            $regionWhere['status'] = config('normal_status');
+            $regionData = $this->getRegionData($regionWhere,array('id,name'));
+            if(!empty($regionData)){
+                $result['flag'] = 1;
+                $result['province'] = $regionData;
+            }
+        }
+        echo json_encode($result);
+	}
+
+
+		/**
+	 * 编辑友情链接
+	 */
+	public function edit(){
+        $id = input('id');
+        $result = array('flag'=>0,'msg'=>'操作失败');
+		if(Request::instance()->isPost()){
+            $postData = input('post.'); 
+            $postData['created_time'] = time();
+            // $postData['province_id'] = rtrim(implode(',',$postData['province_id']),',');
+            $postData['province_id'] = ','.implode(',',$postData['province_id']).',';
+            $where['id'] = $postData['id'];
+            $final = Db::name('Introduce')->where($where)->update($postData);
+            if($final){
+                $result['flag'] = 1;
+                $result['msg'] = '修改成功';
+            }
+        }else{
+            $provWhere['pid'] = array('in',"0,".config('china_num'));
+            $provWhere['status'] = config('normal_status');
+            $province = $this->getRegionData($provWhere,array('id,name'));
+            $data = Db::name('Introduce')->where('id='.$id)->field('id,name,province_id,city_id,sort,url')->find();
+            $result['flag'] = 1;
+            $result['province'] = $province;
+            $result['data'] = $data;
+        }
+        echo json_encode($result);
+	}
+
+	/**
+	 * 删除友情链接
+	 */
+	public function del(){
+		if(Request::instance()->isPost()){
+            $data  = input('post.');
+            $result = array('flag'=>0,'msg'=>'操作失败');
+            $IntroduceModel = Db::name('Introduce');
+            if($IntroduceModel->where('id='.$data['id'])->delete()){
+                $result['flag'] = 1;
+                $result['msg'] = '删除成功';
+            }
+            echo json_encode($result);
+        }
+	}
+
+
+	/**
+     * 通过省份id获取城市信息
+     */
+    public function getCity(){
+        if(Request::instance()->isPost()){
+            $result = array('flag'=>0,'data'=>array());
+            $province_id = I('post.province_id');
+            $regoin = Db::name('region')->field('region_id,region_name')->where('pid='.$province_id.' and state='.config('normal_status'))->select();
+            if(!empty($regoin)){
+                $result['flag'] = 1;
+                $result['data'] = $regoin;
+            }
+            echo json_encode($result);
+        }
+    }
+
+
+    /**
+     * 获取省市数据
+     * @param  array   $where  条件
+     * @param  array   $fields 字段
+     * @param  int     $num    条数
+     * @param  boolean $bool   获取方式
+     * @return array
+     */
+    private function getRegionData($where=array(), $fields=array(), $num=null, $bool=false){
+        $regionModel = Db::name('region');
+        if(!$bool){
+            if($num == 1){
+                $region = $regionModel->where($where)->field($fields)->find();
+            }
+            if(empty($num)){
+                $region = $regionModel->where($where)->field($fields)->select();
+            }
+        }else{
+            $tmp = implode(',',$fields);
+            $region = $regionModel->where($where)->column($tmp);
+        }
+        return $region;
+    }
+
+}

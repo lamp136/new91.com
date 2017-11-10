@@ -1,0 +1,145 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('store/Basestore/etiquette')}">礼仪公司列表</a>
+        <a><cite>{$input['store_name']}  礼仪套餐列表</cite></a>
+    </span>
+</div>
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    {if showHandle('store/Basestore/addcombo')}
+        <div class="layui-inline">
+            <a class="layui-btn add" href="{:url('addcombo',['store_id' => $input['store_id'],'store_name' => $input['store_name'],'store_sn' => $input['store_sn']])}">添加</a>
+        </div>
+    {/if}
+    <table class="layui-table">
+        <colgroup>
+            <col width="200">
+            <col width="200">
+            <col width="150">
+            <col width="200">
+            <col width="80">
+            <col width="150">
+            <col>
+        </colgroup>
+        <thead>
+            <tr> 
+                <th>名称</th>
+                <th>图片</th>
+                <th>市场价|平台价</th>
+                <th>创建时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name="comboList" id="c"}
+                <tr>
+                    <td>{$c.combo_name}</td>
+                    <td>
+                        {notempty name="c.image"}
+                            {if is_file('.'.$c.image) || is_file('.'.$c.thumb_image)}
+                                <img width="130px" height="130px" src="{notempty name="c.image"} {$c.thumb_image} {else/} {$c.image} {/notempty}" alt="{$c.combo_name}"/>
+                            {/if}
+                        {/notempty}
+                    </td>
+                    <td>{$c.combo_price}|{$c.platform_price}</td>
+                    <td>
+                        {notempty name="c.created_time"}
+                            {$c.created_time|date="Y-m-d H:i:s",###}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {if $c.status == config('normal_status')}
+                            <font color="green">正常</font>
+                        {elseif $c.status == config('default_status')/}
+                            <font color="orange">售空</font>
+                        {elseif $c.status == config('delete_status')/}
+                            <font color="red">删除</font>
+                        {/if}
+                    </td>
+                    <td>
+                        {if showHandle('store/Basestore/editcombo')}
+                            <a href="{:url('editcombo',['id' => $c.id,'store_id' => $input['store_id'],'store_name' => $input['store_name'],'page' => $input['page'],'store_sn' => $input['store_sn']])}" class="layui-btn layui-btn-small" style="background-color: #4b5cc4;">编辑</a>
+                        {/if}
+                        {if showHandle('store/Basestore/delcombo')}
+                            {if ($c.status == -1)}
+                                <span class="layui-btn layui-btn-small enb_btn" data-id="{$c.id}" data-status="1" style="background-color: #00e079;">启用</span>
+                            {else/}
+                                <span class="layui-btn layui-btn-small layui-btn-danger del_btn" data-id="{$c.id}" data-status="-1">禁用</span>
+                            {/if}
+                        {/if}
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+layui.use(['jquery', 'layer'], function() {
+    var $ = layui.jquery,
+        layer = layui.layer;
+    $('.del_btn').on('click', function() {
+        var id = $(this).data('id'),
+            status = $(this).data('status');
+        layer.confirm('确定删除？', {
+            icon: 3,
+            title: '提示'
+        }, function(index) {
+            if (id) {
+                var data = {
+                    id: id,
+                    status: status
+                };
+                _del(data);
+                layer.close(index);
+            }
+        });
+    });
+
+    $('.enb_btn').on('click', function() {
+        var id = $(this).data('id'),
+            status = $(this).data('status');
+        if (id) {
+            var data = {
+                id: id,
+                status: status
+            };
+            _del(data);
+        }
+    });
+
+    /**
+     * 公共删除方法
+     * @param  {object} ajaxData ajax传值
+     * @return {void}
+     */
+    var _del = function(ajaxData) {
+        $.ajax({
+            url: "{:url('store/Basestore/delcombo')}",
+            type: 'get',
+            data: ajaxData,
+            dataType: 'json',
+            success: function(result) {
+                if (result) {
+                    layer.msg(result['msg'], {
+                        time: 1000
+                    }, function() {
+                        if (result['code'] == 1) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+        })
+    }
+});
+</script>
+{/block}

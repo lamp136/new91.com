@@ -1,0 +1,77 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+<!-- banner -->
+<div class="help_banner"></div>
+
+<div class="contain clearfix contain_pdsize">
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <ul>
+            <li><a href="/" title='首页'>首页</a></li>
+            <li class="jt">></li>
+            <li><a href="{:url('/help/contactus','',$Think.config.assign_suffix,$Think.config.assign_domain)}" title='帮助中心'>帮助中心</a></li>
+            <li class="jt">></li>
+            <li>购墓技巧</li>
+        </ul>
+    </div><!-- breadcrumb End -->
+    {include file="extra@help_left"}
+    <!-- 帮助中心右侧 -->
+    <div class="help_right help_statement">
+        
+        <!-- 平台声明 -->
+        <div class="help_statement_main">
+            <h2>选墓有哪些技巧?</h2>
+            <p>&nbsp;&nbsp;很多人认为在公墓中寻找吉穴是件容易的事，实则不然，正是因为在来龙一致的情况下，在这么多穴位寻找吉穴，那必须是点穴的高手。
+            首先须看来龙的缓急，,再在公墓的前后左右仔细观察穴位落在那里最中，最能受到龙气，因为在公墓中穴所受龙气的强弱，直接关系后代子孙的富贵贫贱，而后再在穴位上去看明堂、水路、砂等是否合局，这是公墓找吉穴最为关健的一步；
+            除此之外还要避开以下不利因素：</p>
+            <p>&nbsp;1、穴要暖(即藏风聚气),所选之穴要避风,尽量寻找没有风或风小的位置。</p>
+            <p>&nbsp;2、尽量避免穴前有小沟而水流直去,成为牵牛水,导致后代损丁破财。</p>
+            <p>&nbsp;3、因公墓大多以梯田形式开发,后排的墓地贴近山壁,易为淋头水或射穴水所害,后人易因此而伤丁,破财或患上奇症。</p>
+            <p>&nbsp;4、太近树木也不佳,因树根的延伸而搔扰棺木而使后代不安。</p>
+            <p>&nbsp;5、要避开黄泉线度,因为收到黄泉水会退产伤人,决不可用。</p>
+            <p>&nbsp;6、不可取空亡线度,因为线度空亡会使后人败退。</p>
+            
+            <p>总之，选好吉穴后，依来龙及前后左右的砂水，结合仙命，元运来立最佳的向，才能使后代子孙得以荫庇。</p>
+        </div><!-- help_statement_main 平台声明 End -->
+
+    </div><!-- help_right 帮助中心右侧 End -->
+
+</div><!-- contain End -->
+
+<!-- 优势 -->
+<div class="home_advantage aboutus_advantage">
+    <div class="contain">
+        <ul>
+            <li>
+                <img src="_WEB_/images/home_advantage_img1.png"/>
+                <h2>信息透明</h2>
+                <P>陵园信息全面，价格透明</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img2.png"/>
+                <h2>预约服务</h2>
+                <P>线上咨询，电话服务</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img3.png"/>
+                <h2>专业服务</h2>
+                <P>专业咨询团队，资深企业</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img4.png"/>
+                <h2>多重优惠</h2>
+                <P>多种礼品，享受独家优惠</P>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/home_advantage_img5.png"/>
+                <h2>诚信保障</h2>
+                <P>诚信商家，保障服务</P>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- 优势 home_advantage End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}

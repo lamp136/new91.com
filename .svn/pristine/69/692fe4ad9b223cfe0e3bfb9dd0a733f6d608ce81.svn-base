@@ -1,0 +1,6692 @@
+@charset "UTF-8";
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/**
+ * CONTENTS
+ * 
+ * index.............................首页
+ * cemetery..........................陵园墓地
+ * funeralparlour....................陵园详情
+ * cemetery_detail...................殡仪馆
+ * funeralparlour_detail.............殡仪馆详情
+ * etiquette.........................殡葬礼仪
+ * etiquette_detail..................殡葬礼仪详情
+ * funeralencyclopedia...............殡葬百科
+ * funeralencyclopedia_list..........殡葬百科列表
+ * funeralencyclopedia_detail........殡葬百科详情
+ * 
+ * 
+ * SETTINGS
+ * variables.........................变量集中存储文件
+ * commonmixin.......................mixin集中存储文件和公共样式
+ * icons.............................精灵合图
+ * 
+ * TOOLS
+ *
+ * COMPONENTS
+ * reset.............................Compass内置浏览器重置样式文件
+ * typography........................修饰文本列表垂直韵律样式文件
+ * utilities.........................辅助工具类模块(color和精灵合图、打印等模块)
+ * css3..............................CSS3模块
+ *
+ * BUSINESS
+ *
+ * BASE
+ * screen.scss.......................针对当前站点主页的样式修饰
+*/
+/*浏览器样式重置*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+html {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+q, blockquote {
+  quotes: none;
+}
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+a img {
+  border: none;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+.icons-sprite, .user_nav h2 i, .tombmaps_nav .city .sele .city_icon, .tombmaps_nav .city .city_list, .header .city_search .city .sele .city_icon, .header .city_search .city .city_list, .header .city_search .search_btn .ssbtn, .toolbar .toolbar_personal_icon, .toolbar .toolbar_shoping_icon, .toolbar .toolbar_collect_icon, .toolbar .toolbar_weixin_icon, .toolbar .toolbar_service_icon, .toolbar .toolbar_top_icon, .sifting .criteria .if span, .commtooltip .tooltip_cloce, .help_nav .help_nav_list h2 .down, .help_nav .help_nav_list .active .down, .home_banner_info ul .close, .home_cemetery .home_cemetery_main ul li .home_cemetery_main_img .location i, .home_etiquette .home_etiquette_mainbox .home_etiquette_main_img .location i, .home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_img .location i, .cemetery_list .cemetery_list_main .cemetery_list_main_img .ygwicon, .cemetery_list .cemetery_list_main .cemetery_list_main_info h2 span i, .cemetery_list .cemetery_list_main .cemetery_list_main_info .lookmap i, .cemetery_detail_main .cemetery_detail_main_img .ygwicon, .cemetery_detail_main .cemetery_detail_main_text h2 a .cemetery_detail_attention_icon, .cemetery_detail_main .cemetery_detail_main_text .address .lookmap i, .cemetery_detail_main .cemetery_detail_main_text .favorable ul li i, .cemetery_detail_main .cemetery_detail_main_text .favorable ul li:hover i, .cemetery_detail_main .cemetery_detail_main_text .addressAd .lookmap i, .cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .ygwicon, .tooltip_remark .niname span, .tooltip_remark .niname .niname_hover, .tooltip_remark .tooltip_remark_close, .funeralparlour_detail h2 .funeralparlour_introduce_icon, .funeralparlour_detail h2 .funeralparlour_traffic_icon, .fe_list .fe_list_main .fe_list_main_text .source .time .pageviews i, .fe_detail .source i, .eb_main .eb_main_list ul li .home_cemetery_main_img .location i, .login_main .login, .igree_box .tooltip_cloce, .celebrities_details .abstract span, .celebrities_details_right .other i, .tooltip_cemetery_orders .tooltip_cemetery_orders_cloce, .etiquette_orders .cemetery_orders_title i, .cemetery_orders_evaluate .niname span, .cemetery_orders_evaluate .niname .niname_hover, .cemetery_orders_evaluate .cemetery_orders_evaluate_close, .tombmaps_box .tombmaps_right .tombmaps_right_contain h2 i, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_liarrows2, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span1, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span2, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span3, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span4, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span5, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span6, .help_contactus p .dz, .help_contactus p .yx, .help_contactus p .rx {
+  background-image: url('../images/icons-s755b30c2af.png');
+  background-repeat: no-repeat;
+}
+
+a {
+  color: #333333;
+}
+
+a, a:hover, .user_nav ul li .user_led {
+  text-decoration: none;
+}
+
+input:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+.clear {
+  clear: both;
+}
+
+.clearfix {
+  overflow: hidden;
+  *zoom: 1;
+}
+
+body {
+  min-width: 1200px;
+  background: #f7f7f7;
+}
+
+body, p, h1, h2, h3, h4, h5, h6 {
+  font-family: "宋体";
+  font-size: 14px;
+  color: #333333;
+}
+
+.contain {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.contain_pdsize {
+  padding-bottom: 36px;
+}
+
+.nav ul li a, .tombmaps_nav .tombmaps_nav_main li a, .toolbar .toolbar_service .toolbar_service_main a, .buttonlv, .buttonbai, .buttonhui, .subscribetomb .yubtn, .paging ul li a, .paging ul .intext .tex, .commtooltip .tooltip_btn a, .home_burial .drama-slide a, .cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn a, .cem_detail .cem_details_remark .cem_details_star .remark_btn a, .tooltip_remark .remark_btn a, .etiquette_detail_package .package .packageul li .btn a, .login_main .login .login_title ul li a, .login_main .login .login_box_main .login_btn a, .register .register_left a, .register .register_right h1 span, .register .register_right .register_btn, .cemetery_orders .cemetery_orders_nr .licz .ljfk, .tooltip_cemetery_orders .tooltip_cemetery_orders_btn a, .cemetery_orders_evaluate .remark_btn a, .personaldata .pers_save, .changepassword .cha_save, .bury_main .bury_main_left .bury_main_query .btn, .tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price a, .history_contain .history_more_btn a, .subscribe_banner .subscribe_box .subscribe_box_main .login_btn a, .joinus_cem .lea_cembtn {
+  display: block;
+  text-align: center;
+}
+
+.user_nav h2 i, .tombmaps_nav .city .sele .city_icon, .header .city_search .city .sele .city_icon, .help_nav .help_nav_list h2 .down, .help_nav .help_nav_list .active .down, .home_cemetery .home_cemetery_main ul li .home_cemetery_main_img .location i, .home_etiquette .home_etiquette_mainbox .home_etiquette_main_img .location i, .home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_img .location i, .cemetery_list .cemetery_list_main .cemetery_list_main_info h2 span i, .cemetery_list .cemetery_list_main .cemetery_list_main_info .lookmap i, .cemetery_detail_main .cemetery_detail_main_text h2 a .cemetery_detail_attention_icon, .cemetery_detail_main .cemetery_detail_main_text .address .lookmap i, .cemetery_detail_main .cemetery_detail_main_text .favorable ul li i, .cemetery_detail_main .cemetery_detail_main_text .addressAd .lookmap i, .tooltip_remark .niname span, .funeralparlour_detail h2 i, .fe_list .fe_list_main .fe_list_main_text .source .time .pageviews i, .fe_detail .source i, .eb_main .eb_main_list ul li .home_cemetery_main_img .location i, .etiquette_orders .cemetery_orders_title i, .cemetery_orders_evaluate .niname span, .tombmaps_box .tombmaps_right .tombmaps_right_contain h2 i, .help_serviceprocess .help_serviceprocess_main ul li span, .help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_liarrows2, .help_contactus p i {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@font-face {
+  font-family: "iconfont";
+  src: url("../fonts/iconfont.eot?t=1495678306841");
+  /* IE9*/
+  src: url("../fonts/iconfont.eot?t=1495678306841#iefix") format("embedded-opentype"), url("../fonts/iconfont.woff?t=1495678306841") format("woff"), url("../fonts/iconfont.ttf?t=1495678306841") format("truetype"), url("../fonts/iconfont.svg?t=1495678306841#iconfont") format("svg");
+  /* iOS 4.1- */
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-iconfontdownjiantou:before {
+  content: "\e61b";
+}
+
+.icon-arrow-left-copy:before {
+  content: "\e606";
+}
+
+.icon-arrow-left-copy1:before {
+  content: "\e60d";
+}
+
+/*顶部*/
+.navbar_top {
+  width: 100%;
+  height: 46px;
+  background: #e9e9e9;
+  border-bottom: 1px solid #d9d8d8;
+  line-height: 46px;
+}
+.navbar_top .greet {
+  float: left;
+  font-size: 12px;
+}
+.navbar_top .greet span {
+  margin-right: 38px;
+  color: #41b98d;
+}
+.navbar_top .greet a {
+  font-size: 12px;
+  color: #666666;
+}
+.navbar_top .greet i {
+  margin: 0 12px;
+  color: #a9a9a9;
+}
+.navbar_top .greet .login {
+  color: #ef5980;
+}
+.navbar_top .nav_top {
+  float: right;
+  font-size: 12px;
+}
+.navbar_top .nav_top li {
+  float: left;
+  color: #a9a9a9;
+}
+.navbar_top .nav_top li a {
+  margin: 0 18px;
+  font-size: 12px;
+  color: #666666;
+}
+.navbar_top .nav_top li i {
+  font-size: 16px;
+}
+.navbar_top .nav_top .last a {
+  margin-right: 0;
+}
+
+/*导航*/
+.nav {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+  width: 100%;
+  height: 40px;
+  border-bottom: 2px solid #2b916b;
+  background: #f7f7f7;
+}
+.nav li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  white-space: nowrap;
+  float: left;
+  padding-left: left;
+  padding-right: left;
+}
+.nav li:first-child {
+  padding-left: 0;
+}
+.nav li:last-child {
+  padding-right: 0;
+}
+.nav li.last {
+  padding-right: 0;
+}
+.nav ul li a {
+  width: 130px;
+  height: 40px;
+  line-height: 40px;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.nav ul li a:hover, .nav .user_nav ul li .user_led, .user_nav .nav ul li .user_led {
+  background: #41b98d;
+  color: #fff;
+}
+.nav ul .lineheight a {
+  background: #41b98d;
+  color: #fff;
+}
+
+/*面包屑导航*/
+.breadcrumb {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+  color: #333333;
+  font-size: 12px;
+  line-height: 42px;
+}
+.breadcrumb li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  white-space: nowrap;
+  float: left;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.breadcrumb li:first-child {
+  padding-left: 0;
+}
+.breadcrumb li:last-child {
+  padding-right: 0;
+}
+.breadcrumb li.last {
+  padding-right: 0;
+}
+.breadcrumb .jt {
+  color: #333333;
+}
+.breadcrumb a {
+  font-size: 12px;
+  color: #666666;
+}
+
+.fe_nav {
+  height: 48px;
+  background: #2b916b;
+}
+.fe_nav ul li {
+  position: relative;
+  float: left;
+  width: 120px;
+  margin-right: 10px;
+  text-align: center;
+}
+.fe_nav ul li:hover {
+  background: #41b98d;
+}
+.fe_nav ul li a {
+  display: block;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 48px;
+}
+.fe_nav ul li i {
+  display: inline-block;
+  vertical-align: middle;
+  width: 8px;
+  height: 4px;
+  margin-left: 5px;
+  background: url(../images/fe_nav_iicon.png);
+}
+.fe_nav .last {
+  margin-right: 0;
+}
+.fe_nav .fe_nav_led {
+  background: #41b98d;
+}
+.fe_nav .fe_subnav {
+  display: none;
+  position: absolute;
+  top: 48px;
+  width: 120px;
+  background: #41b98d;
+  z-index: 99;
+}
+.fe_nav .fe_subnav li {
+  width: 120px;
+  margin-right: 0;
+  line-height: 38px;
+}
+.fe_nav .fe_subnav li a {
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.fe_nav .fe_subnav li:hover {
+  background: #2b916b;
+}
+
+/*个人中心左侧导航*/
+.user_nav {
+  float: left;
+  width: 198px;
+}
+.user_nav h2 {
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  text-align: center;
+  line-height: 50px;
+}
+.user_nav h2 i {
+  margin: 0 10px 3px 0;
+  background-position: 0 -2196px;
+  height: 20px;
+  width: 16px;
+}
+.user_nav ul {
+  padding-top: 10px;
+  background: #fff;
+  border: 1px solid #e9e9e9;
+}
+.user_nav ul li {
+  line-height: 40px;
+}
+.user_nav ul li a {
+  display: block;
+  padding-left: 70px;
+  color: #666666;
+}
+.user_nav ul li a:hover, .user_nav ul li .user_led {
+  background: #eaf5f1;
+  color: #41b98d;
+}
+
+/*地图看墓导航*/
+.tombmaps_nav {
+  width: 100%;
+  height: 46px;
+  background: #41b98d;
+}
+.tombmaps_nav .city {
+  position: relative;
+  float: left;
+  width: 106px;
+}
+.tombmaps_nav .city .sele {
+  display: block;
+  width: 106px;
+  height: 46px;
+  line-height: 46px;
+  color: #fff;
+  font-size: 16px;
+  font-family: "微软雅黑";
+  font-weight: 700;
+  cursor: pointer;
+}
+.tombmaps_nav .city .sele .city_icon {
+  margin: 0 0 3px 16px;
+  background-position: 0 -688px;
+  height: 21px;
+  width: 14px;
+}
+.tombmaps_nav .city .sele .icon-iconfontdownjiantou {
+  color: #fff;
+}
+.tombmaps_nav .city .city_list {
+  display: none;
+  position: absolute;
+  top: 46px;
+  background-position: 0 -276px;
+  height: 410px;
+  width: 315px;
+  z-index: 99;
+}
+.tombmaps_nav .city .city_list ul {
+  padding-left: 6px;
+}
+.tombmaps_nav .city .city_list ul li {
+  float: left;
+  margin: 0 6px;
+  color: #666666;
+  font-size: 12px;
+  line-height: 26px;
+}
+.tombmaps_nav .city .city_list ul li a {
+  padding: 2px 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #666666;
+  font-size: 12px;
+}
+.tombmaps_nav .city .city_list ul li a:hover, .tombmaps_nav .city .city_list .user_nav ul li .user_led, .user_nav .tombmaps_nav .city .city_list ul li .user_led {
+  background: #41b98d;
+  color: #fff;
+}
+.tombmaps_nav .tombmaps_nav_main {
+  float: left;
+}
+.tombmaps_nav .tombmaps_nav_main li {
+  float: left;
+}
+.tombmaps_nav .tombmaps_nav_main li a {
+  width: 130px;
+  height: 46px;
+  line-height: 46px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.tombmaps_nav .tombmaps_nav_main li a:hover, .tombmaps_nav .tombmaps_nav_main .user_nav ul li .user_led, .user_nav ul .tombmaps_nav .tombmaps_nav_main li .user_led {
+  background: #2b916b;
+}
+.tombmaps_nav .tombmaps_nav_main .lineheight a {
+  background: #2b916b;
+}
+
+/*header*/
+.header {
+  height: 138px;
+  background: #f7f7f7;
+}
+.header .logo {
+  float: left;
+  padding-top: 44px;
+}
+.header .logo img {
+  width: 220px;
+  height: 56px;
+}
+.header .city_search {
+  float: left;
+  width: 642px;
+  margin-left: 38px;
+}
+.header .city_search .city {
+  position: relative;
+  float: left;
+  width: 106px;
+  margin-top: 45px;
+}
+.header .city_search .city .sele {
+  display: block;
+  width: 106px;
+  height: 44px;
+  border: 1px solid #f7f7f7;
+  line-height: 44px;
+  font-size: 16px;
+  font-family: "微软雅黑";
+  cursor: pointer;
+}
+.header .city_search .city .sele:hover {
+  border: 1px solid #e9e9e9;
+  background: #fff;
+}
+.header .city_search .city .sele .city_icon {
+  margin: 0 0 3px 16px;
+  background-position: 0 -253px;
+  height: 21px;
+  width: 14px;
+}
+.header .city_search .city .sele .icon-iconfontdownjiantou {
+  color: #999999;
+}
+.header .city_search .city .city_list {
+  display: none;
+  position: absolute;
+  top: 44px;
+  background-position: 0 -276px;
+  height: 410px;
+  width: 315px;
+  z-index: 99;
+}
+.header .city_search .city .city_list ul {
+  padding-left: 6px;
+}
+.header .city_search .city .city_list ul li {
+  float: left;
+  margin: 0 6px;
+  color: #666666;
+  font-size: 12px;
+  line-height: 26px;
+}
+.header .city_search .city .city_list ul li a {
+  padding: 2px 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #666666;
+  font-size: 12px;
+}
+.header .city_search .city .city_list ul li a:hover, .header .city_search .city .city_list .user_nav ul li .user_led, .user_nav .header .city_search .city .city_list ul li .user_led {
+  background: #41b98d;
+  color: #fff;
+}
+.header .city_search .search {
+  float: left;
+  width: 446px;
+  margin: 42px 0 0 24px;
+  border: 2px solid #41b98d;
+}
+.header .city_search .search .search_sel_box {
+  position: relative;
+  float: left;
+  width: 96px;
+  font-size: 12px;
+  line-height: 36px;
+}
+.header .city_search .search .search_sel_box .search_sel {
+  display: block;
+  width: 80px;
+  height: 36px;
+  padding-left: 16px;
+  border: 1px solid #e9e9e9;
+  cursor: pointer;
+}
+.header .city_search .search .search_sel_box .search_sel_list {
+  position: absolute;
+  top: 35px;
+  display: none;
+  width: 96px;
+  border: 1px solid #e9e9e9;
+  border-top: none;
+  background: #f7f7f7;
+  z-index: 99;
+}
+.header .city_search .search .search_sel_box .search_sel_list a {
+  display: block;
+  padding-left: 16px;
+  color: #666666;
+  line-height: 34px;
+}
+.header .city_search .search .search_sel_box .search_sel_list a:hover, .header .city_search .search .search_sel_box .search_sel_list .user_nav ul li .user_led, .user_nav ul li .header .city_search .search .search_sel_box .search_sel_list .user_led {
+  background: #dcf2ed;
+  color: #41b98d;
+}
+.header .city_search .search .search_input {
+  position: relative;
+  float: left;
+  width: 350px;
+}
+.header .city_search .search .search_input .txt {
+  width: 336px;
+  height: 36px;
+  padding-left: 14px;
+  border: none;
+}
+.header .city_search .search .search_input .search_suggest {
+  display: none;
+  position: absolute;
+  z-index: 999;
+  width: 350px;
+  border: 1px solid #999999;
+}
+.header .city_search .search .search_input .search_suggest li {
+  height: 24px;
+  padding-left: 3px;
+  background: #FFFFFF;
+  overflow: hidden;
+  line-height: 24px;
+  cursor: default;
+}
+.header .city_search .search .search_input .search_suggest li:hover {
+  background: #DDDDDD;
+}
+.header .city_search .search_btn {
+  float: left;
+  width: 62px;
+}
+.header .city_search .search_btn .ssbtn {
+  border: none;
+  background-position: 0 -1904px;
+  height: 42px;
+  width: 62px;
+  margin-top: 42px;
+}
+.header .city_search .search_text {
+  margin-left: 132px;
+}
+.header .city_search .search_text ul li {
+  float: left;
+  margin-right: 16px;
+}
+.header .city_search .search_text ul li a {
+  color: #999999;
+  font-size: 12px;
+}
+.header .city_search .search_text ul li a:hover, .header .city_search .search_text .user_nav ul li .user_led, .user_nav .header .city_search .search_text ul li .user_led {
+  color: #41b98d;
+}
+.header .telephone {
+  float: right;
+  width: 211px;
+  height: 53;
+  margin-top: 42px;
+}
+
+/*登录header*/
+.login_header {
+  height: 96px;
+  border-bottom: 1px solid #e9e9e9;
+}
+.login_header .logo {
+  padding-top: 22px;
+}
+.login_header h1 {
+  float: left;
+  border-left: 1px solid #e9e9e9;
+  padding-left: 36px;
+  margin: 37px 0 0 26px;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  line-height: 42px;
+}
+.login_header .login_register {
+  float: right;
+  margin-top: 50px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.login_header .login_register a {
+  color: #41b98d;
+}
+
+.fe_header .logo a {
+  display: block;
+  float: left;
+  width: 220px;
+}
+.fe_header .logo h2 {
+  float: left;
+  margin: 32px 0 0 18px;
+  color: #565757;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  font-weight: 700;
+}
+.fe_header .city_search {
+  width: 512px;
+  margin-left: 48px;
+}
+.fe_header .city_search .search {
+  margin-left: 0;
+}
+.fe_header .city_search .search_text {
+  margin-left: 0;
+}
+
+/*返回顶部工具条*/
+.toolbar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 40px;
+  height: 622px;
+  background: #666666;
+  text-align: center;
+}
+.toolbar a {
+  display: block;
+  padding: 10px 0;
+  color: #fff;
+}
+.toolbar a:hover, .toolbar .user_nav ul li .user_led, .user_nav ul li .toolbar .user_led {
+  background: #41b98d;
+}
+.toolbar p {
+  margin-top: 6px;
+  color: #fff;
+  font-size: 12px;
+}
+.toolbar .toolbar_personal_icon {
+  display: inline-block;
+  background-position: 0 -2002px;
+  height: 19px;
+  width: 17px;
+}
+.toolbar .toolbar_shoping_icon {
+  display: inline-block;
+  background-position: 0 -2053px;
+  height: 23px;
+  width: 23px;
+}
+.toolbar .toolbar_collect_icon {
+  display: inline-block;
+  background-position: 0 -1980px;
+  height: 20px;
+  width: 22px;
+}
+.toolbar .toolbar_weixin_icon {
+  display: inline-block;
+  background-position: 0 -2108px;
+  height: 22px;
+  width: 22px;
+}
+.toolbar .toolbar_service_icon {
+  display: inline-block;
+  background-position: 0 -2023px;
+  height: 28px;
+  width: 26px;
+}
+.toolbar .toolbar_top_icon {
+  display: inline-block;
+  background-position: 0 -2078px;
+  height: 28px;
+  width: 18px;
+}
+.toolbar .personal {
+  margin-top: 136px;
+}
+.toolbar .toolbar_weixin {
+  position: relative;
+}
+.toolbar .toolbar_weixin span {
+  display: none;
+  position: absolute;
+  top: -30px;
+  left: -142px;
+  width: 142px;
+  height: 133px;
+  background: url(../images/toolbar_weixin_img.png) no-repeat;
+}
+.toolbar .toolbar_service {
+  position: relative;
+}
+.toolbar .toolbar_service .toolbar_service_main {
+  display: none;
+  position: absolute;
+  top: -30px;
+  left: -155px;
+  width: 138px;
+  height: 150px;
+  padding: 58px 0 0 17px;
+  background: url(../images/toolbar_service_mainbg.png);
+}
+.toolbar .toolbar_service .toolbar_service_main a {
+  width: 74px;
+  height: 33px;
+  line-height: 33px;
+  padding: 0 0 0 38px;
+  margin-top: 10px;
+  background: url(../images/toolbar_service_mainabg.png);
+  color: #009ae8;
+  text-align: left;
+}
+.toolbar .top {
+  margin-top: 66px;
+}
+
+/*底部内容*/
+.footer {
+  width: 100%;
+  padding: 42px 0 10px 0;
+  background: #41b98d;
+}
+.footer .footer_nav {
+  float: left;
+}
+.footer .footer_nav ul {
+  float: left;
+  width: 229px;
+  background: url(../images/footer_nav_ulborder.jpg) no-repeat;
+  background-position: 0 7px;
+  text-align: center;
+}
+.footer .footer_nav ul li {
+  line-height: 48px;
+}
+.footer .footer_nav ul li a {
+  font-size: 16px;
+  color: #fff;
+}
+.footer .footer_nav .first {
+  width: 152px;
+  background: inherit;
+  text-align: left;
+}
+.footer .footer_nav h1 {
+  margin-bottom: 14px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+}
+.footer .wechat {
+  float: left;
+  width: 142px;
+  margin-left: 10px;
+  text-align: center;
+}
+.footer .wechat h2 {
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 40px;
+}
+.footer .wechat p {
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+
+/*友情链接*/
+.blogroll {
+  width: 100%;
+  padding: 30px 0;
+  border-bottom: 1px dashed #fff;
+  background: url(../images/blogroll_bg.jpg) repeat-x;
+  background-color: #41b98d;
+}
+.blogroll h3 {
+  margin-bottom: 14px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.blogroll ul {
+  padding-right: 190px;
+}
+.blogroll ul li {
+  float: left;
+  width: 125px;
+  line-height: 32px;
+}
+.blogroll ul li a {
+  color: #fff;
+}
+
+/*版权*/
+.copyright {
+  width: 100%;
+  padding: 32px 0 28px 0;
+  background: #2b916b;
+  text-align: center;
+}
+.copyright ul {
+  display: inline-block;
+  margin-bottom: 18px;
+}
+.copyright ul li {
+  display: inline-block;
+  padding: 0 10px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  text-shadow: 4px 5px 4px rgba(12, 4, 7, 0.1);
+}
+.copyright ul li a {
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.copyright ul li span {
+  font-weight: 700;
+}
+.copyright p {
+  color: #fff;
+  font-family: Arial, "Microsoft YaHei";
+  font-size: 12px;
+  line-height: 20px;
+}
+.copyright p a {
+  color: #fff;
+}
+
+/*登录页面版权*/
+.login_copyright {
+  background: #f7f7f7;
+}
+.login_copyright ul li {
+  color: #333333;
+}
+.login_copyright ul li a {
+  color: #333333;
+}
+.login_copyright p {
+  color: #333333;
+}
+
+/*左右布局*/
+.leftcontain {
+  float: left;
+  width: 880px;
+}
+
+.rightcontain {
+  float: right;
+  width: 300px;
+}
+
+.buttonlv {
+  width: 130px;
+  height: 42px;
+  line-height: 42px;
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.buttonlv:hover {
+  background: #2b916b;
+}
+
+.buttonbai {
+  width: 128px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #41b98d;
+  background: #fff;
+  color: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.buttonbai:hover {
+  background: #41b98d;
+  color: #fff;
+}
+
+.buttonhui {
+  width: 128px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #ccc;
+  background: #ccc;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.cem_margin_bottom {
+  margin-bottom: 20px;
+}
+
+/*筛选条件*/
+.sifting {
+  width: 832px;
+  padding: 0 24px 4px 24px;
+  background: #fff;
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.sifting .criteria {
+  height: 50px;
+  line-height: 50px;
+  background: url(../images/sifting_criteria_border.jpg) no-repeat;
+  background-position: bottom;
+}
+.sifting .criteria ul li {
+  float: left;
+  font-size: 12px;
+  margin-right: 10px;
+}
+.sifting .criteria .sif {
+  width: 52px;
+  color: #666666;
+}
+.sifting .criteria .if {
+  padding: 0 6px;
+  margin-top: 14px;
+  border: 1px solid #41b98d;
+  color: #41b98d;
+  line-height: 20px;
+}
+.sifting .criteria .if span {
+  display: inline-block;
+  margin-left: 12px;
+  background-position: 0 -711px;
+  height: 8px;
+  width: 7px;
+  cursor: pointer;
+}
+.sifting .criteria .number {
+  color: #999999;
+}
+.sifting .criteria .number span {
+  color: #666666;
+}
+.sifting .sifting_main {
+  margin: 10px 0 16px 0;
+}
+.sifting .sifting_main span {
+  display: block;
+  float: left;
+  width: 70px;
+  color: #999999;
+  font-size: 12px;
+  line-height: 30px;
+}
+.sifting .sifting_main ul {
+  float: left;
+  width: 762px;
+}
+.sifting .sifting_main ul li {
+  float: left;
+  margin-right: 30px;
+  line-height: 30px;
+}
+.sifting .sifting_main ul li a {
+  color: #666666;
+  font-family: "微软雅黑";
+}
+.sifting .sifting_main ul li a:hover, .sifting .sifting_main .user_nav ul li .user_led, .user_nav .sifting .sifting_main ul li .user_led {
+  color: #41b98d;
+}
+.sifting .sifting_main ul .led a {
+  color: #41b98d;
+}
+
+/*预约看墓*/
+.subscribetomb {
+  width: 300px;
+  height: 376px;
+  background: url(../images/subscribetomb_bg.jpg);
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.subscribetomb h2 {
+  padding-left: 20px;
+  background: #f8f8f8;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 46px;
+}
+.subscribetomb .tet {
+  width: 244px;
+  height: 36px;
+  padding-left: 14px;
+  margin: 26px 20px 0 20px;
+  border: 1px solid #e9e9e9;
+  font-family: "微软雅黑";
+  line-height: 36px;
+}
+.subscribetomb .yubtn {
+  width: 246px;
+  height: 38px;
+  line-height: 38px;
+  margin: 30px 20px 12px 20px;
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+}
+.subscribetomb p {
+  margin-left: 20px;
+  font-size: 12px;
+}
+.subscribetomb p span {
+  font-family: Arial;
+}
+
+/*陵园排行榜*/
+.ranking_list {
+  width: 300px;
+  height: 480px;
+  padding-top: 17px;
+  background: url(../images/ranking_list_bg.jpg);
+}
+.ranking_list h3 {
+  width: 170px;
+  margin: 0 0 0 67px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 32px;
+}
+.ranking_list .ranking_list_main {
+  width: 266px;
+  margin: 30px 0 0 17px;
+  border: 1px solid #fff;
+  background: #53bcae;
+  -moz-border-radius: 20px 20px 5px 5px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px 20px 5px 5px;
+}
+.ranking_list .ranking_list_main h4 {
+  padding-left: 16px;
+  border-bottom: 1px solid #9fece2;
+  background: #5fd1c2;
+  color: #fff;
+  font-family: "微软雅黑";
+  line-height: 37px;
+  -moz-border-radius: 20px 20px 0 0;
+  -webkit-border-radius: 20px;
+  border-radius: 20px 20px 0 0;
+}
+.ranking_list .ranking_list_main h4 span {
+  margin-left: 20px;
+}
+.ranking_list .ranking_list_main ul li {
+  padding: 14px 14px 14px 16px;
+  border-bottom: 1px solid #9fece2;
+}
+.ranking_list .ranking_list_main ul li span {
+  float: left;
+  width: 34px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  text-align: center;
+  text-shadow: 0px 4px 4px rgba(12, 4, 7, 0.1);
+}
+.ranking_list .ranking_list_main ul li h5 {
+  float: right;
+  width: 194px;
+  font-family: "微软雅黑";
+  color: #fff;
+  line-height: 18px;
+}
+.ranking_list .ranking_list_main .first img {
+  float: left;
+  margin-top: 3px;
+}
+.ranking_list .ranking_list_main .first .txt {
+  float: right;
+  width: 194px;
+}
+.ranking_list .ranking_list_main .first .txt h5 {
+  margin-bottom: 10px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.ranking_list .ranking_list_main .first .txt p {
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 20px;
+}
+.ranking_list .ranking_list_main .first .txt p font {
+  font-size: 12px;
+}
+.ranking_list .ranking_list_main .first .txt .yyuenum {
+  font-size: 14px;
+}
+.ranking_list .wp {
+  margin-top: 28px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 12px;
+  text-align: center;
+}
+
+/*惠民政策*/
+.policies {
+  width: 298px;
+  padding-bottom: 12px;
+  border: 1px solid #d2d2d2;
+  background: #fff;
+}
+.policies h2 {
+  padding-left: 20px;
+  background: #f2f2f2;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 48px;
+}
+.policies ul {
+  padding-left: 20px;
+}
+.policies ul li {
+  list-style: disc inside;
+  color: #41b98d;
+  line-height: 48px;
+}
+.policies ul li a {
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+.policies ul li a:hover, .policies .user_nav ul li .user_led, .user_nav .policies ul li .user_led {
+  color: #41b98d;
+}
+
+/*推荐*/
+.recommend {
+  width: 298px;
+  border: 1px solid #d2d2d2;
+}
+.recommend h2 {
+  padding-left: 22px;
+  border-bottom: 1px solid #d2d2d2;
+  background: #f2f2f2;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 48px;
+}
+.recommend ul {
+  padding: 0 24px 22px 24px;
+}
+.recommend ul li {
+  text-align: center;
+  margin-top: 22px;
+}
+.recommend ul li img {
+  width: 250px;
+  height: 132px;
+}
+.recommend ul li p {
+  margin-top: 12px;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.recommend ul li p:hover {
+  color: #41b98d;
+}
+
+.recommend_etiquette ul li img {
+  width: 250px;
+  height: 176px;
+}
+
+.advborder {
+  border: 1px solid #e9e9e9;
+}
+.advborder img {
+  display: block;
+}
+
+/*最新资讯*/
+.new_message {
+  width: 298px;
+  background: #fff;
+  border: 1px solid #d2d2d2;
+}
+.new_message h2 {
+  padding-left: 22px;
+  border-bottom: 1px solid #d2d2d2;
+  background: #f2f2f2;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 48px;
+}
+.new_message ul {
+  margin-top: 18px;
+}
+.new_message ul li {
+  padding: 0 14px 18px 16px;
+}
+.new_message ul li img {
+  float: left;
+  width: 100px;
+  height: 62px;
+}
+.new_message ul li .txt {
+  float: right;
+  width: 156px;
+}
+.new_message ul li .txt h3 {
+  font-family: "微软雅黑";
+  line-height: 24px;
+}
+.new_message ul li .txt h3:hover {
+  color: #41b98d;
+}
+
+/*分页*/
+.paging {
+  text-align: center;
+  padding-top: 30px;
+}
+.paging ul {
+  display: inline-block;
+}
+.paging ul li {
+  float: left;
+  margin-right: 8px;
+  background: #fff;
+  font-family: Arial;
+  text-align: center;
+  line-height: 28px;
+}
+.paging ul li i {
+  font-size: 14px;
+}
+.paging ul li a {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  border: 1px solid #bfbfbf;
+  font-family: Arial;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+.paging ul li a:hover, .paging .user_nav ul li .user_led, .user_nav .paging ul li .user_led {
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  color: #fff;
+}
+.paging ul .numled a {
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  color: #fff;
+}
+.paging ul .dian {
+  border: none;
+  background: inherit;
+  line-height: 20px;
+}
+.paging ul .jiant i {
+  color: #b5b5b5;
+}
+.paging ul .jianled i {
+  color: #41b98d;
+}
+.paging ul .jiant a:hover, .paging .user_nav ul .jiant li .user_led, .user_nav .paging ul .jiant li .user_led, .paging .user_nav ul li .jiant .user_led, .user_nav .paging ul li .jiant .user_led {
+  border: 1px solid #bfbfbf;
+  background: #fff;
+}
+.paging ul .jiant a:hover i, .paging .user_nav ul .jiant li .user_led i, .user_nav .paging ul .jiant li .user_led i, .paging .user_nav ul li .jiant .user_led i, .user_nav .paging ul li .jiant .user_led i {
+  color: #41b98d;
+}
+.paging ul .tzd {
+  margin-left: 42px;
+  background: inherit;
+  color: #b5b5b5;
+  line-height: 32px;
+}
+.paging ul .intext .tex {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  border: 1px solid #bfbfbf;
+  font-family: Arial;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+.paging ul .go a {
+  font-weight: 700;
+}
+
+/*提示框样式*/
+.tooltip_box {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 100;
+}
+
+.tooltip {
+  display: none;
+  width: 772px;
+  z-index: 1000;
+  background: #fff;
+  position: fixed;
+  top: 5%;
+  left: 40%;
+  margin-left: -240px;
+}
+
+.commtooltip {
+  width: 258px;
+  height: 100px;
+  padding: 20px;
+  top: 30%;
+  left: 55%;
+}
+.commtooltip p {
+  line-height: 22px;
+}
+.commtooltip .tooltip_btn {
+  margin-top: 20px;
+}
+.commtooltip .tooltip_btn a {
+  float: left;
+  width: 90px;
+  height: 28px;
+  line-height: 28px;
+  background: #50b400;
+  color: #fff;
+}
+.commtooltip .tooltip_btn .ack_btn {
+  margin-right: 78px;
+}
+.commtooltip .tooltip_cloce {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: inline-block;
+  background-position: 0 0;
+  height: 12px;
+  width: 12px;
+  cursor: pointer;
+}
+
+/*帮组中心公共样式*/
+/*help banner*/
+.help_banner {
+  width: 100%;
+  height: 258px;
+  background: url(../images/help_banner.jpg) center top no-repeat;
+}
+
+/*nav*/
+.help_nav {
+  float: left;
+  width: 266px;
+}
+.help_nav .help_nav_main {
+  width: 248px;
+  padding-bottom: 30px;
+  margin-left: 18px;
+  background: #fff;
+}
+.help_nav .help_nav_logo {
+  padding: 24px 0 12px 0;
+  text-align: center;
+}
+.help_nav .help_nav_list h2 {
+  position: relative;
+  height: 42px;
+  margin-top: 20px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  cursor: pointer;
+}
+.help_nav .help_nav_list h2 .down {
+  margin: 0 0 3px 8px;
+  background-position: 0 -881px;
+  height: 4px;
+  width: 8px;
+}
+.help_nav .help_nav_list h2 span {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 231px;
+  height: 52px;
+  padding-left: 12px;
+  background: url(../images/help_nav_list_h2bg.png);
+  text-align: center;
+  line-height: 42px;
+}
+.help_nav .help_nav_list .active .down {
+  margin: 0 0 3px 8px;
+  background-position: 0 -875px;
+  height: 4px;
+  width: 8px;
+}
+.help_nav .help_nav_list ul {
+  margin: 0 62px 0 32px;
+  display: none;
+}
+.help_nav .help_nav_list ul li {
+  border-bottom: 1px solid #e9e9e9;
+  text-align: center;
+  line-height: 48px;
+}
+.help_nav .help_nav_list ul li a {
+  color: #666666;
+}
+.help_nav .help_nav_list ul li a:hover, .help_nav .help_nav_list .user_nav ul li .user_led, .user_nav .help_nav .help_nav_list ul li .user_led {
+  color: #41b98d;
+}
+.help_nav .help_nav_list ul .led a {
+  color: #41b98d;
+}
+.help_nav .help_nav_list ul li:last-child {
+  border-bottom: none;
+}
+.help_nav .help_nav_list .show {
+  display: block;
+}
+
+/*帮助中心右侧*/
+.help_right {
+  float: right;
+  width: 908px;
+  border: 1px solid #d9d8d8;
+}
+
+/*banner信息*/
+.home_banner_info {
+  position: absolute;
+  top: 336px;
+  left: 50%;
+  margin-left: -446px;
+}
+.home_banner_info ul li {
+  position: relative;
+  float: left;
+  width: 250px;
+  height: 62px;
+  padding: 34px 14px 28px 14px;
+  margin-right: 30px;
+  background: url(../images/home_banner_info_bg.png);
+}
+.home_banner_info ul li img {
+  float: left;
+  width: 61px;
+}
+.home_banner_info ul li .info_text {
+  float: right;
+  width: 182px;
+}
+.home_banner_info ul li .info_text h2 {
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.home_banner_info ul li .info_text p {
+  margin-top: 12px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 20px;
+}
+.home_banner_info ul .home_banner_info_bglv {
+  background: url(../images/home_banner_info_bglv.png);
+}
+.home_banner_info ul .last {
+  margin-right: 0;
+}
+.home_banner_info ul .close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background-position: 0 -1489px;
+  height: 10px;
+  width: 10px;
+}
+
+/*网站信息*/
+.home_websiteinfo {
+  width: 100%;
+  height: 250px;
+  background: url(../images/home_websiteinfo_bg.jpg) center top no-repeat;
+}
+.home_websiteinfo ul {
+  margin: 0 118px;
+}
+.home_websiteinfo ul li {
+  float: left;
+  width: 118px;
+  margin-right: 51px;
+  text-align: center;
+}
+.home_websiteinfo ul li img {
+  margin-top: 60px;
+}
+.home_websiteinfo ul li p {
+  margin-top: 16px;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.home_websiteinfo ul .last {
+  margin-right: 0;
+}
+
+.home_title {
+  margin-top: 24px;
+  text-align: center;
+}
+.home_title h2 {
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 60px;
+  letter-spacing: 6px;
+  text-shadow: 4px 5px 4px rgba(12, 4, 7, 0.1);
+}
+.home_title a {
+  display: inline-block;
+  width: 88px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border: 1px solid #fff;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-weight: 700;
+}
+
+.home_title_a h2 {
+  color: #333333;
+}
+.home_title_a a {
+  border: 1px solid #41b98d;
+  color: #333333;
+}
+
+.home_cemetery {
+  position: relative;
+}
+.home_cemetery .home_scenerycemetery_bg {
+  width: 100%;
+  height: 348px;
+  background: url(../images/home_scenerycemetery_bg.png) center top no-repeat;
+}
+.home_cemetery .home_lookcemetery_bg {
+  width: 100%;
+  height: 348px;
+  background: url(../images/home_lookcemetery_bg.png) center top no-repeat;
+}
+.home_cemetery .home_geomancycemetery_bg {
+  width: 100%;
+  height: 348px;
+  background: url(../images/home_geomancycemetery_bg.png) center top no-repeat;
+}
+.home_cemetery .home_scenerycemetery_bg_bottom {
+  width: 100%;
+  height: 418px;
+  background: url(../images/home_scenerycemetery_bg_bottom.png) center top no-repeat;
+}
+.home_cemetery .home_lookcemetery_bg_bottom {
+  width: 100%;
+  height: 418px;
+  background: url(../images/home_lookcemetery_bg_bottom.png) center top no-repeat;
+}
+.home_cemetery .home_geomancycemetery_bg_bottom {
+  width: 100%;
+  height: 418px;
+  background: url(../images/home_geomancycemetery_bg_bottom.png) center top no-repeat;
+}
+.home_cemetery .home_cemetery_box {
+  position: absolute;
+  width: 968px;
+  margin: 0 auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.home_cemetery .home_cemetery_main {
+  width: 948px;
+  padding: 10px 10px;
+  margin-top: 36px;
+  background: #fff;
+}
+.home_cemetery .home_cemetery_main ul li {
+  float: left;
+  width: 294px;
+  margin: 10px 10px;
+  border: 1px solid #fff;
+}
+.home_cemetery .home_cemetery_main ul li:hover {
+  border: 1px solid #99dfc5;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_img {
+  position: relative;
+  width: 294px;
+  height: 158px;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_img img {
+  width: 294px;
+  height: 158px;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_img .location {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 284px;
+  padding: 0 5px;
+  background: url(../images/home_cemetery_main_locationbg.png);
+  line-height: 20px;
+  text-align: right;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_img .location a {
+  color: #fff;
+  font-size: 12px;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_img .location i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -1501px;
+  height: 13px;
+  width: 9px;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_text {
+  background: #fff;
+  text-align: center;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_text h2 {
+  margin-top: 12px;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_text h2 a {
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_text p {
+  margin: 14px 0;
+  font-family: "微软雅黑";
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_text p span {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 20px;
+  font-weight: 700;
+}
+.home_cemetery .home_cemetery_main ul li .home_cemetery_main_text p span i {
+  font-family: "微软雅黑";
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.home_etiquette {
+  position: relative;
+}
+.home_etiquette .home_etiquette_bg {
+  width: 100%;
+  height: 616px;
+  background: url(../images/home_etiquette_bg.png) center top no-repeat;
+}
+.home_etiquette .home_etiquette_bg_bottom {
+  width: 100%;
+  height: 230px;
+  background: url(../images/home_etiquette_bg_bottom.png) center top no-repeat;
+}
+.home_etiquette .home_etiquette_box {
+  position: absolute;
+  width: 1200px;
+  margin: 0 auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.home_etiquette .home_etiquette_main {
+  margin-top: 30px;
+}
+.home_etiquette .home_etiquette_mainbox {
+  float: left;
+  margin: 10px;
+}
+.home_etiquette .home_etiquette_mainbox:hover {
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_img {
+  position: relative;
+  width: 380px;
+  height: 268px;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_img img {
+  width: 380px;
+  height: 268px;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_img .location {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 370px;
+  padding: 0 5px;
+  background: url(../images/home_etiquette_main_locationbg.png);
+  line-height: 24px;
+  text-align: right;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_img .location a {
+  color: #fff;
+  font-size: 12px;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_img .location i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -1501px;
+  height: 13px;
+  width: 9px;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text {
+  padding: 18px;
+  background: #fff;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text h2 a {
+  font-family: "微软雅黑";
+  font-size: 20px;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul {
+  margin: 24px 0 30px 0;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul li {
+  float: left;
+  width: 106px;
+  border-right: 1px solid #41b98d;
+  font-size: 12px;
+  color: #666666;
+  text-align: center;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul li span {
+  display: block;
+  margin-bottom: 12px;
+  color: #333333;
+  font-family: "微软雅黑";
+  font-size: 20px;
+  font-weight: 700;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul li .ynum {
+  color: #ef5980;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul li a {
+  display: block;
+  font-size: 12px;
+  color: #666666;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul li a:hover span, .home_etiquette .home_etiquette_mainbox .home_etiquette_main_text .user_nav ul li .user_led span, .user_nav .home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul li .user_led span {
+  color: #41b98d;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text ul .last {
+  border-right: none;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text .etiquette_btn a {
+  display: inline-block;
+  width: 128px;
+  height: 42px;
+  line-height: 42px;
+  text-align: center;
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text .etiquette_btn a:hover, .home_etiquette .home_etiquette_mainbox .home_etiquette_main_text .etiquette_btn .user_nav ul li .user_led, .user_nav ul li .home_etiquette .home_etiquette_mainbox .home_etiquette_main_text .etiquette_btn .user_led {
+  background: #2b916b;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text .etiquette_btn .zxzx {
+  background: #fff;
+  margin-left: 18px;
+  color: #41b98d;
+}
+.home_etiquette .home_etiquette_mainbox .home_etiquette_main_text .etiquette_btn .zxzx:hover {
+  background: #41b98d;
+  color: #fff;
+}
+
+/*节地生态葬*/
+.home_burial {
+  width: 100%;
+  height: 724px;
+  padding-top: 70px;
+  background: url(../images/home_burial_bg.png) center top no-repeat;
+}
+.home_burial .home_title_a {
+  margin-top: 0;
+}
+.home_burial .drama-slide {
+  padding: 0 10px;
+  text-align: right;
+}
+.home_burial .drama-slide li {
+  display: inline-block;
+  margin-left: 10px;
+}
+.home_burial .drama-slide a {
+  width: 31px;
+  height: 36px;
+  line-height: 36px;
+  text-indent: -1000em;
+}
+.home_burial .drama-slide .prev a {
+  background: url(../images/home_burial_prev.png);
+}
+.home_burial .drama-slide .prev a:hover, .home_burial .drama-slide .prev .user_nav ul li .user_led, .user_nav ul li .home_burial .drama-slide .prev .user_led {
+  background: url(../images/home_burial_prevhover.png);
+}
+.home_burial .drama-slide .next a {
+  background: url(../images/home_burial_next.png);
+}
+.home_burial .drama-slide .next a:hover, .home_burial .drama-slide .next .user_nav ul li .user_led, .user_nav ul li .home_burial .drama-slide .next .user_led {
+  background: url(../images/home_burial_nexthover.png);
+}
+.home_burial .home_burial_main {
+  height: 494px;
+}
+.home_burial .home_burial_main ul li {
+  float: left;
+  width: 380px;
+  height: 474px;
+  margin: 10px;
+}
+.home_burial .home_burial_main ul li:hover {
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.home_burial .home_burial_main ul li img {
+  width: 380px;
+  height: 268px;
+}
+.home_burial .home_burial_main .home_burial_main_text {
+  height: 168px;
+  padding: 18px;
+  background: #fff;
+}
+.home_burial .home_burial_main .home_burial_main_text h2 {
+  margin-bottom: 16px;
+  font-family: "微软雅黑";
+  font-size: 20px;
+}
+.home_burial .home_burial_main .home_burial_main_text p {
+  color: #666666;
+  line-height: 26px;
+}
+.home_burial .home_burial_main .home_burial_main_text .burial_btn {
+  margin-top: 36px;
+}
+.home_burial .home_burial_main .home_burial_main_text .burial_btn a {
+  display: inline-block;
+  width: 128px;
+  height: 42px;
+  line-height: 42px;
+  text-align: center;
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.home_burial .home_burial_main .home_burial_main_text .burial_btn a:hover, .home_burial .home_burial_main .home_burial_main_text .burial_btn .user_nav ul li .user_led, .user_nav ul li .home_burial .home_burial_main .home_burial_main_text .burial_btn .user_led {
+  background: #2b916b;
+}
+.home_burial .home_burial_main .home_burial_main_text .burial_btn .zxzx {
+  background: #fff;
+  margin-left: 18px;
+  color: #41b98d;
+}
+.home_burial .home_burial_main .home_burial_main_text .burial_btn .zxzx:hover {
+  background: #41b98d;
+  color: #fff;
+}
+
+/*殡葬资讯*/
+.home_information {
+  width: 100%;
+  padding: 45px 0 66px 0;
+  background: #fff;
+}
+.home_information .home_title_a {
+  margin-top: 0;
+}
+.home_information .home_information_main {
+  margin-top: 48px;
+}
+.home_information .home_information_main .information {
+  float: left;
+  width: 334px;
+  padding: 22px 36px 22px 24px;
+  margin-right: 9px;
+  background: #f3fdf9;
+}
+.home_information .home_information_main .information h2 {
+  border-bottom: 1px solid #d9d8d8;
+  font-family: "微软雅黑";
+  font-size: 20px;
+  line-height: 36px;
+}
+.home_information .home_information_main .information h2 a {
+  float: right;
+  color: #666666;
+  font-family: "宋体";
+  font-size: 12px;
+}
+.home_information .home_information_main .information ul {
+  margin-top: 16px;
+}
+.home_information .home_information_main .information ul li {
+  list-style: disc inside;
+  color: #41b98d;
+  line-height: 36px;
+}
+.home_information .home_information_main .information ul li a {
+  color: #666666;
+}
+.home_information .home_information_main .information ul li a:hover, .home_information .home_information_main .information .user_nav ul li .user_led, .user_nav .home_information .home_information_main .information ul li .user_led {
+  color: #41b98d;
+}
+.home_information .home_information_main .cjwt {
+  background: #fff6fa;
+}
+.home_information .home_information_main .last {
+  margin-right: 0;
+}
+
+/*优势*/
+.home_advantage {
+  width: 100%;
+  height: 226px;
+  padding-top: 10px;
+  background: url(../images/home_advantage_bg.png) center top no-repeat;
+}
+.home_advantage ul {
+  margin: 0 80px;
+}
+.home_advantage ul li {
+  float: left;
+  width: 168px;
+  margin-right: 40px;
+  text-align: center;
+}
+.home_advantage ul li h2 {
+  margin: 28px 0 12px 0;
+  font-family: "微软雅黑";
+  font-size: 24px;
+}
+.home_advantage ul li p {
+  font-family: "微软雅黑";
+  color: #999999;
+}
+.home_advantage ul .last {
+  margin-right: 0;
+}
+
+/*index-1*/
+.home_cemetery_com {
+  margin-bottom: 40px;
+}
+.home_cemetery_com .home_title {
+  margin-top: 0;
+}
+.home_cemetery_com .home_cemetery_main {
+  margin-top: 36px;
+}
+.home_cemetery_com .home_cemetery_main ul li {
+  float: left;
+  width: 294px;
+  margin-right: 5px;
+  border: 1px solid #e9e9e9;
+}
+.home_cemetery_com .home_cemetery_main ul li:hover {
+  border: 1px solid #99dfc5;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_img {
+  position: relative;
+  width: 294px;
+  height: 158px;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_img img {
+  width: 294px;
+  height: 158px;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_img .location {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 284px;
+  padding: 0 5px;
+  background: url(../images/home_cemetery_main_locationbg.png);
+  line-height: 20px;
+  text-align: right;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_img .location a {
+  color: #fff;
+  font-size: 12px;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_img .location i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -1501px;
+  height: 13px;
+  width: 9px;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_text {
+  background: #fff;
+  text-align: center;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_text h2 {
+  padding-top: 12px;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_text h2 a {
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_text p {
+  padding: 14px 0;
+  font-family: "微软雅黑";
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_text p span {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 20px;
+  font-weight: 700;
+}
+.home_cemetery_com .home_cemetery_main ul li .home_cemetery_main_text p span i {
+  font-family: "微软雅黑";
+  font-size: 12px;
+  font-weight: 400;
+}
+.home_cemetery_com .home_cemetery_main .last {
+  margin-right: 0;
+}
+
+/*陵园墓地*/
+.cemetery_list {
+  padding-bottom: 50px;
+  margin-top: 20px;
+  border: 1px solid #eaeaea;
+  background: #fff;
+}
+.cemetery_list .cemetery_list_rank {
+  padding-left: 22px;
+  background: #f8f8f8;
+  line-height: 46px;
+}
+.cemetery_list .cemetery_list_rank a {
+  margin-right: 28px;
+  color: #666666;
+  font-family: "微软雅黑";
+}
+.cemetery_list .cemetery_list_rank .led {
+  color: #41b98d;
+}
+.cemetery_list .cemetery_list_box {
+  padding: 0 42px 0 22px;
+  border: 2px solid #fff;
+}
+.cemetery_list .cemetery_list_box:hover {
+  border: 2px solid #41b98d;
+}
+.cemetery_list .cemetery_list_box .last {
+  border-bottom: none;
+}
+.cemetery_list .cemetery_list_main {
+  padding: 20px 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_img {
+  position: relative;
+  float: left;
+  width: 250px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_img img {
+  width: 250px;
+  height: 132px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_img .ygwicon {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background-position: 0 -215px;
+  height: 36px;
+  width: 62px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info {
+  float: left;
+  width: 360px;
+  margin-left: 24px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info h2 {
+  line-height: 32px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info h2 a {
+  float: left;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info h2 span {
+  float: left;
+  margin-left: 22px;
+  color: #848484;
+  font-family: Arial;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info h2 span i {
+  margin: 0 4px 3px 0;
+  background-position: 0 -189px;
+  height: 11px;
+  width: 15px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info p {
+  float: left;
+  margin-right: 22px;
+  line-height: 32px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info p font {
+  color: #999999;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info .lookmap {
+  color: #848484;
+  font-size: 12px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info .lookmap i {
+  margin: 0 4px 3px 0;
+  background-position: 0 -202px;
+  height: 11px;
+  width: 8px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info ul li {
+  float: left;
+  padding: 0 12px;
+  margin: 10px 8px 0 0;
+  border: 1px solid #99dfc5;
+  color: #41b98d;
+  font-size: 12px;
+  line-height: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_info ul li:hover {
+  background: #41b98d;
+  color: #fff;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_consult {
+  float: left;
+  width: 30px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_consult img {
+  margin-top: 86px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_price {
+  float: right;
+  width: 130px;
+  padding-top: 16px;
+  text-align: center;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_price .ckj {
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_price p {
+  margin: 8px 0 14px 0;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_price p i {
+  font-size: 20px;
+}
+.cemetery_list .cemetery_list_main .cemetery_list_main_price p span {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/*殡仪馆*/
+.funeralparlour_list .funeralparlour_list_main_info {
+  float: left;
+  width: 360px;
+  margin-left: 24px;
+}
+.funeralparlour_list .funeralparlour_list_main_info h2 {
+  margin-bottom: 10px;
+  line-height: 32px;
+}
+.funeralparlour_list .funeralparlour_list_main_info h2 a {
+  float: left;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.funeralparlour_list .funeralparlour_list_main_info p {
+  font-family: "微软雅黑";
+  line-height: 26px;
+}
+.funeralparlour_list .funeralparlour_list_main_info p span {
+  color: #999999;
+}
+.funeralparlour_list .funeralparlour_list_main_info .phone {
+  color: #41b98d;
+  font-family: Arial;
+  font-weight: 700;
+}
+.funeralparlour_list .funeralparlour_list_main_info .num {
+  color: #333333;
+  font-family: Arial;
+}
+.funeralparlour_list .funeralparlour_list_main .funeralparlour_list_main_price {
+  padding-top: 44px;
+}
+
+/*陵园详情*/
+.cemetery_detail_main {
+  margin-bottom: 42px;
+}
+.cemetery_detail_main .cemetery_detail_main_img {
+  position: relative;
+  float: left;
+  width: 546px;
+}
+.cemetery_detail_main .cemetery_detail_main_img img {
+  width: 546px;
+  height: 296px;
+}
+.cemetery_detail_main .cemetery_detail_main_img .ygwicon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-position: 0 -138px;
+  height: 49px;
+  width: 84px;
+}
+.cemetery_detail_main .cemetery_detail_main_text {
+  float: right;
+  width: 630px;
+}
+.cemetery_detail_main .cemetery_detail_main_text h2 {
+  font-family: "微软雅黑";
+  font-size: 22px;
+  font-weight: 700;
+}
+.cemetery_detail_main .cemetery_detail_main_text h2 a {
+  float: right;
+  color: #ef5980;
+  font-size: 14px;
+  font-weight: 400;
+}
+.cemetery_detail_main .cemetery_detail_main_text h2 a .cemetery_detail_attention_icon {
+  margin: 0 6px 3px 0;
+  background-position: 0 -66px;
+  height: 14px;
+  width: 18px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price {
+  height: 56px;
+  padding: 0 10px 0 6px;
+  margin: 20px 0 14px 0;
+  background: #fff;
+  line-height: 56px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .zxprice {
+  float: left;
+  font-family: "微软雅黑";
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .zxprice font {
+  color: #666666;
+  font-size: 20px;
+  weight: 700;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .zxprice strong {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 26px;
+  font-weight: 700;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .zxprice span {
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .llnum {
+  float: right;
+  color: #848484;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .llnum span {
+  color: #2b916b;
+  font-family: Arial;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .llnum .ll {
+  color: #848484;
+}
+.cemetery_detail_main .cemetery_detail_main_text .price .llnum .fg {
+  color: #62deaf;
+  margin: 0 24px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .address {
+  margin-bottom: 22px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .address p {
+  font-family: "微软雅黑";
+}
+.cemetery_detail_main .cemetery_detail_main_text .address span {
+  float: left;
+}
+.cemetery_detail_main .cemetery_detail_main_text .address .lookmap {
+  margin-left: 22px;
+  color: #848484;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .address .lookmap i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -125px;
+  height: 11px;
+  width: 8px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .setting {
+  margin: 14px 0 0 0;
+}
+.cemetery_detail_main .cemetery_detail_main_text .setting ul li {
+  float: left;
+  padding: 0 12px;
+  margin: 0 8px 0 0;
+  border: 1px solid #99dfc5;
+  color: #41b98d;
+  font-size: 12px;
+  line-height: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.cemetery_detail_main .cemetery_detail_main_text .setting ul li:hover {
+  background: #41b98d;
+  color: #fff;
+}
+.cemetery_detail_main .cemetery_detail_main_text .settingAd {
+  width: 370px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .settingAd ul li {
+  margin: 0 8px 10px 0;
+}
+.cemetery_detail_main .cemetery_detail_main_text .favorable p {
+  float: left;
+  font-family: "微软雅黑";
+  line-height: 28px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .favorable ul {
+  float: left;
+}
+.cemetery_detail_main .cemetery_detail_main_text .favorable ul li {
+  float: left;
+  width: 74px;
+  height: 28px;
+  margin-right: 10px;
+  border: 1px solid #999999;
+  font-size: 12px;
+  text-align: center;
+  line-height: 28px;
+  cursor: pointer;
+}
+.cemetery_detail_main .cemetery_detail_main_text .favorable ul li i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -82px;
+  height: 13px;
+  width: 14px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .favorable ul li:hover {
+  border: 1px solid #41b98d;
+}
+.cemetery_detail_main .cemetery_detail_main_text .favorable ul li:hover i {
+  background-position: 0 -97px;
+  height: 13px;
+  width: 14px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .btn {
+  margin-top: 26px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .btn a {
+  float: left;
+}
+.cemetery_detail_main .cemetery_detail_main_text .btn .btnleft {
+  margin-right: 18px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .infoAd {
+  margin: 26px 0 28px 0;
+}
+.cemetery_detail_main .cemetery_detail_main_text .infoAd ul li {
+  float: left;
+  width: 156px;
+  border-right: 1px solid #41b98d;
+  color: #666666;
+  font-size: 12px;
+  text-align: center;
+}
+.cemetery_detail_main .cemetery_detail_main_text .infoAd ul li span {
+  display: block;
+  margin-bottom: 10px;
+  color: #333333;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.cemetery_detail_main .cemetery_detail_main_text .infoAd .phoneAd span {
+  color: #ef5980;
+}
+.cemetery_detail_main .cemetery_detail_main_text .infoAd .last {
+  border-right: none;
+}
+.cemetery_detail_main .cemetery_detail_main_text .addressAd {
+  margin-bottom: 18px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .addressAd span {
+  color: #666666;
+  font-size: 12px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .addressAd .lookmap {
+  margin-left: 22px;
+  color: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+.cemetery_detail_main .cemetery_detail_main_text .addressAd .lookmap i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -112px;
+  height: 11px;
+  width: 8px;
+}
+
+/*详情*/
+.cem_detail {
+  border: 1px solid #d2d2d2;
+  background: #fff;
+}
+.cem_detail .cem_detail_title {
+  width: 878px;
+  background: #f2f2f2;
+  z-index: 99;
+}
+.cem_detail .cem_detail_title ul li {
+  float: left;
+  width: 128px;
+  line-height: 50px;
+}
+.cem_detail .cem_detail_title ul li a {
+  display: block;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  text-align: center;
+  line-height: 50px;
+}
+.cem_detail .cem_detail_title ul li a:hover, .cem_detail .cem_detail_title .user_nav ul li .user_led, .user_nav .cem_detail .cem_detail_title ul li .user_led {
+  background: #3fb98d;
+  color: #fff;
+}
+.cem_detail .cem_detail_title ul .thistab a {
+  background: #3fb98d;
+  color: #fff;
+}
+.cem_detail .cem_detail_environment {
+  padding: 0 32px 6px 32px;
+}
+.cem_detail .cem_detail_environment .environment_title ul li {
+  float: left;
+  margin-right: 30px;
+  line-height: 50px;
+}
+.cem_detail .cem_detail_environment .environment_title ul li a {
+  color: #666666;
+  font-family: "微软雅黑";
+}
+.cem_detail .cem_detail_environment .environment_title ul li a:hover, .cem_detail .cem_detail_environment .environment_title .user_nav ul li .user_led, .user_nav .cem_detail .cem_detail_environment .environment_title ul li .user_led {
+  color: #41b98d;
+}
+.cem_detail .cem_detail_environment .environment_title .led a {
+  color: #41b98d;
+}
+.cem_detail .cem_detail_environment .environment ul li {
+  float: left;
+  margin: 0 8px 32px 0;
+}
+.cem_detail .cem_detail_environment .environment ul li img {
+  width: 266px;
+  height: 245px;
+}
+.cem_detail .cem_detail_environment .environment ul li p {
+  margin-top: 16px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  text-align: center;
+}
+.cem_detail .cem_detail_environment .environment ul .last {
+  margin-right: 0;
+}
+.cem_detail .cem_detail_tombtype .sifting {
+  padding: 0 22px 4px 24px;
+  border-bottom: 1px solid #d2d2d2;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.cem_detail .cem_detail_tombtype .tombtype {
+  padding: 24px 24px 30px 30px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li {
+  position: relative;
+  float: left;
+  width: 264px;
+  margin: 0 13px 12px 0;
+  border: 1px solid #d2d2d2;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li:hover {
+  border: 1px solid #41b98d;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li img {
+  width: 264px;
+  height: 242px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .ygwicon {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  background-position: 0 -138px;
+  height: 49px;
+  width: 84px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt {
+  padding: 0 8px 20px 8px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt h2 {
+  margin: 12px 0 8px 0;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt p {
+  font-family: "微软雅黑";
+  line-height: 22px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt p span {
+  color: #999999;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt p strong {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: 700;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt p .yuan {
+  color: #ef5980;
+  font-size: 12px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt .small p {
+  float: left;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .txt .small .smalla {
+  margin-right: 60px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn {
+  margin: 16px 0 0 0;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn a {
+  float: left;
+  width: 84px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn a:hover, .cem_detail .cem_detail_tombtype .tombtype .tombtypeul .user_nav ul li .btn .user_led, .user_nav ul .cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn .user_led {
+  border: 1px solid #2b916b;
+  background: #2b916b;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn .buthui {
+  background: #ccc;
+  border: 1px solid #ccc;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn .buthui:hover {
+  border: 1px solid #ccc;
+  background: #ccc;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn .zxzx {
+  margin-left: 26px;
+  border: 1px solid #41b98d;
+  background: #fff;
+  color: #41b98d;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul li .btn .zxzx:hover {
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  color: #fff;
+}
+.cem_detail .cem_detail_tombtype .tombtype .tombtypeul .last {
+  margin-right: 0;
+}
+.cem_detail .cem_detail_intro {
+  padding: 20px 30px;
+}
+.cem_detail .cem_detail_intro p {
+  margin-bottom: 28px;
+  font-family: "微软雅黑";
+  line-height: 24px;
+}
+.cem_detail .cem_detail_intro .img {
+  text-align: center;
+}
+.cem_detail .cem_detail_intro .img p {
+  margin-top: 18px;
+  font-family: "宋体";
+  font-size: 12px;
+}
+.cem_detail .cem_detail_intro .intro {
+  float: left;
+  margin-left: 38px;
+  text-align: center;
+}
+.cem_detail .cem_detail_intro .intro p {
+  margin-top: 18px;
+  font-family: "宋体";
+  font-size: 12px;
+}
+.cem_detail .cem_detail_celebrity {
+  padding-bottom: 34px;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_box {
+  padding: 0 26px 0 30px;
+  border: 1px solid #fff;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_box:hover {
+  border: 1px solid #41b98d;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_box .last {
+  border-bottom: none;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main {
+  padding: 20px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_img {
+  float: left;
+  width: 140px;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_img img {
+  width: 140px;
+  height: 140px;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_info {
+  float: left;
+  width: 458px;
+  margin-left: 20px;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_info h2 {
+  line-height: 28px;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_info h2 a {
+  color: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 20px;
+  font-weight: 700;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_info h2 span {
+  font-size: 12px;
+  font-weight: 400;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_info h3 {
+  font-family: "微软雅黑";
+  line-height: 30px;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_info p {
+  color: #666666;
+  font-size: 12px;
+  line-height: 24px;
+}
+.cem_detail .cem_detail_celebrity .celebrity_list_main .celebrity_list_main_more {
+  float: right;
+  width: 130px;
+  padding-top: 40px;
+}
+.cem_detail .cem_detail_map {
+  margin: 31px;
+  border: 2px solid #d2d2d2;
+}
+.cem_detail .cem_details_remark {
+  padding: 0 32px 40px 32px;
+}
+.cem_detail .cem_details_remark .cem_details_star {
+  padding-top: 28px;
+}
+.cem_detail .cem_details_remark .cem_details_star .coincide {
+  float: left;
+  width: 134px;
+  text-align: center;
+}
+.cem_detail .cem_details_remark .cem_details_star .coincide p {
+  font-family: "微软雅黑";
+}
+.cem_detail .cem_details_remark .cem_details_star .coincide h2 {
+  color: #41b98d;
+  font-family: Arial;
+  font-size: 36px;
+  font-weight: 700;
+  margin-top: 16px;
+}
+.cem_detail .cem_details_remark .cem_details_star .coincide h2 span {
+  color: #333333;
+  font-size: 12px;
+}
+.cem_detail .cem_details_remark .cem_details_star ul {
+  float: left;
+  width: 500px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+}
+.cem_detail .cem_details_remark .cem_details_star ul li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  white-space: nowrap;
+  float: left;
+  padding-left: left;
+  padding-right: left;
+}
+.cem_detail .cem_details_remark .cem_details_star ul li:first-child {
+  padding-left: 0;
+}
+.cem_detail .cem_details_remark .cem_details_star ul li:last-child {
+  padding-right: 0;
+}
+.cem_detail .cem_details_remark .cem_details_star ul li.last {
+  padding-right: 0;
+}
+.cem_detail .cem_details_remark .cem_details_star ul img {
+  margin: 0 2px 5px 12px;
+  vertical-align: middle;
+}
+.cem_detail .cem_details_remark .cem_details_star ul li {
+  margin: 0 50px 26px 0;
+  font-family: "微软雅黑";
+  font-size: 12px;
+}
+.cem_detail .cem_details_remark .cem_details_star ul .last {
+  margin-right: 0;
+}
+.cem_detail .cem_details_remark .cem_details_star .remark_btn {
+  float: right;
+  width: 86px;
+  padding-top: 10px;
+}
+.cem_detail .cem_details_remark .cem_details_star .remark_btn a {
+  width: 86px;
+  height: 36px;
+  line-height: 36px;
+  background: #ef5980;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-weight: 700;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.cem_detail .cem_details_remark .cem_details_evaluate_title {
+  background: #f2f2f2;
+}
+.cem_detail .cem_details_remark .cem_details_evaluate_title ul li {
+  float: left;
+  margin-left: 18px;
+  font-family: "微软雅黑";
+  font-size: 12px;
+  line-height: 44px;
+}
+.cem_detail .cem_details_remark .cem_details_evaluate_title ul li img {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px 3px 0;
+}
+.cem_detail .cem_details_remark .cem_details_evaluate_title .led {
+  color: #41b98d;
+}
+.cem_detail .cem_details_remark .evaluate_main {
+  padding: 28px 0;
+  margin: 0 16px;
+  border-bottom: 1px solid #f2f2f2;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_yh {
+  float: left;
+  width: 120px;
+  padding-left: 14px;
+  font-family: Arial;
+  font-weight: 700;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_pj {
+  float: left;
+  width: 430px;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_pj p {
+  color: #848484;
+  font-family: "微软雅黑";
+  font-size: 12px;
+  line-height: 20px;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_xing {
+  float: right;
+  margin-right: 40px;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_xing p {
+  font-family: Arial;
+  font-size: 12px;
+  text-align: right;
+  margin-top: 12px;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_zj {
+  padding: 18px 0;
+  margin: 24px 42px 0 134px;
+  border-top: 1px dashed #f1f1f1;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_zj h6 {
+  margin-bottom: 8px;
+  font-family: "微软雅黑";
+  font-size: 12px;
+  font-weight: 700;
+}
+.cem_detail .cem_details_remark .evaluate_main .evaluate_main_zj p {
+  width: 430px;
+  color: #848484;
+  font-family: "微软雅黑";
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.tooltip_remark {
+  padding-bottom: 48px;
+}
+.tooltip_remark h2 {
+  background: #f2f2f2;
+  padding-left: 30px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 50px;
+}
+.tooltip_remark .title {
+  display: block;
+  float: left;
+  width: 62px;
+  height: 60px;
+  color: #999999;
+  line-height: 26px;
+}
+.tooltip_remark .pf {
+  margin: 46px 0 0 62px;
+}
+.tooltip_remark .pf ul li {
+  float: left;
+  margin: 0 142px 26px 0;
+  font-size: 12px;
+}
+.tooltip_remark .pf ul li img {
+  margin: 0 10px 5px 12px;
+  vertical-align: middle;
+}
+.tooltip_remark .pf ul .last {
+  margin-right: 0;
+}
+.tooltip_remark .ms {
+  margin: 14px 0 0 62px;
+}
+.tooltip_remark .ms .ms_tarea {
+  width: 540px;
+  height: 128px;
+  padding: 6px 14px;
+  border: 1px solid #d2d2d2;
+}
+.tooltip_remark .phone {
+  margin: 26px 0 0 62px;
+}
+.tooltip_remark .phone .title {
+  height: 28px;
+}
+.tooltip_remark .phone .phone_txt {
+  width: 172px;
+  height: 28px;
+  padding: 0 14px;
+  border: 1px solid #d2d2d2;
+}
+.tooltip_remark .niname {
+  width: 76px;
+  margin: 12px 0 0 124px;
+  font-family: "微软雅黑";
+  cursor: pointer;
+}
+.tooltip_remark .niname span {
+  margin: 0 6px 3px 0;
+  background-position: 0 -2166px;
+  height: 13px;
+  width: 13px;
+}
+.tooltip_remark .niname span:hover, .tooltip_remark .niname span.tooltip_remark_niname-hover {
+  background-position: 0 -2181px;
+}
+.tooltip_remark .niname .niname_hover {
+  background-position: 0 -2181px;
+  height: 13px;
+  width: 13px;
+}
+.tooltip_remark .remark_btn {
+  margin: 14px 0 0 588px;
+}
+.tooltip_remark .remark_btn a {
+  width: 110px;
+  height: 38px;
+  line-height: 38px;
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.tooltip_remark .tooltip_remark_close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background-position: 0 -2147px;
+  height: 17px;
+  width: 17px;
+  cursor: pointer;
+}
+
+/*殡仪馆详情*/
+.funeralparlour_detail_main {
+  margin-bottom: 42px;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_img {
+  float: left;
+  width: 545px;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_img img {
+  width: 525px;
+  height: 293px;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text {
+  float: right;
+  width: 630px;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text h2 {
+  font-family: "微软雅黑";
+  font-size: 22px;
+  font-weight: 700;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text .txt {
+  padding: 6px 14px;
+  margin-top: 22px;
+  background: #fff;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text .txt p {
+  font-family: "微软雅黑";
+  line-height: 24px;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text ul {
+  margin-top: 22px;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text ul li {
+  list-style: disc inside;
+  color: #41b98d;
+  font-family: "微软雅黑";
+  line-height: 30px;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text ul li p {
+  display: inline-block;
+  font-family: "微软雅黑";
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text ul li span {
+  color: #ef5980;
+}
+.funeralparlour_detail_main .funeralparlour_detail_main_text ul li .phone {
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/*殡仪馆介绍*/
+.funeralparlour_detail {
+  padding: 0 40px 30px 30px;
+  border: 1px solid #d2d2d2;
+}
+.funeralparlour_detail h2 {
+  margin-bottom: 20px;
+  border-bottom: 1px dashed #d2d2d2;
+  font-family: "微软雅黑";
+  font-size: 20px;
+  line-height: 48px;
+}
+.funeralparlour_detail h2 i {
+  margin: 0 10px 3px 0;
+}
+.funeralparlour_detail h2 .funeralparlour_introduce_icon {
+  background-position: 0 -753px;
+  height: 20px;
+  width: 16px;
+}
+.funeralparlour_detail h2 .funeralparlour_traffic_icon {
+  background-position: 0 -775px;
+  height: 23px;
+  width: 16px;
+}
+.funeralparlour_detail .funeralparlour_detail_text p {
+  margin-bottom: 20px;
+  font-family: "微软雅黑";
+  color: #666666;
+  line-height: 24px;
+}
+.funeralparlour_detail .funeralparlour_detail_map {
+  width: 806px;
+  height: 480px;
+  border: 2px solid #d2d2d2;
+}
+
+/*殡葬礼仪*/
+.etiquette_list .etiquette_list_main .cemetery_list_main_img img {
+  width: 250px;
+  height: 176px;
+}
+.etiquette_list .etiquette_list_main .etiquette_list_main_info .yunum {
+  font-family: Arial;
+  color: #ef5980;
+}
+.etiquette_list .etiquette_list_main .etiquette_list_main_price {
+  padding-top: 66px;
+}
+.etiquette_list .etiquette_list_main .cemetery_list_main_consult {
+  float: left;
+  width: 30px;
+}
+.etiquette_list .etiquette_list_main .cemetery_list_main_consult img {
+  margin-top: 78px;
+}
+
+/*殡葬礼仪详情*/
+.etiquette_detail_main {
+  width: 1152px;
+  padding: 18px 28px 18px 20px;
+  margin-bottom: 34px;
+  background: #fff;
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.etiquette_detail_main .etiquette_detail_main_img {
+  float: left;
+  width: 250px;
+}
+.etiquette_detail_main .etiquette_detail_main_img img {
+  width: 250px;
+  height: 176px;
+}
+.etiquette_detail_main .etiquette_detail_main_text {
+  float: left;
+  width: 489px;
+  margin-left: 20px;
+}
+.etiquette_detail_main .etiquette_detail_main_text h2 {
+  font-family: "微软雅黑";
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 36px;
+}
+.etiquette_detail_main .etiquette_detail_main_text p {
+  font-family: "微软雅黑";
+  line-height: 28px;
+}
+.etiquette_detail_main .etiquette_detail_main_text p span {
+  color: #999999;
+}
+.etiquette_detail_main .etiquette_detail_main_text p font {
+  color: #41b98d;
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: 700;
+}
+.etiquette_detail_main .etiquette_detail_main_text p .fwqy {
+  float: left;
+  width: 74px;
+}
+.etiquette_detail_main .etiquette_detail_main_text p .dq {
+  float: left;
+  width: 400px;
+  color: #333333;
+}
+.etiquette_detail_main .etiquette_detail_main_text .num span {
+  margin-left: 36px;
+}
+.etiquette_detail_main .etiquette_detail_main_text .num .first {
+  margin-left: 0;
+}
+.etiquette_detail_main .etiquette_detail_main_btn {
+  float: right;
+  width: 272px;
+  padding-top: 54px;
+}
+.etiquette_detail_main .etiquette_detail_main_btn a {
+  float: left;
+}
+.etiquette_detail_main .etiquette_detail_main_btn .buttonlv {
+  margin-right: 12px;
+}
+
+/*服务套餐*/
+.etiquette_detail_package .sifting {
+  padding: 0 22px 4px 24px;
+  border-bottom: 1px solid #d2d2d2;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.etiquette_detail_package .package {
+  padding: 24px 24px 30px 30px;
+}
+.etiquette_detail_package .package .packageul li {
+  float: left;
+  width: 264px;
+  margin: 0 13px 12px 0;
+  border: 1px solid #d2d2d2;
+}
+.etiquette_detail_package .package .packageul li:hover {
+  border: 1px solid #41b98d;
+}
+.etiquette_detail_package .package .packageul li img {
+  width: 264px;
+  height: 242px;
+}
+.etiquette_detail_package .package .packageul li .txt {
+  padding: 0 8px 20px 8px;
+  text-align: center;
+}
+.etiquette_detail_package .package .packageul li .txt h2 {
+  margin: 12px 0 8px 0;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.etiquette_detail_package .package .packageul li .txt p {
+  color: #999999;
+  font-family: "微软雅黑";
+  line-height: 22px;
+}
+.etiquette_detail_package .package .packageul li .txt p strong {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: 700;
+}
+.etiquette_detail_package .package .packageul li .txt p .yuan {
+  color: #ef5980;
+  font-size: 12px;
+}
+.etiquette_detail_package .package .packageul li .btn {
+  margin: 16px 0 0 28px;
+}
+.etiquette_detail_package .package .packageul li .btn a {
+  float: left;
+  width: 84px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.etiquette_detail_package .package .packageul li .btn a:hover, .etiquette_detail_package .package .packageul .user_nav ul li .btn .user_led, .user_nav ul .etiquette_detail_package .package .packageul li .btn .user_led {
+  border: 1px solid #2b916b;
+  background: #2b916b;
+}
+.etiquette_detail_package .package .packageul li .btn .zxzx {
+  margin-left: 26px;
+  border: 1px solid #41b98d;
+  background: #fff;
+  color: #41b98d;
+}
+.etiquette_detail_package .package .packageul li .btn .zxzx:hover {
+  border: 1px solid #41b98d;
+  background: #41b98d;
+  color: #fff;
+}
+.etiquette_detail_package .package .packageul .last {
+  margin-right: 0;
+}
+
+/*殡葬百科*/
+.fe_main {
+  margin-top: 28px;
+}
+.fe_main .fe_title {
+  position: relative;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #d9d8d8;
+}
+.fe_main .fe_title h2 {
+  float: left;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  font-weight: 700;
+}
+.fe_main .fe_title ul {
+  float: right;
+}
+.fe_main .fe_title ul li {
+  float: left;
+  margin-left: 10px;
+  line-height: 30px;
+}
+.fe_main .fe_title ul li a {
+  display: block;
+  padding: 0 20px;
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+}
+.fe_main .fe_title ul li a:hover, .fe_main .fe_title .user_nav ul li .user_led, .user_nav .fe_main .fe_title ul li .user_led {
+  background: #2b916b;
+}
+.fe_main .fe_title .more {
+  float: right;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 24px;
+}
+.fe_main .fe_title .more a {
+  color: #666666;
+}
+.fe_main .fe_title .bg {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 96px;
+  height: 4px;
+  background: url(../images/fe_main_h2_bg.jpg) no-repeat;
+}
+.fe_main .fe_hot {
+  height: 388px;
+}
+.fe_main .fe_hot .fe_hot_left {
+  float: left;
+  width: 540px;
+}
+.fe_main .fe_hot .fe_hot_left ul {
+  margin-top: 38px;
+}
+.fe_main .fe_hot .fe_hot_left ul li {
+  list-style: disc inside;
+  margin-bottom: 36px;
+}
+.fe_main .fe_hot .fe_hot_left ul li h3 {
+  display: inline-block;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.fe_main .fe_hot .fe_hot_left ul li h3 a:hover, .fe_main .fe_hot .fe_hot_left .user_nav ul li h3 .user_led, .user_nav .fe_main .fe_hot .fe_hot_left ul li h3 .user_led {
+  color: #41b98d;
+}
+.fe_main .fe_hot .fe_hot_left ul li p {
+  margin: 14px 0 0 12px;
+  font-family: "微软雅黑";
+}
+.fe_main .fe_hot .fe_hot_left ul .last {
+  margin-bottom: 0;
+}
+.fe_main .fe_hot .fe_hot_right {
+  float: right;
+  width: 622px;
+}
+.fe_main .fe_hot .fe_hot_right .fe_hot_flexslider ul li {
+  position: relative;
+}
+.fe_main .fe_hot .fe_hot_right .fe_hot_flexslider ul li h3 {
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 606px;
+  padding-left: 16px;
+  background: url(../images/fe_hot_flexslider_h3.png) repeat-x;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 42px;
+}
+.fe_main .fe_type_a li {
+  border-bottom: 1px solid #d9d8d8;
+  padding: 20px 0;
+}
+.fe_main .fe_type_a li:first-child {
+  padding-top: 0;
+}
+.fe_main .fe_type_a li:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.fe_main .fe_type_a .fe_type_a_img {
+  float: left;
+  width: 160px;
+}
+.fe_main .fe_type_a .fe_type_a_img img {
+  width: 160px;
+  height: 100px;
+}
+.fe_main .fe_type_a .fe_type_a_text {
+  float: right;
+  width: 446px;
+}
+.fe_main .fe_type_a .fe_type_a_text h3 {
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.fe_main .fe_type_a .fe_type_a_text h3 a:hover, .fe_main .fe_type_a .fe_type_a_text h3 .user_nav ul li .user_led, .user_nav ul li .fe_main .fe_type_a .fe_type_a_text h3 .user_led {
+  color: #41b98d;
+}
+.fe_main .fe_type_a .fe_type_a_text .time {
+  color: #999999;
+  font-size: 12px;
+}
+.fe_main .fe_type_a .fe_type_a_text p {
+  margin-top: 6px;
+  font-family: "微软雅黑";
+  line-height: 24px;
+}
+.fe_main .fe_type_b ul {
+  margin-top: 22px;
+}
+.fe_main .fe_type_b ul li {
+  list-style: disc inside;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 36px;
+}
+.fe_main .fe_type_b ul li a {
+  color: #333333;
+}
+.fe_main .fe_type_b ul li a:hover, .fe_main .fe_type_b .user_nav ul li .user_led, .user_nav .fe_main .fe_type_b ul li .user_led {
+  color: #41b98d;
+}
+.fe_main .fe_type_b ul li:first-child {
+  font-size: 18px;
+  font-weight: 700;
+}
+.fe_main .fe_type_c .img {
+  position: relative;
+  margin-bottom: 10px;
+}
+.fe_main .fe_type_c .img img {
+  display: block;
+  width: 540px;
+  height: 338px;
+}
+.fe_main .fe_type_c .img h3 {
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 524px;
+  padding-left: 16px;
+  background: url(../images/fe_hot_flexslider_h3.png) repeat-x;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 42px;
+}
+.fe_main .fe_type_c .img h3 a {
+  color: #fff;
+}
+.fe_main .fe_type_c ul li {
+  list-style: disc inside;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 44px;
+}
+.fe_main .fe_type_c ul li a {
+  color: #333333;
+}
+.fe_main .fe_type_c ul li a:hover, .fe_main .fe_type_c .user_nav ul li .user_led, .user_nav .fe_main .fe_type_c ul li .user_led {
+  color: #41b98d;
+}
+.fe_main .fe_information {
+  height: 746px;
+  margin-top: 40px;
+}
+.fe_main .fe_information .fe_information_left {
+  float: left;
+  width: 540px;
+  margin-top: 26px;
+}
+.fe_main .fe_information .fe_information_left .first img {
+  width: 540px;
+  height: 338px;
+}
+.fe_main .fe_information .fe_information_left .first h3 {
+  margin: 24px 0 8px 0;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.fe_main .fe_information .fe_information_left .first h3 a {
+  position: relative;
+}
+.fe_main .fe_information .fe_information_left .first h3 a i {
+  position: absolute;
+  top: -18px;
+  right: -44px;
+  display: block;
+  width: 42px;
+  height: 23px;
+  background: url(../images/fe_information_zxicon.gif);
+}
+.fe_main .fe_information .fe_information_left .first h3 a:hover, .fe_main .fe_information .fe_information_left .first h3 .user_nav ul li .user_led, .user_nav ul li .fe_main .fe_information .fe_information_left .first h3 .user_led {
+  color: #41b98d;
+}
+.fe_main .fe_information .fe_information_left .first p {
+  font-family: "微软雅黑";
+  line-height: 24px;
+}
+.fe_main .fe_information .fe_information_left .first p a {
+  color: #41b98d;
+}
+.fe_main .fe_information .fe_information_left ul {
+  margin-top: 10px;
+}
+.fe_main .fe_information .fe_information_left ul li {
+  list-style: disc inside;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 44px;
+}
+.fe_main .fe_information .fe_information_left ul li a {
+  color: #333333;
+}
+.fe_main .fe_information .fe_information_left ul li a:hover, .fe_main .fe_information .fe_information_left .user_nav ul li .user_led, .user_nav .fe_main .fe_information .fe_information_left ul li .user_led {
+  color: #41b98d;
+}
+.fe_main .fe_information .fe_information_right {
+  float: right;
+  width: 622px;
+  margin-top: 26px;
+}
+.fe_main .fe_dynamic {
+  height: 665px;
+  margin-top: 40px;
+}
+.fe_main .fe_dynamic .fe_dynamic_left {
+  float: left;
+  width: 540px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right {
+  float: right;
+  width: 622px;
+  margin-top: 30px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right img {
+  display: block;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_img1 {
+  position: relative;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_img1 img {
+  width: 622px;
+  height: 388px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_img1 h3 {
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 606px;
+  padding-left: 16px;
+  background: url(../images/fe_hot_flexslider_h3.png) repeat-x;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 42px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_imgbottom {
+  margin-top: 12px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_imgbottom ul li {
+  position: relative;
+  float: left;
+  width: 306px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_imgbottom ul li img {
+  width: 306px;
+  height: 192px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_imgbottom ul li h3 {
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  height: 30px;
+  width: 294px;
+  padding-left: 12px;
+  background: url(../images/fe_hot_flexslider_h3.png) repeat-x;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-weight: 700;
+  line-height: 30px;
+}
+.fe_main .fe_dynamic .fe_dynamic_right .fe_dynamic_imgbottom .first {
+  margin-right: 10px;
+}
+.fe_main .fe_culture {
+  height: 744px;
+  margin-top: 40px;
+}
+.fe_main .fe_culture .fe_culture_left {
+  float: left;
+  width: 540px;
+}
+.fe_main .fe_culture .fe_culture_left .fe_title {
+  margin-bottom: 42px;
+}
+.fe_main .fe_culture .fe_culture_right {
+  float: right;
+  width: 622px;
+}
+.fe_main .fe_culture .fe_culture_right .fe_title {
+  margin-bottom: 24px;
+}
+.fe_main .fe_folkways {
+  height: 664px;
+  margin-top: 40px;
+}
+.fe_main .fe_folkways .fe_folkways_left {
+  float: left;
+  width: 540px;
+}
+.fe_main .fe_folkways .fe_folkways_right {
+  float: right;
+  width: 622px;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main {
+  float: left;
+  margin-top: 28px;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main .img {
+  position: relative;
+  margin-bottom: 16px;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main .img img {
+  display: block;
+  width: 304px;
+  height: 192px;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main .img h3 {
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 292px;
+  height: 30px;
+  padding-left: 12px;
+  background: url(../images/fe_hot_flexslider_h3.png) repeat-x;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-weight: 700;
+  line-height: 30px;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main ul li {
+  list-style: disc inside;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 36px;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main ul li a {
+  color: #333333;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main ul li a:hover, .fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main .user_nav ul li .user_led, .user_nav .fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main ul li .user_led {
+  color: #41b98d;
+}
+.fe_main .fe_folkways .fe_folkways_right .fe_folkways_right_main ul li:nth-child(odd) {
+  font-weight: 700;
+}
+.fe_main .fe_folkways .fe_folkways_right .left {
+  margin-right: 10px;
+}
+.fe_main .fe_life {
+  height: 744px;
+  margin-top: 40px;
+}
+.fe_main .fe_life .fe_life_left {
+  float: left;
+  width: 540px;
+}
+.fe_main .fe_life .fe_life_left .fe_title {
+  margin-bottom: 42px;
+}
+.fe_main .fe_life .fe_life_right {
+  float: right;
+  width: 622px;
+}
+.fe_main .fe_life .fe_life_right .fe_title {
+  margin-bottom: 24px;
+}
+
+/*殡葬百科列表页*/
+.fe_list {
+  padding-bottom: 50px;
+  border: 1px solid #eaeaea;
+  background: #fff;
+}
+.fe_list .fe_list_box {
+  padding: 0 30px 0 22px;
+  border: 2px solid #fff;
+}
+.fe_list .fe_list_box:hover {
+  border: 2px solid #41b98d;
+}
+.fe_list .fe_list_box .last {
+  border-bottom: none;
+}
+.fe_list .fe_list_main {
+  padding: 20px 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+.fe_list .fe_list_main .fe_list_main_img {
+  float: left;
+  width: 160px;
+}
+.fe_list .fe_list_main .fe_list_main_img img {
+  width: 160px;
+  height: 100px;
+}
+.fe_list .fe_list_main .fe_list_main_text {
+  float: right;
+  width: 584px;
+  padding-right: 26px;
+}
+.fe_list .fe_list_main .fe_list_main_text h2 {
+  margin-bottom: 6px;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+}
+.fe_list .fe_list_main .fe_list_main_text h2 span {
+  color: #ef5980;
+}
+.fe_list .fe_list_main .fe_list_main_text p {
+  font-family: "微软雅黑";
+  line-height: 26px;
+}
+.fe_list .fe_list_main .fe_list_main_text .source {
+  color: #666666;
+  font-size: 12px;
+  font-weight: 700;
+}
+.fe_list .fe_list_main .fe_list_main_text .source .time {
+  float: right;
+}
+.fe_list .fe_list_main .fe_list_main_text .source .time .pageviews {
+  margin-left: 54px;
+}
+.fe_list .fe_list_main .fe_list_main_text .source .time .pageviews i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -740px;
+  height: 11px;
+  width: 15px;
+}
+
+/*殡葬百科详情*/
+.fe_detail {
+  padding: 36px 30px 64px 34px;
+  background: #fff;
+  border: 1px solid #d9d8d8;
+}
+.fe_detail h2 {
+  text-align: center;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  font-weight: 700;
+}
+.fe_detail .source {
+  margin-top: 26px;
+  color: #666666;
+  text-align: center;
+  font-family: "微软雅黑";
+  font-size: 12px;
+  font-weight: 700;
+}
+.fe_detail .source i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -740px;
+  height: 11px;
+  width: 15px;
+}
+.fe_detail .fe_detail_main {
+  padding-bottom: 20px;
+  margin-top: 50px;
+  border-bottom: 1px solid #e7e7e7;
+}
+.fe_detail .fe_detail_main p {
+  margin-bottom: 30px;
+  font-family: "微软雅黑";
+  line-height: 30px;
+  text-indent: 2em;
+}
+.fe_detail .fe_detail_main .img {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.fe_detail .pageturning {
+  padding: 20px;
+  border-bottom: 1px solid #e7e7e7;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 36px;
+}
+
+/*生态葬*/
+.eb_banner {
+  width: 100%;
+  height: 518px;
+  background: url(../images/eb_banner.jpg) center top no-repeat;
+}
+
+/*生态葬简介*/
+.eb_intro {
+  width: 100%;
+  padding: 18px 0 46px 0;
+  background: #64a49d;
+}
+.eb_intro .eb_intro_main {
+  margin: 0 86px;
+  border-bottom: 1px dashed #fff;
+}
+.eb_intro .eb_intro_main span {
+  color: #fff;
+  float: left;
+  width: 62px;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 90px;
+}
+.eb_intro .eb_intro_main .eb_intro_text {
+  float: right;
+  width: 940px;
+}
+.eb_intro .eb_intro_main .eb_intro_text p {
+  margin-bottom: 30px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 30px;
+}
+.eb_intro .eb_intro_policies {
+  margin: 0 86px;
+}
+.eb_intro .eb_intro_policies h2 {
+  margin: 34px 0 20px 0;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 22px;
+}
+.eb_intro .eb_intro_policies ul li {
+  float: left;
+  width: 266px;
+  margin-right: 115px;
+  font-family: "微软雅黑";
+  line-height: 30px;
+}
+.eb_intro .eb_intro_policies ul li a {
+  color: #fff;
+}
+.eb_intro .eb_intro_policies .last {
+  margin-right: 0;
+}
+
+/*生态葬内容*/
+.eb_main {
+  padding: 120px 140px 74px 140px;
+}
+.eb_main .eb_main_intro .eb_main_intro_img {
+  float: left;
+  width: 452px;
+  text-align: right;
+}
+.eb_main .eb_main_intro .eb_main_intro_text {
+  float: right;
+  width: 358px;
+  margin-right: 74px;
+}
+.eb_main .eb_main_intro .eb_main_intro_text h2 {
+  margin-top: 28px;
+  color: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 36px;
+}
+.eb_main .eb_main_intro .eb_main_intro_text h2 strong {
+  font-weight: 700;
+}
+.eb_main .eb_main_intro .eb_main_intro_text p {
+  margin-top: 20px;
+  font-family: "微软雅黑";
+  line-height: 30px;
+}
+.eb_main .eb_main_list {
+  margin-top: 24px;
+}
+.eb_main .eb_main_list h2 {
+  background: url(../images/eb_main_list_h2bg.png) no-repeat;
+  background-position: center center;
+  text-align: center;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  line-height: 72px;
+}
+.eb_main .eb_main_list ul li {
+  float: left;
+  width: 294px;
+  margin-right: 16px;
+  border: 1px solid #f7f7f7;
+}
+.eb_main .eb_main_list ul li:hover {
+  border: 1px solid #99dfc5;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_img {
+  position: relative;
+  width: 294px;
+  height: 158px;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_img img {
+  width: 294px;
+  height: 158px;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_img .location {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 284px;
+  padding: 0 5px;
+  background: url(../images/home_cemetery_main_locationbg.png);
+  line-height: 20px;
+  text-align: right;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_img .location a {
+  color: #fff;
+  font-size: 12px;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_img .location i {
+  margin: 0 6px 3px 0;
+  background-position: 0 -1501px;
+  height: 13px;
+  width: 9px;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_text {
+  text-align: center;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_text h3 {
+  margin-top: 12px;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_text h3 a {
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_text p {
+  margin: 14px 0;
+  font-family: "微软雅黑";
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_text p span {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 20px;
+  font-weight: 700;
+}
+.eb_main .eb_main_list ul li .home_cemetery_main_text p span i {
+  font-family: "微软雅黑";
+  font-size: 12px;
+  font-weight: 400;
+}
+.eb_main .eb_main_list .last {
+  margin-right: 0;
+}
+
+.eb_main_a {
+  background: #e8f1ee;
+}
+.eb_main_a .eb_main_list ul li {
+  border: 1px solid #e8f1ee;
+}
+
+.eb_main_b .eb_main_intro .eb_main_intro_img {
+  float: right;
+  width: 452px;
+  text-align: left;
+}
+.eb_main_b .eb_main_intro .eb_main_intro_text {
+  float: left;
+  width: 358px;
+  margin-left: 74px;
+  margin-right: 0;
+}
+
+/*登录*/
+.login_main {
+  width: 100%;
+  height: 546px;
+  border-bottom: 1px solid #e9e9e9;
+}
+.login_main .logbanner {
+  float: left;
+  width: 522px;
+  margin-top: 45px;
+}
+.login_main .login {
+  float: right;
+  margin: 70px 42px 0 0;
+  background-position: 0 -1516px;
+  height: 386px;
+  width: 365px;
+}
+.login_main .login .login_title {
+  height: 32px;
+  margin: 30px 64px 0 48px;
+}
+.login_main .login .login_title ul li {
+  float: left;
+  width: 123px;
+  height: 32px;
+  border-bottom: 2px solid #e9e9e9;
+  font-size: 16px;
+  line-height: 32px;
+}
+.login_main .login .login_title ul li a {
+  width: 123px;
+}
+.login_main .login .login_title ul .thistab a {
+  border-bottom: 2px solid #41b98d;
+  color: #41b98d;
+}
+.login_main .login .login_box_main li {
+  position: relative;
+  padding: 0 64px 0 48px;
+  margin-top: 30px;
+  text-align: center;
+}
+.login_main .login .login_box_main li .login_tex {
+  width: 232px;
+  height: 34px;
+  padding-left: 16px;
+  line-height: 34px/9;
+  border: 1px solid #e9e9e9;
+}
+.login_main .login .login_box_main li .getcode_btn {
+  position: absolute;
+  top: 1px;
+  right: 67px;
+  width: 120px;
+  height: 36px;
+  background: #eeeeee;
+  border: none;
+  color: #41b98d;
+  font-size: 12px;
+  text-align: center;
+  line-height: 36px;
+  cursor: pointer;
+}
+.login_main .login .login_box_main li p {
+  color: #999999;
+  font-size: 13px;
+}
+.login_main .login .login_box_main li .log_check {
+  float: left;
+}
+.login_main .login .login_box_main li .log_check .check {
+  vertical-align: middle;
+  margin-top: 0px;
+}
+.login_main .login .login_box_main li .log_forget {
+  float: right;
+}
+.login_main .login .login_box_main li .log_forget a {
+  color: #999999;
+}
+.login_main .login .login_box_main .getyzm {
+  position: relative;
+}
+.login_main .login .login_box_main .zddl {
+  margin-top: 38px;
+}
+.login_main .login .login_box_main .login_btn {
+  margin-top: 12px;
+}
+.login_main .login .login_box_main .login_btn a {
+  width: 250px;
+  height: 36px;
+  line-height: 36px;
+  background: #41b98d;
+  color: #fff;
+}
+.login_main .login .login_box_main .log_register {
+  margin-top: 16px;
+  font-size: 13px;
+  text-align: right;
+}
+.login_main .login .login_box_main .log_register a {
+  color: #999999;
+}
+.login_main .login .log_validate {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  width: 234px;
+  padding-left: 16px;
+  margin: 0 51px;
+  color: #ff0000;
+  font-size: 12px;
+  text-align: left;
+  line-height: 20px;
+}
+.login_main .login .log_validate_lv {
+  color: #41b98d;
+}
+
+/*注册*/
+.register {
+  padding-bottom: 72px;
+  margin-top: 46px;
+  border-bottom: 1px solid #e9e9e9;
+}
+.register .register_left {
+  float: left;
+  width: 260px;
+  height: 432px;
+  border-right: 1px solid #41b98d;
+  text-align: center;
+}
+.register .register_left p {
+  margin-top: 160px;
+  font-family: "微软雅黑";
+}
+.register .register_left a {
+  width: 116px;
+  height: 36px;
+  line-height: 36px;
+  margin: 22px 0 0 58px;
+  background: #ef5980;
+  color: #fff;
+}
+.register .register_right {
+  float: right;
+  width: 760px;
+  margin-right: 128px;
+}
+.register .register_right h1 {
+  height: 34px;
+  margin-bottom: 34px;
+  border-bottom: 2px solid #e9e9e9;
+  color: #41b98d;
+  font-size: 16px;
+  line-height: 34px;
+}
+.register .register_right h1 span {
+  width: 154px;
+  height: 34px;
+  line-height: 34px;
+  border-bottom: 2px solid #41b98d;
+}
+.register .register_right ul li {
+  margin-bottom: 20px;
+}
+.register .register_right .reg_tex {
+  width: 282px;
+  height: 34px;
+  line-height: 34px;
+  padding-left: 16px;
+  border: 1px solid #e9e9e9;
+}
+.register .register_right .regget_tex {
+  width: 150px;
+}
+.register .register_right .fsyzm .regget_tex {
+  float: left;
+  margin-right: 10px;
+}
+.register .register_right .getcode_btn {
+  float: left;
+  width: 120px;
+  height: 36px;
+  margin-top: 1px;
+  background: #eeeeee;
+  border: none;
+  color: #41b98d;
+  font-size: 12px;
+  text-align: center;
+  line-height: 36px;
+  cursor: pointer;
+}
+.register .register_right .igree {
+  padding-top: 10px;
+  margin-bottom: 10px;
+  color: #41b98d;
+  font-size: 12px;
+}
+.register .register_right .igree .reg_check {
+  margin-top: 0;
+  vertical-align: middle;
+}
+.register .register_right .igree a {
+  color: #41b98d;
+}
+.register .register_right .register_btn {
+  width: 300px;
+  height: 36px;
+  line-height: 36px;
+  background: #41b98d;
+  color: #fff;
+}
+.register .register_right .reg_validate {
+  color: #ff0000;
+  font-size: 12px;
+  margin-left: 24px;
+}
+
+/*弹出协议内容背景层*/
+.igree_box_bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 100;
+  display: none;
+}
+
+/*点击我已阅读了搜墓网的《用户协议》—— 弹出协议内容 */
+.igree_box {
+  width: 924px;
+  height: 500px;
+  z-index: 1000;
+  background: #fff;
+  position: absolute;
+  margin-left: -450px;
+  top: 5%;
+  left: 50%;
+  display: none;
+}
+.igree_box .igree_title {
+  height: 28px;
+  padding: 10px;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+  line-height: 28px;
+}
+.igree_box .igree_main_box {
+  height: 420px;
+}
+.igree_box .igree_main_box .igree_main {
+  height: 365px;
+  padding: 10px 20px 0 10px;
+  margin-top: 5px;
+  overflow: auto;
+}
+.igree_box .igree_main_box .igree_btn {
+  width: 322px;
+  margin: 20px auto 0;
+}
+.igree_box .igree_main_box .igree_btn .igree_btn_img {
+  width: 322px;
+  height: 34px;
+  background: #fe0000;
+  border: none;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 34px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.igree_box .tooltip_cloce {
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  background-position: 0 -2147px;
+  height: 17px;
+  width: 17px;
+  cursor: pointer;
+}
+
+/*名人墓地详情*/
+.celebrities_details h1 {
+  margin-bottom: 28px;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 58px;
+}
+.celebrities_details .celebrities_details_main {
+  padding-bottom: 42px;
+  border: 1px solid #dddddd;
+}
+.celebrities_details .abstract {
+  position: relative;
+  padding: 22px 40px 22px 40px;
+  margin-bottom: 34px;
+  background: #fff;
+  line-height: 28px;
+  text-indent: 2em;
+}
+.celebrities_details .abstract span {
+  display: inline-block;
+  position: absolute;
+  left: 4px;
+  top: -5px;
+  background-position: 0 -14px;
+  height: 43px;
+  width: 36px;
+}
+.celebrities_details .celebrities_details_img {
+  text-align: center;
+}
+.celebrities_details .celebrities_details_img p {
+  margin-top: 16px;
+}
+.celebrities_details .p_main {
+  padding: 0 44px;
+  line-height: 28px;
+  text-indent: 2em;
+}
+.celebrities_details .p_main p {
+  margin: 24px 0 0 0;
+}
+
+/*右侧内容*/
+.celebrities_details_right .resume h1 {
+  margin-bottom: 10px;
+  font-family: "微软雅黑";
+  font-size: 20px;
+  font-weight: 700;
+}
+.celebrities_details_right .resume p {
+  line-height: 24px;
+}
+.celebrities_details_right .resume p span {
+  font-weight: 700;
+}
+.celebrities_details_right .resume img {
+  margin-top: 6px;
+}
+.celebrities_details_right .other {
+  margin-top: 20px;
+  border: 1px solid #e9e9e9;
+}
+.celebrities_details_right .other h2 {
+  padding-left: 6px;
+  margin-bottom: 16px;
+  background: #41b98d;
+  color: #fff;
+  font-weight: 700;
+  line-height: 30px;
+}
+.celebrities_details_right .other ul {
+  padding-bottom: 16px;
+}
+.celebrities_details_right .other ul li {
+  line-height: 24px;
+}
+.celebrities_details_right .other ul li a {
+  font-weight: 700;
+  margin-left: 12px;
+}
+.celebrities_details_right .other ul li span {
+  float: right;
+  margin-right: 50px;
+}
+.celebrities_details_right .other i {
+  display: inline-block;
+  background-position: 0 -59px;
+  height: 5px;
+  width: 5px;
+  margin-right: 88px;
+}
+.celebrities_details_right .attention {
+  margin-top: 20px;
+}
+.celebrities_details_right .attention h2 {
+  background: #e9e9e9;
+  color: #41b98d;
+}
+
+/*殡葬礼仪-服务套餐详情*/
+.etiquette_service {
+  background: #fff;
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.etiquette_service .etiquette_service_info {
+  padding: 22px 24px 32px 24px;
+  border-bottom: 1px solid #e9e9e9;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_img {
+  float: left;
+  width: 360px;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_img img {
+  width: 360px;
+  height: 332px;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text {
+  float: left;
+  width: 546px;
+  margin-left: 26px;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text h2 {
+  font-family: "微软雅黑";
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 36px;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text p {
+  margin-bottom: 16px;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 28px;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text p span {
+  display: inline-block;
+  width: 94px;
+  color: #999999;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text .price strong {
+  color: #ef5980;
+  font-family: Arial;
+  font-size: 26px;
+  font-weight: 700;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text .price font {
+  color: #777777;
+  font-size: 16px;
+  font-weight: 600;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text .price .yuan {
+  color: #666666;
+  font-size: 12px;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text .phone font {
+  color: #41b98d;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: 700;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_text .num .yy {
+  width: 70px;
+  margin-left: 96px;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_btn a {
+  float: left;
+}
+.etiquette_service .etiquette_service_info .etiquette_service_info_btn .buttonbai {
+  margin-left: 18px;
+}
+.etiquette_service .etiquette_service_combo {
+  padding: 26px 40px 18px 40px;
+  border-bottom: 1px solid #e9e9e9;
+}
+.etiquette_service .etiquette_service_combo h2 {
+  margin-bottom: 12px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.etiquette_service .etiquette_service_combo ul li {
+  float: left;
+  width: 322px;
+  margin-right: 56px;
+  font-family: "微软雅黑";
+  line-height: 32px;
+}
+.etiquette_service .etiquette_service_combo ul li a {
+  color: #999999;
+}
+.etiquette_service .etiquette_service_combo .last {
+  margin-right: 0;
+}
+.etiquette_service .etiquette_service_process {
+  padding: 26px 40px 18px 40px;
+}
+.etiquette_service .etiquette_service_process h2 {
+  margin-bottom: 12px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+}
+.etiquette_service .etiquette_service_process_main p {
+  margin-bottom: 28px;
+  font-family: "微软雅黑";
+  line-height: 24px;
+}
+.etiquette_service .etiquette_service_process_main .img {
+  text-align: center;
+}
+.etiquette_service .etiquette_service_process_main .img p {
+  margin-top: 18px;
+  font-family: "宋体";
+  font-size: 12px;
+}
+.etiquette_service .etiquette_service_process_main .intro {
+  float: left;
+  margin-left: 38px;
+  text-align: center;
+}
+.etiquette_service .etiquette_service_process_main .intro p {
+  margin-top: 18px;
+  font-family: "宋体";
+  font-size: 12px;
+}
+
+/*网站地图*/
+.webmap {
+  margin-top: 38px;
+}
+.webmap h2 {
+  float: left;
+  width: 50px;
+  color: #666666;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+.webmap h2 img {
+  margin: 20px 0 10px 0;
+}
+.webmap .webmap_right {
+  float: right;
+  width: 1036px;
+  padding: 0 10px 0 32px;
+  background: #fff;
+}
+.webmap .webmap_right .webmap_main {
+  padding: 20px 0;
+  border-bottom: 1px dashed #d9d8d8;
+}
+.webmap .webmap_right .last {
+  border-bottom: none;
+}
+.webmap .webmap_right h3 {
+  margin-bottom: 12px;
+  color: #41b98d;
+  font-size: 16px;
+  font-weight: 700;
+}
+.webmap .webmap_right ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+}
+.webmap .webmap_right ul li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  white-space: nowrap;
+  float: left;
+  padding-left: left;
+  padding-right: left;
+}
+.webmap .webmap_right ul li:first-child {
+  padding-left: 0;
+}
+.webmap .webmap_right ul li:last-child {
+  padding-right: 0;
+}
+.webmap .webmap_right ul li.last {
+  padding-right: 0;
+}
+.webmap .webmap_right ul li {
+  position: relative;
+  width: 150px;
+  margin-right: 20px;
+  line-height: 30px;
+}
+.webmap .webmap_right ul li a {
+  color: #666666;
+}
+.webmap .webmap_right ul li a:hover, .webmap .webmap_right .user_nav ul li .user_led, .user_nav .webmap .webmap_right ul li .user_led {
+  color: #41b98d;
+}
+.webmap .webmap_right ul li .hot {
+  position: absolute;
+  top: 0;
+  left: -4px;
+  display: inline-block;
+  width: 9px;
+  height: 11px;
+  background: url(../images/webmap_hot.png);
+}
+
+/*陵园订单*/
+.user_right {
+  float: right;
+  width: 980px;
+}
+.user_right h1 {
+  border-bottom: 2px solid #e9e9e9;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 26px;
+}
+
+/*订单title*/
+.order_title {
+  width: 980px;
+  margin-bottom: 20px;
+  background: #e9e9e9;
+}
+.order_title ul li {
+  float: left;
+  font-size: 12px;
+  text-align: center;
+  line-height: 42px;
+}
+.order_title .ddxx {
+  width: 370px;
+}
+.order_title .gmr {
+  width: 140px;
+}
+.order_title .phone {
+  width: 158px;
+}
+.order_title .zt {
+  width: 152px;
+}
+.order_title .jycz {
+  width: 156px;
+}
+
+/*订单内容*/
+.cemetery_orders {
+  margin-bottom: 10px;
+  border: 1px solid #e9e9e9;
+}
+.cemetery_orders .cemetery_orders_title {
+  background: #eaf5f1;
+}
+.cemetery_orders .cemetery_orders_title p {
+  padding-left: 22px;
+  color: #666666;
+  font-size: 12px;
+  line-height: 36px;
+}
+.cemetery_orders .cemetery_orders_nr {
+  background: #fff;
+}
+.cemetery_orders .cemetery_orders_nr ul li {
+  float: left;
+  font-size: 12px;
+}
+.cemetery_orders .cemetery_orders_nr .liimg {
+  width: 346px;
+  margin-left: 22px;
+  border-right: 1px solid #f7f7f7;
+}
+.cemetery_orders .cemetery_orders_nr .liimg img {
+  float: left;
+  width: 146px;
+  height: 80px;
+  margin: 10px 0;
+}
+.cemetery_orders .cemetery_orders_nr .liimg h2 {
+  float: left;
+  margin-left: 14px;
+  font-size: 16px;
+  line-height: 100px;
+}
+.cemetery_orders .cemetery_orders_nr .ligmr {
+  width: 140px;
+  border-right: 1px solid #f7f7f7;
+  text-align: center;
+  line-height: 100px;
+}
+.cemetery_orders .cemetery_orders_nr .liphone {
+  width: 158px;
+  border-right: 1px solid #f7f7f7;
+  text-align: center;
+  line-height: 100px;
+}
+.cemetery_orders .cemetery_orders_nr .lizt {
+  width: 152px;
+  border-right: 1px solid #f7f7f7;
+  text-align: center;
+  line-height: 100px;
+}
+.cemetery_orders .cemetery_orders_nr .licz {
+  width: 156px;
+  text-align: center;
+}
+.cemetery_orders .cemetery_orders_nr .licz .ljfk {
+  width: 74px;
+  height: 24px;
+  line-height: 24px;
+  margin: 32px 0 8px 38px;
+  background: #ef5980;
+  color: #fff;
+  font-size: 12px;
+}
+.cemetery_orders .cemetery_orders_nr .licz_eva {
+  line-height: 100px;
+}
+
+/*查看更多订单*/
+.cemetery_orders_more {
+  font-size: 12px;
+  text-align: right;
+}
+.cemetery_orders_more a {
+  color: #666666;
+}
+
+/*删除订单提示框*/
+.tooltip_cemetery_orders {
+  position: fixed;
+  top: 20%;
+  left: 30%;
+  width: 546px;
+  padding-bottom: 36px;
+  z-index: 1000;
+  background: #fff;
+  display: none;
+}
+.tooltip_cemetery_orders h2 {
+  padding-left: 30px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 38px;
+  background: #1a96e1;
+}
+.tooltip_cemetery_orders p {
+  padding-left: 36px;
+  font-family: "微软雅黑";
+  font-size: 20px;
+  line-height: 98px;
+}
+.tooltip_cemetery_orders .tooltip_cemetery_orders_btn {
+  padding-left: 308px;
+}
+.tooltip_cemetery_orders .tooltip_cemetery_orders_btn a {
+  float: left;
+  border: 1px solid #1a96e1;
+  background: #1a96e1;
+  color: #fff;
+  width: 98px;
+  height: 38px;
+  line-height: 38px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.tooltip_cemetery_orders .tooltip_cemetery_orders_btn .qx {
+  margin-left: 12px;
+  border: 1px solid #d9d8d8;
+  background: #fff;
+  color: #333333;
+}
+.tooltip_cemetery_orders .tooltip_cemetery_orders_cloce {
+  position: absolute;
+  top: 14px;
+  right: 26px;
+  background-position: 0 -2132px;
+  height: 13px;
+  width: 13px;
+  cursor: pointer;
+}
+
+/*服务订单*/
+.etiquette_orders .cemetery_orders_title i {
+  margin: 0 5px 3px 0;
+  background-position: 0 -721px;
+  height: 17px;
+  width: 18px;
+}
+.etiquette_orders .cemetery_orders_nr .liimg img {
+  width: 80px;
+  height: 74px;
+}
+.etiquette_orders .cemetery_orders_nr .liimg .txt {
+  float: left;
+  width: 230px;
+  margin: 10px 0 10px 10px;
+}
+.etiquette_orders .cemetery_orders_nr .liimg .txt h2 {
+  float: none;
+  margin-left: 0;
+  line-height: 24px;
+}
+.etiquette_orders .cemetery_orders_nr .liimg .txt p {
+  margin-top: 6px;
+  color: #666666;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/*评价*/
+.cemetery_orders_evaluate {
+  position: relative;
+  padding-bottom: 48px;
+  margin-top: 14px;
+  background: #fff;
+}
+.cemetery_orders_evaluate h2 {
+  background: #f2f2f2;
+  padding-left: 30px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 50px;
+}
+.cemetery_orders_evaluate .title {
+  display: block;
+  float: left;
+  width: 62px;
+  height: 60px;
+  color: #999999;
+  line-height: 26px;
+}
+.cemetery_orders_evaluate .pf {
+  margin: 46px 0 0 62px;
+}
+.cemetery_orders_evaluate .pf ul li {
+  float: left;
+  margin: 0 142px 26px 0;
+  font-size: 12px;
+}
+.cemetery_orders_evaluate .pf ul li img {
+  margin: 0 10px 5px 12px;
+  vertical-align: middle;
+}
+.cemetery_orders_evaluate .pf ul .last {
+  margin-right: 0;
+}
+.cemetery_orders_evaluate .ms {
+  margin: 14px 0 0 62px;
+}
+.cemetery_orders_evaluate .ms .ms_tarea {
+  width: 750px;
+  height: 130px;
+  padding: 6px 14px;
+  border: 1px solid #d2d2d2;
+}
+.cemetery_orders_evaluate .phone {
+  margin: 26px 0 0 62px;
+}
+.cemetery_orders_evaluate .phone .title {
+  height: 28px;
+}
+.cemetery_orders_evaluate .phone .phone_txt {
+  width: 172px;
+  height: 28px;
+  padding: 0 14px;
+  border: 1px solid #d2d2d2;
+}
+.cemetery_orders_evaluate .niname {
+  width: 76px;
+  margin: 12px 0 0 124px;
+  font-family: "微软雅黑";
+  cursor: pointer;
+}
+.cemetery_orders_evaluate .niname span {
+  margin: 0 6px 3px 0;
+  background-position: 0 -2166px;
+  height: 13px;
+  width: 13px;
+}
+.cemetery_orders_evaluate .niname span:hover, .cemetery_orders_evaluate .niname span.tooltip_remark_niname-hover {
+  background-position: 0 -2181px;
+}
+.cemetery_orders_evaluate .niname .niname_hover {
+  background-position: 0 -2181px;
+  height: 13px;
+  width: 13px;
+}
+.cemetery_orders_evaluate .remark_btn {
+  margin: 14px 0 0 798px;
+}
+.cemetery_orders_evaluate .remark_btn a {
+  width: 110px;
+  height: 38px;
+  line-height: 38px;
+  background: #41b98d;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.cemetery_orders_evaluate .cemetery_orders_evaluate_close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background-position: 0 -2147px;
+  height: 17px;
+  width: 17px;
+  cursor: pointer;
+}
+
+/*个人资料*/
+.pers_validate {
+  display: inline-block;
+  margin-left: 12px;
+  color: #ff0000;
+  font-size: 12px;
+  line-height: 32px;
+}
+
+/*个人资料*/
+.personaldata {
+  padding-top: 28px;
+}
+.personaldata ul li {
+  margin-bottom: 24px;
+  font-family: "微软雅黑";
+}
+.personaldata ul li .pers_nam {
+  display: inline-block;
+  width: 88px;
+  margin-right: 12px;
+}
+.personaldata ul li .pers_nam font {
+  display: inline-block;
+  width: 6px;
+  margin-right: 12px;
+  color: #ff7800;
+}
+.personaldata ul li .space {
+  display: inline-block;
+  width: 28px;
+}
+.personaldata ul li input:focus {
+  border: 1px solid #41b98d;
+}
+.personaldata ul li .pers_tex {
+  width: 204px;
+  height: 32px;
+  padding-left: 24px;
+  border: 1px solid #dddddd;
+  line-height: 32px;
+}
+.personaldata ul li .pers_sel {
+  width: 230px;
+  height: 36px;
+  padding-left: 24px;
+  border: 1px solid #dddddd;
+}
+.personaldata ul li .pers_validate_tex {
+  border: 1px solid #ff0000;
+}
+.personaldata p {
+  color: #999999;
+  margin-left: 18px;
+  font-size: 12px;
+  line-height: 18px;
+}
+.personaldata .pers_save {
+  width: 146px;
+  height: 42px;
+  line-height: 42px;
+  margin: 38px 0 0 20px;
+  background: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  color: #fff;
+}
+
+/*修改密码*/
+.changepassword ul li {
+  margin-top: 24px;
+}
+.changepassword p {
+  margin-bottom: 12px;
+}
+.changepassword p .cha_hint {
+  margin-left: 3px;
+  color: #ff7800;
+}
+.changepassword p font {
+  font-size: 12px;
+  color: #666666;
+}
+.changepassword input:focus {
+  border: 1px solid #41b98d;
+}
+.changepassword .cha_tex {
+  width: 204px;
+  height: 32px;
+  padding-left: 24px;
+  border: 1px solid #dddddd;
+  line-height: 32px;
+}
+.changepassword .pers_validate_tex {
+  border: 1px solid #ff0000;
+}
+.changepassword .yzm .cha_tex {
+  float: left;
+}
+.changepassword .yzm .cha_yzm {
+  float: left;
+  vertical-align: middle;
+  margin: 0 24px;
+}
+.changepassword .yzm a {
+  float: left;
+  color: #8c8c9a;
+  line-height: 32px;
+}
+.changepassword .cha_save {
+  width: 146px;
+  height: 42px;
+  line-height: 42px;
+  margin: 38px 0 0 20px;
+  background: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  color: #fff;
+}
+
+/*安葬吉日*/
+.bury {
+  width: 100%;
+  height: 902px;
+  background: url(../images/bury_bg.jpg) center top no-repeat;
+}
+
+.bury_box {
+  padding: 30px 0 0 0;
+}
+
+/*安葬吉日内容*/
+.bury_main {
+  width: 1096px;
+  height: 724px;
+  margin: 0 50px;
+  background: #fff;
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.bury_main .bury_main_left {
+  float: left;
+  width: 690px;
+  height: 830px;
+}
+.bury_main .bury_main_left .bury_main_query {
+  height: 140px;
+  padding: 0 42px 0 50px;
+  background: url(../images/bury_main_query_bg.jpg);
+}
+.bury_main .bury_main_left .bury_main_query h2 {
+  color: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  line-height: 68px;
+}
+.bury_main .bury_main_left .bury_main_query ul li {
+  float: left;
+  margin-right: 10px;
+}
+.bury_main .bury_main_left .bury_main_query .sele {
+  width: 104px;
+  height: 32px;
+  border: 1px solid #d9d8d8;
+  color: #999999;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.bury_main .bury_main_left .bury_main_query .sele_y {
+  width: 74px;
+  height: 32px;
+}
+.bury_main .bury_main_left .bury_main_query .btn {
+  width: 82px;
+  height: 34px;
+  line-height: 34px;
+  margin-left: 66px;
+  background: #41b98d;
+  border: none;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.bury_main .bury_main_left .bury_main_calendar {
+  padding: 0 30px;
+  background: #f7f7f7;
+}
+.bury_main .bury_main_left .bury_main_calendar .week {
+  padding-top: 38px;
+}
+.bury_main .bury_main_left .bury_main_calendar .week li {
+  float: left;
+  width: 90px;
+  color: #41b98d;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+.bury_main .bury_main_left .bury_main_calendar .day li {
+  float: left;
+  width: 90px;
+  height: 60px;
+  padding: 15px 0 30px 0;
+  border-bottom: 1px solid #e9e9e9;
+  font-family: Arial;
+  font-size: 24px;
+  text-align: center;
+}
+.bury_main .bury_main_left .bury_main_calendar .day li a {
+  display: inline-block;
+  width: 56px;
+  padding: 10px 0;
+}
+.bury_main .bury_main_left .bury_main_calendar .day li a span {
+  display: block;
+  margin-top: 4px;
+  color: #666666;
+  font-size: 12px;
+  font-weight: 700;
+}
+.bury_main .bury_main_left .bury_main_calendar .day li .led {
+  background: #41b98d;
+  color: #fff;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+}
+.bury_main .bury_main_left .bury_main_calendar .day li .led span {
+  color: #fff;
+}
+.bury_main .bury_main_right {
+  float: left;
+  width: 286px;
+  height: 830px;
+  padding: 0 60px;
+  background: #41b98d;
+  text-align: center;
+}
+.bury_main .bury_main_right .data {
+  margin-top: 36px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+}
+.bury_main .bury_main_right .day {
+  display: inline-block;
+  width: 126px;
+  height: 126px;
+  margin-top: 30px;
+  background: #fff;
+  text-align: center;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.bury_main .bury_main_right .day p {
+  color: #41b98d;
+  font-family: Arial;
+  font-size: 90px;
+  font-weight: 700;
+  line-height: 126px;
+}
+.bury_main .bury_main_right .lunarcalendar {
+  margin-top: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #ade8d2;
+}
+.bury_main .bury_main_right .lunarcalendar li {
+  margin-bottom: 14px;
+  color: #fff;
+  font-size: 16px;
+}
+.bury_main .bury_main_right .lunarcalendar .first {
+  margin-bottom: 10px;
+  font-family: "微软雅黑";
+  font-size: 20px;
+}
+.bury_main .bury_main_right .shouldavoid {
+  padding-top: 64px;
+}
+.bury_main .bury_main_right .shouldavoid .shouldavoid_main {
+  float: left;
+  width: 90px;
+  margin: 0 26px;
+}
+.bury_main .bury_main_right .shouldavoid .shouldavoid_main h2 {
+  margin-bottom: 18px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 36px;
+  text-shadow: 2px 2px 1px rgba(102, 102, 102, 0.1);
+}
+.bury_main .bury_main_right .shouldavoid .shouldavoid_main ul li {
+  float: left;
+  width: 45px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  text-align: center;
+  line-height: 32px;
+}
+
+/*碑文大全*/
+.epigraphic_banner {
+  width: 100%;
+  height: 423px;
+  background: url(../images/epigraphic_banner.jpg) center top no-repeat;
+}
+
+/*碑文大全内容*/
+.epigraphic_box {
+  width: 100%;
+  background: url(../images/epigraphic_box_bg.jpg) center top no-repeat;
+}
+.epigraphic_box .epigraphic {
+  width: 860px;
+  padding-bottom: 32px;
+  float: right;
+  background: #fff;
+}
+.epigraphic_box .epigraphic_main h2 {
+  position: relative;
+  height: 60px;
+  margin-top: 32px;
+}
+.epigraphic_box .epigraphic_main h2 img {
+  position: absolute;
+  left: -20px;
+}
+.epigraphic_box .epigraphic_main h2 a {
+  position: absolute;
+  right: 100px;
+  top: 26px;
+  color: #855119;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.epigraphic_box .epigraphic_main ul {
+  margin: 24px 0 12px 46px;
+}
+.epigraphic_box .epigraphic_main ul li {
+  list-style: disc inside;
+  color: #d93535;
+  font-size: 16px;
+  line-height: 30px;
+}
+.epigraphic_box .epigraphic_main ul li a {
+  color: #333333;
+}
+.epigraphic_box .epigraphic_style {
+  position: relative;
+  width: 300px;
+  margin-top: 32px;
+}
+.epigraphic_box .epigraphic_style img {
+  width: 300px;
+  height: 221px;
+}
+.epigraphic_box .epigraphic_style p {
+  position: absolute;
+  bottom: 1px;
+  width: 290px;
+  padding-left: 10px;
+  background: url(../images/fe_hot_flexslider_h3.png) repeat-x;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 42px;
+}
+
+/*地图看墓*/
+.tombmaps_box {
+  position: absolute;
+  top: 86px;
+  bottom: 0px;
+  left: 0px;
+  width: 90%;
+  padding: 0 5%;
+  clear: both;
+  display: inline-block;
+}
+.tombmaps_box .tombmaps_left {
+  position: relative;
+  float: left;
+  width: 380px;
+  height: 100%;
+  margin-right: -380px;
+}
+.tombmaps_box .tombmaps_left .logo span {
+  margin-left: 16px;
+  color: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 24px;
+}
+.tombmaps_box .tombmaps_left .area {
+  padding: 0 0 16px 20px;
+  margin: 26px 0 20px 0;
+  background: #e9f2ef;
+}
+.tombmaps_box .tombmaps_left .area h2 {
+  font-family: "微软雅黑";
+  font-size: 18px;
+  line-height: 60px;
+}
+.tombmaps_box .tombmaps_left .area ul li {
+  float: left;
+  width: 70px;
+  margin: 0 20px 10px 0;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  text-align: center;
+}
+.tombmaps_box .tombmaps_left .area ul li a {
+  display: block;
+  width: 70px;
+  height: 26px;
+  color: #666666;
+  line-height: 26px;
+}
+.tombmaps_box .tombmaps_left .area ul li a:hover, .tombmaps_box .tombmaps_left .area .user_nav ul li .user_led, .user_nav .tombmaps_box .tombmaps_left .area ul li .user_led {
+  background: #41b98d;
+  color: #fff;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+.tombmaps_box .tombmaps_left .area .led a {
+  background: #41b98d;
+  color: #fff;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list {
+  overflow-y: scroll;
+  background: #fff;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main {
+  padding: 20px 20px 18px 14px;
+  border-bottom: 1px solid #e9e9e9;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main:hover {
+  background: #f7f7f7;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main h2 {
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main h2 span {
+  float: right;
+  font-size: 12px;
+  line-height: 16px;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price {
+  margin-top: 12px;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price p {
+  float: left;
+  margin: 2px 0 0 30px;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price p span {
+  color: #ef5980;
+  font-size: 12px;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price p span font {
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price p span strong {
+  font-family: Arial;
+  font-size: 24px;
+  font-weight: 700;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price a {
+  float: right;
+  width: 80px;
+  height: 26px;
+  line-height: 26px;
+  background: #41b98d;
+  color: #fff;
+  font-size: 12px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price a:hover, .tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price .user_nav ul li .user_led, .user_nav ul li .tombmaps_box .tombmaps_left .tombmaps_list .tombmaps_list_main .price .user_led {
+  background: #2b916b;
+}
+.tombmaps_box .tombmaps_right {
+  float: right;
+  width: 100%;
+  height: 100%;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain {
+  margin-left: 416px;
+  height: 100%;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain h2 {
+  height: 36px;
+  margin-bottom: 4px;
+  color: #ef5980;
+  font-family: "微软雅黑";
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 30px;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain h2 i {
+  margin: 0 6px 5px 0;
+  background-position: 0 -1948px;
+  height: 30px;
+  width: 30px;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain h2 span {
+  margin-left: 18px;
+  color: #666666;
+  font-size: 16px;
+  font-weight: 400;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map {
+  position: relative;
+  padding: 10px;
+  border: 1px solid #d9d8d8;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map .tombmaps_map_main {
+  overflow: hidden;
+  border: 1px solid #e9e9e9;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map img {
+  width: 100%;
+  height: auto;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map .cemname {
+  position: absolute;
+  top: 30px;
+  left: 100px;
+  padding: 0 16px;
+  background: #2b916b;
+  color: #fff;
+  line-height: 28px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 6px 5px 0px rgba(43, 145, 109, 0.4);
+  -webkit-box-shadow: 6px 5px 0px rgba(43, 145, 109, 0.4);
+  box-shadow: 6px 5px 0px rgba(43, 145, 109, 0.4);
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map .cemname:after {
+  position: absolute;
+  top: 28px;
+  left: 46%;
+  content: ' ';
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top: 10px solid #2b916b;
+}
+.tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map .cemname:before {
+  position: absolute;
+  top: 33px;
+  left: 48%;
+  content: ' ';
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top: 10px solid rgba(43, 145, 109, 0.4);
+}
+
+/*历史上的今天*/
+.history_banner {
+  width: 100%;
+  height: 515px;
+  padding-top: 30px;
+  background: url(../images/history_banner.jpg) center top no-repeat;
+}
+.history_banner .calendar {
+  width: 433px;
+  height: 498px;
+  margin: 0 0 0 732px;
+  background: url(../images/history_calendar.png);
+}
+.history_banner .calendar .month {
+  padding: 60px 0 0 248px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+}
+.history_banner .calendar .month .month_sel {
+  width: 62px;
+  height: 22px;
+  border: none;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.history_banner .calendar .date {
+  height: 110px;
+  padding: 14px 0 20px 0;
+  margin: 0 34px 0 48px;
+  margin-top: 12px;
+  border-bottom: 1px dashed #d9d8d8;
+  text-align: center;
+}
+.history_banner .calendar .date p {
+  font-weight: 700;
+}
+.history_banner .calendar .date h2 {
+  color: #41b98d;
+  font-family: Arial;
+  font-size: 80px;
+  font-weight: 700;
+}
+.history_banner .calendar .calendar_main {
+  padding-top: 10px;
+  margin: 0 34px 0 48px;
+}
+.history_banner .calendar .calendar_main .week {
+  margin-bottom: 10px;
+}
+.history_banner .calendar .calendar_main .week li {
+  float: left;
+  width: 50px;
+  color: #41b98d;
+  font-weight: 700;
+  text-align: center;
+}
+.history_banner .calendar .calendar_main .day li {
+  float: left;
+  width: 50px;
+  height: 30px;
+  margin-bottom: 2px;
+  font-family: Arial;
+  text-align: center;
+}
+.history_banner .calendar .calendar_main .day li a {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+}
+.history_banner .calendar .calendar_main .day li .led {
+  background: #41b98d;
+  color: #fff;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+}
+
+/*历史上的今天内容*/
+.history_contain .history_title {
+  width: 600px;
+  background: url(../images/history_title_bg.png) repeat-x;
+  background-position: bottom;
+  text-align: right;
+}
+.history_contain .history_title h2 {
+  font-family: "微软雅黑";
+  font-size: 36px;
+}
+.history_contain .history_title h2 span {
+  color: #41b98d;
+  font-size: 60px;
+  font-weight: 700;
+}
+.history_contain .history_title p {
+  padding: 16px 0 18px 0;
+  font-family: "微软雅黑";
+  font-size: 30px;
+  font-weight: 700;
+}
+.history_contain .history_box {
+  padding-top: 56px;
+  background: url(../images/history_main_bg.png) repeat-y;
+  background-position: center center;
+}
+.history_contain .history_box .history_more {
+  display: none;
+}
+.history_contain .history_box .li {
+  position: relative;
+  height: 178px;
+}
+.history_contain .history_box .history_box_main {
+  position: absolute;
+  left: 594px;
+}
+.history_contain .history_box .history_box_main .title {
+  position: absolute;
+  width: 139px;
+  background: url(../images/history_box_title1.png) no-repeat;
+  background-position: bottom left;
+  text-align: center;
+}
+.history_contain .history_box .history_box_main .title h2 {
+  padding-bottom: 6px;
+  color: #5992fa;
+  font-family: Arial;
+  font-size: 40px;
+}
+.history_contain .history_box .history_box_main .title2 {
+  background: url(../images/history_box_title2.png) no-repeat;
+  background-position: bottom left;
+}
+.history_contain .history_box .history_box_main .title2 h2 {
+  color: #df89ec;
+}
+.history_contain .history_box .history_box_main .title3 {
+  background: url(../images/history_box_title3.png) no-repeat;
+  background-position: bottom left;
+}
+.history_contain .history_box .history_box_main .title3 h2 {
+  color: #95bf62;
+}
+.history_contain .history_box .history_box_main .title4 {
+  background: url(../images/history_box_title4.png) no-repeat;
+  background-position: bottom left;
+}
+.history_contain .history_box .history_box_main .title4 h2 {
+  color: #b0417d;
+}
+.history_contain .history_box .history_box_main .title5 {
+  background: url(../images/history_box_title5.png) no-repeat;
+  background-position: bottom left;
+}
+.history_contain .history_box .history_box_main .title5 h2 {
+  color: #de8d37;
+}
+.history_contain .history_box .history_box_main .title6 {
+  background: url(../images/history_box_title6.png) no-repeat;
+  background-position: bottom left;
+}
+.history_contain .history_box .history_box_main .title6 h2 {
+  color: #65b9e1;
+}
+.history_contain .history_box .history_box_main .title7 {
+  background: url(../images/history_box_title7.png) no-repeat;
+  background-position: bottom left;
+}
+.history_contain .history_box .history_box_main .title7 h2 {
+  color: #ef6d92;
+}
+.history_contain .history_box .history_box_main .history_main {
+  position: absolute;
+  top: 16px;
+  left: 139px;
+  width: 464px;
+}
+.history_contain .history_box .history_box_main .history_main .bg {
+  position: absolute;
+  border-bottom: -23px;
+  width: 464px;
+  height: 23px;
+  background: url(../images/history_box_main_bg.png) no-repeat;
+}
+.history_contain .history_box .history_box_main .history_main h3 {
+  padding-left: 20px;
+  background: #5992fa;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 46px;
+}
+.history_contain .history_box .history_box_main .history_main h3 a {
+  color: #fff;
+}
+.history_contain .history_box .history_box_main .history_main ul {
+  padding: 22px 0 22px 20px;
+  background: #fff;
+}
+.history_contain .history_box .history_box_main .history_main ul li {
+  list-style: disc inside;
+  color: #999999;
+  line-height: 30px;
+}
+.history_contain .history_box .history_box_main .history_main ul li a {
+  color: #333333;
+}
+.history_contain .history_box .history_box_main .history_main ul li a:hover, .history_contain .history_box .history_box_main .history_main .user_nav ul li .user_led, .user_nav .history_contain .history_box .history_box_main .history_main ul li .user_led {
+  color: #41b98d;
+}
+.history_contain .history_box .history_box_main .history_main2 h3 {
+  background: #df89ec;
+}
+.history_contain .history_box .history_box_main .history_main3 h3 {
+  background: #95bf62;
+}
+.history_contain .history_box .history_box_main .history_main4 h3 {
+  background: #b0417d;
+}
+.history_contain .history_box .history_box_main .history_main5 h3 {
+  background: #de8d37;
+}
+.history_contain .history_box .history_box_main .history_main6 h3 {
+  background: #65b9e1;
+}
+.history_contain .history_box .history_box_main .history_main7 h3 {
+  background: #ef6d92;
+}
+.history_contain .history_box .history_box_main_left {
+  left: 4px;
+}
+.history_contain .history_box .history_box_main_left .title {
+  left: 464px;
+}
+.history_contain .history_box .history_box_main_left .history_main {
+  left: 0;
+}
+.history_contain .history_more_btn {
+  margin-top: 110px;
+}
+.history_contain .history_more_btn a {
+  float: left;
+  width: 288px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 456px;
+  border: 1px solid #d9d8d8;
+  color: #41b98d;
+}
+.history_contain .history_more_btn span {
+  margin-left: 18px;
+  color: #666666;
+  font-size: 12px;
+  line-height: 42px;
+}
+
+/*关于我们*/
+.aboutus_banner {
+  width: 100%;
+  height: 520px;
+  background: url(../images/aboutus_banner.jpg) center top no-repeat;
+}
+
+.aboutus_title {
+  text-align: center;
+}
+
+/*我们是谁*/
+.aboutus_who {
+  padding: 56px 0 60px 0;
+}
+.aboutus_who .aboutus_who_main {
+  margin-top: 36px;
+}
+.aboutus_who .aboutus_who_main img {
+  float: left;
+  width: 364px;
+  height: 270px;
+  margin-left: 174px;
+}
+.aboutus_who .aboutus_who_main .aboutus_who_main_text {
+  float: left;
+  width: 518px;
+  margin-left: 22px;
+}
+.aboutus_who .aboutus_who_main .aboutus_who_main_text p {
+  margin-bottom: 22px;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 28px;
+}
+
+/*提供哪些服务*/
+.aboutus_service {
+  width: 100%;
+  height: 802px;
+  background: url(../images/aboutus_service.jpg) center top no-repeat;
+}
+
+/*为什么选择我们*/
+.aboutus_promise {
+  padding: 68px 0 80px 0;
+}
+.aboutus_promise ul {
+  margin: 60px 0 0 166px;
+}
+.aboutus_promise ul li {
+  float: left;
+  width: 215px;
+  margin-right: 14px;
+}
+.aboutus_promise ul li p {
+  font-size: 12px;
+  line-height: 24px;
+}
+.aboutus_promise ul .last {
+  margin-right: 0;
+}
+
+/*我们的成绩*/
+.aboutus_result {
+  width: 100%;
+  height: 802px;
+  background: url(../images/aboutus_result.jpg) center top no-repeat;
+}
+
+/*用户有话说*/
+.aboutus_word {
+  width: 100%;
+  height: 776px;
+  background: url(../images/aboutus_word.jpg) center top no-repeat;
+}
+
+/*优势*/
+.aboutus_advantage {
+  background: inherit;
+}
+
+/*落葬讲究*/
+.help_wasburied {
+  width: 786px;
+  padding: 80px 64px 40px 58px;
+  background: url(../images/help_wasburied_bg.jpg) no-repeat;
+}
+.help_wasburied .help_wasburied_title {
+  text-align: center;
+}
+.help_wasburied .help_wasburied_text {
+  width: 695px;
+  height: 168px;
+  padding: 40px 46px 0 46px;
+  margin-top: 186px;
+  background: url(../images/help_wasburied_text.png);
+}
+.help_wasburied .help_wasburied_text p {
+  margin-bottom: 26px;
+  line-height: 28px;
+}
+.help_wasburied .help_wasburied_box {
+  position: relative;
+  width: 697px;
+  padding: 0 46px;
+  margin-top: 14px;
+}
+.help_wasburied .help_wasburied_box h2 {
+  position: absolute;
+  top: 24px;
+  left: 20px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 20px;
+}
+.help_wasburied .help_wasburied_box h2 span {
+  font-weight: 700;
+}
+.help_wasburied .help_wasburied_box .help_wasburied_main {
+  padding-top: 78px;
+}
+.help_wasburied .help_wasburied_box .help_wasburied_main p {
+  color: #666666;
+  font-size: 12px;
+  line-height: 24px;
+}
+.help_wasburied .help_wasburied_box .help_wasburied_main .pa {
+  color: #333333;
+  margin-bottom: 24px;
+}
+.help_wasburied .help_wasburied_box .help_wasburied_main .pb {
+  margin-bottom: 10px;
+  color: #333333;
+  font-size: 14px;
+}
+.help_wasburied .help_wasburied_box .help_wasburied_main .p_red {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f75125;
+}
+.help_wasburied .help_wasburied_box .help_wasburied_main ul li {
+  color: #666666;
+  font-size: 12px;
+  line-height: 30px;
+}
+.help_wasburied .help_wasburied_box .help_wasburied_main ul li span {
+  color: #333333;
+  font-size: 14px;
+}
+.help_wasburied .help_wasburied_one {
+  height: 521px;
+  background: url(../images/help_wasburied_one_bg.png) no-repeat;
+}
+.help_wasburied .help_wasburied_two {
+  height: 247px;
+  background: url(../images/help_wasburied_two_bg.png) no-repeat;
+}
+.help_wasburied .help_wasburied_three {
+  height: 261px;
+  background: url(../images/help_wasburied_three_bg.png) no-repeat;
+}
+.help_wasburied .help_wasburied_four {
+  height: 384px;
+  background: url(../images/help_wasburied_four_bg.png) no-repeat;
+}
+.help_wasburied .help_wasburied_five {
+  height: 384px;
+  background: url(../images/help_wasburied_five_bg.png) no-repeat;
+}
+
+/*公墓年限*/
+.help_tombagelimit {
+  width: 836px;
+  padding: 217px 36px 72px 36px;
+  background: url(../images/help_tombagelimit_bg.jpg) no-repeat;
+  background-color: #fff;
+}
+.help_tombagelimit h2 {
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  text-align: center;
+  line-height: 54px;
+  border-bottom: 1px solid #e9e9e9;
+}
+.help_tombagelimit .help_tombagelimit_text {
+  margin-top: 26px;
+}
+.help_tombagelimit .help_tombagelimit_text p {
+  margin-bottom: 26px;
+  color: #666666;
+  font-size: 12px;
+  line-height: 24px;
+}
+
+/*购墓须知*/
+.help_tombnotes .fe_list .fe_list_box {
+  padding: 0 44px 0 38px;
+}
+.help_tombnotes .fe_list .fe_list_main .fe_list_main_text {
+  width: 610px;
+}
+
+/*平台声明*/
+.help_statement {
+  width: 840px;
+  padding: 34px;
+  background: #fff;
+}
+.help_statement h2 {
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  line-height: 52px;
+}
+.help_statement p {
+  color: #666666;
+  font-size: 12px;
+  line-height: 24px;
+}
+.help_statement h3 {
+  margin-top: 24px;
+  color: #333333;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+/*服务流程*/
+.help_serviceprocess {
+  width: 832px;
+  padding: 40px 38px;
+  background: #fff;
+}
+.help_serviceprocess .help_serviceprocess_main {
+  padding: 30px 56px 0 55px;
+  background: #f2f9f6;
+}
+.help_serviceprocess .help_serviceprocess_main h2 {
+  margin-bottom: 88px;
+  font-family: "微软雅黑";
+  font-size: 26px;
+  text-align: center;
+}
+.help_serviceprocess .help_serviceprocess_main ul li {
+  position: relative;
+  float: left;
+  width: 124px;
+  height: 280px;
+  padding: 0 12px;
+  margin-bottom: 76px;
+  background: #d5f3e8;
+}
+.help_serviceprocess .help_serviceprocess_main ul li h3 {
+  margin-top: 86px;
+  color: #41b98d;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+.help_serviceprocess .help_serviceprocess_main ul li p {
+  margin-top: 16px;
+  color: #666666;
+  font-size: 12px;
+  line-height: 24px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li span {
+  position: absolute;
+  top: -36px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_liarrows2 {
+  position: absolute;
+  top: -64px;
+  left: 66px;
+  background-position: 0 -887px;
+  height: 19px;
+  width: 22px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span1 {
+  left: 12px;
+  background-position: 0 -908px;
+  height: 100px;
+  width: 113px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span2 {
+  left: 12px;
+  background-position: 0 -1010px;
+  height: 102px;
+  width: 125px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span3 {
+  left: 36px;
+  background-position: 0 -1114px;
+  height: 98px;
+  width: 74px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span4 {
+  left: 16px;
+  background-position: 0 -1214px;
+  height: 98px;
+  width: 116px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span5 {
+  left: 36px;
+  background-position: 0 -1314px;
+  height: 79px;
+  width: 75px;
+}
+.help_serviceprocess .help_serviceprocess_main ul li .help_serviceprocess_span6 {
+  left: 38px;
+  background-position: 0 -1395px;
+  height: 92px;
+  width: 79px;
+}
+.help_serviceprocess .help_serviceprocess_main .right {
+  margin-left: 382px;
+}
+.help_serviceprocess .help_serviceprocess_main .liarrows {
+  width: 19px;
+  background: #f2f9f6;
+}
+.help_serviceprocess .help_serviceprocess_main .liarrows img {
+  margin-top: 38px;
+}
+
+/*联系我们*/
+.help_contactus {
+  width: 828px;
+  padding: 40px;
+  background: #fff;
+}
+.help_contactus img {
+  margin-bottom: 40px;
+  border: 2px solid #e9e9e9;
+}
+.help_contactus p {
+  margin-bottom: 22px;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.help_contactus p span {
+  color: #666666;
+}
+.help_contactus p i {
+  margin: 0 14px 3px 0;
+}
+.help_contactus p .dz {
+  background-position: 0 -800px;
+  height: 23px;
+  width: 23px;
+}
+.help_contactus p .yx {
+  background-position: 0 -850px;
+  height: 23px;
+  width: 23px;
+}
+.help_contactus p .rx {
+  background-position: 0 -825px;
+  height: 23px;
+  width: 23px;
+}
+
+/*帮您操办白事-殡葬流程*/
+.funeralprocess_banner {
+  width: 100%;
+  height: 567px;
+  background: url(../images/funeralprocess_banner.jpg) center center no-repeat;
+}
+
+.funeralprocess {
+  width: 100%;
+  height: 1930px;
+  background: url(../images/funeralprocess.jpg) center top no-repeat;
+}
+
+/*购墓流程*/
+.help_tombprocess {
+  background-color: #fff;
+}
+.help_tombprocess h2 {
+  height: 54px;
+  padding-top: 217px;
+  background: url(../images/help_tombprocess_bg.jpg) no-repeat;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  text-align: center;
+  line-height: 54px;
+}
+.help_tombprocess .help_tombprocess_text {
+  padding: 26px 36px 30px 36px;
+  border-top: 1px solid #e9e9e9;
+}
+.help_tombprocess .help_tombprocess_text h3 {
+  height: 36px;
+  margin-bottom: 16px;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 36px;
+}
+.help_tombprocess .help_tombprocess_text h3 span {
+  margin: 0 12px 0 8px;
+  font-family: Bernard MT Condensed;
+  font-size: 26px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h31 {
+  background: url(../images/help_tombprocess_text_h31.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h32 {
+  background: url(../images/help_tombprocess_text_h32.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h33 {
+  background: url(../images/help_tombprocess_text_h33.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h34 {
+  background: url(../images/help_tombprocess_text_h34.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h35 {
+  background: url(../images/help_tombprocess_text_h35.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h36 {
+  background: url(../images/help_tombprocess_text_h36.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h37 {
+  background: url(../images/help_tombprocess_text_h37.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text .help_tombprocess_text_h38 {
+  background: url(../images/help_tombprocess_text_h38.png) no-repeat;
+}
+.help_tombprocess .help_tombprocess_text p {
+  margin-bottom: 40px;
+  line-height: 22px;
+}
+
+/*购墓须知详情*/
+.help_tombnotes_detail {
+  width: 826px;
+  padding: 46px 40px 20px 40px;
+  background: #fff;
+}
+.help_tombnotes_detail h2 {
+  margin-bottom: 30px;
+  font-family: "微软雅黑";
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+.help_tombnotes_detail p {
+  margin-bottom: 26px;
+  font-family: "微软雅黑";
+  line-height: 30px;
+  text-indent: 2em;
+}
+.help_tombnotes_detail .img {
+  margin-bottom: 26px;
+  text-align: center;
+}
+
+/*历史上的今天详情*/
+.help_history_detail .fe_detail {
+  padding-bottom: 38px;
+}
+.help_history_detail .fe_detail .fe_detail_main {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/*预约看墓*/
+.subscribe_banner {
+  width: 100%;
+  height: 519px;
+  padding-top: 82px;
+  background: url(../images/subscribe_banner.jpg) center top no-repeat;
+}
+.subscribe_banner .subscribe_box {
+  float: right;
+  width: 332px;
+  height: 396px;
+  background: #fff;
+  -moz-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  -webkit-box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+  box-shadow: 0px 0px 15px rgba(102, 102, 102, 0.1);
+}
+.subscribe_banner .subscribe_box h2 {
+  font-family: "微软雅黑";
+  font-size: 20px;
+  text-align: center;
+  line-height: 66px;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li {
+  position: relative;
+  padding: 0 44px 0 24px;
+  margin-bottom: 24px;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .xing {
+  display: block;
+  float: left;
+  width: 6px;
+  height: 36px;
+  margin-right: 6px;
+  color: #ff0000;
+  font-size: 12px;
+  line-height: 36px;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .login_tex {
+  width: 232px;
+  height: 34px;
+  padding-left: 16px;
+  line-height: 34px;
+  border: 1px solid #eeeeee;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .getcode_btn {
+  position: absolute;
+  top: 1px;
+  right: 47px;
+  width: 120px;
+  height: 36px;
+  background: #eeeeee;
+  border: none;
+  color: #41b98d;
+  font-size: 12px;
+  text-align: center;
+  line-height: 36px;
+  cursor: pointer;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .yutime_sel {
+  position: relative;
+  float: left;
+  display: block;
+  width: 232px;
+  height: 34px;
+  padding-left: 16px;
+  border: 1px solid #eeeeee;
+  color: #999999;
+  font-size: 12px;
+  line-height: 34px;
+  cursor: pointer;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .yutime_sel .yu_icon {
+  float: right;
+  width: 30px;
+  background: #e9e9e9;
+  text-align: center;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .yutime_sel_list {
+  display: none;
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  z-index: 99;
+  width: 232px;
+  height: 34px;
+  padding-left: 16px;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  border-top: none;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .yutime_sel_list li {
+  padding: 0;
+  line-height: 34px;
+  font-size: 12px;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .yutime_sel_list li a {
+  display: block;
+  color: #999999;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main li .log_validate {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 234px;
+  padding-left: 16px;
+  margin: 0 51px;
+  color: #ff0000;
+  font-size: 12px;
+  text-align: left;
+  line-height: 20px;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main .login_btn {
+  margin: 0 0 0 12px;
+  padding-top: 16px;
+}
+.subscribe_banner .subscribe_box .subscribe_box_main .login_btn a {
+  width: 250px;
+  height: 36px;
+  line-height: 36px;
+  background: #41b98d;
+  color: #fff;
+}
+
+/*邀请入驻*/
+.joinus_banner {
+  width: 100%;
+  height: 520px;
+  background: url(../images/joinus_banner.jpg) center top no-repeat;
+}
+
+/*了解我们*/
+.joinus_know {
+  width: 974px;
+  margin: auto;
+  padding: 24px 0 92px 0;
+}
+.joinus_know h2 {
+  height: 62px;
+  margin-bottom: 64px;
+  background: url(../images/joinus_know_h2bg.png) center no-repeat;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 34px;
+  text-align: center;
+  line-height: 72px;
+}
+.joinus_know p {
+  color: #031327;
+  font-family: SimHei;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+}
+.joinus_know .center {
+  margin: 18px 0;
+}
+
+/*五大服务*/
+.joinus_serve {
+  width: 100%;
+  height: 838px;
+  background: url(../images/joinus_serve.jpg) center top no-repeat;
+}
+
+/*优势*/
+.joinus_advantage {
+  padding: 46px 0;
+}
+.joinus_advantage ul li {
+  float: left;
+  width: 540px;
+  margin: 0 120px 60px 0;
+}
+.joinus_advantage ul li img {
+  margin-bottom: 24px;
+}
+.joinus_advantage ul li h2 {
+  padding-bottom: 22px;
+  background: url(../images/joinus_advantage_h2bg.jpg) no-repeat;
+  background-position: left bottom;
+  color: #244669;
+  font-family: "微软雅黑";
+  font-size: 28px;
+}
+.joinus_advantage ul li p {
+  margin-top: 20px;
+  color: #244669;
+  font-family: "微软雅黑";
+  font-size: 22px;
+  line-height: 44px;
+}
+.joinus_advantage .last {
+  margin-right: 0;
+}
+.joinus_advantage .bottom {
+  margin-bottom: 0;
+}
+
+/*我们的优势*/
+.joinus_advantagetu {
+  width: 100%;
+  height: 740px;
+  background: url(../images/joinus_advantagetu.jpg) center top no-repeat;
+}
+
+/*合作陵园*/
+.joinus_cem {
+  padding: 64px 0 126px 0;
+  text-align: center;
+}
+.joinus_cem h2 {
+  height: 62px;
+  margin-bottom: 92px;
+  background: url(../images/joinus_know_h2bg.png) center no-repeat;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 34px;
+  text-align: center;
+  line-height: 72px;
+}
+.joinus_cem ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+}
+.joinus_cem ul li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  white-space: nowrap;
+  float: left;
+  padding-left: left;
+  padding-right: left;
+}
+.joinus_cem ul li:first-child {
+  padding-left: 0;
+}
+.joinus_cem ul li:last-child {
+  padding-right: 0;
+}
+.joinus_cem ul li.last {
+  padding-right: 0;
+}
+.joinus_cem ul li {
+  width: 216px;
+  margin-right: 30px;
+}
+.joinus_cem ul li a {
+  display: block;
+}
+.joinus_cem ul .last {
+  margin-right: 0;
+}
+.joinus_cem .lea_cembtn {
+  width: 188px;
+  height: 38px;
+  line-height: 38px;
+  display: inline-block;
+  margin-top: 30px;
+  background: #001f57;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 24px;
+}
+.joinus_cem .last .lea_cembtn {
+  width: 216px;
+}
+
+/*立即加入*/
+.joinus_join {
+  width: 100%;
+  height: 609px;
+  background: url(../images/joinus_join_bg.jpg) center;
+}
+.joinus_join h2 {
+  padding: 56px 0 38px 0;
+  color: #fff;
+  font-family: "微软雅黑";
+  font-size: 34px;
+  text-align: center;
+}
+.joinus_join ul li {
+  margin: 0 0 28px 386px;
+}
+.joinus_join ul li .name {
+  float: left;
+  width: 90px;
+  height: 50px;
+  background: #e9e9e9;
+  font-size: 16px;
+  text-align: center;
+  line-height: 50px;
+  -moz-border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px 0 0 6px;
+}
+.joinus_join ul .li_bg {
+  width: 421px;
+  background: #fff;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+}
+.joinus_join .leag_tex {
+  float: left;
+  width: 312px;
+  height: 48px;
+  padding-left: 18px;
+  background: #fff;
+  border: none;
+  font-size: 14px;
+  -moz-border-radius: 0 6px 6px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 6px 6px 0;
+}
+.joinus_join .leag_validate {
+  width: 408px;
+  margin: 0 auto;
+}
+.joinus_join .leag_validate p {
+  font-size: 18px;
+  color: #fff;
+  text-align: left;
+}
+.joinus_join .leag_joinbtn {
+  display: inline-block;
+  width: 420px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  margin-top: 28px;
+  font-family: "微软雅黑";
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  background: #52bdb8;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+}
+.joinus_join p {
+  color: #fff;
+  font-family: "微软雅黑";
+  font-weight: bold;
+}
+.joinus_join ul .lx {
+  margin: 60px 0 0 0;
+  text-align: center;
+}
+.joinus_join ul .lx p {
+  font-family: "微软雅黑";
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 36px;
+}
+.joinus_join ul .lx p span {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/*搜索不到*/
+.findnothing {
+  padding: 186px 0 260px 0;
+  text-align: center;
+}
+.findnothing p {
+  color: #666666;
+  font-family: "微软雅黑";
+  line-height: 38px;
+}
+.findnothing p img {
+  margin-right: 18px;
+  vertical-align: middle;
+}
+.findnothing p a {
+  color: #41b98d;
+}
+
+/*404*/
+.four {
+  position: relative;
+  padding: 56px 0 126px 0;
+}
+.four img {
+  margin-left: 298px;
+}
+.four p {
+  position: absolute;
+  left: 465px;
+  top: 306px;
+  width: 406px;
+  color: #666666;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  line-height: 30px;
+  text-align: left;
+}
+.four p a {
+  color: #41b98d;
+}

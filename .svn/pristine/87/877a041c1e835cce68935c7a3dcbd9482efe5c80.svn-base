@@ -1,0 +1,129 @@
+<?php
+namespace back\basic\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+use back\extra\model\SearchKeywords;
+
+/**
+ * 搜索词词库
+ * 
+ */
+class SearchKey extends Base
+{
+	/**
+	 * 搜索关键词列表页
+	 * @return void;
+	 */
+	public function index(){
+		$get = input('get.');
+        $pageSize = Config('page_size');
+        $search = array();
+        if(!empty($get)){
+        	$search['type']= $get['type'];
+        }
+		$list = Db::name('SearchKeywords')->where($search)->order('created_time desc')->paginate($pageSize,false,['query'=>$get]);
+		$page = $list->render();
+		$map['level'] = config('normal_status');
+        $map['status'] = config('normal_status');
+        $province = Db::name('region')->where($map)->column('id,name');
+        $where['level'] = '2';
+        $where['status'] = config('normal_status');
+        $city =   Db::name('region')->where($where)->column('id,name');
+        $type= config('search_type');
+        $this->assign('province',$province);
+		$this->assign('list',$list);
+		$this->assign('city',$city);
+		$this->assign('type',$type);
+		$this->assign('page',$page);
+        return $this->fetch();	
+    }
+
+
+    /**
+	 * 添加过滤词
+	 */
+	public function add(){
+		$postData = input('post.');
+		$str = rtrim($postData['keyword'],'；');
+		$data =explode('；',$str);
+		foreach($data as $v){
+			$list[]= [
+ 				'province_id'=>$postData['province_id'],
+ 				'created_time'=>time(),
+ 				'keyword'=>$v,
+ 				'city_id'=>$postData['city_id'],
+ 				'type'=>$postData['type'],
+
+ 			];
+		}
+		$sub = new SearchKeywords;
+ 		$final = $sub->saveAll($list);
+		if($final){
+			$result['flag'] = 1;
+			$result['msg'] = '操作成功';
+		}
+		echo json_encode($result);
+	}
+
+	/**
+	 * 编辑
+	 */
+	public function edit(){
+         $result = array('flag'=>0,'data'=>array());
+
+        if(Request::instance()->isPost()){
+        	$postData = input('post.');
+        	$id = $postData['id'];
+        	$data['created_time'] = time();
+        	$data['province_id'] = $postData['province_id'];
+        	$data['keyword'] = $postData['keyword'];
+        	$data['type'] = $postData['type'];
+        	if(!empty($postData['city_id'])){
+        	$data['city_id'] = $postData['city_id'];
+        	}
+            if(Db::name('SearchKeywords')->where('id='.$id)->update($data)){
+                $result['flag'] = 1;
+                $result['msg'] = '操作成功';
+            }
+        }else{
+        	$getInfo = input('get.');
+        	$id = $getInfo['id'];
+            if(!empty($id)){
+                $data = Db::name('SearchKeywords')->find($id);
+                //查询市
+	            if(!empty($data['city_id'])){
+	                $name = Db::name('region')->where('id',$data['city_id'])->field('id')->find();
+	                $data['city'] = $name['id'];
+            	}
+                if(!empty($data)){
+                    $result['flag'] = 1;
+                    $result['data'] = $data;
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+
+
+    /**
+     * 删除
+     */
+    public function del(){
+    	if(Request::instance()->isPost()){
+            $id = input('id');
+            $result = array('flag'=>0,'msg'=>'操作失败');
+            
+            if(Db::name('SearchKeywords')->where('id='.$id)->delete()){
+                $result['flag'] = 1;
+                $result['msg'] = '操作成功';
+            }
+            echo json_encode($result);
+        }
+    }
+
+ 
+}	

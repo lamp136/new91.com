@@ -1,0 +1,115 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        <a><cite>同环比表</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <!--筛选 start-->
+    <form  method="get"  autocomplete="off" action='{:url("ordersamecompare")}'>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label" >年份:</label>
+                  {volist name="allYear" id="vo"}
+                    <span  {eq name="vo" value="$nowYear"}class="checked"{/eq}> </span>
+	                  <input type="radio" name="year" value="{$vo}" title="{$vo}"  {eq name="vo" value="$nowYear"}checked{/eq}>
+	                  <div class="layui-unselect layui-form-radio layui-form-radioed">
+	                  	<i class="layui-anim layui-icon"></i><span>{$vo}</span>
+	                  </div>
+               	  {/volist}
+                	<button class="layui-btn layui-btn-small" lay-submit="" >查询</button>
+            </div>
+        </div>
+    </form>
+   	<table class="layui-table">
+        <colgroup>
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th></th>
+                <th>一月</th>
+                <th>二月</th>
+                <th>三月</th>
+                <th>四月</th>
+                <th>五月</th>
+                <th>六月</th>
+                <th>七月</th>
+                <th>八月</th>
+                <th>九月</th>
+                <th>十月</th>
+                <th>十一月</th>
+                <th>十二月</th>
+            </tr> 
+        </thead>
+        <tbody>
+            <tr>
+               <td>总订单</td>
+               {for start="1" end="13"}
+               <td>{$now_total[$i]}</td>
+           	   {/for}
+            </tr>
+            <tr>
+               <td>环比</td>
+               <td>{$next_total[12]}</td>
+               {for start="1" end="12"}
+                    <td>{$now_total[$i]}</td>
+               {/for}
+            </tr>
+            <tr>
+               <td>同比</td>
+               {for start="1" end="13"}
+                    <td>{$next_total[$i]}</td>
+               {/for}
+            </tr>
+            <tr style="background-color:#ffffcc">
+                <td>完成订单</td>
+                {for start="1" end="13"}
+                    <td>{$now_success_total[$i]}</td>
+                {/for}
+            </tr>
+            <tr style="background-color:#ffffcc">
+                <td>环比</td>
+                <td>{$next_success_total[12]}</td>
+                {for start="1" end="12"}
+                    <td>{$now_success_total[$i]}</td>
+                {/for}
+            </tr>
+            <tr style="background-color:#ffffcc">
+                <td>同比</td>
+                {for start="1" end="13"}
+                    <td>{$next_success_total[$i]}</td>
+                {/for}
+            </tr>
+            <tr style="background-color:#ffffcc">
+                <td>完成百分比</td>
+                {for start="1" end="13"}
+                    <td>
+                        {notempty name="now_success_total[$i]"}
+                            {$now_success_total[$i]/$now_total[$i]*100|substr=0,4}%
+                        {/notempty}
+                    </td>
+                {/for}
+            </tr>
+        </tbody>
+    </table> 
+   
+   
+</div>
+
+{/block}

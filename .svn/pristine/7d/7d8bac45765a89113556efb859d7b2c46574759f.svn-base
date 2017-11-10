@@ -1,0 +1,270 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+<!-- banner -->
+<div class="help_banner"></div>
+
+<div class="contain clearfix contain_pdsize">
+    
+    <!-- 帮助中心 nav -->
+    <div class="help_nav">
+        <div class="help_nav_main">
+            <!-- LOGO -->
+            <div class="help_nav_logo">
+                <img src="_WEB_/images/help_nav_logo.png" alt="LOGO" />
+            </div><!-- help_nav_logo End -->
+            <div id="help_nav_list" class="help_nav_list">
+                <h2 class="active"><span>91搜墓网<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/aboutus')}">关于我们</a></li>
+                    <li><a href="{:url('help/Help/serviceprocess')}">服务流程</a></li>
+                    <li><a href="{:url('help/Help/contactus')}">联系我们</a></li>
+                </ul>
+                <h2><span>购墓指南<i class="down"></i></span></h2>
+                <ul class="show">
+                    <li class="led"><a href="{:url('help/Help/tombnotes')}">购墓须知</a></li>
+                    <li><a href="#">购墓技巧</a></li>
+                    <li><a href="#">购墓流程</a></li>
+                </ul>
+                <h2><span>常见问题<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="#">墓型选择</a></li>
+                    <li><a href="{:url('help/Help/tombagelimit')}">公墓年限</a></li>
+                    <li><a href="#">鲜花祭品</a></li>
+                    <li><a href="{:url('help/Help/wasburied')}">落葬讲究</a></li>
+                    <li><a href="#">迁坟讲究</a></li>
+                </ul>
+                <h2><span>殡葬文化<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/bury')}">安葬吉日</a></li>
+                    <li><a href="#">墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}">碑文挽联</a></li>
+                    <li><a href="#">三大鬼节</a></li>
+                    <li><a href="#">殡葬礼仪</a></li>
+                </ul>
+                <h2><span>平台声明<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="#">版权声明</a></li>
+                    <li><a href="#">免责条款</a></li>
+                    <li><a href="#">法律声明</a></li>
+                    <li><a href="{:url('help/Help/privacy')}">隐私条款</a></li>
+                </ul>
+            </div><!-- help_nav_list End -->
+        </div><!-- help_nav_main End -->
+    </div><!-- help_nav 帮助中心 nav End -->
+    
+    <!-- 帮助中心右侧 -->
+    <div class="help_right help_tombnotes">
+        
+        <!-- 殡葬百科列表 -->
+        <div class="fe_list">
+
+            <!-- 内容1 -->
+            <div class="fe_list_box">
+                <div class="fe_list_main clearfix">
+                    <!-- 图片 -->
+                    <div class="fe_list_main_img">
+                        <a href="funeralencyclopedia_detail.html"><img src="_WEB_/images/fe_list_img1.jpg" alt="行业新闻"/></a>
+                    </div>
+                    <!-- 右侧内容 -->
+                    <div class="fe_list_main_text">
+                        <h2><a href="funeralencyclopedia_detail.html">青城山味江陵园怎么样_青城山味江陵园价格山味江陵园价格</a></h2>
+                        <p>早春，空气中弥漫着丝丝凉意。在公司一块草坪中央有一棵小树孑然独立，树枝上系着一条明亮的粉色丝带，在冷风中飘扬。</p>
+                        <p class="source">
+                            来源：91搜墓网
+                            <span class="time">
+                                时间：2017-03-28
+                                <span class="pageviews">
+                                    <i></i>8891
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </div><!-- cemetery_list_main End -->
+            </div><!-- fe_list_box 内容 End -->
+
+            <!-- 内容2 -->
+            <div class="fe_list_box">
+                <div class="fe_list_main clearfix">
+                    <!-- 图片 -->
+                    <div class="fe_list_main_img">
+                        <a href="funeralencyclopedia_detail.html"><img src="_WEB_/images/fe_list_img2.jpg" alt="行业新闻"/></a>
+                    </div>
+                    <!-- 右侧内容 -->
+                    <div class="fe_list_main_text">
+                        <h2><a href="funeralencyclopedia_detail.html">青城山味江陵园怎么样_青城山味江陵园价格山味江陵园价格</a></h2>
+                        <p>早春，空气中弥漫着丝丝凉意。在公司一块草坪中央有一棵小树孑然独立，树枝上系着一条明亮的粉色丝带，在冷风中飘扬。</p>
+                        <p class="source">
+                            来源：91搜墓网
+                            <span class="time">
+                                时间：2017-03-28
+                                <span class="pageviews">
+                                    <i></i>8891
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </div><!-- cemetery_list_main End -->
+            </div><!-- fe_list_box 内容 End -->
+
+            <!-- 内容3 -->
+            <div class="fe_list_box">
+                <div class="fe_list_main clearfix">
+                    <!-- 图片 -->
+                    <div class="fe_list_main_img">
+                        <a href="funeralencyclopedia_detail.html"><img src="_WEB_/images/fe_list_img3.jpg" alt="行业新闻"/></a>
+                    </div>
+                    <!-- 右侧内容 -->
+                    <div class="fe_list_main_text">
+                        <h2><a href="funeralencyclopedia_detail.html">青城山味江陵园怎么样_青城山味江陵园价格山味江陵园价格</a></h2>
+                        <p>早春，空气中弥漫着丝丝凉意。在公司一块草坪中央有一棵小树孑然独立，树枝上系着一条明亮的粉色丝带，在冷风中飘扬。</p>
+                        <p class="source">
+                            来源：91搜墓网
+                            <span class="time">
+                                时间：2017-03-28
+                                <span class="pageviews">
+                                    <i></i>8891
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </div><!-- cemetery_list_main End -->
+            </div><!-- fe_list_box 内容 End -->
+
+            <!-- 内容4 -->
+            <div class="fe_list_box">
+                <div class="fe_list_main clearfix">
+                    <!-- 图片 -->
+                    <div class="fe_list_main_img">
+                        <a href="funeralencyclopedia_detail.html"><img src="_WEB_/images/fe_list_img1.jpg" alt="行业新闻"/></a>
+                    </div>
+                    <!-- 右侧内容 -->
+                    <div class="fe_list_main_text">
+                        <h2><a href="funeralencyclopedia_detail.html">青城山味江陵园怎么样_青城山味江陵园价格山味江陵园价格</a></h2>
+                        <p>早春，空气中弥漫着丝丝凉意。在公司一块草坪中央有一棵小树孑然独立，树枝上系着一条明亮的粉色丝带，在冷风中飘扬。</p>
+                        <p class="source">
+                            来源：91搜墓网
+                            <span class="time">
+                                时间：2017-03-28
+                                <span class="pageviews">
+                                    <i></i>8891
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </div><!-- cemetery_list_main End -->
+            </div><!-- fe_list_box 内容 End -->
+
+            <!-- 内容5 -->
+            <div class="fe_list_box">
+                <div class="fe_list_main clearfix">
+                    <!-- 图片 -->
+                    <div class="fe_list_main_img">
+                        <a href="funeralencyclopedia_detail.html"><img src="_WEB_/images/fe_list_img2.jpg" alt="行业新闻"/></a>
+                    </div>
+                    <!-- 右侧内容 -->
+                    <div class="fe_list_main_text">
+                        <h2><a href="funeralencyclopedia_detail.html">青城山味江陵园怎么样_青城山味江陵园价格山味江陵园价格</a></h2>
+                        <p>早春，空气中弥漫着丝丝凉意。在公司一块草坪中央有一棵小树孑然独立，树枝上系着一条明亮的粉色丝带，在冷风中飘扬。</p>
+                        <p class="source">
+                            来源：91搜墓网
+                            <span class="time">
+                                时间：2017-03-28
+                                <span class="pageviews">
+                                    <i></i>8891
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </div><!-- cemetery_list_main End -->
+            </div><!-- fe_list_box 内容 End -->
+
+            <!-- 内容6 -->
+            <div class="fe_list_box">
+                <div class="fe_list_main clearfix">
+                    <!-- 图片 -->
+                    <div class="fe_list_main_img">
+                        <a href="funeralencyclopedia_detail.html"><img src="_WEB_/images/fe_list_img2.jpg" alt="行业新闻"/></a>
+                    </div>
+                    <!-- 右侧内容 -->
+                    <div class="fe_list_main_text">
+                        <h2><a href="funeralencyclopedia_detail.html">青城山味江陵园怎么样_青城山味江陵园价格山味江陵园价格</a></h2>
+                        <p>早春，空气中弥漫着丝丝凉意。在公司一块草坪中央有一棵小树孑然独立，树枝上系着一条明亮的粉色丝带，在冷风中飘扬。</p>
+                        <p class="source">
+                            来源：91搜墓网
+                            <span class="time">
+                                时间：2017-03-28
+                                <span class="pageviews">
+                                    <i></i>8891
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </div><!-- cemetery_list_main End -->
+            </div><!-- fe_list_box 内容 End -->
+
+            <!-- 分页 -->
+            <div class="paging">
+                <ul>
+                    <li class="jiant jianled"><a href="#"><i class="iconfont icon-arrow-left-copy"></i></a></li>
+                    <li class="numled"><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">6</a></li>
+                    <li><a href="#">7</a></li>
+                    <li class="dian">...</li>
+                    <li><a href="#">99</a></li>
+                    <li><a href="#">100</a></li>
+                    <li class="jiant"><a href="#"><i class="iconfont icon-arrow-left-copy1"></i></a></li>
+                    <li class="tzd">跳转到：</li>
+                    <li class="intext"><input class="tex" type="text" value="" /></li>
+                    <li class="go"><a href="#">GO</a></li>
+                </ul>
+            </div><!-- paging 分页 End -->
+
+        </div><!-- cemetery_list 陵园列表 End -->
+
+    </div><!-- help_right 帮助中心右侧 End -->
+
+</div><!-- contain End -->
+
+<!-- 优势 -->
+<div class="home_advantage aboutus_advantage">
+    <div class="contain">
+        <ul>
+            <li>
+                <img src="_WEB_/images/home_advantage_img1.png"/>
+                <h2>信息透明</h2>
+                <P>陵园信息全面，价格透明</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img2.png"/>
+                <h2>预约服务</h2>
+                <P>线上咨询，电话服务</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img3.png"/>
+                <h2>专业服务</h2>
+                <P>专业咨询团队，资深企业</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img4.png"/>
+                <h2>多重优惠</h2>
+                <P>多种礼品，享受独家优惠</P>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/home_advantage_img5.png"/>
+                <h2>诚信保障</h2>
+                <P>诚信商家，保障服务</P>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- 优势 home_advantage End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}
+    
+    

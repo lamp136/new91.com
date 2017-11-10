@@ -1,0 +1,417 @@
+{extend name='extra@main' /}
+{block name="link"}
+    <link href="_WEB_/css/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="_WEB_/js/jquery-1.8.2.min.js"></script>
+{/block}
+{block name="popups"}
+    <!-- 我要评价 -->
+    <div class="tooltip_box"></div>
+    <div class="tooltip tooltip_remark">
+        <h2>我的评价</h2>
+        <form id="evalForm">
+            <div class="pf clearfix">
+                <span class="title">评分：</span>
+                 <ul>
+                    <li>环境：<span id='hj'></span></li>
+                    <li>价格：<span id='jg'></span></li>
+                    <li>交通：<span id='jt'></span></li>
+                    <li>服务：<span id='fw'></span></li>
+                </ul>
+            </div>
+            <div class="ms">
+                <span class="title">描述：</span>
+                <textarea class="ms_tarea" name="content" placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+            </div>
+            <!-- <div class="phone">
+                <span class="title">评分：</span>
+                <input class="phone_txt" type="text" value="" placeholder="请输入您正在使用的手机号" />
+            </div>
+            <div class="niname">
+                <span></span>匿名评价
+            </div> -->
+            <div class="remark_btn">
+                <a class="remark_btn_a" data-url="{:url('cemetery/Cemetery/addcomment')}" href="javascript:void(0);">提交评价</a>
+                <input type="hidden" name="hj" value=""/>
+                <input type="hidden" name="jg" value=""/>
+                <input type="hidden" name="jt" value=""/>
+                <input type="hidden" name="fw" value=""/>
+                <input type="hidden" name="store_id" value="{$data.id}"/>
+            </div>
+            <div class="tooltip_remark_close"></div>
+        </form>
+    </div><!-- tooltip_remark 我要评价 End -->
+{/block}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('cemetery/Cemetery/index')}" title="陵园墓地">陵园墓地</a></li>
+                <li class="jt">></li>
+                <li>{$data.name}</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 陵园详情介绍 -->
+        <div class="cemetery_detail_main clearfix">
+            {eq name="Think.config.store_member_ad" value="$data.member_status"}
+                <!-- 图片 -->
+                <div class="cemetery_detail_main_img">
+                    <img alt="{$data.name}" src="{$data.image}" alt="陵园详情图片" />
+                </div>
+                <!-- 详情 -->
+                <div class="cemetery_detail_main_text">
+                    <h2>{$data.name}</h2>
+                    <!-- 参考价 浏览量 客户评价 -->
+                    <div class="price clearfix">
+                        <p class="zxprice">参考价：{eq name="data.min_price" value="0.00"}<font></font><strong>--</strong><span></span>{else /}<font>￥</font><strong>{$data.min_price}</strong><span>万起</span>{/eq}</p>
+                        <p class="llnum">浏览量：<span class="ll">{$data.actual_hits + $data.hits}</span><span class="fg">|</span>客户评价：<span>{$data.comments_count}</span></p>
+                    </div>
+                    <div class="infoAd clearfix">
+                        <ul>
+                            <li><span>{$data.city_id}</span>行政区域</li>
+                            <li><span>{$data.distance}</span>距离市区</li>
+                            {notempty name="data.service_time"}
+                                <li>
+                                    <span>{$data.service_time}</span>服务时间
+                                    </li>
+                            {/notempty}
+                            {notempty name="data.phone"}
+                                <li class="phoneAd last">
+                                    <span>{$data.phone}</span>服务热线
+                                </li>
+                            {/notempty}
+                        </ul>
+                    </div>
+                    <!-- 环境 -->
+                    <div class="setting settingAd">
+                        <ul class="clearfix">
+                            {notempty name="data.label"}
+                                {php}
+                                    $label = explode(',',$data['label']);
+                                    foreach($label as $val){
+                                        echo '<li>'.$val.'</li>';
+                                    }
+                                {/php}
+                            {/notempty}
+                        </ul>
+                    </div>
+                    <!-- 地址 -->
+                    <div class="addressAd clearfix">
+                        <p><span>陵园地址：</span>{$data.address}<a href="javascript:void(0);" class="lookmap"><i></i>查看地图</a></p>
+                    </div>
+                </div>
+            {else/}
+                <!-- 图片 -->
+                <div class="cemetery_detail_main_img">
+                    <img alt="{$data.name}" src="{$data.image}" alt="{$data.name}" />
+                    {eq name="data.status" value="0"}
+                        <span class="ygwicon"></span>
+                    {/eq}
+                </div>
+                <!-- 详情 -->
+                <div class="cemetery_detail_main_text">
+                    <h2>{$data.name}</h2>
+                    <!-- 环境 -->
+                    <div class="setting">
+                        <ul class="clearfix">
+                            {notempty name="data.label"}
+                                {php}
+                                    $label = explode(',',$data['label']);
+                                    foreach($label as $val){
+                                        echo '<li>'.$val.'</li>';
+                                    }
+                                {/php}
+                            {/notempty}
+                        </ul>
+                    </div>
+                    <!-- 参考价 浏览量 客户评价 -->
+                    <div class="price clearfix">
+                        <p class="zxprice">参考价：
+                            {eq name="data.min_price" value="0.00"}<font></font><strong>--</strong><span></span>{else /}<font>￥</font><strong>{$data.min_price}</strong><span>万起</span>{/eq}
+                        </p>
+                        <p class="llnum">浏览量：<span class="ll">{$data.actual_hits + $data.hits}</span><span class="fg">|</span>客户评价：<span>{$data.comments_count}</span></p>
+                    </div>
+                    <!-- 地址 -->
+                    <div class="address clearfix">
+                        <p><span>陵园地址：{$data.address}</span><a href="javascript:void(0);" class="lookmap" title="查看地图"><i></i>查看地图</a></p>
+                    </div>
+                    <!-- 平台优惠 -->
+                    <!-- <div class="favorable clearfix">
+                        <p><span>平台优惠：</span></p>
+                        <ul class="clearfix">
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                            <li><i></i>礼品赠送</li>
+                        </ul>
+                    </div> -->
+                    <!-- 预约看墓 在线咨询 -->
+                    <div class="btn clearfix">
+                        <a class="buttonlv btnleft" target="_blank" title="预约看墓" href="{:url('cemetery/Cemetery/subscribe',['id' => $data.id])}" >预约看墓</a>
+                        <a class="buttonbai" target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439" title="在线咨询">在线咨询</a>
+                    </div>
+                </div>
+            {/eq}
+        </div><!-- cemetery_detail_main 陵园详情介绍 End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+            <div class="cem_detail"  id="cem_detail">
+                <!-- 定位导航头部 -->
+                <div class="cem_detail_title" id="cem_detail_title">
+                    <ul>
+                        <li class="thistab"><a href="javascript:void(0);" tab="tabcem1" title="环境照片">环境照片</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem2" title="墓型展示">墓型展示</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem3" title="陵园简介">陵园简介</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem4" title="名人墓地">名人墓地</a></li>
+                        <li class="address_map"><a href="javascript:void(0);" id="tab5" tab="tabcem5" title="交通信息">交通信息</a></li>
+                        <li><a href="javascript:void(0);" tab="tabcem6" title="客户评价">客户评价</a></li>
+                        <div class="clear"></div>
+                    </ul>
+                </div>
+                <ul>
+                    <!-- 环境照片 -->
+                    <li class="cem_details_box" id="tabcem1">
+                        <!-- 环境照片内容 -->
+                        <div class="cem_detail_environment">
+                            <!-- 展示内容title -->
+                            {notempty name="data.landscape"}
+                                <div class="environment_title clearfix">
+                                    <ul>
+                                        <li class="led" data-zone="0">
+                                            <a href="javascript:void(0);">全部（{$data['landscape']['total']}）</a>
+                                        </li>
+                                        {volist name="data['landscape']['info']" id="zone"}
+                                            {notempty name="zone"}
+                                                {neq name="key" value="0"}
+                                                    <li data-zone="{$key}"><a href="javascript:void(0);">{if array_key_exists($key,$allTombZones)}{$allTombZones[$key]}{/if}（{:count($zone)}）</a></li>
+                                                {/neq}
+                                            {/notempty}
+                                        {/volist}
+                                    </ul>
+                                </div>
+                            {/notempty}
+                            <!-- 展示图片 -->
+                            <div class="environment clearfix">
+                                <ul>
+                                    {notempty name="data['landscape']['list']"}
+                                        {volist name="data['landscape']['list']" id="landscape"}
+                                            <li {if $i%3 == 0} class="last" {/if}>
+                                                <a class="fancybox" href="{$landscape.image}" data-fancybox-group="group" title="{$landscape.title}">
+                                                    {notempty name="landscape.thumb_image"}
+                                                        <img class="lazy" data-original="{$landscape.thumb_image}" alt="陵园风景图-{$i}" />
+                                                    {else/}
+                                                        <img class="lazy" data-original="{$landscape.image}" alt="陵园风景图-{$i}" />
+                                                    {/notempty}
+                                                    <!-- <p>{$landscape.title}</p> -->
+                                                </a>
+                                            </li>
+                                        {/volist}
+                                    {/notempty}
+                                </ul>
+                            </div><!-- environment 展示图片 End -->
+                        </div><!-- cem_detail_environment 环境照片内容 End -->
+                    </li>
+                    
+                    <!-- 墓型展示 -->
+                    <li  class="cem_details_box cem_detail_tombtype" id="tabcem2">
+                        <!-- 筛选条件 -->
+                        {notempty name="data.tombs"}
+                            <div class="sifting">
+                                {notempty name="tombZones"}
+                                    <!--所在区域 -->
+                                    <div class="sifting_main clearfix">
+                                        <span>所在墓区：</span>
+                                        <ul>
+                                            <li class="led"><a class="tomb_zones" data-zone="0" href="javascript:void(0);">不限</a></li>
+                                            {volist name="tombZones" id="zone"}
+                                                {notempty name="zone.tombs_count"}
+                                                    <li><a class="tomb_zones" data-zone="{$zone.id}" href="javascript:void(0);">{$zone.zone_name}({$zone.tombs_count})</a></li>
+                                                {/notempty}
+                                            {/volist}
+                                        </ul>
+                                    </div>
+                                {/notempty}
+
+                                <!-- 价格区间 -->
+                                <div class="sifting_main clearfix">
+                                    <span>价格区间：</span>
+                                    <ul>
+                                        <li class="led"><a class="tombs_price" data-range="0" href="javascript:void(0);">不限</a></li>
+                                        {volist name="Think.config.price_range" id="range"}
+                                            <li><a href="javascript:void(0);" data-range="{$range}" class="tombs_price" title="{$range}">{$range}{if $key == 0}万及以下{else/}万{/if}</a></li>
+                                        {/volist}
+                                    </ul>                   
+                                </div>
+                            </div><!-- sifting筛选条件结束 -->
+                        {/notempty}
+                        
+                        <!-- 墓型列表 -->
+                        <div class="tombtype">
+                            <ul class="tombtypeul clearfix">
+                                
+                            </ul>
+
+                            <!-- 分页 -->
+                            <div class="paging">
+                                
+                            </div><!-- paging 分页 End -->
+                        </div><!-- tombtype 墓型列表 End -->
+                    </li>
+                    
+                    <!-- 陵园简介 -->
+                    <li class="cem_details_box" id="tabcem3">
+                        <div class="cem_detail_intro kindedit_td kindedit_strong">
+                            {$data.content}
+                        </div><!-- cem_detail_intro 陵园简介 End -->
+                    </li>
+                    
+                    <!-- 名人墓地 -->
+                    <li class="cem_details_box" id="tabcem4">
+                        <!-- 名人墓地 -->
+                        <div class="cem_detail_celebrity">
+                            <div class="celebrity_list">
+                                
+                            </div>
+                            <!-- 分页 -->
+                            <div class="paging"></div><!-- paging 分页 End -->
+
+                        </div><!-- cem_detail_celebrity 名人墓地 End -->
+                    </li>
+                    
+                    <!-- 交通信息 -->
+                    <li class="cem_details_box" id="tabcem5">
+                        <div class="cem_detail_map" id="Bmap" style="width: 812px;height: 484px;">
+                            <!-- <img src="_WEB_/images/cem_details_map_img1.jpg" alt="地图" /> -->
+                        </div>
+                    </li>
+                    
+                    <!-- 客户评价 -->
+                    <li class="cem_details_box" id="tabcem6">
+                        <!-- 评价 -->
+                        <div class="cem_details_remark">
+
+                            <!-- 与描述相符+星星 -->
+                            <div class="cem_details_star clearfix">
+                                <div class="coincide">
+                                    <p>综合评价</p>
+                                    <h2>{$average.total}<span>分</span></h2>
+                                </div>
+                                <ul>
+                                    <li>
+                                        环境：
+                                        <span class="comment_star" data-value="{$average.environment}"></span>
+                                    </li>
+                                    <li class="last">
+                                        价格：
+                                        <span class="comment_star" data-value="{$average.price}"></span>
+                                    </li>
+                                    <li>
+                                        交通：
+                                        <span class="comment_star" data-value="{$average.traffic}"></span>
+                                    </li>
+                                    <li class="last">
+                                        服务：
+                                        <span class="comment_star" data-value="{$average.service}"></span>
+                                    </li>
+                                </ul>
+                                <!-- <div class="remark_btn">
+                                    <a class="remark_a" href="javascript:void(0);">我要评价</a>
+                                </div> -->
+                            </div>
+                            {gt name="data.comments_count" value="0"}
+                                <!-- 评价数量 -->
+                                <div class="cem_details_evaluate_title clearfix">
+                                    <ul>
+                                        <li class="led"><img src="_WEB_/images/evaluate_title1.png" alt="评论"/>全部 {$data.comments_count}</li>
+
+                                    </ul>
+                                </div>
+                                <div class="comment_list">
+                                    
+                                </div>
+                                <!-- 分页 -->
+                                <div class="paging"></div><!-- paging 分页 End -->
+                            {/gt}
+                        </div><!-- cem_details_remark 评价 End -->
+                    </li>
+                </ul>
+            </div>
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            {notempty name="storeNews"}
+                <!--陵园动态-->
+                <div class="policies cem_margin_bottom">
+                    <h2>陵园动态</h2>
+                    <ul>
+                        {volist name="storeNews" id="news"}
+                            <li><a target="_blank" title="{$news.title}" href="{:url('article/Article/detail',['id' => $news.id],$Think.config.assign_suffix,$Think.config.assign_domain)}">{$news.title|msubstr=0,18}</a></li>
+                        {/volist}
+                    </ul>
+                </div><!-- policies 惠民政策 End-->
+            {/notempty}
+
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <img src="_WEB_/images/advertising_img1.jpg" alt="广告"/>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <a target="_blank" title="商家入驻" href="{:url('/help/joinus','',$Think.config.assign_suffix,$Think.config.assign_domain)}"><img src="_WEB_/images/advertising_img.jpg" alt="商家入驻"/></a>
+            </div> <!-- advertising 广告位 End-->
+            
+            {notempty name="hmzc"}
+                <!--风水文化-->
+                <div class="policies">
+                    <h2>风水文化</h2>
+                    <ul>
+                        {volist name="hmzc" id="v"}
+                            <li><a target="_blank" title="{$v.title}" href="{:url('article/Article/detail',['id' => $v.id],$Think.config.assign_suffix,$Think.config.assign_domain)}">{$v.title|msubstr=0,15}</a></li>
+                        {/volist}
+                    </ul>
+                </div><!-- policies 惠民政策 End-->
+            {/notempty}
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+{/block}
+
+{block name="js"}
+    <!-- 环境照片点击小图弹出大图jquery.fancybox.js -->
+    <script src="_WEB_/js/jquery.fancybox.js"></script>
+    <script src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170705114645"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+    <script src="_WEB_/js/raty/jquery.raty.js"></script>
+    <!--私有JS -->
+    <script type="text/javascript">
+        var data = <?php echo !empty($data) ? json_encode($data) : ''?>,
+            isMap = {$is_map},
+            priceConfig = <?php echo json_encode(config('price_range'))?>,
+            sid = {$data.id};
+    </script>
+    <script type="text/javascript" src="_WEB_/js/cemeterydetails.js"></script>
+    <!--jquery.lazyloadxt部分 -->
+    <script type="text/javascript" src="_WEB_/js/jquery.lazyload.min.js"></script>
+    <script type="text/javascript">
+        $("img.lazy").lazyload({
+            placeholder : "/static/web/images/detail_loading.gif", //用图片提前占位
+            effect: "fadeIn",
+        });
+    </script>
+
+    
+{/block}

@@ -1,0 +1,385 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id='motai' style="display:none">
+    <form id='data-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+      <tr>
+        <td> <span style="color:red">*</span>上级权限</td>
+        <td>
+          <div class="layui-form-item">
+            <select name="Privilege[pid]" id="privilege_pid" lay-verify="required">
+            <option value="">--请选择部门--</option>
+           </select>
+         </div>
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>地址类型</td>
+        <td>  
+          <input type="radio" name="Privilege[type]" value="0" title="菜单" checked>
+          <input type="radio" name="Privilege[type]" value="1" title="方法"><span class="layui-form-mid layui-word-aux">菜单：用于显示，方法：不显示</span>
+        </td>
+      </tr>
+       <tr>
+        <td> <span style="color:red">*</span>是否启用</td>
+        <td>  
+          <input type="radio" name="pri_status[status]" value="1" title="启用" checked>
+          <input type="radio" name="pri_status[status]" value="-1" title="禁用">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>权限名称</td>
+        <td>  
+          <input type="text" name="Privilege[title]"  value="" placeholder="权限名称" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>权限地址</td>
+        <td>  
+          <input type="text" name="Privilege[name]" value="" placeholder="权限地址--控制器/方法" autocomplete="off" class="layui-input"><span class="layui-form-mid layui-word-aux"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>排序</td>
+        <td>  
+          <input type="text" name="Privilege[sort]" placeholder="排序--越大越靠前" autocomplete="off" class="layui-input"><span class="layui-form-mid layui-word-aux"></span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2' style="text-align: center;">  
+          <button class="layui-btn" id='submit' type='button'>立即提交</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    <input type='hidden' name=''>
+</form>
+</div>
+
+
+<div id='editmotai' style="display:none">
+    <form id='editdata-form' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+      <tr>
+        <td> <span style="color:red">*</span>上级权限</td>
+        <td>
+          <div class="layui-form-item">
+            <select name="editPrivilege[pid]" id="edit_privilege_pid" lay-verify="required">
+            <option value="">--请选择部门--</option>
+           </select>
+         </div>
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>地址类型</td>
+        <td>  
+          <input type="radio" name="editPrivilege[type]" value="0" title="菜单" checked>
+          <input type="radio" name="editPrivilege[type]" value="1" title="方法"><span class="layui-form-mid layui-word-aux">菜单：用于显示，方法：不显示</span>
+        </td>
+      </tr>
+       <tr>
+        <td> <span style="color:red">*</span>是否启用</td>
+        <td>  
+          <input type="radio" name="status[status]" value="1" title="启用" checked>
+          <input type="radio" name="status[status]" value="-1" title="禁用">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>权限名称</td>
+        <td>  
+          <input type="text" name="editPrivilege[title]" id="edit_privilege_title" placeholder="权限名称" autocomplete="off" class="layui-input">
+        </td>
+      </tr>
+      <tr>
+        <td> <span style="color:red">*</span>权限地址</td>
+        <td>  
+          <input type="text" name="editPrivilege[name]" id="edit_privilege_name" placeholder="权限地址" autocomplete="off" class="layui-input"><span class="layui-form-mid layui-word-aux">控制器/方法</span>
+        </td>
+      </tr>
+      <tr>
+        <td>排序</td>
+        <td>  
+          <input type="text" name="editPrivilege[sort]" placeholder="排序" autocomplete="off" id="edit_privilege_sort"  class="layui-input"><span class="layui-form-mid layui-word-aux">越大越靠前</span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2' style="text-align: center;">  
+          <input name="editPrivilege[id]"  type="hidden" id='edit_privilege_id' data-rule='required'>
+          <button class="layui-btn" id='editsubmit' type='button'>立即提交</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+</div>
+{/block}
+{block name='body'}
+<div style="height:10px;"></div>
+<div style="float:right;">
+  {php}
+        if(showHandle('store/Privilegecont/addprivilege')){
+  {/php}
+  <button  class="layui-btn add">
+    <i class="layui-icon ">&#xe608;</i>添加菜单
+  </button>
+  {php}
+        }
+  {/php}
+
+</div>
+  <div style="float:left;border:1px;width:100%;">
+     <div style="float:left;border:1px;width:20%;">
+        <div class="widget-body">
+            <div style="padding-top: 40px;"></div>
+            <div style="float: left;width:80px; padding-left: 60px;">
+                <ul class='unstyled'>
+                    {volist name='privilegeMenu' id='vo'}
+                        <li><a href="{:url('index',['id'=>$vo.id])}"><i>{$vo.title}</i></a></li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+     </div>
+     <div style="float:left;border:1px;width:75%;">
+      <p style='text-align:center;margin-top:10px; '>{$currentPrivilege.title}-功能列表</p>
+        <table class="layui-table">
+          
+          <thead>
+            <tr>
+              <th>功能块</th>
+              <th>菜单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作方法</th>
+            </tr> 
+          </thead>
+          <tbody>
+
+           {volist name='first' id='firstVal'}
+            <tr>
+              <td style="width:10%;height:100px;">
+                <button class="layui-btn layui-btn-small edit"  data-id='{$firstVal.id}'>
+                    <a href="javascript:void(0);"  >{$firstVal.title}</a>
+                </button>
+              </td>
+              <td>
+                  <table width="100%">
+                    {notempty name="two[$firstVal['id']]"}
+
+                    {volist name="two[$firstVal['id']]" id='twoVal'}
+                     <tr>
+                         <td style="height: 35%;width:20%;">
+                             <button class="layui-btn layui-btn-small edit" data-id='{$twoVal.id}'><a href="javascript:void(0);"   >{$twoVal.title}</a></button>
+                             <button><span data-id='{$twoVal.id}' class="delete"><i class="layui-icon">&#xe640;</i></span></button>
+                         </td>
+                         <td style="width:80%;">
+                            {notempty name="three[$twoVal['id']]"}
+                            {volist name="three[$twoVal['id']]" id='threeVal'}
+                                <button class="layui-btn layui-btn-small edit" data-id='{$threeVal.id}' style="margin-bottom:8px"><a href="javascript:void(0)"   >{$threeVal.title}</a></button>
+                                <button>
+                                    <span  data-id='{$threeVal.id}' class="delete"><i class="layui-icon">&#xe640;</i></span>
+                                </button>
+                            {/volist}
+                            {/notempty}
+                         </td>
+                     </tr>
+                     {/volist}
+                     {/notempty}
+                  </table>
+              </td>
+            </tr>
+           {/volist}
+          </tbody>
+        </table>
+     </div>
+  </div>
+{/block}
+
+{block name="optJS"}
+<script>
+      
+      layui.use(['form', 'jquery', 'layer'],function(){
+        var $ = layui.jquery;
+        var form = layui.form();
+        var layer = layui.layer;
+        
+         //摸态框
+         //点击添加职位，弹出添加职位表单
+        $('.add').click(function () {
+            $.ajax({
+                url: "{:url('getprivilege')}",
+                type: "get",
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var str = '';
+                    if (result.flag == 1) {
+                        var data = result.data;
+                        str += '<option value="">--请选择--</option>'
+                        str += '<option  value="0">顶级</option>'
+                        for (i in data) {
+                            if (data[i].level == 0) {
+                                str += '<option value="' + data[i].id + '">|--' + data[i].title + '</option>'
+                            } else if (data[i].level == 1) {
+                                str += '<option value="' + data[i].id + '">&nbsp;&nbsp;|--' + data[i].title + '</option>'
+                            } else if (data[i].level == 2) {
+                                str += '<option value="' + data[i].id + '">&nbsp;&nbsp;&nbsp;&nbsp;|--' + data[i].title + '</option>'
+                            }
+                        }
+
+                    } else {
+                        str += '<option value="">--请选择--</option>'
+                        str += '<option  value="0">顶级</option>'
+                    }
+                    $('#privilege_pid').html(str);
+                    form.render();
+                     layer.open({
+                        closeBtn: 2,
+                        type: 1, 
+                        area: '1000px',
+                        title:'添加职位信息',
+                        content: $('#motai'),
+                  }); 
+                }
+            });
+        });
+
+
+     //添加职位信息表单提交
+    $('#submit').bind('click',function(){
+        var  val = $('#privilege_pid').val();
+        var title = $("#data-form input[name='Privilege[title]']").val();
+        if(val.length<1){
+            layer.msg('请选择上级权限');
+            return false;
+        } 
+        if(title.length<1){
+            layer.msg('请填写权限名称');
+            return false;
+        } 
+        
+
+        var dataFrom = $('#data-form').serialize();
+        $.ajax({
+            url:"{:url('addprivilege')}",
+            type:'POST',
+            data:dataFrom,
+            dataType:'json',
+            success:function(d){
+                if(d.flag==1){
+                    layer.msg(d.msg,{icon:1,time:2000},function(){
+                        window.location.reload();//刷新当前页面.
+                    });
+                }else{
+                    layer.msg(d.msg,{icon:1,time:2000},function(){
+                        window.location.reload();//刷新当前页面.
+                    });
+                }
+            }
+        });
+    });  
+
+    //点击编辑菜单，弹出编辑菜单表单
+        $('.edit').click(function () {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: "{:url('editprivilege')}",
+                type: 'GET',
+                data: 'id='+id,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var str ='';
+                    if (result.flag == 1) {
+                         
+                        var currentprivilege = result.currentprivilege;
+                        var privilegeTree = result.privilegeTree;
+                        str += '<option value="">--请选择--</option>';
+                        str += '<option  value="0">顶级</option>';
+                        for (i in privilegeTree) {
+                            if (privilegeTree[i].level == 0) {
+                                if(privilegeTree[i].id==currentprivilege.pid){
+                                    str += '<option value="' + privilegeTree[i].id + '" selected>|--' + privilegeTree[i].title + '</option>';
+                                }else{
+                                    str += '<option value="' + privilegeTree[i].id + '">|--' + privilegeTree[i].title + '</option>';
+                                }
+                            } else if (privilegeTree[i].level == 1) {
+                                if(privilegeTree[i].id==currentprivilege.pid){
+                                    str += '<option value="' + privilegeTree[i].id + '" selected>&nbsp;&nbsp;|--' + privilegeTree[i].title + '</option>';
+                                }else{
+                                    str += '<option value="' + privilegeTree[i].id + '">&nbsp;&nbsp;|--' + privilegeTree[i].title + '</option>';
+                                }
+                            } else if (privilegeTree[i].level == 2) {
+                                if(privilegeTree[i].id==currentprivilege.pid){
+                                    str += '<option value="' + privilegeTree[i].id + '" selected>&nbsp;&nbsp;&nbsp;&nbsp;|--' + privilegeTree[i].title + '</option>';
+                                }else{
+                                    str += '<option value="' + privilegeTree[i].id + '">&nbsp;&nbsp;&nbsp;&nbsp;|--' + privilegeTree[i].title + '</option>';
+                                }
+                            }
+                        }
+                        $('#edit_privilege_pid').html(str);
+                        $('#edit_privilege_title').val(currentprivilege.title);
+                        $('#edit_privilege_name').val(currentprivilege.name);
+                        $('#edit_privilege_sort').val(currentprivilege.sort);
+                        $('#edit_privilege_id').val(currentprivilege.id);
+                        $("input[name='status[status]'][value="+currentprivilege.status+"]").attr("checked",true); 
+                        $("input[name='editPrivilege[type]'][value="+currentprivilege.type+"]").attr("checked",true); 
+                        form.render();
+                        layer.open({
+                          closeBtn: 2,
+                          type: 1, 
+                          area: '1000px',
+                          title:'添加职位信息',
+                          content: $('#editmotai'),
+                        });
+                    }
+                }
+            });
+        });
+
+
+          //提交编辑菜单form 表单
+        $('#editsubmit').click(function(){
+            var dataFrom = $('#editdata-form').serialize();
+            $.ajax({
+                url: "{:url('editprivilege')}",
+                type: 'POST',
+                data:dataFrom,
+                dataType:'json',
+                success: function (d) {
+                      if (d.flag == 1) {
+                          layer.msg(d.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                          });
+                    } else {
+                        layer.msg('修改失败');
+                    }
+                }
+            });
+        });
+
+        //删除菜单
+        $('.delete').click(function(){
+            var id = $(this).attr('data-id');
+            layer.confirm('你确认要删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    url: "{:url('delprivilege')}",
+                    type: 'POST',
+                    data: {'id':id},
+                    success:function(d){
+                        var result = eval("(" + d + ")");
+                        if (result.flag == 1) {
+                            layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                          });
+                        } else {
+                            layer.msg(result.msg);
+                        }
+                    },
+                });
+              layer.close(index);
+            });
+        });
+    
+  });
+
+</script>
+
+{/block}

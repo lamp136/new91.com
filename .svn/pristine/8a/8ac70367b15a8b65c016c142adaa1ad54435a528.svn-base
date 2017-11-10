@@ -1,0 +1,315 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="editmsg_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="edit_info_form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">编辑短信信息</label>
+            <div class="layui-input-block">
+               <textarea placeholder="编辑短信信息" class="layui-textarea" name="msg" id="msgid" ></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="editmsg">提交</div>
+        </div>
+        <input type='hidden' name='id' class="editid" value="">
+    </form>
+</div>
+{/block}
+{block name='body'}
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  {notempty name="$title"}
+  <legend>{$title.created_time|date='Y-m-d',###}|{$title.reservation_person}|{$title.store_name}订单详情</legend>
+  {/notempty}
+</fieldset>
+<div class="layui-tab" lay-filter="items">
+    <ul class="layui-tab-title" id='ul_table'>
+        <li lay-id="orderDetail" data-url='{:url("money/Money/finishdetail",array("orderId"=>$orderId,"items"=>"orderDetail"))}'>订单信息</li>
+        <li lay-id="messages" data-url='{:url("money/Money/finishdetail",array("orderId"=>$orderId,"items"=>"messages"))}'>短信</li>
+    </ul>
+    <!--订单信息-->
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">  
+        {notempty name="$data"}
+            {volist name="data" id="vo"}
+            <table class="layui-table">
+
+                <tr>
+                    <th>预约人</th><td>{$vo.reservation_person}</td>
+                    <th>手机</th><td>{$vo.reservation_phone}</td>
+                    <th>来源</th><td>{$order_type[$vo.order_type]}</td>
+                    <th>地区</th><td>{$zone.province.name}/{$zone.city.name}</td>
+                </tr>
+                <tr>
+                    <th>订单类型</th><td>
+                    <span class="label label-info">
+                    {notempty name="vo['call_type']"}
+                    {$call_arr[$vo.call_type]}
+                    {/notempty}
+                    </span>&nbsp;
+                    </td>
+                    <th>座机</th><td>{$vo.reservation_landline}</td>
+                    <th>微信</th><td>{$vo.reservation_wechat}</td>
+                    <th>QQ</th><td>{$vo.reservation_qq}</td>
+                </tr>
+                <tr>
+                    {if condition="($vo['store_names'] == '')"}
+
+                    <th>预约陵园</th><td colspan="3">{$vo.store_name}</td>
+                    {else /}
+                    <th>预约陵园</th><td colspan="3">{$vo.store_names}</td>
+                    {/if}
+                    <th>实际购买园区</th><td colspan="3">
+                       
+                    </td>
+                </tr>
+                <tr>
+                    <th>心里价位</th><td>{$vo.budgeted_price}万</td>
+                    <th>下单时间</th><td>{$vo.created_time|date='Y-m-d',###}</td>
+                    <th>意向程度</th><td></td>
+                    <th>看墓时间</th><td>{$vo.appoint_time|date="Y-m-d",###}</td>
+                </tr>
+    
+                <tr>
+                    <th>安葬人名</th><td>{$vo.tomb_user}</td>
+                    <th>安葬人性别</th><td>
+                    {notempty name="vo['tomb_user_sex']"}
+                     {$sex[$vo.tomb_user_sex]}
+                    {/notempty}
+                    </td>
+                    <th>安葬人年龄</th><td>{$vo.tomb_user_age}</td>
+                    <th>安葬人状态</th><td>
+                    {notempty name="vo['is_live']"}
+
+                    {$tomb_user_status[$vo.is_live]}
+                    {/notempty}
+                    </td>
+                </tr>
+                <tr>
+                    <th>购买人</th><td>{$vo.buyer}</td>
+                    <th>手机</th><td>{$vo.mobile}</td>
+                    <th>性别</th><td>
+                    {notempty name="vo['reservation_sex']"}
+                        {$sex[$vo.reservation_sex]}
+                    {/notempty}
+                    </td>
+                    <th>年龄</th><td>{$vo.reservation_age}</td>
+                </tr>
+                <tr>
+                    <th>座机</th><td>
+                        {$vo.buyer_landline}
+                    </td>
+                    <th>微信</th><td>{$vo.buyer_wechat}</td>
+                    <th>QQ</th><td>{$vo.buyer_qq}</td>
+                </tr>
+                <tr>
+                    <th>是否成交</th><td>是 <img src="" title="凭证" style="width:20px;height:20px;"/></td>
+                    
+                    <th>订单状态</th><td>
+                    {if condition="$Think.config.normal_status eq ($vo['state'])"}
+                        {$order_status_change[$vo.status]}
+                    {else /}
+                        已删除
+                    {/if}
+                    </td>
+                    <th>推送商家</th><td>
+                    {eq name="vo['pushed_status']" value="0"}
+                        未推送
+                    {/eq}
+                    {eq name="vo['pushed_status']" value="1"}
+                     已推送
+                    {/eq}
+                 </td>
+                </tr>
+                <tr>
+                    <th>墓价</th><td>{$vo.total_price}</td>
+                    <th>成交价</th><td>{$vo.tomb_price}</td>
+                    <th>园区折扣</th><td>{$vo.store_discount}</td>
+                    <th>91折扣</th><td>{$vo.91_discount}</td>
+                </tr>
+                 <tr>
+                    <th>佣金比例</th><td>{$vo.brokerage_percent}</td>
+                    <th>应收</th><td>{$vo.brokerage_money}</td>
+                    <th>实收</th><td>{$vo.paid_in_amount}</td>
+                </tr>
+                <tr>
+                    <th>返现比例</th><td>{$vo.return_percent}</td>
+                    <th>应返</th><td>{$vo.return_money}</td>
+                    <th>实返</th><td>{$vo.return_fact_money}</td>
+                </tr>
+                <tr>
+                    <th>墓穴位置</th><td colspan="3">{$vo.tomb_address}</td>
+                    <th>备注</th><td colspan="3">{$vo.remark}</td>
+                </tr>
+                <tr>
+                    <th>未成交原因</th><td colspan="3">{$vo.outstanding_reason}</td>
+                    <th>解决方案</th><td colspan="3">{$vo.outstanding_method}</td>
+                </tr>
+                <tr>
+                    <th>需求描述</th><td colspan="7">
+                        {$vo.demand}
+                    </td>
+                </tr>
+            </table> 
+            {/volist}
+            {/notempty}
+        </div>
+
+        <!--短信信息-->
+          <div class="layui-tab-item">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="80">
+                    <col width="80">
+                    <col width="100">
+                    <col width="300">
+                    <col width="60">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>对象</th>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>短信内容</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {notempty name="msg"}
+                     {volist name="msg" id="vo"}
+                    <tr>
+                        <td>{switch name="vo.classify"}
+                                {case value="1"}客户{/case}
+                                {case value="2"}商家{/case}
+                                {default /}客户
+                            {/switch}</td>
+                        <td>{$vo.name} </td>
+                        <td>{$vo.mobile}</td>
+                        <td>{$vo.msg}</td>
+                        <td>{switch name="vo.status"}
+                                {case value="0"}未发送{/case}
+                                {case value="1"}已发送{/case}
+                                {case value="-1"}已删除{/case}
+                                {default /}客户
+                            {/switch}</td>
+                        <td>    
+                        {if condition="$vo['status'] == 0"}
+                        <a href="javascript:void(0);"><span class="
+                        editmsg" edit-id="{$vo.id}">编辑</span></a> 
+
+                        <a href="javascript:void(0);"><span class="
+                        sendmsg" send-id="{$vo.id}" send-classify="{$vo.classify}">发送</span></a>
+                        {/if}
+                        </td>
+                    </tr>
+                    {/volist}
+                   {/notempty}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+layui.use(['element', 'form', 'layedit', 'jquery', 'laydate', 'layer'], function() {
+    var $ = layui.jquery,
+        element = layui.element(),
+        layedit = layui.layedit,
+        laydate = layui.laydate,
+        layer = layui.layer,
+        form = layui.form(),
+        msgTips,
+        provinceId,
+        cityId,
+        choiceStore,
+        editViewCar;
+
+    //创建一个编辑器
+    var demo_index = layedit.build('demo_edit');
+    //接收锚点
+    var layid = "{$items}";
+    //跳转目的地
+    element.tabChange('items', layid);
+    //tab切换方法
+    element.on('tab(items)', function(elem) {
+        var items = $(this).attr('lay-id');
+        var URL = $(this).attr('data-url');
+        window.location.href = URL;
+    });
+
+
+    //短信区域JS代码开始
+    //编辑短信信息
+    $('.editmsg').click(function() {
+        var id = $(this).attr('edit-id');
+        $('.editid').val(id);
+        $.ajax({
+            url: "{:url('orders/Tomb/editordermsg')}",
+            type: 'get',
+            data: 'id=' + id,
+            success: function(d) {
+                var result = eval("(" + d + ")");
+                if (result.flag == 1) {
+                    var data = result.data;
+                    $('#msgid').empty().text(data.msg);
+                }
+                layer.open({
+                    closeBtn: 2,
+                    type: 1,
+                    area: '500px',
+                    title: '编辑短信信息',
+                    content: $('#editmsg_form'),
+                });
+            }
+        });
+    });
+
+    $('#editmsg').click(function() {
+        var From = $('#edit_info_form').serialize();
+        $.ajax({
+            url: "{:url('orders/Tomb/editordermsg')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var d = eval("(" + result + ")");
+                if (d.flag == 1) {
+                    layer.msg(d.msg);
+                    window.location.reload();
+                } else {
+                    layer.msg(d.msg);
+                }
+            }
+        });
+    });
+
+    //发送短信
+    $('.sendmsg').click(function() {
+        var id = $(this).attr('send-id');
+        layer.confirm('确定要发送短信吗?', {
+            icon: 3,
+            title: '提示'
+        }, function(index) {
+            $.ajax({
+                url: "{:url('orders/Tomb/sendmessage')}",
+                data: {
+                    'id': id
+                },
+                type: 'post',
+                success: function(result) {
+                    var d = eval("(" + result + ")");
+                    if (d.flag == 1) {
+                        layer.msg(d.msg);
+                        window.location.reload();
+                    } else {
+                        layer.msg(d.msg);
+                    }
+                }
+            });
+        });
+    });
+});
+</script>
+{/block}

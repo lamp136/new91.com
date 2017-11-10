@@ -1,0 +1,237 @@
+<?php
+namespace back\store\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Session;
+use think\Request;
+use think\Db;
+use back\extra\model\EcologicalBurial;
+
+/**
+ * 生态葬
+ */
+class Ecology extends Base
+{
+    /**
+     * 列表
+     * @return void
+     */
+    public function index(){
+        $input = input('get.');
+        $where = [];
+        $ecologyTombs = Db::name('category')->where('pid',config('ecology_tombs'))->column('id,name');
+        $province = [];
+        $city = [];
+        $regions = Db::name('region')->where('status',config('normal_status'))->field('id,name,pid')->select();
+        if($regions){
+            foreach ($regions as $val) {
+                if($val['pid'] == config('china_num')){
+                    $province[$val['id']] = $val['name'];
+                }else if(isset($input['province']) && !empty($input['province'])){
+                    $where['province_id'] = $input['province'];
+                    if(isset($input['city']) && !empty($input['city'])){
+                        $where['city_id'] = $input['city'];
+                    }
+                    if($val['pid'] == $input['province']){
+                        $city[$val['id']] = $val['name'];
+                    }
+                }
+            }
+        }
+        if(!empty($input['type']) && isset($input['type'])){
+            $where['type'] = $input['type'];
+        }
+        $ecologyList = EcologicalBurial::with(['store','province','city'])->where($where)->order('created_time desc')->paginate(config('page_size'),false,['query' => $input]);
+        $page = $ecologyList->render();
+        $params = [
+            'province' => isset($input['province']) ? $input['province'] : '',
+            'city' => isset($input['city']) ? $input['city'] : '',
+            'type' => isset($input['type']) ? $input['type'] : '',
+        ];
+        $this->assign([
+            'params'       => $params,
+            'page'         => $page,
+            'province'     => $province,
+            'city'         => $city,
+            'ecologyTombs' => $ecologyTombs,
+            'ecologyList'  => $ecologyList
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 添加
+     */
+    public function add(){
+        if(request()->isPost()){
+            $input = input('post.');
+            $info = $input['info'];
+            $result = ['code' => 0,'msg' => '添加失败'];
+            $data = [];
+            if(!empty($input['store_ids'])){
+                $storeIds = explode(',',$input['store_ids']);
+                $sn = $this->_getStoreSn($storeIds);
+                foreach ($storeIds as $val) {
+                    $data[$val] = [
+                        'store_id'     => $val,
+                        'store_sn'     => $sn[$val],
+                        'type'         => $info['type'],
+                        'province_id'  => $info['province'],
+                        'city_id'      => $info['city'],
+                        'sort'         => $info['sort'],
+                        'created_time' => time()
+                    ];
+                }
+                $ret = Db::name('EcologicalBurial')->insertAll($data);
+                if($ret){
+                    $result = ['code' => 1,'msg' => '添加成功'];
+                }
+            }
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * 编辑
+     */
+    public function edit(){
+        $result = ['code' => 0,'data' => []];
+        if(request()->isPost()){
+            $input = input('post.');
+            $data = $input['info'];
+            $ret = Db::name('EcologicalBurial')->data($data)->update();
+            if($ret){
+                $result = ['code' => 1,'msg' => '修改成功'];
+            }
+        }else{
+            $id = input('get.id');
+            $stores = [];
+            $city = [];
+            if($id){
+                $data = Db::name('EcologicalBurial')->where('id',$id)->find();
+                if($data){
+                    if($data['province_id']){
+                        $cityDatas = $this->cityList($data['province_id']);
+                        if(!empty($cityDatas)){
+                            $city = $cityDatas;
+                        }
+                        if(!empty($data['store_id'])){
+                            $store = Db::name('store')->where('id',$data['store_id'])->field('province_id,city_id')->find();
+                            if(!empty($store['province_id']) && !empty($store['city_id'])){
+                                $where['province_id'] = $store['province_id'];
+                                $where['city_id'] = $store['city_id'];
+                                $storeCitys = $this->cityList($store['province_id']);
+                                $storeDatas = $this->_stores($where);
+                                if(!empty($storeDatas)){
+                                    $stores['list'] = $storeDatas;
+                                    $stores = [
+                                        'list'     => $storeDatas,
+                                        'province' => $store['province_id'],
+                                        'city'     => $store['city_id'],
+                                        'citylist' => $storeCitys
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                    $result['code'] = 1;
+                    $result['data'] = $data;
+                    $result = ['code' => 1,'data' => $data,'stores' => $stores,'city' => $city];
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 删除
+     * @return json
+     */
+    public function delete(){
+        $id = input('get.id');
+        $result = ['code' => 0,'msg' => '操作失败'];
+        if($id){
+            $delInfo = Db::name('EcologicalBurial')->where('id',$id)->delete();
+            if($delInfo){
+                $result = ['code' => 1,'msg' => '操作成功'];
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 判断重复
+     * @return json
+     */
+    public function isRepeat(){
+        $query = input('get.');
+        $where = [];
+        $result = ['code' => 0];
+        if(!empty($query['store_id'])){
+            $where['store_id'] = $query['store_id'];
+        }
+        if(!empty($query['type'])){
+            $where['type'] = $query['type'];
+        }
+
+        $count = Db::name('EcologicalBurial')->where($where)->count();
+        if(!empty($count)){
+            $result = ['code' => 1];
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 获取陵园
+     * @return json
+     */
+    public function getstores(){
+        $input = input('get.');
+        $result = ['code' => 0,'data' => []];
+        if(!empty($input['province'])){
+            if(!empty($input['city'])){
+                $where['province_id'] = $input['province'];
+                $where['city_id'] = $input['city'];
+                $data = $this->_stores($where);
+                if(!empty($data)){
+                    $result = ['code' => 1,'data' => $data];
+                }
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 通过省市获取商家
+     * @param  int $where where条件
+     * @return array
+     */
+    private function _stores($where){
+        $data = [];
+        $where['member_status'] = ['gt',0];
+        $stores = Db::name('store')->where($where)->field('id,name,store_sn')->select();
+        if(!empty($stores)){
+            $data = $stores;
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取商家sn
+     * @param  int|array $ids 商家id，可能多个
+     * @return array
+     */
+    private function _getStoreSn($ids){
+        $datas = [];
+        if(!empty($ids)){
+            $where['id'] = ['in',$ids];
+            $datas = Db::name('store')->where($where)->column('id,store_sn');
+        }
+
+        return $datas;
+    }
+}

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {include file="extra@head" /}
+    <script src="_WEB_/js/jquery.cookie.js"></script>
+</head>
+<body>
+    {include file="extra@topup" /}
+    {include file="extra@topdown" /}
+    <!-- 面包屑 -->
+    <div class="contain">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/cemetery')}">陵园</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('/cemetery/detail/'.$store.id)}">{$store.name}</a></li>
+                <li class="jt">></li>
+                <li>预约看墓</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+    </div><!-- contain End -->
+
+    <div class="subscribe_banner">
+         <div class="contain">
+            <div class="subscribe_box">
+                <h2>{$store.name}</h2>
+                <form id="subscribeForm">
+                    <ul class="subscribe_box_main">
+                        <li>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_name" name="name" type="text" placeholder="姓名"/>
+                        </li>
+                        <li>
+                            <span class="xing">*</span>
+                            <input class="login_tex sub_mobile" name="mobile" type="text" placeholder="手机号"/>
+                            <input type="hidden" name="store_id" value="{$store.id}"/>
+                            <span class="log_validate reg_mobile"></span>
+                        </li>
+                        {empty name="Think.session.name"}
+                            <li class="getyzm">
+                                <span class="xing">*</span>
+                                <input class="login_tex sub_code" name="code" type="text" placeholder="验证码"/>
+                                <input class="getcode_btn" type="button" id="getting" value="获取验证码">
+                                <span class="log_validate reg_msg"></span>
+                            </li>
+                        {/empty}
+                        <!-- <li class="yu">
+                            <span class="xing"></span>
+                            <span class="yutime_sel">预约时间<i class="yu_icon iconfont icon-iconfontdownjiantou"></i></span>
+                            <div class="yutime_sel_list">
+                                <ul>
+                                    <li><a href="javascript:void(0);">预约时间</a></li>
+                                </ul>
+                            </div>
+                            <div class="clear"></div>
+                        </li> -->
+                        <li class="login_btn">
+                            <a class="sub_appoint_btn" href="javascript:void(0);">立即预约</a>
+                        </li>
+                    </ul>
+                </form>
+             </div>
+         </div>
+    </div>
+
+    <!-- 版权 -->
+    <div class="copyright login_copyright">
+        <ul>
+            <li><a href="aboutus.html">关于我们</a></li>
+            <li><a href="help_contactus.html">联系我们</a></li>
+            <li><a href="websitemap.html">网站地图</a></li>
+            <li><a href="#">加盟合作</a></li>
+            <li><a href="#">手机站</a></li>
+            <li>热线：<span>400-618-9191</span></li>
+        </ul>
+        <p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;91搜墓网版权所有</p>
+        <p>CopyRight (C)2015-2016 Huigeyuan Technology Allrights</p>
+    </div><!-- copyright版权结束 -->
+    {include file="extra@toolsbar" /}
+<!-- 搜索提示 -->
+{include file="extra@publicjs"/}
+<script type="text/javascript" src="_WEB_/js/hit.js"></script>
+<script type="text/javascript">
+    //预约时间
+    $(".yutime_sel").click(function(event) {
+        event.stopPropagation();
+        $(".yutime_sel_list").css("display", "block");
+    })
+
+    $(".yutime_sel_list ul li").click(function() {
+        $(".yutime_sel_list").css("display", "none");
+    })
+    document.onclick = function() {
+        $(".yutime_sel_list").css("display", "none");
+    }
+
+    //获取验证码
+    $(function() {
+        /*仿刷新：检测是否存在cookie*/
+        if ($.cookie("captcha")) {
+            var count = $.cookie("captcha");
+            var btn = $('#getting');
+            btn.val(count + '秒后可重新获取').attr('disabled', true).css('cursor', 'not-allowed');
+            var resend = setInterval(function() {
+                count--;
+                if (count > 0) {
+                    btn.val(count + '秒后可重新获取').attr('disabled', true).css('cursor', 'not-allowed');
+                    $.cookie("captcha", count, {
+                        path: '/',
+                        expires: (1 / 86400) * count
+                    });
+                } else {
+                    clearInterval(resend);
+                    btn.val("获取验证码").removeClass('disabled').removeAttr('disabled style');
+                }
+            }, 1000);
+        }
+        /*点击改变按钮状态，已经简略掉ajax发送短信验证的代码*/
+
+        $('#getting').click(function() {
+            var btn = $(this),
+                count = 60,
+                subMobile = $('.subscribe_box_main .sub_mobile').val(),
+                reg = /^1((3\d)|(47)|(5[0-35-9])|(7[01789])|(8\d))\d{8}$/;
+            if(subMobile == ''){
+                $('.subscribe_box_main .reg_mobile').text('手机号码不能为空');
+            }else{
+                if(!reg.test(subMobile)){
+                    $('.subscribe_box_main .reg_mobile').text('请输入正确的手机号码');
+                }else{
+                    $.ajax({
+                        url:"{:url('cemetery/Cemetery/verifyCode')}",
+                        type:'post',
+                        data:{
+                            mobile:subMobile
+                        },
+                        dataType:'json',
+                        success:function(result){
+                            if(result){
+                                if(result['code'] == 1){
+                                    console.log(result['msg']);
+                                    var resend = setInterval(function() {
+                                        count--;
+                                        if (count > 0) {
+                                            btn.val(count + "秒后可重新获取");
+                                            $.cookie("captcha", count, {
+                                                path: '/',
+                                                expires: (1 / 86400) * count
+                                            });
+                                        } else {
+                                            clearInterval(resend);
+                                            btn.val("获取验证码").removeAttr('disabled style');
+                                        }
+                                    }, 1000);
+                                    btn.attr('disabled', true).css('cursor', 'not-allowed');
+                                }else{
+                                    $('.subscribe_box_main .reg_msg').text(result['msg']);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    $('.sub_appoint_btn').click(function(){
+        var datas = $('#subscribeForm').serialize();
+        $.ajax({
+            url:"{:url('cemetery/Cemetery/putscribe')}",
+            type:'post',
+            data:datas,
+            dataType:'json',
+            success:function(result){
+                console.log(result);
+            }
+        });
+    });
+    $('.subscribe_box_main .sub_mobile').on({
+        keyup: function() {
+            if (this.value.length == 1) {
+                this.value = this.value.replace(/[^1-9]/g, '')
+            } else {
+                this.value = this.value.replace(/\D/g, '')
+            }
+        },
+        focus:function(){
+            $('.subscribe_box_main .log_validate').text('');
+        }
+    });
+</script>
+</body>
+</html>
+    

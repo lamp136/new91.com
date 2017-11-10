@@ -1,0 +1,193 @@
+body,html{
+	height: 100%;
+	background-color: #f7f7f7;
+}
+.c_banner{
+	margin: 0 auto;
+	width: 100%;
+	max-width: 1920px;
+	height: 520px;
+	background: url(../../images/zhongyuanjie/banner.jpg) no-repeat center;
+	background-size: 100% 100%;
+	border-top: 2px solid #2b916b;
+}
+
+/*最大内容*/
+.c_content{
+	width: 1152px;
+	margin: 20px auto 36px;
+	height: auto;
+	border: 5px solid #fbe6bb;
+	background-color: #fff;
+}
+.c_content{
+	padding: 24px;
+}
+/*公共的中元节标题*/
+.c_tit{
+	padding-left: 26px;
+}
+
+/*第一部分*/
+.c_content_one_left{
+	width: 637px;
+	height: 246px;
+	background: url(../../images/zhongyuanjie/c_bj.jpg) no-repeat center 30px;
+	float: left;
+}
+.c_content_one_left>div{
+	padding: 22px 35px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #cbad91;
+	line-height:28px;
+}
+
+.c_content_one_right{
+	width: 482px;
+	height: 246px;
+	float: right;
+	text
+}
+.c_content_one_right>div{
+	padding: 22px 35px;
+	line-height: 30px;
+	font-size: 15px;
+	color: black;
+}
+.c_content_one_right>div>span{
+	font-weight: bold;
+	font-size: 14px;
+}
+/*第二部分*/
+.c_content_two{
+	position: relative;
+	margin-top: 20px;
+	padding-top: 20px;
+	padding-left: 22px;
+	width: 100%;
+	height: 450px;
+	background: url(../../images/zhongyuanjie/c_bj2.jpg) no-repeat center;
+	background-size:100% ;
+}
+/*定位的换下中元节*/
+.c_dingwei{
+	position: absolute;
+	right: 35px;
+	top: 10px;
+	padding-top:10px;
+
+}
+.c_content_two>li{
+	width: 533px;
+	height: 150px;
+	float: left;
+	padding: 20px;
+}
+.c_l_img{
+	width: 202px;
+	height: auto;
+	float: left;
+}
+.c_l_img>img{
+	border:  1px solid #8d5024;
+}
+.c_r_text{
+	width: 318px;
+	height: auto;
+	float: right;
+	color: #8d5024;
+	font-size: 14px;
+	line-height: 26px;
+	word-wrap: normal;
+	word-break:  normal;
+}
+.c_r_text>h3{
+	color: black;
+	font-size: 22px;
+	font-weight: bold;
+}
+/*十字边框线*/
+.c_content_two>li:nth-child(4){
+	border-right:1px dashed #d9c4a9;
+	border-bottom:1px dashed #d9c4a9;
+}
+.c_content_two>li:nth-child(5){
+	border-bottom:1px dashed #d9c4a9;
+}
+.c_content_two>li:nth-child(6){
+	border-right:1px dashed #d9c4a9;
+}
+
+/*第三部分*/
+.c_content_three{
+	width: 100%;
+	height: 760px;
+	margin-top: 20px;
+	padding-top: 20px;
+	background: url(../../images/zhongyuanjie/c_bj3.jpg) no-repeat center;
+	background-size:100% ;
+	position: relative;
+}
+.c_content_three>li{
+	width: 96%;
+	margin: 0 auto;
+	height: 180px;
+	padding: 25px 0;
+	border-bottom: 1px dashed #d7c1a4;	
+}
+.c_content_three>li:last-child{
+	border: 0;
+}
+.c_li_img{
+	width: 300px;
+	height: 190px;
+	float: left;
+}
+.c_li_text{
+	margin-right: 10px;
+	width: 770px;
+	height: 190px;
+	float: right;
+	font-size: 15px;
+	line-height: 26px;	
+}
+.c_li_text>h3{
+	font-size: 23px;
+	padding-bottom: 23px;
+}
+.c_li_text>p{
+	font-size: 15px;
+}
+/*第四部分*/
+.c_content_four{
+	position: relative;
+	width: 100%;
+	height: 580px;
+	background:url(../../images/zhongyuanjie/c_bj4.jpg) no-repeat center;
+	background-size:100% ;
+	margin-top: 20px;
+	padding-top:20px ;
+}
+.c_img_img{
+	width: 1100px;
+	height: 436px;
+	margin: 30px auto;
+}
+
+.c_img_img_l{
+	width: 350px;
+	height: 100%;
+	float: left;
+}
+.c_img_img_r{
+	width: 750px;
+	height: 100%;
+	float: left;
+}
+/*foot*/
+.c_foot{
+	padding: 50px 0;
+	text-align: center;
+	font-size: 17px;
+}

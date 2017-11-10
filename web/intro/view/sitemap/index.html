@@ -1,0 +1,61 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+        {volist name="stores" id="data"}
+            <!-- 北京 -->
+            <div class="webmap clearfix">
+                <!-- 左侧城市名称 -->
+                <h2><img src="_WEB_/images/citytubiao/{$data.region_name}.png"/>{$data.region_name}</h2>
+
+                <!-- 右侧内容 -->
+                <div class="webmap_right">
+                    {notempty name="data.37"}
+                        <!-- 陵园 -->
+                        <div class="webmap_main clearfix">
+                            <h3>陵园</h3>
+                            <ul>
+                                {foreach name="data.37" item="val" key="k"}
+                                    <li>
+                                        <a target="_blank" href="{:url('cemetery/Cemetery/details',['id'=>$val.id],$Think.config.assign_suffix,$key.'.'.$Think.config.domain_name)}" title="{$val.name}">{$val.name}</a>
+                                        {gt name="val.member_status" value="0"} 
+                                            <span class="hot"></span>
+                                        {/gt}
+                                    </li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                    {/notempty}
+                    <!-- 殡仪馆 -->
+                    {notempty name="data.38"}
+                        <div class="webmap_main {empty name="data.43"} last {/empty} clearfix">
+                            <h3>殡仪馆</h3>
+                            <ul>
+                                {foreach name="data.38" item="val" key="k"}
+                                    <li><a target="_blank" href="{:url('funeral/Funeral/details',['id' => $val.id],$Think.config.assign_suffix,$key.'.'.$Think.config.domain_name)}" title="{$val.name}">{$val.name}</a></li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                    {/notempty}
+                    <!-- 殡仪服务公司 -->
+                    {notempty name="data.43"}
+                        <div class="webmap_main last clearfix">
+                            <h3>殡仪服务公司</h3>
+                            <ul>
+                                {foreach name="data.43" item="val" key="k"}
+                                    <li><a target="_blank" href="{:url('rite/Rite/detail',['id'=>$val.id],$Think.config.assign_suffix,$key.'.'.$Think.config.domain_name)}" title="{$val.name}">{$val.name}</a></li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                    {/notempty}
+
+                </div><!-- webmap_right右侧内容结束 -->
+            </div><!-- webmap end -->
+        {/volist}
+    </div><!-- contain End -->
+{/block}
+
+{block name="js"}
+<!-- 搜索提示 -->
+<script type="text/javascript" src="_WEB_/js/hit.js"></script>
+{/block}

@@ -1,0 +1,78 @@
+$('.varify_code').click(function(){
+    _verifyCode();
+});
+
+var _verifyCode = function() {
+    var verifyImg = $('.varify_code').attr("src");
+    if (verifyImg.indexOf('?') > 0) {
+        $('.varify_code').attr("src", verifyImg + '&random=' + Math.random());
+    } else {
+        $('.varify_code').attr("src", verifyImg.replace(/\?.*$/, '') + '?' + Math.random());
+    }
+}
+
+$('.cha_save').click(function() {
+    $('#changePwdForm input[name="old_pwd"],#changePwdForm input[name="new_pwd"],#changePwdForm input[name="new_pwd_2"]').next('span').remove();
+    var flag = true,
+        changeData = $('#changePwdForm').serializeArray(),
+        oldPwd = $('#changePwdForm input[name="old_pwd"]').val(),
+        newPwd = $('#changePwdForm input[name="new_pwd"]').val(),
+        newPwd2 = $('#changePwdForm input[name="new_pwd_2"]').val(),
+        code = $('#changePwdForm input[name="code"]').val();
+    if (oldPwd == '') {
+        $('#changePwdForm input[name="old_pwd"]').addClass('pers_validate_tex').after('<span class="pers_validate"><i></i>提示：请输入原始密码</span>');
+        flag = false;
+    }
+    if (newPwd == '') {
+        $('#changePwdForm input[name="new_pwd"]').addClass('pers_validate_tex').after('<span class="pers_validate"><i></i>提示：请输入新密码</span>');
+        flag = false;
+    }
+    if (newPwd2 == '') {
+        $('#changePwdForm input[name="new_pwd_2"]').addClass('pers_validate_tex').after('<span class="pers_validate"><i></i>提示：请再次输入新密码</span>');
+        flag = false;
+    }
+    if (newPwd != newPwd2) {
+        $('#changePwdForm input[name="new_pwd"],#changePwdForm input[name="new_pwd_2"]').addClass('pers_validate_tex').after('<span class="pers_validate"><i></i>提示：两次密码不一致</span>');
+        flag = false
+    } else {
+        $('#changePwdForm input[name="new_pwd"],#changePwdForm input[name="new_pwd_2"]').removeClass('pers_validate_tex').next('span').remove();
+        flag = true;
+    }
+    if (code == '') {
+        $('#changePwdForm input[name="code"]').addClass('pers_validate_tex');
+        flag = false;
+    }
+    if (flag) {
+        changeData.push({
+            'name': 'id',
+            'value': userId
+        });
+        var url = $('.cha_save').attr('data-url');
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: changeData,
+            dataType: 'json',
+            success: function(result) {
+                if (result) {
+                    _verifyCode();
+                    if (result['code'] == 1) {
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else if (result['code'] == 2) {
+                        $('#changePwdForm input[name="code"]').addClass('pers_validate_tex');
+                    } else if (result['code'] == 3) {
+                        $('#changePwdForm input[name="old_pwd"]').addClass('pers_validate_tex').after('<span class="pers_validate"><i></i>提示：' + result['msg'] + '</span>');
+                    }
+                }
+            }
+        });
+    }
+});
+
+$('#changePwdForm input[name="old_pwd"],#changePwdForm input[name="new_pwd"],#changePwdForm input[name="new_pwd_2"],#changePwdForm input[name="code"]').focus(function(){
+    $(this).removeClass('pers_validate_tex');
+    $(this).next('span').remove();
+});
+   

@@ -1,0 +1,798 @@
+<?php
+namespace web\help\controller;
+use think\Controller;
+use think\Db;
+use web\extra\controller\Base;
+use think\Request;//请求类
+use think\Cookie;//cookie类
+
+/**
+ * 帮助中心
+ * author
+ */
+class Help extends Base{ 
+    public function _initialize(){
+        //用户登录信息name
+        $member_name = decode(session('name'));
+        $this->assign('member_name',$member_name);
+       
+        //获取当前路径
+        $path  =  Request::instance()->controller();
+        $this->assign('path',$path);
+        $action = request()->action();
+        $this->assign('action',$action);
+        //查找省份 
+        $province = array();
+        $regions = $this->getRegionData(array('status'=>config('normal_status'),'pid'=>config('china_num')),array('id','name','flag','abbreviate'),'',false,'flag asc');
+        foreach($regions as $val){
+            $province[$val['flag']][$val['id']] = [
+                'name' => $val['name'],
+                'abbr' => strtolower($val['abbreviate'])
+            ];
+        }
+        $this->assign('province',$province);
+        
+        //推荐关键词
+        $currentProvinceId = decode(cookie::get('ip_region_id'));
+        $this->getRecommendWords($currentProvinceId);
+    }
+    
+    
+    
+	/*
+     * 关于我们
+     */
+    public function aboutus(){
+         //SEO部分
+        $seo = array(
+            'seo_title'=>'91搜墓网,一站式殡葬服务平台',
+            'seo_keywords'=>'91搜墓网,一站式殡葬服务平台,购墓平台,墓地价格',
+            'seo_description'=>'91搜墓网,一站式殡葬服务平台,您买墓我补贴,提供最真实全面的墓地陵园价格,提供最专业贴心的购墓1对1服务,91搜墓网为中国殡葬协会青年工作委员会主任单位,20年殡葬服务经验.墓地咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    } 
+	
+    /*
+     * 联系我们
+     */
+    public function contactus(){
+        //seo
+        $seo = array(
+            'seo_title'=>'联系我们-91搜墓网',
+            'seo_keywords'=>'联系我们,91搜墓网',
+            'seo_description'=>'联系我们,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+
+    /**
+     * 服务流程
+     */
+    public function serviceprocess(){
+        //seo
+        $seo = array(
+            'seo_title'=>'服务流程-91搜墓网',
+            'seo_keywords'=>'服务流程,91搜墓网',
+            'seo_description'=>'服务流程,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+    	return $this->fetch();
+    }
+
+    /**
+     * 购墓流程
+     */
+    public function tombprocess(){
+        //seo
+        $seo = array(
+            'seo_title'=>'购墓流程-91搜墓网',
+            'seo_keywords'=>'购墓流程,91搜墓网',
+            'seo_description'=>'购墓流程,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+
+    /**
+     * 隐私保护 
+     */
+    
+    public function privacy(){
+        //seo
+        $seo = array(
+            'seo_title'=>'隐私保护-91搜墓网',
+            'seo_keywords'=>'隐私保护,91搜墓网',
+            'seo_description'=>'隐私保护,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+    	return $this->fetch();
+    }
+    /**
+     * 版权声明
+     */
+    public function copyright(){
+        //seo
+         $seo = array(
+            'seo_title'=>'版权声明-91搜墓网',
+            'seo_keywords'=>'版权声明,91搜墓网',
+            'seo_description'=>'版权声明,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    
+    /**
+     * 免责条款
+     */
+    public function disclaimer(){
+        //seo
+        $seo = array(
+            'seo_title'=>'免责条款-91搜墓网',
+            'seo_keywords'=>'免责条款,91搜墓网',
+            'seo_description'=>'免责条款,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    
+    /**
+     * 法律声明
+     */
+    public function law(){
+        //seo
+        $seo = array(
+            'seo_title'=>'法律声明-91搜墓网',
+            'seo_keywords'=>'法律声明,91搜墓网',
+            'seo_description'=>'法律声明,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    
+    /**
+     * 公墓年限
+     */
+    public function tombagelimit(){
+        //SEO部分
+        $seo = array(
+            'seo_title'=>'公墓年限-公墓使用年限-陵园墓地使用年限20年-91搜墓网',
+            'seo_keywords'=>'公墓年限,公墓使用年限,墓地使用年限20年,公墓20年年限到期怎么办,陵园使用年限',
+            'seo_description'=>'墓地使用期限与其土地性质和使用年限有关,一般为50年或70年.20年不是指墓地的使用年限,而是指护墓费以20年为一个缴费周期.91搜墓网告诉你墓地使用年限到期后怎么办,续费多少.91搜墓网服务热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+    	return $this->fetch();
+    }
+    /**
+     * 购墓须知
+     */
+    public function tombnotes(){
+        $where['category_id'] = config('help_tombnotes');
+        $where['status'] = config('normal_status');
+        $field = 'id,title,thumb_url,image_url,summary,published_time,source,hits';
+        $list = Db::name('news')->where($where)->field($field)->order('published_time desc')->paginate(config('page_size'));
+
+        $page = $list->render();
+
+        //seo
+        $seo = array(
+            'seo_title'=>'购墓须知-91搜墓网',
+            'seo_keywords'=>'购墓须知,91搜墓网',
+            'seo_description'=>'购墓须知,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('page',$page);
+        $this->assign('list',$list);
+    	return $this->fetch();
+    }
+    
+     /**
+     * 鲜花祭品
+     */
+    public function tombflower(){
+        $where['category_id'] = config('help_tombflower');
+        $where['status'] = config('normal_status');
+        $field = 'id,title,thumb_url,image_url,summary,published_time,source,hits';
+        $list = Db::name('news')->where($where)->field($field)->order('published_time desc')->paginate(config('page_size'));
+        $page = $list->render();
+        //seo
+        $seo = array(
+            'seo_title'=>'鲜花祭品-91搜墓网',
+            'seo_keywords'=>'鲜花祭品,91搜墓网',
+            'seo_description'=>'鲜花祭品,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('page',$page);
+        $this->assign('list',$list);
+    	return $this->fetch();
+    }
+    /**
+     * 鲜花祭品详情
+     */
+    public function tombflowerdetails(){
+        $id = input('id');
+        if($id){
+            $field = 'id,title,content,hits';
+            $data = Db::name('news')->where('id',$id)->field($field)->find();
+            //字符串替换
+            $data['content'] = str_replace('src="/public/','src="/',$data['content']);
+            $this->assign('data',$data);
+        }
+        Db::name('News')->where('id', $id)->setInc('hits');
+        //seo
+        $seo = array(
+            'seo_title'=>'鲜花祭品详情-91搜墓网',
+            'seo_keywords'=>'鲜花祭品详情,91搜墓网',
+            'seo_description'=>'鲜花祭品详情,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    /**
+     * 购墓技巧
+     */
+    public function buyart(){
+        //seo
+        $seo = array(
+            'seo_title'=>'购墓技巧-91搜墓网',
+            'seo_keywords'=>'购墓技巧,91搜墓网',
+            'seo_description'=>'购墓技巧,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+     /**
+     * 三大鬼节
+     */
+    public function ghost(){
+        $where['category_id'] = config('help_ghost');
+        $where['status'] = config('normal_status');
+        $field = 'id,title,thumb_url,image_url,summary,published_time,source,hits';
+        $list = Db::name('news')->where($where)->field($field)->order('published_time desc')->paginate(config('page_size'));
+        $page = $list->render();
+        //seo
+        $seo = array(
+            'seo_title'=>'三大鬼节-91搜墓网',
+            'seo_keywords'=>'三大鬼节,91搜墓网',
+            'seo_description'=>'三大鬼节,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('page',$page);
+        $this->assign('list',$list);
+    	return $this->fetch();
+    }
+    /**
+     * 三大鬼节详情
+     */
+    public function ghostdetails(){
+        $id = input('id');
+        if($id){
+            $field = 'id,title,content,hits';
+            $data = Db::name('news')->where('id',$id)->field($field)->find();
+            //字符串替换
+            $data['content'] = str_replace('src="/public/','src="/',$data['content']);
+            $this->assign('data',$data);
+        }
+        Db::name('News')->where('id', $id)->setInc('hits');
+        //seo
+        $seo = array(
+            'seo_title'=>'三大鬼节详情-91搜墓网',
+            'seo_keywords'=>'三大鬼节详情,91搜墓网',
+            'seo_description'=>'三大鬼节详情,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    /**
+     * 迁坟讲究
+     */
+    public function movetomb(){
+        $where['category_id'] = config('help_movetomb');
+        $where['status'] = config('normal_status');
+        $field = 'id,title,thumb_url,image_url,summary,published_time,source,hits';
+        $list = Db::name('news')->where($where)->field($field)->order('published_time desc')->paginate(config('page_size'));
+        $page = $list->render();
+        //seo
+        $seo = array(
+            'seo_title'=>'迁坟讲究-91搜墓网',
+            'seo_keywords'=>'迁坟讲究,91搜墓网',
+            'seo_description'=>'迁坟讲究,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('page',$page);
+        $this->assign('list',$list);
+    	return $this->fetch();
+    }
+     /**
+     * 迁坟讲究详情
+     */
+    public function movetombdetails(){
+        $id = input('id');
+        if($id){
+            $field = 'id,title,content,hits';
+            $data = Db::name('news')->where('id',$id)->field($field)->find();
+            //字符串替换
+            $data['content'] = str_replace('src="/public/','src="/',$data['content']);
+            $this->assign('data',$data);
+        }
+        Db::name('News')->where('id', $id)->setInc('hits');
+        //seo
+        $seo = array(
+            'seo_title'=>'迁坟讲究详情-91搜墓网',
+            'seo_keywords'=>'迁坟讲究详情,91搜墓网',
+            'seo_description'=>'迁坟讲究详情,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    /**
+     * 购墓须知详情
+     */
+    public function tombnotesDetails(){
+        $id = input('id');
+        if($id){
+            $field = 'id,title,content,hits';
+            $data = Db::name('news')->where('id',$id)->field($field)->find();
+            //字符串替换
+            $data['content'] = str_replace('src="/public/','src="/',$data['content']);
+            $this->assign('data',$data);
+        }
+        Db::name('News')->where('id', $id)->setInc('hits');
+        //seo
+        $seo = array(
+            'seo_title'=>'购墓详情-91搜墓网',
+            'seo_keywords'=>'购墓详情,91搜墓网',
+            'seo_description'=>'购墓详情,91搜墓网,咨询热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch('tombnotesdetails');
+    }
+    
+    /**
+     * 落葬讲究
+     */
+    public function wasburied(){
+        //SEO部分
+        $seo = array(
+            'seo_title'=>'落葬讲究_落葬仪式_落葬注意事项_落葬时间-91搜墓网',
+            'seo_keywords'=>'落葬讲究,落葬仪式,落葬注意事项,落葬时间,骨灰落葬讲究',
+            'seo_description'=>'91搜墓网帮你操办白事为您提供落葬仪式讲究,落葬时间注意事项,落葬吉日选择,骨灰落葬是如何祭拜等相关方面的知识.91搜墓网告诉您骨灰落葬是如何祭拜,落葬仪式讲究注意事项.91搜墓网服务热线：400-618-9191.'
+        );
+        $this->assign('seo',$seo);
+    	return $this->fetch();
+    }
+
+    /**
+     * 安葬吉日
+     */
+    public function bury(){
+        $get = input('get.');
+        $month = date('m');
+        $day = date('d');
+        $year = date('Y');
+        $arrDay = '';
+
+        if(!empty($get['day'])){
+            $day = $get['day'];
+        }
+        
+        if(!empty($get['month'])){
+            $month = $get['month'];
+            $year =  $get['year'];
+        }
+
+        if(!empty($get['yiji'])){
+            //带搜索条件
+            $where[$get['yiji']] = array('like',"%".$get['explain']."%");
+            $where['year'] = $year;
+            $where['month'] = $month;
+            $list = '';
+            $array = Db::name('burial_day')->where($where)->select();
+            if($array){
+                foreach ($array as $key => $value) {
+                    $arrDay[] = $value['day'];
+                }
+                $list = $array[0];
+                $day = $array[0]['day'];
+            }
+            $this->assign('yiji',$get['yiji']);
+            $this->assign('explain',$get['explain']);
+
+        }else{
+            //没有搜索条件查找数据库
+            $where['year'] = $year;
+            $where['month'] = $month;
+            $where['day'] = $day;
+            $list = Db::name('burial_day')->where($where)->find();
+            $arrDay = $day;
+        }
+
+        if(!empty($list['suitabl'])){
+            $list['suitabl'] = explode(',',$list['suitabl']);
+            $list['avoid'] = explode(',',$list['avoid']);
+        }
+
+
+        $count =date("t",strtotime($year."-".$month))+1;  //一个月有多少天
+       
+        $firstDay = date("w", strtotime(date($year."-".$month."-1"))); //一个月中第一天是周几
+        $week = date("w", strtotime(date($year."-".$month."-".$day))); //当前天为周几
+
+        //计算每一天农历
+        for($i=1;$i<$count;$i++){
+            if($i<10){
+                $i = '0'.$i;
+            }
+            $countDay[$i] = nongli($year.$month.$i)['day'];
+        }
+        //当前天农历日期
+        $currnetNoli = nongli($year.$month.$day)['monthDay'];
+
+        //SEO部分
+        $seo = array(
+            'seo_title'=>'2017年安葬黄历查询-安葬黄道吉日-91搜墓网',
+            'seo_keywords'=>'安葬黄道吉日,2017年安葬吉日安葬时辰,2017老黄历查询',
+            'seo_description'=>'91搜墓网安葬黄道吉日为您提供黄道吉日、公历、农历,新历、阴历、黄历、
+                                星座运程、农历春节、中秋节等中国传统节日信息.并且包括老黄历搬家吉
+                                日查询,皇历结婚吉日查询,开业吉日查询,婚嫁吉日查询,吉时吉日查询,搬
+                                家选日子,结婚择吉日,安葬吉日查询等.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('list',$list);
+        $this->assign('countDay',$countDay);
+        $this->assign('firstDay',$firstDay);
+        $this->assign('week',$week);
+        $this->assign('year',$year);
+        $this->assign('day',$day);
+        $this->assign('month',$month);
+        $this->assign('currnetNoli',$currnetNoli);
+        $this->assign('arrDay',$arrDay);
+
+    	return $this->fetch();
+    }
+
+    /**
+     * 获取宜忌的数据
+     */
+    public function getyiji(){
+        $id = input('id');
+        $res = array('flag'=>0,'data'=>'');
+        if($id !== 0){
+            $data = config('suitabl_avoid')[$id];
+            $res = array('flag'=>1,'data'=>$data);
+        }
+
+        echo json_encode($res);
+    }
+
+
+
+    /**
+     * 碑文大全列表
+     */
+    public function epigraphic(){
+        $category = config('epitaph_category');
+        $li = '0,6';
+        foreach ($category as $key => $value) {
+            $list[$key] = $this->_epicommon($key,$li);
+        }
+
+         //SEO部分
+        $seo = array(
+            'seo_title'=>'墓碑碑文大全_碑文范例_碑文的写法-91搜墓网',
+            'seo_keywords'=>'碑文范例大全,碑文格式与模板,碑文的写法,墓碑碑文范例',
+            'seo_description'=>'91搜墓网碑文大全收录了墓碑碑文范例大全,墓碑碑文的写法,格式与模板,碑文常用字体,包括父母墓碑碑文大全,祖父母碑文大全,同辈碑文大全.91搜墓网为您提供墓碑碑文范例大全,让你不再为寻找碑文发愁.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('list',$list);
+    	return $this->fetch();
+    }
+
+    /**
+     * 碑文大全详情
+     */
+    public function epicdetail(){
+        $category = input('category');
+        $li = '';
+        $data = $this->_epicommon($category,$li);
+
+         //SEO部分
+        $seo = array(
+            'seo_title'=>'墓碑碑文大全_碑文范例_碑文的写法-91搜墓网',
+            'seo_keywords'=>'碑文范例大全,碑文格式与模板,碑文的写法,墓碑碑文范例',
+            'seo_description'=>'91搜墓网碑文大全收录了墓碑碑文范例大全,墓碑碑文的写法,格式与模板,碑文常用字体,包括父母墓碑碑文大全,祖父母碑文大全,同辈碑文大全.91搜墓网为您提供墓碑碑文范例大全,让你不再为寻找碑文发愁.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('data',$data);
+        $this->assign('category',$category);
+        return $this->fetch();
+    }
+
+    /**
+     * 碑文大全公共方法
+     * @param  $category 碑文分类
+     * @return $list [array]   
+     */
+    public function _epicommon($category,$li){
+
+        $list = Db::name('epitaph')->where('category',$category)->limit($li)->order('created_time desc')->select();
+        //获取相关文章
+        $field = 'id,title,thumb_url';
+        $bscs = $this->article(config('article_sense'),7,$field);
+        $this->assign('bscs',$bscs);
+        return $list;
+    }
+
+    /**
+     * 历史上的今天
+     */
+    public function history(){
+
+        $time = input('get.');
+        $where['month'] = date('m');
+        $where['day'] = date('d');
+        
+        if(!empty($time)){
+            $where['month'] = $time['month'];
+            $where['day'] = $time['day'];
+            $where['day'] = $time['day'] < 10 ? '0'.$time['day'] : $time['day'] ;
+           
+        }
+        $year = date('Y');
+        $this->calendar($where['month'],$where['day']);
+        
+        //查询数据
+        $res = $this->commonSelect($where,$year);
+      
+        $countNum = Db::name('today_history')->where($where)->count();
+
+         //SEO部分
+        $seo = array(
+            'seo_title'=>'历史上的今天-91搜墓网',
+            'seo_keywords'=>'历史上的今天,历史上的今天发生了什么事情,历史今日,史上今日',
+            'seo_description'=>'91搜墓网历史上的今天,以时间为线索,梳理历史上发生的大事件,查看历史上的今天发生的重大事情,给当下借鉴感悟同事增长知识,开拓眼界,提高人文素养.'
+        );
+        $this->assign('seo',$seo);
+        $this->assign('countNum',$countNum);
+        $this->assign('month',$where['month']);
+        $this->assign('day',$where['day']);
+        $this->assign('list',$res['list']);
+        $this->assign('tagYear',$res['tagYear']);
+    	return $this->fetch();
+    }
+
+    //点击加载更多历史今天
+    public function historyMore(){
+        $year = input('year');
+        $where['month'] = input('month');
+        $where['day'] = input('day');
+
+        $res = $this->commonSelect($where,$year);
+        // var_dump($res);die;
+        $array = array('flag'=>0,'data'=>'');
+        if(!empty($res['list'])){
+            $array = array('flag'=>1,'data'=>$res['list'],'tagYear'=>$res['tagYear']);
+        }
+
+        echo json_encode($array);
+
+    }
+
+    /**
+     * 查询历史今天数据公共方法
+     * @param  [array] $where [搜索条件]
+     * @param  [string|int] $year  [查询的年份]
+     * @return [array]      
+     */
+    public function commonSelect($where,$year){
+    
+        $tagYear = $this->getCount($where,$year);
+        $where['year'] = array(array('egt',$tagYear),array('lt',$year));
+        $data = Db::name('today_history')->where($where)->field('id,year,title')->order('year desc')->select();
+        
+        $j = 0;
+        $list = array();
+        foreach ($data as $key => $value) {
+            $list[$data[$key]['year']][] = $value;
+
+            if(count($list[$data[$key]['year']])==1){
+                $list[$data[$key]['year']]['tag'] = ++$j;
+            }
+        }
+        $result = array('list'=>$list,'tagYear'=>$tagYear);
+        return $result;
+    }
+
+    /**
+     * 检测数据历史今天
+     * @param  [array] $where [搜索条件]
+     * @param  [string|int] $year  [当前年]
+     * @return [int]        
+     */
+    public function getCount($where, $year) {
+        $tagYear = $year - 10;
+        $where['year'] = array(array('egt',$tagYear),array('lt',$year));
+        $count = Db::name('today_history')->where($where)->field('id')->count();
+        if($count == 0){
+            if($tagYear > 0){
+                $tagYear = $this->getCount($where,$tagYear);
+            }
+        }
+        return $tagYear;
+    }
+
+    /**
+     * 历史上的今天详情
+     */
+    public function historyDetails(){
+        $id = input('id');
+        $data = Db::name('today_history')->where('id',$id)->find();
+        if(!empty($data)){
+
+            if($data['day'] < 10){
+                $data['day'] = '0'.$data['day'];
+            }
+            if($data['month'] < 10){
+                $data['month'] = '0'.$data['month'];
+            }
+            
+            $this->calendar($data['month'],$data['day']);
+
+            //最新资讯
+            $field = 'id,title,thumb_url';
+            $zx = $this->article(config('article_industry_information'),5,$field);
+
+            //热门文章
+            $hotWhere['status'] = config('normal_status');
+            $hotWhere['is_hot'] = config('normal_status');
+            $hotNews = Db::name('news')->where($hotWhere)->field('id,title')->order('published_time desc')->limit(0,6)->select();
+            // var_dump($hotNews);die;
+
+            //seo
+            $seo = array(
+                'seo_title'=>'历史上的今天-91搜墓网',
+                'seo_keywords'=>'历史上的今天,91搜墓网',
+                'seo_description'=>'历史上的今天,91搜墓网,咨询热线：400-618-9191.'
+            );
+
+            $this->assign('zx',$zx);
+            $this->assign('hotNews',$hotNews);
+            $this->assign('seo',$seo);
+            $this->assign('data',$data);
+            $this->assign('month',$data['month']);
+            $this->assign('day',$data['day']);
+            return $this->fetch('historydetails');
+        } 
+    }
+
+    /**
+     * 制作日历的方法
+     * @param  [int] $month [月]
+     * @param  [int] $day   [日]
+     * @return [type]    
+     */
+    public function calendar($month,$day){
+        $year = date('Y');
+        $countDay =date("t",strtotime($year."-".$month))+1;  //一个月有多少天
+       
+        $firstDay = date("w", strtotime(date($year."-".$month."-1"))); //一个月中第一天是周几
+        $week = date("w", strtotime(date($year."-".$month."-".$day))); //当前天为周几
+        $this->assign('year',$year);
+        $this->assign('countDay',$countDay);
+        $this->assign('firstDay',$firstDay);
+        $this->assign('week',$week);
+    }
+
+    /**
+     * 申请合作
+     */
+    public function joinus(){
+        //SEO部分
+        $seo = array(
+            'seo_title'=>'欢迎各地陵园墓地、殡仪馆、殡仪服务公司入驻91搜墓网',
+            'seo_keywords'=>'陵园墓地、殡仪馆、殡仪服务公司',
+            'seo_description'=>'91搜墓网为一站式殡葬服务平台,欢迎各地陵园墓地、殡仪馆、殡仪服务公司入驻91搜墓网.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    /**
+     * 陵园合作申请验证
+     */
+    public function collaborate(){
+        $cemetery_name = input("name");
+        $cemetery_linkman = input("linkman");
+        $cemetery_mobile = input("mobile");
+
+        $returnInfo = array(
+            'status' =>false,
+            'msg' =>''
+        );
+
+        //验证IP
+        $ip = request()->ip(1);
+     
+        //获取当前日期并生成时间戳
+        $date = date("Y-m-d").' 00:00:00';
+        $time = strtotime($date);
+        //查询相同IP当天预约次数并进行判断
+        $res=Db::name('collaborate')->where("ip=".$ip." and created_time>".$time)->count();
+        
+        //判断相同信息一天只能一次
+        $collaborateWhere['cemetery'] = $cemetery_name;
+        $collaborateWhere['name'] = $cemetery_linkman;
+        $collaborateWhere['mobile'] = $cemetery_mobile;
+        $collaborateWhere['created_time'] = array('gt',$time);
+        $collaborateNum=Db::name('collaborate')->where($collaborateWhere)->count();
+        if(!empty($collaborateNum)){
+            $returnInfo['msg']='该信息已经申请过!';
+        }else if($res >= config('book_every_ip_num')){
+             $returnInfo['msg']='今天预约次过多!';
+        }else{
+            //封装数据
+            $data['ip'] = $ip;
+            $data['cemetery'] = $cemetery_name;
+            $data['name'] = $cemetery_linkman;
+            $data['mobile'] = $cemetery_mobile;
+            $data['created_time']=$data['updated_time']=time();
+
+             //调用判断周几发送给谁的
+            $type = array_search('陵园合作申请',config('business_email_msg'));
+            $emailData = weeksEmail($type);
+           
+            //初始化
+            $admin_id = '';
+            if(!empty($emailData)){
+                $emailAdd = array();
+                foreach($emailData as $val){
+                    $emailAdd[] = $val['email_address']; 
+                    if($val['is_sendmsg']==1){
+                        $admin_id = $val['admin_id'];
+                        $admin_name = $val['name'];
+                    }
+                }
+
+                //发送邮件
+                $content = '陵园联系人：'.$data['name'].' 陵园手机号：'.$data['mobile'].' 陵园名称：'.$data['cemetery'].' 请及时联系！本邮件系统自动发送请忽回复！';
+                if(sendMail($emailAdd,'陵园合作申请',$content)){
+                    $status = 1;
+                    $send_time = date('Y-m-d H:i:s');
+                }else{
+                    $status = 0;
+                }
+                //插入数据库
+                foreach($emailData as $val){
+                    $addData[] = array('type'=>$type,'email_address'=>$val['email_address'],'title'=>'陵园合作申请','content'=>$content,'status'=>$status,'send_time'=>$send_time,'creat_time'=>date('Y-m-d H:i:s'));
+                }
+                Db::name('email_log')->insertAll($addData);
+            }
+            //写入数据并判断
+            $data['flow_man'] = $admin_id;
+            $data['admin_id'] = $admin_id;
+            if(Db::name('collaborate')->insert($data)){
+                $returnInfo['status'] = true;
+                $returnInfo['msg'] = '申请成功!';
+            }else{
+                $returnInfo['msg'] = '申请失败！';
+            }
+        }
+        echo json_encode($returnInfo);
+    }
+    /**
+     * 帮您操办白事
+     * @param   void;
+     * @return  void;
+     */
+    public function funeralprocess(){
+        //SEO部分
+        $seo = array(
+            'seo_title'              =>  '操办白事-91搜墓网',
+            'seo_keywords'           =>  '操办白事、白事、帮您操办白事',
+            'seo_description'        =>  '帮您操办白事91搜墓网.'
+        );
+        $this->assign('seo',$seo);
+        return $this->fetch();
+    }
+    
+}

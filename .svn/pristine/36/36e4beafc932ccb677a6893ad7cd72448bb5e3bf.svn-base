@@ -1,0 +1,40 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: 流年 <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+// 应用公共文件
+
+/**
+ * 主要用于首页和导航的URL拼接
+ *
+ * @param string $prefix
+ *
+ * @return String
+ */
+function getHomeUrl($prefix='') {
+    $abbr = strtolower(Session::get('ip_region_abbr'));
+    $qgAbbr = strtolower(C('CHINA_ABBR'));
+    if (empty($abbr) || $abbr == $qgAbbr) {
+        if ($prefix) {
+            $url = '/'.$prefix;
+        } else {
+            $url = '/';
+        }
+
+    } else {
+        if ($prefix) {
+            $url = '/'.$prefix.'/'.$abbr;
+        } else {
+            $url = '/'.$abbr;
+        }
+    }
+
+    return url($url);
+}

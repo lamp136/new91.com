@@ -1,0 +1,91 @@
+{extend name='extra@articlemain' /}
+{block name='body'}
+    
+    <!-- 殡葬百科列表 -->
+    <div class="contain contain_pdsize">
+        
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="{:url('article/Article/index')}">91资讯</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('article/Article/listbox',['cid'=>$title.id])}">{$title.name}</a></li>
+                <li class="jt">></li>
+                <li>正文</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain">
+            
+            <!-- 殡葬百科详情 -->
+            <div class="fe_detail">
+                <h2>{$data.title}</h2>
+                <p class="source">
+                    {notempty name="vo.source"}
+                        来源：{$vo.source}
+                    {else /}
+                        来源：91搜墓网
+                    {/notempty}
+                    &nbsp;&nbsp;&nbsp;&nbsp;时间：{$data.published_time|date='Y-m-d',###}&nbsp;&nbsp;&nbsp;&nbsp;<i></i>{$data.hits}</p>
+                <div class="fe_detail_main">
+                    {$data.content}
+                </div>
+                <!-- 上一篇 下一篇 -->
+                <div class="pageturning">
+                    {notempty name="up.title"}
+                        <p><a href="{:url('article/Article/detail',['id'=>$up.id,'cid'=>$title.id])}">上一篇：{$up.title}</a></p>
+                    {/notempty}
+                    {notempty name="after.title"}
+                        <p><a href="{:url('article/Article/detail',['id'=>$after.id,'cid'=>$title.id])}">下一篇：{$after.title}</a></p>
+                    {/notempty}
+                </div><!-- pageturning 上一篇 下一篇 End -->
+
+            </div><!-- fe_detail 殡葬百科详情 End -->
+
+        </div><!-- leftcontain End -->
+
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <!--广告位-->
+            <div class="advertising advborder cem_margin_bottom">
+                <img src="_WEB_/images/advertising_img2.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+            
+            <!--最新资讯-->
+            <div class="new_message cem_margin_bottom">
+                <h2>最新资讯</h2>
+                <ul class="clearfix">
+                    {volist name="informationdata" id="vo"}
+                        <li class="clearfix">
+                            <a href="{:url('article/Article/detail',['id'=>$vo.id,'cid'=>$title.id])}" title="{$vo.title}">
+                                <img src="{$vo.thumb_url}" alt="{$vo.title}"/>
+                                <div class="txt">
+                                    <h3>{$vo.title}</h3>
+                                </div>
+                            </a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- new_message 最新资讯 End-->
+
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <img src="_WEB_/images/advertising_img.jpg"/>
+            </div> <!-- advertising 广告位 End-->
+
+            <!--热门文章-->
+            <div class="policies">
+                <h2>热门文章</h2>
+                <ul>
+                    {volist name="hotdata" id="vo"}
+                        <li><a href="{:url('article/Article/detail',['id'=>$vo.id,'cid'=>$title.id])}">{$vo.title}</a></li>
+                    {/volist}
+                </ul>
+            </div><!-- policies 热门文章 End-->
+        </div><!-- leftcontain End -->
+        <div class="clear"></div>
+    </div><!-- contain 殡葬百科列表 End -->
+{/block}
+    

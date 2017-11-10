@@ -1,0 +1,66 @@
+{extend name='extra@main' /}
+{block name='body'}  
+<!-- contain -->
+<div class="contain contain_pdsize">
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li class="jt">></li>
+            <li><a href="{:url('rite/list')}" title='殡葬礼仪'>殡葬礼仪</a></li>
+            <li class="jt">></li>
+            <li><a href="{:url('rite/Rite/detail',['id'=>$combo.store_id])}" title=''>{$combo.store_name}</a></li>
+            <li class="jt">></li>
+            <li>{$combo.combo_name}</li>
+        </ul>
+    </div><!-- breadcrumb End -->
+    
+    <!-- 殡葬礼仪服务套餐详情介绍 -->
+    <div class="etiquette_service">
+        
+        <!-- 介绍 -->
+        <div class="etiquette_service_info clearfix">
+            <!-- 图片 -->
+            <div class="etiquette_service_info_img">
+                <img src="{$combo.thumb_image}" alt="{$combo.combo_name}" />
+            </div>
+            <!-- 详情内容介绍 -->
+            <div class="etiquette_service_info_text">
+                <h2>{$combo.combo_name}</h2>
+                <p><span>服务商地址：</span>{$store.address}</p>
+                <p class="price"><span>服务参考价格：￥</span><strong>{$combo.platform_price}</strong><span class="yuan">元起</span></p>
+                <p class="phone"><span>服务热线：</span><font>{$store.phone}</font></p>
+                <p><span>浏览量：{$combo.page_view}</span></p>
+            </div>
+            <!-- 立即预约 在线咨询 -->
+            <div class="etiquette_service_info_btn">
+                <a class="buttonlv" href="#">立即预约</a>
+                <a class="buttonbai" href="#">在线咨询</a>
+            </div>
+        </div><!-- etiquette_service_info 介绍 End -->
+        
+        <!-- 套餐内容 -->
+        <div class="etiquette_service_combo">
+            <h2>套餐内容：</h2>
+            <ul class="clearfix">
+            {volist name='$combo.content' id='vo'}
+                <li {if ($key+1)%3==0} class='last' {/if}><a href="javascript:void(0);">{$vo}</a></li>
+            {/volist}
+                
+            </ul>
+        </div><!-- etiquette_service_combo 套餐内容 End -->
+        
+        <!-- 服务流程 -->
+        <div class="etiquette_service_process">
+            <h2>服务流程：</h2>
+
+            <div class="etiquette_service_process_main">
+                {$combo.service_course}
+            </div><!-- etiquette_service_process_main 流程 End -->
+        </div><!-- etiquette_service_process 服务流程 End -->
+
+    </div><!-- etiquette_service 殡葬礼仪服务套餐详情介绍 End -->
+
+</div><!-- contain End -->
+{/block}

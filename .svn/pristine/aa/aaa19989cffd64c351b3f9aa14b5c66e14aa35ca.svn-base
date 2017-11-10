@@ -1,0 +1,95 @@
+<?php
+namespace back\plugin\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+
+	
+class History extends Base
+{
+	/**
+	 * 列表页
+	 */
+	public function index(){
+		//默认当前年份
+		$where['year'] = Date('Y');
+		//当前月
+		$month =Date('m');
+		$arr = array("01","02","03","04","05","06","07","08","09");
+		if(in_array($month,$arr)){
+			$month = str_replace(0,'', $month);
+		}
+		$where['month'] = $month;
+		$pageSize = Config('page_size');
+		$list = Db::name('TodayHistory')->where($where)->order('month desc')->paginate($pageSize,false);
+		$page = $list->render();
+		$this->assign('list',$list);
+        $this->assign('page',$page);
+		return $this->fetch();
+	}
+
+	/**
+	 * 增加
+	 */
+	public function add(){
+		$result = array('flag'=>0,'msg'=>'添加失败');
+		$arr = array("01","02","03","04","05","06","07","08","09");
+		$inputdata = input('post.');
+		$time = explode('-', $inputdata['time']);
+		$inputdata['year'] =  $time[0];
+		$month =  $time[1]; 
+		$day =    $time[2]; 
+		if(in_array($month,$arr)){
+			$inputdata['month'] = str_replace(0,'', $month);
+		}
+		if(in_array($day,$arr)){
+			$inputdata['day'] = str_replace(0,'', $day);
+		}else{
+			$inputdata['day'] = $day;
+		}
+		$inputdata['created_time'] = time();
+		unset($inputdata['time']);
+		$info = Db::name('TodayHistory')->insert($inputdata);
+		if($info){
+			$result['flag'] = 1;
+			$result['msg'] = '添加成功';
+		}
+		echo json_encode($result);
+	}
+
+	
+	/**
+	 * 删除
+	 */
+	public function delete(){
+		$result = array('flag'=>0,'msg'=>'删除失败');
+		$id = input('id');
+		$info = Db::name('TodayHistory')->where('id='.$id)->delete();
+		if($info){
+			$result['flag'] = 1;
+			$result['msg'] = '删除成功';
+		}
+		echo json_encode($result);
+	}
+
+	/**
+	 * 查看内容
+	 */
+	public function lookcontent(){
+		$input = input('post.');
+		$where['id'] = $input['id'];
+		if($input['type']== 'content'){
+			$field = 'content';
+		}else{
+			$field = 'keywords';
+		}
+		$data = Db::name('TodayHistory')->where($where)->field($field)->find();
+		if($data){
+			$result['flag'] = 1;
+			$result['data'] = $data;
+		}
+		echo json_encode($result);
+	}
+}

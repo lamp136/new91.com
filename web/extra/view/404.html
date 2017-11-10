@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+    <link href="/static/web/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/static/web/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/static/web/js/common.js"></script>
+</head>
+<body>
+    <!-- header -->
+    <div class="header">
+        <div class="contain">
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="/" title='91搜墓'><img src="/static/web/images/logo.png" alt="LOGO" /></a>
+            </div>
+            <!-- 选择城市+搜索 -->
+            <div class="city_search">
+                <!-- 选择城市 -->
+                <!--<div class="city">
+                    <span class="sele">
+                        <i class="city_icon"></i>
+
+                        <i class="iconfont icon-iconfontdownjiantou"></i>
+                    </span>
+                </div>-->
+                <!-- city 选择城市 End -->
+                <!-- 搜索 -->
+                <div class="search">
+                    <!-- 选择搜索内容 -->
+                    <div class="search_sel_box">
+                        <span class="search_sel">陵园墓地 
+                            <i class="iconfont icon-iconfontdownjiantou"></i>
+                        </span>
+                        <div class="search_sel_list">
+                            <ul>
+                                <li><a href="javascript:void(0);" data-href="/cemetery" data-cat="{$Think.config.category_cemetery_id}">陵园墓地</a></li>
+                                <li><a href="javascript:void(0);" data-href="/funeral" data-cat="{$Think.config.category_funeral_id}">殡仪馆</a></li>
+                                <li><a href="javascript:void(0);" data-href="/rite" data-cat="{$Think.config.category_etiquette_id}">殡仪公司</a></li>
+                            </ul>
+                        </div>
+                    </div><!-- search_sel_box 选择搜索内容 End -->
+                    <!-- 搜索框 -->
+                    <div class="search_input">
+                        <input id="gover_search_key" class="txt" type="text" value="" data-cat="{$Think.config.category_cemetery_id}" placeholder="我们帮您找"/>
+                        <div class="search_suggest" id="gov_search_suggest">  
+                            <ul>
+                            </ul>
+                        </div>
+                    </div><!-- search_input 搜索框 End -->
+                    <div style="clear:both;"></div>
+                </div><!-- search 搜索 End -->
+                <!-- 搜索按钮 -->
+                <div class="search_btn">
+                    <button class="ssbtn"></button>
+                </div><!-- search_btn 搜索按钮 End -->
+                <div style="clear:both;"></div>
+            </div><!-- city_search 选择城市+搜索 End -->
+            <!-- 电话 -->
+            <div class="telephone">
+                <img src="/static/web/images/telephone.png" alt="电话" />
+            </div><!-- telephone 电话 End -->
+
+        </div><!-- contain End -->
+    </div><!-- header End -->
+    <div class="contain four">
+        <img src="/static/web/images/four_img.jpg"/>
+        <p>抱歉！您访问的页面可能被删除或者暂时无法访问，<br/>您可以返回到  <a href="/">首页</a>，系统 <span id="count"></span> 秒将自动为您跳转......</p>
+    </div>
+    <script>
+        $(function() {
+            var count = 5;
+            $('#count').text(count);
+            var interVal = setInterval(function() {
+                count--;
+                if (count > 0) {
+                    $('#count').text(count);
+                } else {
+                    location.href = '/';
+                    clearInterval(interVal);
+                }
+            }, 1000);
+        });
+        
+        //改变搜索条件
+        var href = '/cemetery';
+        $('.search_sel_list ul a').click(function() {
+            var othis = $(this),
+            cname = othis.text();
+            $('#gover_search_key').attr('data-cat',othis.attr('data-cat'));
+            href = othis.data('href');
+            $('.search_sel').html(cname + '<i class="iconfont icon-iconfontdownjiantou"></i>');
+        });
+
+        //点击搜索
+        $('.ssbtn').click(function() {
+            var keyWord = $('#gover_search_key').val(),
+            jumpUrl = href + '.html?name=' + keyWord;
+            window.location.href = jumpUrl;
+        });
+    </script>
+</body>
+</html>

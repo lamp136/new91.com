@@ -1,0 +1,112 @@
+{extend name='extra@main' /}
+{block name='body'}  
+<!-- banner -->
+<div class="help_banner"></div>
+
+<div class="contain clearfix contain_pdsize">
+    
+    <!-- 帮助中心 nav -->
+    <div class="help_nav">
+        <div class="help_nav_main">
+            <!-- LOGO -->
+            <div class="help_nav_logo">
+                <img src="_WEB_/images/help_nav_logo.png" alt="LOGO" />
+            </div><!-- help_nav_logo End -->
+            <div id="help_nav_list" class="help_nav_list">
+                <h2 class="active"><span>91搜墓网<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/aboutus')}">关于我们</a></li>
+                    <li><a href="{:url('help/Help/serviceprocess')}">服务流程</a></li>
+                    <li><a href="{:url('help/Help/contactus')}">联系我们</a></li>
+                </ul>
+                <h2><span>购墓指南<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/tombnotes')}">购墓须知</a></li>
+                    <li><a href="#">购墓技巧</a></li>
+                    <li><a href="{:url('help/Help/tombprocess')}">购墓流程</a></li>
+                </ul>
+                <h2><span>常见问题<i class="down"></i></span></h2>
+                <ul class="show">
+                    <li><a href="#">墓型选择</a></li>
+                    <li class="led"><a href="{:url('help/Help/tombagelimit')}">公墓年限</a></li>
+                    <li><a href="#">鲜花祭品</a></li>
+                    <li><a href="{:url('help/Help/wasburied')}">落葬讲究</a></li>
+                    <li><a href="#">迁坟讲究</a></li>
+                </ul>
+                <h2><span>殡葬文化<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/bury')}">安葬吉日</a></li>
+                    <li><a href="{:url('article/Article/listbox',['cid'=>$Think.config.category_fengshui_culture])}">墓地风水</a></li>
+                    <li><a href="{:url('help/Help/epigraphic')}">碑文挽联</a></li>
+                    <li><a href="#">三大鬼节</a></li>
+                    <li><a href="#">殡葬礼仪</a></li>
+                </ul>
+                <h2><span>平台声明<i class="down"></i></span></h2>
+                <ul>
+                    <li><a href="{:url('help/Help/copyright')}">版权声明</a></li>
+                    <li><a href="{:url('help/Help/disclaimer')}">免责条款</a></li>
+                    <li><a href="{:url('help/Help/law')}">法律声明</a></li>
+                    <li><a href="{:url('help/Help/privacy')}">隐私条款</a></li>
+                </ul>
+            </div><!-- help_nav_list End -->
+        </div><!-- help_nav_main End -->
+    </div><!-- help_nav 帮助中心 nav End -->
+    
+    <!-- 帮助中心右侧 -->
+    <div class="help_right help_tombagelimit">
+        
+        <!-- 公墓年限 -->
+        <div class="help_tombagelimit_main">
+            <h2>公墓年限</h2>
+            <div class="help_tombagelimit_text">
+                <p>最近大家都在讨论关于公墓使用年限的问题，大多数人都会认为既然买下了公墓，那就可以永久使用，针对这个问题，91搜墓网为大家总结几个关于墓地使用年限的问题，希望可以帮到大家。</p>
+                <p>第一，墓地只是租赁关系，不是产权关系，只有使用权，没有所有权。墓地使用期限与其土地性质和使用年限有关，一般为50年或70年。</p>
+                <p>第二，公墓的使用年限≠土地使用年限。公墓的所有者(现在大部分都是经营性公墓，是有经营主体的)购买的土地年限可能是50年70年，但是公墓墓穴是按照20年为一个管理期的。</p>
+                <p>第三，这里的20年是“管理期”，每20年交一次管理费，就可以继续使用墓穴。管理费的现行标准是购墓价格的10%。首次购墓一般都包括了第一个二十年的管理费。</p>
+                <p>第四，20年管理期是以民政局颁发的安葬证发证日期为起始点而不是购买日为起始点。</p>
+                <p>另外，据介绍，《公墓管理暂行办法》规定的20年使用周期是出于20年一代人的考虑。在现实中，到了使用期限，如果丧主还想继续使用墓穴，可以再缴管理费。对于无人认领或者不交管理费的骨灰，都会统一下葬，体现对逝者的尊重。</p>
+            </div>
+        </div><!-- help_tombagelimit_main 公墓年限 End -->
+
+    </div><!-- help_right 帮助中心右侧 End -->
+
+</div><!-- contain End -->
+
+<!-- 优势 -->
+<div class="home_advantage aboutus_advantage">
+    <div class="contain">
+        <ul>
+            <li>
+                <img src="_WEB_/images/home_advantage_img1.png"/>
+                <h2>信息透明</h2>
+                <P>陵园信息全面，价格透明</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img2.png"/>
+                <h2>预约服务</h2>
+                <P>线上咨询，电话服务</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img3.png"/>
+                <h2>专业服务</h2>
+                <P>专业咨询团队，资深企业</P>
+            </li>
+            <li>
+                <img src="_WEB_/images/home_advantage_img4.png"/>
+                <h2>多重优惠</h2>
+                <P>多种礼品，享受独家优惠</P>
+            </li>
+            <li class="last">
+                <img src="_WEB_/images/home_advantage_img5.png"/>
+                <h2>诚信保障</h2>
+                <P>诚信商家，保障服务</P>
+            </li>
+        </ul>
+    </div><!-- contain End -->
+</div><!-- 优势 home_advantage End -->
+{/block}
+{block name='js'}
+<script src="_WEB_/js/help.js"></script>
+{/block}
+    
+    

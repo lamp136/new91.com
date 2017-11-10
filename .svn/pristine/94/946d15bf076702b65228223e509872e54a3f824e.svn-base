@@ -1,0 +1,12 @@
+<?php
+namespace web\extra\controller;
+use think\Controller;
+use think\Request;//请求类
+use think\Session;//session类
+use think\Db;
+
+
+class Base extends Controller 
+{
+    
+}

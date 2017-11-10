@@ -1,0 +1,111 @@
+{extend name='extra@main' /}
+{block name="layer"}     
+<form id='editForm' style="display:none" class="layui-form" >       
+        <table class="layui-table">
+            <tr class="memberBank">
+                <th>开户行</th>
+                <th>开户人</th>
+                <th>银行账号</th>
+                <th>是否默认卡</th>
+                <th>操作</th>
+            </tr>
+  
+        </table>
+       
+    </form>
+
+{/block}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:10px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">首页</a>
+        <a><cite>我的任务</cite></a>
+    </span>
+</div>
+<div class="layui-form">
+      <table class="layui-table">
+        <colgroup>
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col width="200">
+        </colgroup>
+        <thead>
+          <tr> 
+            <th>任务类型</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+            {volist name="data" id="vo"}
+            <tr>
+                <td>{$type[$vo.type]}</td>
+                <td>{$arr[$vo.status]}</td>
+                <td>{$vo.create_time|date='Y-m-d',###}</td>
+                <td>
+                    <a href="javascript:void(0)" data-id="{$vo.id}"  data-type="{$vo.type}" title="处理" class="layui-btn layui-btn-small layui-btn-danger  work"><i class="layui-icon" >处理</i></a>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+</div>
+{/block}
+
+{block name="optJS"}
+<script> 
+    layui.use('layer', function() {
+        layui.use(['form', 'jquery', 'laypage'], function() {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            $(document).ready(function() { 
+                setTimeout(require)
+            }); 
+            function require() {
+                var url = "{:url('checkNotify')}";
+                $.get(url,null,function(data) {
+                    // 如果获得的数据不为空，则显示提醒
+                    var result = eval('('+data+')');
+                       if (result.flag==1) {
+                            // 这里写提醒的方式 
+                    　　　　layer.alert('您有新的工作消息')
+                       }else if(result.flag==2){
+                             return false;
+                       }else if(result.flag==0){
+                         // 每5分钟请求一次
+                            setTimeout(require,50000);
+                       }
+                });
+            }
+
+            $('.work').click(function(){
+                var id = $(this).attr('data-id');
+                var type = $(this).attr('data-type');
+                $.ajax({
+                    url:"{:url('dealing')}",
+                    data:{'id':id,'type':type},
+                    type:'post',
+                    success:function(d){
+                        var result = eval("("+d+")");
+                        if(result.flag==1){
+                            if(type == 1){
+                                window.location.href="{:url('orders/Tomb/appoint')}"
+                            }else if(type == 2){
+                                window.location.href="{:url('orders/Tomb/leavemessage')}"
+                            }else if(type == 3){
+                                window.location.href="{:url('financial/Service/leavemessage')}"
+                            }else if(type == 4){
+                                window.location.href="{:url('member/Handtohand/index')}"
+                            }else if(type == 5){
+                                window.location.href="{:url('financial/Service/appoint')}"
+                            }     
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+{/block}

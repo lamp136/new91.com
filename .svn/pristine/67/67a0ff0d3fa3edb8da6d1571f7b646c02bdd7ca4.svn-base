@@ -1,0 +1,11 @@
+<?php
+namespace back\extra\model;
+use think\Model;
+
+class News extends Model{
+
+    /**操作人**/
+    public function nickname(){
+        return $this->hasOne('admin','id','admin_id')->field('id,name');
+    }
+}   

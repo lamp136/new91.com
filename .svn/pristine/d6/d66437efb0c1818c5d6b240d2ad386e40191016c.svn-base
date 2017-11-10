@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>陵园订单评价</title>
+    <link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="javascripts/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+
+    <!-- 提交评价提示框 -->
+    <div class="tooltip_box"></div>
+    <div class="tooltip_cemetery_orders">
+        <h2>删除订单</h2>
+        <p>您好，您确定要删除该订单吗？</p>
+        <div class="tooltip_cemetery_orders_btn">
+            <a href="#">确定</a>
+            <a class="qx" href="#">取消</a>
+        </div>
+        <!-- 关闭按钮 -->
+        <span class="tooltip_cemetery_orders_cloce"></span>
+    </div>
+ 
+    <!-- 顶部 -->
+    <div class="navbar_top">
+        <div class="contain">
+            <div class="greet">
+                <span>您好，欢迎来到91搜墓网</span>
+                <a class="login" href="login.html">登录</a>
+                <i>|</i>
+                <a href="register.html">免费注册</a>
+            </div>
+            <div class="nav_top">
+                <ul>
+                    <li class="scan"><a href="#">我的订单<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                    <li class="gwc"><a href="#">购物车<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                    <li><a href="cemetery_orders.html">个人中心<i class="iconfont icon-iconfontdownjiantou"></i></a>|</li>
+                    <li><a href="#">帮助中心</a>|</li>
+                    <li><a href="#">网站地图</a>|</li>
+                    <li class="last"><a href="#">商家后台</a></li>
+                </ul>
+            </div>
+            <div style="clear:both;"></div>
+        </div>  
+    </div><!-- navbar_top 顶部 End -->
+    
+    <!-- header -->
+    <div class="header">
+        <div class="contain">
+
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png" alt="LOGO" /></a>
+            </div>
+            
+            <!-- 选择城市+搜索 -->
+            <div class="city_search">
+
+                <!-- 选择城市 -->
+                <div class="city">
+
+                    <span class="sele">
+                        <i class="city_icon"></i>
+                        上海
+                        <i class="iconfont icon-iconfontdownjiantou"></i>
+                    </span>
+
+                    <!-- 城市列表 -->
+                    <div class="city_list">
+                        <ul class="clearfix">
+                            <li>A</li>
+                            <li><a href="#">安徽</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>B</li>
+                            <li><a href="#">北京</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>C</li>
+                            <li><a href="#">重庆</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>F</li>
+                            <li><a href="#">福建</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>G</li>
+                            <li><a href="#">广东</a></li>
+                            <li><a href="#">广西</a></li>
+                            <li><a href="#">贵州</a></li>
+                            <li><a href="#">甘肃</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>H</li>
+                            <li><a href="#">河北</a></li>
+                            <li><a href="#">河南</a></li>
+                            <li><a href="#">黑龙江</a></li>
+                            <li><a href="#">海南</a></li>
+                            <li><a href="#">湖北</a></li>
+                            <li><a href="#">湖南</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>J</li>
+                            <li><a href="#">江苏</a></li>
+                            <li><a href="#">吉林</a></li>
+                            <li><a href="#">江西</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>L</li>
+                            <li><a href="#">辽宁</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>N</li>
+                            <li><a href="#">宁夏</a></li>
+                            <li><a href="#">内蒙古</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>Q</li>
+                            <li><a href="#">青海</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>S</li>
+                            <li><a href="#">上海</a></li>
+                            <li><a href="#">山东</a></li>
+                            <li><a href="#">山西</a></li>
+                            <li><a href="#">四川</a></li>
+                            <li><a href="#">陕西</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>T</li>
+                            <li><a href="#">天津</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>X</li>
+                            <li><a href="#">新疆</a></li>
+                            <li><a href="#">西藏</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>Y</li>
+                            <li><a href="#">云南</a></li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>Z</li>
+                            <li><a href="#">浙江</a></li>
+                        </ul>
+                    </div>
+                   
+                </div><!-- city 选择城市 End -->
+
+                <!-- 搜索 -->
+                <div class="search">
+
+                    <!-- 选择搜索内容 -->
+                    <div class="search_sel_box">
+                        <span class="search_sel">陵园墓地<i class="iconfont icon-iconfontdownjiantou"></i></span>
+                        <div class="search_sel_list">
+                            <ul>
+                                <li><a href="#">陵园墓地</a></li>
+                                <li><a href="#">殡仪馆</a></li>
+                                <li><a href="#">殡仪公司</a></li>
+                                <li><a href="#">新闻</a></li>
+                            </ul>
+                        </div>
+                    </div><!-- search_sel_box 选择搜索内容 End -->
+                    
+                    <!-- 搜索框 -->
+                    <div class="search_input">
+                        <input id="gover_search_key" class="txt" type="text" value="" placeholder="我们帮您找陵园"/>
+                        <div class="search_suggest" id="gov_search_suggest">  
+                            <ul>
+                            </ul>
+                        </div>
+                    </div><!-- search_input 搜索框 End -->
+                    
+                    <div style="clear:both;"></div>
+
+                </div><!-- search 搜索 End -->
+
+                <!-- 搜索按钮 -->
+                <div class="search_btn">
+                    <button class="ssbtn"></button>
+                </div><!-- search_btn 搜索按钮 End -->
+                
+                <div style="clear:both;"></div>
+                
+                <!-- 搜索展示内容 -->
+                <div class="search_text clearfix">
+                    <ul>
+                        <li><a href="#">天寿陵园</a></li>
+                        <li><a href="#">殡仪服务</a></li>
+                        <li><a href="#">树葬</a></li>
+                        <li><a href="#">海葬</a></li>
+                        <li><a href="#">风水</a></li>
+                    </ul>
+                </div><!-- search_text 搜索展示内容 End -->
+
+            </div><!-- city_search 选择城市+搜索 End -->
+            
+            <!-- 电话 -->
+            <div class="telephone">
+                <img src="images/telephone.png" alt="电话" />
+            </div><!-- telephone 电话 End -->
+
+        </div><!-- contain End -->
+    </div><!-- header End -->
+    
+    <!-- 导航 -->
+    <div class="nav">
+        <div class="contain">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="cemetery.html">陵园墓地</a></li>
+                <li><a href="tombmaps.html">地图看墓</a></li>
+                <li><a href="funeralparlour.html">殡仪馆</a></li>
+                <li><a href="etiquette.html">殡葬礼仪</a></li>
+                <li><a href="ecologicalburial.html">节地生态葬</a></li>
+                <li><a href="funeralencyclopedia.html">殡葬百科</a></li>
+                <li><a href="#">91乐融</a></li>
+            </ul>
+        </div><!-- contain End -->
+    </div><!-- nav 导航 End -->
+    
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="cemeteryorders.html">用户中心</a></li>
+                <li class="jt">></li>
+                <li>个人资料</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+       <!-- 用户中心左侧导航 -->
+        <div class="user_nav">
+            <h2><i></i>用户中心</h2>
+            <ul>
+                <li><a class="user_led" href="cemetery_orders.html">陵园订单</a></li>
+                <li><a href="etiquette_orders.html">礼仪服务订单</a></li>
+                <li><a href="#">领取返现</a></li>
+                <li><a href="personaldata.html">个人资料</a></li>
+                <li><a href="changepassword.html">修改密码</a></li>
+            </ul>
+        </div><!-- user_nav用户中心左侧导航 End -->
+        
+        <!-- 用户中心右侧 -->
+        <div class="user_right">
+            
+            <!-- 订单title -->
+            <div class="order_title">
+                <ul class="clearfix">
+                    <li class="ddxx">订单信息</li>
+                    <li class="gmr">购买人</li>
+                    <li class="phone">手机号码</li>
+                    <li class="zt">状态</li>
+                    <li class="jycz">交易操作</li>
+                </ul>
+            </div>
+            
+            <!-- 订单内容1 -->
+            <div class="cemetery_orders">
+                <div class="cemetery_orders_title">
+                    <p>订单编号：49998018    预约时间：2015-03-30 09:29:38 </p>
+                </div>
+                <div class="cemetery_orders_nr">
+                    <!-- 商品1 -->
+                    <ul class="clearfix">
+                        <!-- 订单信息 -->
+                        <li class="liimg clearfix">
+                            <a href="#"><img src="images/cemetery_orders_img1.jpg"/></a>
+                            <h2>北京天寿陵园</h2>
+                        </li>
+                        <!-- 购买人 -->
+                        <li class="ligmr">慕容侠客</li>
+                        <!-- 手机号码 -->
+                        <li class="liphone">13432990220</li>
+                        <!-- 状态 -->
+                        <li class="lizt">完成</li>
+                        <!-- 交易操作 -->
+                        <li class="licz licz_eva">
+                            <a class="cemetery_orders_delete_btn" href="#">删除订单</a>
+                        </li>
+                    </ul>
+                </div><!-- cemetery_orders_nr End -->
+            </div><!-- cemetery_orders 订单内容 End -->
+            
+            <!-- 我的评价 -->
+            <div class="cemetery_orders_evaluate">
+                <h2>我的评价</h2>
+                <div class="pf clearfix">
+                    <span class="title">评分：</span>
+                     <ul>
+                        <li>环境：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                        <li class="last">风水：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                        <li>交通：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                        <li class="last">服务：<img src="images/cem_detail_star_img5.jpg"/>5分</li>
+                    </ul>
+                </div>
+                <div class="ms">
+                    <span class="title">描述：</span>
+                    <textarea class="ms_tarea" placeholder="请您输入真实客观的评价，您的评价对其它客户是非常有帮助的! (不超过300字）" ></textarea>
+                </div>
+                <div class="phone">
+                    <span class="title">评分：</span>
+                    <input class="phone_txt" type="text" value="" placeholder="请输入您正在使用的手机号" />
+                </div>
+                <div class="niname">
+                    <span></span>匿名评价
+                </div>
+                <div class="remark_btn">
+                    <a href="#">提交评价</a>
+                </div>
+                <div class="cemetery_orders_evaluate_close"></div>
+            </div><!-- cemetery_orders_evaluate 我要评价 End -->
+
+        </div><!-- user_right 用户中心右侧 End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+
+    <!-- 底部footer部分 -->
+    <div class="footer clearfix">
+        <div class="contain">
+
+            <!-- 底部导航+联系我们 -->
+            <div class="footer_main clearfix">
+
+                <!-- 底部导航 -->
+                <div class="footer_nav clearfix">
+                    <ul class="first">
+                        <h1>殡葬文化</h1>
+                        <li><a href="#">殡葬吉日</a></li>
+                        <li><a href="#">墓地风水</a></li>
+                        <li><a href="#">碑文挽联</a></li>
+                    </ul>
+                    <ul>
+                        <h1>购墓指南</h1>
+                        <li><a href="#">购墓须知</a></li>
+                        <li><a href="#">选墓技巧</a></li>
+                        <li><a href="#">购墓流程</a></li>
+                    </ul>
+                    <ul>
+                        <h1>常见问题</h1>
+                        <li><a href="#">墓型选择</a></li>
+                        <li><a href="#">公墓年限</a></li>
+                        <li><a href="#">鲜花祭品</a></li>
+                    </ul>
+                    <ul>
+                        <h1>平台保障</h1>
+                        <li><a href="#">免责条款</a></li>
+                        <li><a href="#">隐私保护</a></li>
+                        <li><a href="#">法律声明</a></li>
+                    </ul>
+                </div><!-- footer_nav底部导航结束 -->
+
+                <!-- 公众号 -->
+                <div class="wechat">
+                    <img src="images/footer_wechat.jpg" align="微信号" />
+                    <h2>91忆语</h2>
+                    <p>91搜墓网微信公众号</p>
+                </div><!-- contact联系我们结束 -->
+            </div><!-- footer_main底部导航+联系我们结束 -->
+            
+        </div><!-- contain -->
+    </div><!-- footer底部footer部分结束 -->
+
+    <!-- 友情链接 -->
+    <div class="blogroll">
+        <div class="contain clearfix">
+            <h3>友情链接：</h3>
+            <ul>
+                <li><a href="#">广东公墓</a></li>
+                <li><a href="#">上海墓地网站</a></li>
+                <li><a href="#">北京墓地网</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">殡葬人才网</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">广东公墓</a></li>
+                <li><a href="#">上海墓地网站</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">殡葬人才网</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">殡葬人才网</a></li>
+                <li><a href="#">苏州山陵文化</a></li>
+                <li><a href="#">丧葬网</a></li>
+                <li><a href="#">天堂家园</a></li>
+                <li><a href="#">风水殡葬学</a></li>
+                <li><a href="#">九宫风水网</a></li>
+                <li><a href="#">网上纪念馆</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">网上纪念馆</a></li>
+                <li><a href="#">广东公墓</a></li>
+                <li><a href="#">上海墓地</a></li>
+                <li><a href="#">北京墓地</a></li>
+                <li><a href="#">网上纪念馆</a></li>
+            </ul>
+        </div>
+    </div><!-- blogroll友情链接结束 -->
+
+    <!-- 版权 -->
+    <div class="copyright">
+        <ul>
+            <li><a href="aboutus.html">关于我们</a></li>
+            <li><a href="help_contactus.html">联系我们</a></li>
+            <li><a href="websitemap.html">网站地图</a></li>
+            <li><a href="#">加盟合作</a></li>
+            <li><a href="#">手机站</a></li>
+            <li>热线：<span>400-618-9191</span></li>
+        </ul>
+        <p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;91搜墓网版权所有</p>
+        <p>CopyRight (C)2015-2016 Huigeyuan Technology Allrights</p>
+    </div><!-- copyright版权结束 -->
+
+    <!-- 返回顶部工具条 -->
+    <div class="toolbar">
+        <ul>
+            <li class="personal">
+                <a href="#">
+                    <i class="toolbar_personal_icon"></i>
+                    <p>我的</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="toolbar_shoping_icon"></i>
+                    <p>购<br/>物<br/>车</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="toolbar_collect_icon"></i>
+                    <p>收藏</p>
+                </a>
+            </li>
+            <li class="toolbar_weixin">
+                <a href="#">
+                    <i class="toolbar_weixin_icon"></i>
+                    <p>微信</p>
+                </a>
+                <span class="toolbar_weixin_img"></span>
+            </li>
+            <li class="toolbar_service">
+                <a href="#">
+                    <i class="toolbar_service_icon"></i>
+                    <p>客服</p>
+                </a>
+                <div class="toolbar_service_main">
+                    <a href="#">九儿</a>
+                    <a href="#">小一</a>
+                    <a href="#">小木</a>
+                </div>
+            </li>
+            <li id="backTop" class="top">
+                <a href="javascript:void(0)">
+                    <i class="toolbar_top_icon"></i>
+                    <p>TOP</p>
+                </a>
+            </li>
+        </ul>
+    </div><!-- toolbar返回顶部工具条结束 -->
+
+<!-- 搜索提示 -->
+<script type="text/javascript" src="javascripts/hit.js"></script>
+<!-- 返回顶部JS -->
+<script src="javascripts/backtop.js"></script>
+<!-- JS -->
+<script src="javascripts/common.js"></script>
+</body>
+</html>
+    

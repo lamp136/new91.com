@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会员登录_91搜墓网</title>
+    <link href="_WEB_/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="_WEB_/js/jquery-1.9.1.min.js"></script>
+    <!-- 获取验证码jquery.cookie.js -->
+    <script type="text/javascript" src="_WEB_/js/jquery.cookie.js"></script>
+</head>
+<body>
+    <!-- header -->
+    <div class="header login_header">
+        <div class="contain">
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="index.html"><img src="_WEB_/images/logo.png"/></a>
+            </div>
+            <h1>欢迎登录</h1>
+            <div class="login_register"><a href="{:url('login/Login/register')}">还没有账号？快来免费注册</a></div>
+        </div><!-- contain End -->
+    </div><!-- header End -->
+
+    <!-- 登录 -->
+    <div class="login_main">
+        <div class="contain clearfix">
+            <!-- 登录banner -->
+            <div class="logbanner">
+                <img src="_WEB_/images/login_banner.jpg"/>
+            </div>
+            <!-- 登录内容 -->
+            <div class="login">
+                <div id="login_title" class="login_title">
+                    <ul>
+                        <li><a href="javascript:void(0);" tab="tablog1">账号登录</a></li>
+                        <li><a href="javascript:void(0);" tab="tablog2">动态登录</a></li>
+                    </ul>
+                </div>
+                <ul>
+                    <li id="tablog1" class="login_box">
+                        <ul class="login_box_main">
+                            <li>
+                                <input class="login_tex mobile" type="text" placeholder="手机号"/>
+                                <span class="log_validate log_mobile" style='display:none;'>请输入账号和密码</span>
+                            </li>
+                            <li>
+                                <input class="login_tex password" type="password" placeholder="输入密码"/>
+                                <span class="log_validate log_password" style='display:none;'>请输入账号和密码</span>
+                            </li>
+                            <li class="zddl clearfix">
+                                <p class="log_check"><input class="check" type="checkbox"/>自动登录</p>
+                                <!--<p class="log_forget"><a href="javascript:;">忘记密码</a></p>-->
+                            </li>
+                            <li class="login_btn">
+                                <a href="javascript:;" id='sublogin' data-url='sublogin.html'>立即登录</a>
+                            </li>
+                            <li class="log_register"><a href="{:url('login/Login/register')}">还没有账号？快来免费注册</a></li>
+                        </ul>
+                    </li>
+                    <li id="tablog2" class="login_box">
+                        <ul class="login_box_main">
+                            <li>
+                                <input class="login_tex phone" type="text" placeholder="手机号"/>
+                                <span class="log_validate log_phone" style='display:none;'>请输入账号和密码</span>
+                            </li>
+                            <li class="getyzm">
+                                <input class="login_tex code" type="text" placeholder="输入密码"/>
+                                <input class="getcode_btn" type="button" id="getting" data-url="sendcode.html" value="获取验证码">
+                                <span class="log_validate log_code" style='display:none;'>请输入账号和密码</span>
+                            </li>
+                            <li class="zddl clearfix">
+                                <p class="log_check"><input class="check" type="checkbox"/>自动登录</p>
+                            </li>
+                            <li class="login_btn">
+                                <a href="javascript:;" id='moblogin' data-url='moblogin.html'>立即登录</a>
+                            </li>
+                            <li class="log_register"><a href="{:url('login/Login/register')}">还没有账号？快来免费注册</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- login登录内容 End -->
+        </div><!-- contain -->
+    </div><!-- login_main 登录 End -->
+
+    <!-- 版权 -->
+    <div class="copyright login_copyright">
+        <ul>
+            <li><a href="aboutus.html">关于我们</a></li>
+            <li><a href="help_contactus.html">联系我们</a></li>
+            <li><a href="websitemap.html">网站地图</a></li>
+            <li><a href="#">加盟合作</a></li>
+            <li><a href="#">手机站</a></li>
+            <li>热线：<span>400-618-9191</span></li>
+        </ul>
+        <p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;91搜墓网版权所有</p>
+        <p>CopyRight (C)2015-2016 Huigeyuan Technology Allrights</p>
+    </div><!-- copyright版权结束 -->
+</body>
+<script src="_WEB_/js/common.js"></script>
+<script type='text/javascript'>
+    //获取验证码
+    $(function(){
+        /*仿刷新：检测是否存在cookie*/
+        if($.cookie("mobilecode")){
+            var count = $.cookie("mobilecode");
+            var btn = $('#getting');
+            btn.val(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
+            var resend = setInterval(function(){
+                count--;
+                if (count > 0){
+                    btn.val(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
+                    $.cookie("mobilecode", count, {path: '/', expires: (1/86400)*count});
+                }else {
+                    clearInterval(resend);
+                    btn.val("获取验证码").removeClass('disabled').removeAttr('disabled style');
+                }
+            }, 1000);
+        }
+        /*点击改变按钮状态，已经简略掉ajax发送短信验证的代码*/
+        $('#getting').click(function(){
+            //手机号
+            var phone = $('.phone').val().replace(/(^\s*)|(\s*$)/g, "");
+            if(phone.length == 0){
+                $('.log_phone').empty().html('提示：请输入您的手机号').show(); 
+                return false;
+            }
+            var mobiletest = /^(1[3|4|5|7|8]\d{9})$/;
+            if(!mobiletest.test(phone)){
+                $('.log_phone').empty().html('提示：请确认手机号是否正确').show(); 
+                return false;
+            }
+            
+            //提交信息
+            var url=$(this).attr('data-url');
+            $.ajax({
+                url:url,
+                type:'post',
+                data:{'mobile':phone},
+                dataType:'json',
+                success:function(result){
+                    if(result.flag == 0){
+                        $('.reg_code').empty().html('提示：请重新发送').show(); 
+                    }
+                }
+            });
+            
+            var btn = $(this);
+            var count = 60;
+            var resend = setInterval(function(){
+                count--;
+                if (count > 0){
+                    btn.val(count+"秒后可重新获取");
+                    $.cookie("mobilecode", count, {path: '/', expires: (1/86400)*count});
+                }else {
+                    clearInterval(resend);
+                    btn.val("获取验证码").removeAttr('disabled style');
+                }
+            }, 1000);
+            btn.attr('disabled',true).css('cursor','not-allowed');
+        });
+    });
+    //动态登录start
+    $('#moblogin').click(function(){
+        var code = $('.code').val().replace(/(^\s*)|(\s*$)/g, "");
+        var phone = $('.phone').val().replace(/(^\s*)|(\s*$)/g, "");
+        var url = $(this).attr('data-url');
+        var myreg = /^(1[3|4|5|7|8]\d{9})$/;
+        if(phone == ''){
+            $('.log_phone').empty().html('提示：请输入手机号').show();
+            return false;
+        }
+        if(!myreg.test(phone)){
+            $('.log_phone').empty().html('提示：手机号不正确').show();
+            return false;
+        }
+        if(code == ''){
+            $('.log_code').empty().html('提示：验证码不能为空').show();
+            return false;
+        }
+        $.ajax({
+            url:url,
+            type:'POST',
+            data:{'mobile':phone,'code':code} ,
+            success: function (d) {
+                var result = eval("(" + d + ")");
+                if (result.flag == 1) {
+                    window.location.href = '/';
+                } else if (result.flag == 0) {
+                    $('.log_code').empty().html(result.msg).show();
+                }
+            }
+        });
+    });
+    //手机号
+    $('.phone').focus(function(){
+        $('.log_phone').hide();
+    });
+    //验证码
+    $('.code').focus(function(){
+        $('.log_code').hide();
+    });
+    //动态登录end
+    
+    //正常登录start
+    $('#sublogin').click(function(){
+        var password = $('.password').val().replace(/(^\s*)|(\s*$)/g, "");
+        var mobile = $('.mobile').val().replace(/(^\s*)|(\s*$)/g, "");
+        var url = $(this).attr('data-url');
+        if(mobile == ''){
+            $('.log_mobile').empty().html('请输入账号').show();
+            return false;
+        }
+        if(password == ''){
+            $('.log_password').empty().html('密码不能为空').show();
+            return false;
+        }
+        $.ajax({
+            url:url,
+            type:'POST',
+            data:{'mobile':mobile,'password':password} ,
+            success: function (d) {
+                var result = eval("(" + d + ")");
+                if (result.flag == 1) {
+                    window.location.href = '/';
+                } else if (result.flag == 0) {
+                    $('.log_password').empty().html(result.msg).show();
+                }
+            }
+        });
+    });
+    //手机号
+    $('.mobile').focus(function(){
+        $('.log_mobile').hide();
+    });
+    //密码
+    $('.password').focus(function(){
+        $('.log_password').hide();
+    });
+    //正常登录end
+</script>
+</html>
+    

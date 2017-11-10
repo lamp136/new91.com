@@ -1,0 +1,183 @@
+<?php
+namespace back\basic\controller;
+use back\extra\controller\Base;
+use think\Session;
+use think\Request;
+use think\Db;
+use back\extra\model\Comment;
+
+
+class Commentinfo extends Base
+{
+	/*
+     * 墓地评论列表
+     * 
+     */
+    public function index(){
+        $getMap = input('get.');
+        if(isset($getMap['comment_status']) && $getMap['comment_status'] != 0){
+            $where['comment_status'] = $getMap['comment_status'];
+        }else{
+            $where['comment_status'] = array('egt',config('comment_status.unpass'));
+        }
+        $pageSize = Config('page_size');
+        $time = 'created_time';
+        $data = Comment::with(array('findstore'))->where($where)->order(''.$time.' desc')->paginate($pageSize,false,['query' => $getMap]);
+       	$page = $data->render();
+       	$map['level'] = config('normal_status');
+        $map['status'] = config('normal_status');
+        $province = Db::name('region')->where($map)->column('id,name');
+        $this->assign('province',$province);
+        $this->assign('page',$page);
+        $this->assign('data',$data);
+        $this->assign('getMap',$getMap);
+       	return  $this->fetch();
+    }
+
+
+    /**
+     * 审核方法
+     */
+    public function changestatus(){
+    	$val = input('post.');
+    	$data['comment_status'] = $val['status'];
+    	$finaresult = Db::name('comment')->where('id='.$val['id'])->update($data);
+    	if($finaresult){
+    		$result['flag'] = 1;
+    		$result['msg'] = '操作成功！';
+    	}
+    	echo json_encode($result);
+    }
+
+
+     /**
+	 * 导入数据
+	 */
+	public function importFiles(){
+        $filePath = config('root_path').config('ctrack_excel');
+
+        $img = request()->file('flow_file');
+	    // $maxSize = 3145728;
+	    // $ext = Config('exts');
+	    // $umf = (int) ini_get('upload_max_filesize');
+	    $path = ROOT_PATH . Config('root_path') . config('ctrack_excel');
+
+	    //上传文件
+	    $info = $img->move($path);
+	    //获取文件名
+	    $file_name = str_replace("\\", "/", $info->getSaveName());
+
+	    //文件夹名
+	    $save_path = substr($file_name,0,strpos($file_name,'/'));
+	    //路径
+	    $factFilename = './'.$filePath .'/'. $file_name;
+
+	    //获取文件后缀
+	    $exstring = explode('.',$factFilename);
+	    $end = $exstring[2];
+
+	    $fileError = $info->getError();
+	    if(!empty($fileError)){
+	    	$result['flag'] = 0;
+	    	$result['msg'] = $img->getError();
+	    }else{
+		    vendor('PHPExcel.PHPExcel');
+	        vendor('PHPExcel.PHPExcel.IOFactory');
+	        vendor('PHPExcel.PHPExcel.Reader.Excel5');// Excel5:xls;Excel2007:xlsx;
+	        vendor('PHPExcel.PHPExcel.Reader.Excel2007');// Excel5:xls;Excel2007:xlsx;
+			$objReader     = \PHPExcel_IOFactory::createReader('Excel5');
+	        if($end == 'xlsx'){
+	            $objReader     = \PHPExcel_IOFactory::createReader('Excel2007');
+	        }
+	        
+
+	        $realFile = './'.$factFilename;
+	        // var_dump(file_exists($realFile));die;
+
+			$objPHPExcel   = $objReader->load($realFile);
+			$sheet         = $objPHPExcel->getSheet(0);
+			$highestRow    = $sheet->getHighestRow();
+			$highestColumn = $sheet->getHighestColumn();
+
+	        for ($i=2; $i < $highestRow+1; $i++) {
+	            // 商家id
+				$store_id         = $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getValue();
+				// 用户名称
+				$member_name          = $objPHPExcel->getActiveSheet()->getCell('B'.$i)->getValue();
+				// 手机号
+				$mobile           = $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getValue();
+				// 评论内容
+	            $content        = $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getValue();
+				// 环境评分
+				$environment    = $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getValue();
+				// 服务评分
+				$service = $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getValue();
+				// 价格评分
+				$price    = $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getValue();
+				// 交通评分
+				$traffic      = $objPHPExcel->getActiveSheet()->getCell('H'.$i)->getValue();
+				// 评论时间
+				$comment_time   = $objPHPExcel->getActiveSheet()->getCell('I'.$i)->getValue();
+				// 创建时间
+				$created_time      = $objPHPExcel->getActiveSheet()->getCell('J'.$i)->getValue();
+
+	            // 写入数据表
+	            $XrModel = Db::name('Comment');
+	            $XrModel->insert(array(
+					'store_id'        	=> $store_id,
+					'member_name'         => $member_name,
+					'mobile'      		=> $mobile,
+					'content'           => $content,
+					'environment'         => $environment,
+					'service'       => $service,
+					'price'    => $price,
+					'traffic' => $traffic,
+					'comment_time'      => $comment_time,
+					'created_time'  	=> $created_time,
+					'comment_status'    => 1,
+	            ));      
+	        }
+	        if($XrModel){
+        		$result['flag'] = 1;
+        		$result['msg'] = '执行成功';
+       		}else{
+        		$result['flag'] = 0;
+        		$result['msg'] = '执行失败';
+        	}
+	    }
+ 
+        echo json_encode($result);
+	}
+
+	/**
+	 * 后台添加评论
+	 */
+	public function addcomment(){
+		$data = input('post.');
+		$info = $data['info'];
+		$info['store_id'] = $data['store_id'];
+		$info['created_time'] = time();
+		$info['comment_status'] = config('comment_status.pass');
+		unset($info['province_id']);
+		unset($info['city_id']);
+		$final = Db::name('Comment')->insert($info);
+		if($final){
+			$result['flag'] = 1;
+			$result['msg'] = '添加成功!';
+		}
+		echo json_encode($result);
+	}
+
+
+	 //查看评论的内容
+    public function lookreason(){
+        $id = input('id');
+        $reason = Db::name('Comment')->where('id='.$id)->field('content')->find();
+        if($reason){
+            $result['flag'] = 1;
+            $result['data'] = $reason['content'];
+        }
+        echo json_encode($result);
+    }
+
+}

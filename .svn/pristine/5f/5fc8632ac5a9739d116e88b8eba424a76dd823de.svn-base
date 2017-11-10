@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>地图看墓</title>
+    <link href="_WEB_/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="_WEB_/js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+    
+    <!-- 导航 -->
+    <div class="tombmaps_nav">
+        <div class="contain">
+            <!-- 选择城市 -->
+            <div class="city">
+
+                <span class="sele">
+                    <i class="city_icon"></i>
+                    {$reg[$province]}
+                    <i class="iconfont icon-iconfontdownjiantou"></i>
+                </span>
+
+                <!-- 城市列表 -->
+                <div class="city_list">
+                    {volist name="allProvince" id="p"}
+                        <ul class="clearfix">
+                            <li>{$key}</li>
+                            {foreach name="p" item="v" key="k"}
+                                <li><a title="{$v}" href="{:url('/map/'.$k)}">{$v}</a></li>
+                            {/foreach}
+                        </ul>
+                    {/volist}
+                </div>
+               
+            </div><!-- city 选择城市 End -->
+            
+            <!-- nav -->
+            <ul class="tombmaps_nav_main">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="{:url('cemetery/Cemetery/index')}">陵园墓地</a></li>
+                <li class="lineheight"><a href="{:url('/map/3')}">地图看墓</a></li>
+                <li><a href="funeralparlour.html">殡仪馆</a></li>
+                <li><a href="etiquette.html">殡葬礼仪</a></li>
+                <li><a href="ecologicalburial.html">节地生态葬</a></li>
+                <li><a href="funeralencyclopedia.html">殡葬百科</a></li>
+                <li><a href="#">91乐融</a></li>
+            </ul>
+
+            <div class="clear"></div>
+
+        </div><!-- contain End -->
+    </div><!-- tombmaps_nav 导航 End -->
+    
+    <!-- 地图看墓 -->
+    <div class="tombmaps_box">
+
+        <!-- 地图看墓左侧 -->
+        <div class="tombmaps_left">
+
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="#">
+                    <img src="_WEB_/images/logo.png" alt="LOGO" /><span>地图看墓</span>
+                </a>
+            </div><!-- LOGO End -->
+            
+            <!-- 所在区域 -->
+            <div class="area">
+                <h2>所在区域：</h2>
+                <ul class="clearfix">
+                    <li {notempty name="province"} class="led" {/notempty}>
+                        <a title="全部" href="javascript:void(0);" class="area_city" data-city="">全部</a>
+                    </li>
+                    {volist name="city" id="name"}
+                        <li>
+                            <a title="{$name}" href="javascript:void(0);" class="area_city" data-city="{$key}">{$name}</a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- area 所在区域 End -->
+            
+            <!-- 陵园列表 -->
+            <div class="tombmaps_list">
+                
+
+            </div><!-- tombmaps_list 陵园列表 End -->
+
+        </div><!-- tombmaps_left 地图看墓左侧 End -->
+        
+        <!-- 地图看墓右侧 -->
+        <div class="tombmaps_right">
+            <div class="tombmaps_right_contain">
+                <h2><i></i>400-618-9191 <span>全国咨询服务热线</span></h2>
+                <!-- 地图 -->
+                <div class="tombmaps_map">
+                    <div class="tombmaps_map_main" id="Bmap" style="height: 450px;"></div>
+                </div>
+            </div><!-- tombmaps_right_contain End -->
+        </div><!-- tombmaps_right 地图看墓右侧 End -->
+
+    </div><!-- tombmaps_box 地图看墓 End -->  
+    <script src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170705114645"></script>
+    {include file="extra@toolsbar" /}
+    {include file="extra@publicjs"/}
+    <script type="text/javascript">
+        function layout() {
+            $(".tombmaps_list").css("max-height", $(window).height() - $(".area").outerHeight(true) - 146);
+            $(".tombmaps_map_main").css("max-height", $(window).height() - 152);
+        }
+        layout();
+        $(window).resize(function() {
+            layout()
+        });
+
+        var map = new BMap.Map("Bmap"); // 创建地图实例  
+
+        map.addControl(new BMap.NavigationControl({
+            type: BMAP_NAVIGATION_CONTROL_LARGE
+        }));
+
+        map.enableScrollWheelZoom(); //启用地图滚轮放大缩小
+        var jsonData = <?php echo !empty($stores) ? json_encode($stores) : '' ?>;
+        _loadData(jsonData);
+
+        function _addLabel(pos, stores) {
+            var options = {
+                position: pos, // 指定文本标注所在的地理位置
+                offset: new BMap.Size(-40, -20) //设置文本偏移量
+            };
+            var label = new BMap.Label('<span data-name="' + stores['name'] + '">' + stores['name'] + '</span>', options); // 创建文本标注对象
+            label.setStyle({
+                position: 'absolute',
+                top: '30px',
+                left: '100px',
+                padding: '0 16px',
+                background: '#2b916b',
+                color: '#fff',
+                lineHeight: '28px',
+                border: "1px solid white",
+                cursor: 'pointer',
+            });
+
+            // label.addEventListener('hover',function(){
+
+            // });
+
+            var sContent = "<a target='_blank' href='http://www.91soumu.com/cemetery/detail/" + stores['id'] + ".html'><h4 style='margin:0 0 5px 0;padding:0.2em 0'>" + stores['name'] + "</h4><img style='float:right;margin:4px' id='imgDemo' src='http://www.91soumu.com" + stores['image'] + "' width='139' height='104' title='" + stores['name'] + "'/><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + stores['address'] + "</p></div></a>";
+            var infoWindow = new BMap.InfoWindow(sContent);
+
+            label.addEventListener('click', function() {
+                map.openInfoWindow(infoWindow,
+                    pos
+                );
+            });
+            setTimeout(function() {
+                map.panTo(stores.longitude, stores.latitude);
+            }, 500);
+            map.addOverlay(label);
+        }
+
+        $('.area_city').on('click', function() {
+            var province = <?php echo input('province')?>,
+                that = $(this),
+                city = that.data('city');
+            $('.area').find('li').removeClass('led');
+            that.parent('li').addClass('led');
+            var data = {
+                province: province,
+                city:city
+            };
+            _loadMerchant(data);
+        });
+
+        function _loadMerchant(info) {
+            $('.tombmaps_list').empty();
+            map.clearOverlays();
+            var data = [];
+            $.ajax({
+                url: "{:url('merchant')}",
+                type: 'get',
+                data: info,
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        if (result['code'] == 1) {
+                            data = result['data'];
+                            _loadData(data);
+                        }
+                    }
+                }
+            });
+        }
+
+        function _loadData(datas) {
+            var pointArr = [],
+                s = '';
+            $.each(datas, function(index, val) {
+                s += '<div class="tombmaps_list_main"><h2><a href="javascript:void(0);">' + val['name'] + '<span>' + val['province']['name'] + '' + val['city']['name'] + '</span></a></h2><div class="price clearfix"><p>参考价<span><font>￥</font><strong>' + val['min_price'] + '</strong>万起</span></p><a href="javascript:void(0);">查看详情</a></div></div>';
+                point = new BMap.Point(val['longitude'], val['latitude']);
+                pointArr.push(point);
+                _addLabel(point, val);
+            });
+            $('.tombmaps_list').empty().append(s);
+            var view = map.getViewport(pointArr),
+                level = view.zoom, // 缩放级别
+                zoomCenter = view.center; // 中心位置
+            map.centerAndZoom(zoomCenter, level);
+        }
+    </script>
+</body>
+</html>
+    

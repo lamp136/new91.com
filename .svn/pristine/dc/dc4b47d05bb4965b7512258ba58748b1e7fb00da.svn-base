@@ -1,0 +1,72 @@
+<?php
+namespace web\extra\model;
+use think\Model;
+
+class Store extends Model
+{
+    /**
+     * 省份
+     * @return object
+     */
+    public function province(){
+        return $this->hasOne('Region','id','province_id')->where(['status' => 1,'level' => 1])->field('id,name');
+    }
+
+    /**
+     * 市区
+     * @return object
+     */
+    public function city(){
+        return $this->hasOne('Region','id','city_id')->where(['status' => 1,'level' => 2])->field('id,name');
+    }
+
+    /**
+     * 商家墓位
+     * @return object
+     */
+    public function tombs(){
+        return $this->hasMany('Tombs','store_id','id')->where('status',config('normal_status'))->field('store_id,tomb_zone_id,tomb_name,material,size,aspect,meridians,unit,maket_price,sales_price,category_id,category_pid,remarks,status,image,thumb_image')->order('id desc');
+    }
+
+    /**
+     * 名人墓地
+     * @return object
+     */
+    public function celebrity(){
+        return $this->hasMany('CelebrityCemetery','store_id','id')->where('status',config('normal_status'))->field('store_id,name,life_info,born_in,died_in,summary,content,image_url,thumb_image_url');
+    }
+
+    /**
+     * 景观图片
+     * @return object
+     */
+    public function landscape(){
+        return $this->hasMany('StoreImages','store_id','id')->where(['type' => ['eq',2],'state' => ['eq',1]])->field('id,store_id,image_link,thumb_image,image,type,state,title,tomb_zone_id');
+    }
+    
+      /**查询评论**/
+    public function Comment(){
+        return $this->HasMany('Comment','store_id','id')->field('store_id');
+    }
+
+    /**
+     * 评论列表
+     * @return object
+     */
+    public function comments(){
+        return $this->HasMany('Comment','store_id','id')->where('comment_status',config('normal_status'))->field('id,mobile,content,environment,service,price,traffic,store_id,comment_time,replay_time,created_time');
+    }
+
+    /**查询预约**/
+    public function OrderGrave(){
+        return $this->HasMany('OrderGrave','store_id','id')->field('store_id');
+    }
+
+    /**
+     * 商家联系人信息
+     * @return object
+     */
+    public function contactmsg(){
+        return $this->hasMany('StoreContact','store_id','id')->where('status',config('normal_status'))->field('store_id,tel,mobile,contact_name,default_person');
+    }
+}

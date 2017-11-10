@@ -1,0 +1,522 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: 流年 <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+// 应用公共文件
+/**
+ * 上传单个文件
+ * @param string    $imgName    form表单中文件域的name值
+ * @param string    $dirName    图片保存的文件夹
+ * @param array     $thumb       array(
+  array('600', '600', 1),
+  array('350', '350', 1),
+  array('130', '130', 1),
+  ))  宽、高、缩略图的处理方式
+ * @return array
+ */
+// function uploadOne($imgName,$dirName,$thumb=array(),$water=TRUE) {
+//     $img = request()->file($imgName);
+//     $maxSize = (int) Config('max_size');
+//     $ext = Config('ext');
+//     $umf = (int) ini_get('upload_max_filesize');
+//     $readSize = min($umf, $maxSize)* 1024 * 1024;
+//     $path = ROOT_PATH . Config('root_path') . $dirName;
+//     dump($path);exit;
+//     //上传文件
+//     $info = $img->validate(['size'=>$readSize,'ext'=>$ext])->move($path);
+//     $file_name = str_replace("\\", "/", $info->getSaveName());
+//     $save_path = substr($file_name,0,strpos($file_name,'/'));
+//     $uploads = '/uploads/';
+//     $fileError = $info->getError();
+//     $factFilename = $uploads.$dirName.'/'. $file_name;
+//     if(!empty($fileError)){
+//         return $ret = array(
+//                     'ok' => 0,
+//                     'error' => $img->getError()
+//                 );
+//     }else{
+//         $ret = array(
+//             'ok' => 1,
+//             'images' => array($factFilename),
+//         );
+//     }
+
+
+//     //添加水印
+//     $imgobj = new \think\File('.'.$factFilename);
+
+//     if($water){
+//         $image = \think\Image::open($imgobj);
+//         $image->water(Config('water_pic_path'),Config('water_southeast'))->save($path.'/'.$file_name);
+//     }
+//     //是否生成缩略图
+//     if($thumb){
+//         $image = \think\Image::open($imgobj);
+//         foreach ($thumb as $k => $v) {
+//             $_imgName = Config('root_path') .$dirName .'/'.$save_path.'/'. 'thumb_' . $v[0] . 'X' . $v[1] . '_' . $info->getFilename(); 
+
+//             // 把这个缩略图的名字放到要返回的图片中
+//             $ret['images'][] = $uploads.$dirName .'/'.$save_path.'/'. 'thumb_' . $v[0] . 'X' . $v[1] . '_' . $info->getFilename();
+//             $image->thumb($v[0], $v[1], $v[2])->save(ROOT_PATH .$_imgName);
+
+//             $water = \think\Image::open(ROOT_PATH .$_imgName);
+//             $water->water(Config('water_pic_path'),Config('water_southeast'))->save(ROOT_PATH .$_imgName);
+//         }
+//     }
+//     return  $ret;
+// }
+
+/**
+ * 上传单个文件
+ * @param string    $imgName    form表单中文件域的name值
+ * @param string    $dirName    图片保存的文件夹
+ * @param array     $thumb       array(
+  array('600', '600', 1),
+  array('350', '350', 1),
+  array('130', '130', 1),
+  ))  宽、高、缩略图的处理方式
+ * @return array
+ */
+function uploadOne($imgName,$dirName,$thumb=array(),$water=TRUE) {
+    $img = request()->file($imgName);
+    $maxSize = (int) Config('max_size');
+    $ext = Config('ext');
+    $umf = (int) ini_get('upload_max_filesize');
+    $readSize = min($umf, $maxSize)* 1024 * 1024;
+    $path = ROOT_PATH . Config('root_path') . $dirName;
+
+    //上传文件
+    $info = $img->validate(['size'=>$readSize,'ext'=>$ext])->move($path);
+    $file_name = str_replace("\\", "/", $info->getSaveName());
+    $save_path = substr($file_name,0,strpos($file_name,'/'));
+
+    $fileError = $info->getError();
+    $saveFile = config('img_host').'/'.$dirName .'/'. $file_name;
+    $factFilename = Config('root_path') .$dirName .'/'. $file_name;
+    if(!empty($fileError)){
+        return $ret = array(
+                    'ok' => 0,
+                    'error' => $img->getError()
+                );
+    }else{
+        $ret = array(
+            'ok' => 1,
+            'images' => array($saveFile),
+        );
+    }
+
+
+    //添加水印
+    $imgobj = new \think\File('.'.$factFilename);
+
+    if($water){
+        $image = \think\Image::open($imgobj);
+        $image->water(Config('water_pic_path'),Config('water_southeast'),40)->save($path.'/'.$file_name);
+    }
+    //是否生成缩略图
+    if($thumb){
+        $image = \think\Image::open($imgobj);
+        foreach ($thumb as $k => $v) {
+            $_imgName = Config('root_path') .$dirName .'/'.$save_path.'/'. 'thumb_' . $v[0] . 'X' . $v[1] . '_' . $info->getFilename(); 
+
+            // 把这个缩略图的名字放到要返回的图片中
+            $ret['images'][] = config('img_host').'/'.$dirName .'/'.$save_path.'/'. 'thumb_' . $v[0] . 'X' . $v[1] . '_' . $info->getFilename();
+            $image->thumb($v[0], $v[1], $v[2])->save(ROOT_PATH .$_imgName);
+
+            // $water = \think\Image::open(ROOT_PATH .$_imgName);
+            // $water->water(Config('water_pic_path'),Config('water_southeast'))->save(ROOT_PATH .$_imgName);
+        }
+    }
+    return  $ret;
+}
+
+/**
+ * 上传多个文件
+ * @param string    $imgName    form表单中文件域的name值
+ * @param string    $dirName    图片保存的文件夹
+ * @param array     $thumb       array(
+  array('600', '600', 1),
+  array('350', '350', 1),
+  array('130', '130', 1),
+  ))  宽、高、缩略图的处理方式
+ * @return array
+ */
+function upload($imgName,$dirName,$thumb=array(),$water=TRUE){
+    $img = request()->file($imgName);
+    $maxSize = (int) Config('max_size');
+    $ext = Config('ext');
+    $umf = (int) ini_get('upload_max_filesize');
+    $readSize = min($umf, $maxSize)* 1024 * 1024;
+    $path = ROOT_PATH . Config('root_path') . $dirName;
+
+    //文件上传
+    foreach($img as $ki=>$file){
+        // 移动到框架应用根目录/public/uploads/ 目录下
+        $info = $file->validate(['size'=>$readSize,'ext'=>$ext])->move($path);
+        $file_name = str_replace("\\", "/", $info->getSaveName());
+        $save_path = substr($file_name,0,strpos($file_name,'/'));
+        $fileError = $info->getError();
+        if(!empty($fileError)){
+            return $ret = array(
+                    'ok' => 0,
+                    'error' => $file->getError()
+                );
+        }else{
+            $factFilename = Config('root_path') .$dirName .'/'. $file_name;
+            $saveFile = config('img_host').'/'.$dirName .'/'. $file_name;
+            $ret['ok'] = 1;
+            $ret['images'][] = $saveFile;
+            //添加水印
+            $imgobj = new \think\File('.'.$factFilename);
+            $image = \think\Image::open($imgobj);
+            $image->water(Config('water_pic_path'),Config('water_southeast'))->save($path.'/'.$file_name);
+
+            //是否生成缩略图
+            if($thumb){
+                $image = \think\Image::open($imgobj);
+                foreach ($thumb as $k => $v) {
+                    $_imgName = Config('root_path') .$dirName .'/'.$save_path.'/'. 'thumb_' . $v[0] . 'X' . $v[1] . '_' . $info->getFilename(); 
+
+                    // 把这个缩略图的名字放到要返回的图片中
+                    $ret['thumb'][$ki][] = config('img_host').'/'.$dirName .'/'.$save_path.'/'. 'thumb_' . $v[0] . 'X' . $v[1] . '_' . $info->getFilename();
+                    $image->thumb($v[0], $v[1], $v[2])->save(ROOT_PATH .$_imgName);
+
+                    //给缩略图添加水印
+                    $water = \think\Image::open(ROOT_PATH .$_imgName);
+                    $water->water(Config('water_pic_path'),Config('water_southeast'))->save(ROOT_PATH .$_imgName);
+                }
+            }
+        }    
+    }
+    return $ret;
+}
+/**
+ * 获取商家会员信息
+ *
+ * @param bool $keyVal 判断获取的数据格式，默认是 true ,返回值：array('20'=>'商家会员'),如果是： false，返回值： array(20)
+ * @param string $type 获取商家会员是显示优惠 还是现实V，商家会员20 和 个人会员是 优惠，以及广告会员
+ *
+ * @return array
+ */
+function getStoreMember($keyFlag=true, $dataFlag = '') {
+    if ($keyFlag) {
+        switch ($dataFlag) {
+            case 'sj'://获取商家的会员 
+                $storeMembers = array(
+                    config('store_member') => config('store_member_msg'),
+                );
+                break;
+            case 'gr'://获取商家的会员 
+                $storeMembers = array(
+                    config('store_member_person') => config('store_member_person_msg'),
+                );
+                break;
+            case 'ad'://只获取广告
+                $storeMembers = array(
+                    config('store_member_ad') => config('store_member_ad_msg')
+                );
+                break;
+            case 'all'://所有会员
+            default:
+                $storeMembers = array(
+                    config('store_member') => config('store_member_msg'),
+                    config('store_member_person') => config('store_member_person_msg'),
+                    config('store_member_ad') => config('store_member_ad_msg'),
+                );
+        }
+    } else {
+        switch ($dataFlag){
+            case 'business'://商家会员
+                $storeMembers = array(
+                    config('store_member')
+                );
+                break;
+            case 'ad'://广告会员
+                $storeMembers = array(
+                    config('store_member_ad')
+                );
+                break;
+            case 'gr'://广告会员
+                $storeMembers = array(
+                    config('store_member_person')
+                );
+                break;
+            case 'yh'://个人会员和商家会员
+                $storeMembers = array(
+                    config('store_member'),
+                    config('store_member_person'),
+                );
+                break;
+            case 'all'://所有会员
+            default:
+                $storeMembers = array(
+                    config('store_member'),
+                    config('store_member_person'),
+                    config('store_member_ad')
+                );
+        }
+    }
+
+    return $storeMembers;
+
+}
+
+    /**
+     * 后台密码加密
+     *
+     * @param string $pwd 用户输入的数据
+     *
+     * @return string
+     */
+  function encryptAdmin($pwd) {
+        $prefix = substr(md5(config("a_prefix")), 0, 16);
+        $suffix = substr(md5(config("a_suffix")), 0, 16);
+
+        $encryptAPwd = md5($prefix.md5($pwd).$suffix);
+
+        return $encryptAPwd;
+    }
+
+        /**
+     * 前台密码加密
+     *
+     * @param string $pwd 用户输入的数据
+     *
+     * @return string
+     */
+    function encryptHome($pwd) {
+        $prefix = substr(md5(config("h_prefix")), 0, 16);
+        $suffix = substr(md5(config("h_suffix")), 0, 16);
+
+        $encryptHPwd = md5($prefix.md5($pwd).$suffix);
+
+        return $encryptHPwd;
+    }
+
+
+
+    /**
+ * 获取客户端浏览器类型
+ * @return string|array 传递连接符则连接浏览器类型和版本号返回字符串否则直接返回数组
+ */
+function get_client_browser(){
+    if (empty($_SERVER['HTTP_USER_AGENT'])){
+        return '';
+    }
+
+    $agent       = $_SERVER['HTTP_USER_AGENT'];
+    $browser     = '';
+    $browser_ver = '';
+
+    if (preg_match('/MSIE\s([^\s|;]+)/i', $agent, $regs)){
+        $browser     = 'IE';
+        $browser_ver = $regs[1];
+    }elseif (preg_match('/.*(Firefox)\/([\w.]+).*/', $agent, $regs)){
+        $browser     = 'FireFox';
+        $browser_ver = $regs[2];
+    }elseif (preg_match('/Maxthon/i', $agent, $regs)){
+        $browser     = '(Internet Explorer ' .$browser_ver. ') Maxthon';
+        $browser_ver = '';
+    }elseif (preg_match('/OPR[\s|\/]([^\s]+)/i', $agent, $regs)){
+        $browser     = 'Opera';
+        $browser_ver = $regs[1];
+    }elseif (preg_match('/OmniWeb\/(v*)([^\s|;]+)/i', $agent, $regs)){
+        $browser     = 'OmniWeb';
+        $browser_ver = $regs[2];
+    }elseif (preg_match('/Netscape([\d]*)\/([^\s]+)/i', $agent, $regs)){
+        $browser     = 'Netscape';
+        $browser_ver = $regs[2];
+    }elseif (preg_match('/.*(Chrome)\/([\w.]+).*/', $agent, $regs)){
+        $browser     = 'Chrome';
+        $browser_ver = $regs[2];
+    }elseif (preg_match('/safari\/([^\s]+)/', $agent, $regs)){
+        $browser     = 'Safari';
+        $browser_ver = $regs[1];
+    }elseif (preg_match('/NetCaptor\s([^\s|;]+)/i', $agent, $regs)){
+        $browser     = '(Internet Explorer ' .$browser_ver. ') NetCaptor';
+        $browser_ver = $regs[1];
+    }elseif (preg_match('/Lynx\/([^\s]+)/i', $agent, $regs)){
+        $browser     = 'Lynx';
+        $browser_ver = $regs[1];
+    }
+
+    if (!empty($browser)){
+        return addslashes($browser . ' ' . $browser_ver);
+    }else{
+        return 'Unknow browser';
+    }
+}
+
+
+/**
+ * 获取客户端IP地址
+ * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
+ * @param boolean $adv 是否进行高级模式获取（有可能被伪装） 
+ * @return mixed
+ */
+function get_client_ip($type = 0,$adv=false) {
+    $type       =  $type ? 1 : 0;
+    static $ip  =   NULL;
+    if ($ip !== NULL) return $ip[$type];
+    if($adv){
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $arr    =   explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $pos    =   array_search('unknown',$arr);
+            if(false !== $pos) unset($arr[$pos]);
+            $ip     =   trim($arr[0]);
+        }elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip     =   $_SERVER['HTTP_CLIENT_IP'];
+        }elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            $ip     =   $_SERVER['REMOTE_ADDR'];
+        }
+    }elseif (isset($_SERVER['REMOTE_ADDR'])) {
+        $ip     =   $_SERVER['REMOTE_ADDR'];
+    }
+    // IP地址合法验证
+    $long = sprintf("%u",ip2long($ip));
+    $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
+    return $ip[$type];
+}
+
+
+
+/**
+ * 是否显示菜单
+ * 传递类名和方法名称来进行判断
+ * 如果是Admin，直接返回true
+ * @param String $handleString 类名/方法名称
+ * @return boolean
+ */
+function showHandle($handleString) {
+    $loginName = input('session.login_name');
+    if ($loginName == Config('admin_name')) {
+        return true;
+    }
+    if (empty($handleString)) {
+        return false;
+    }
+    $privileges = json_decode(input('session.privilegeData'));    
+    if (in_array($handleString, $privileges)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 获取商家SN 商家分类+6位数字
+ *
+ * @param int $type 商家分类37陵园，38殡仪馆，43服务
+ *
+ * @return String
+ */
+function getStoreSn($type) {
+    $key = 'store_sn_'.$type;
+    $storeNumber =  think\Cache::get($key);
+    $dbData = [];
+    $dbData['name'] = $key;
+    $id = 0;
+    if ($storeNumber) {
+        $storeNumber += 1;
+    } else {
+        //不存在的情况下需要获取数据库的数据
+        $dbSystemData = think\Db::name('SystemCode')->field('id, max_value')->where(['name' => $key])->find();
+        if ($dbSystemData['id']) {
+            $id = $dbSystemData['id'];
+            $dbData['id'] = $id;
+			$step = rand(1,10);
+            $storeNumber = $dbSystemData['max_value'] + $step;
+        } else {
+            $number = rand(100000,100999);
+            $storeNumber = $type.$number;
+        }
+    }
+    $dbData['max_value'] = $storeNumber;
+    //写入文件缓存，并且写入数据库
+    think\Cache::set($key, $storeNumber);
+    if ($id>0) {
+        $ret = think\Db::name('SystemCode')->where('id='.$id)->update($dbData);
+    } else {
+        $ret = think\Db::name('SystemCode')->insert($dbData);
+    }
+
+    return $storeNumber;
+}
+
+/**
+ * url中文转码
+ * @param String $nedname 需要转码的字符串
+ * @return String  
+ * 
+ */
+function transcoding($nedname){
+    $name = $nedname;
+    $encode = mb_detect_encoding($nedname, array('ASCII','UTF-8','GB2312','GBK','BIG5')); 
+    if ($encode == 'GBK' ){ 
+        $name = iconv("GBK", 'UTF-8', $nedname); 
+    } else if($encode == 'GB2312'){ 
+        $name = iconv('GB2312', "UTF-8", $nedname); 
+    } else if ($encode == 'ASCII'){ 
+        $name = iconv('ASCII', "UTF-8", $nedname); 
+    } else if ($encode == 'BIG5'){ 
+        $name = iconv('BIG5', "UTF-8", $nedname); 
+    } else if ($encode == 'EUC-CN') {
+        $name = iconv('EUC-CN', "UTF-8", $nedname);  
+    }
+
+    return $name;
+}
+
+/*
+ * 生成预约单order_sn  12位数字 年月日+四位随机数
+ *
+ * @param string $store_name  商家名称 此方法修改之后商家参数不再使用
+ *
+ * @return string
+ */
+function makeSn(){
+    //$sn = md5($store_name.rand(1000, 9999).time());
+
+    $sn = date('Ymd', time()).rand(1000, 9999);
+
+    return $sn;
+}
+
+/**
+* 字符串截取，支持中文和其他编码
+* @static
+* @access public
+* @param string $str 需要转换的字符串
+* @param int      $start 开始位置
+* @param int      $length 截取长度
+* @param string $charset 编码格式
+* @param string $suffix 截断显示字符
+*
+* @return string
+*/
+function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=false) {
+    if(function_exists("mb_substr"))
+       $slice = mb_substr($str, $start, $length, $charset);
+    elseif(function_exists('iconv_substr')) {
+       $slice = iconv_substr($str,$start,$length,$charset);
+    }else{
+       $re['utf-8']   = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
+       $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
+       $re['gbk']    = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
+       $re['big5']   = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
+       preg_match_all($re[$charset], $str, $match);
+       $slice = join("",array_slice($match[0], $start, $length));
+    }
+    if(mb_strlen($str,'UTF-8') < $length){
+        return $slice;
+    }else{
+        return $slice.'...';
+    }
+}

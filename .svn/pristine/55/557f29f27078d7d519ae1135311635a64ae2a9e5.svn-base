@@ -1,0 +1,345 @@
+{extend name='extra@main' /}
+{block name="layer"}
+	 
+	<form id='editForm' style="display:none" class="layui-form" >
+		
+        <table class="layui-table">
+            <tr class="memberBank">
+                <th>开户行</th>
+                <th>开户人</th>
+                <th>银行账号</th>
+                <th>操作</th>
+            </tr>
+  
+        </table>
+        <table class="layui-table">
+             <tbody>
+                <tr>
+                    <td>会员基本信息：</td>
+                    <td id='memberInfo'></td>
+                </tr>
+                <tr>
+                    <td>支付类型：</td>
+                    <td>
+                        <select name='bank_type' data-rule='required'>
+                            <option value=0>请选择</option>
+                                {volist name="Think.config.pay_type" id="payType" key="paytypeKey"}
+                                    <option value={$paytypeKey}>{$payType}</option>
+                                {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>开户行：</td>
+                    <td>
+                        <select name='bank' data-rule='required'>
+                            <option value=0>请选择</option>
+                                {volist name="Think.config.pay_type" id="payBank" key="payBankKey"}
+                                    <option value={$payBankKey}>{$payBank}</option>
+                                {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>银行卡号：</td>
+                    <td>
+                        <input type="text" name='bank_account' class="layui-input" /> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>开户人：</td>
+                    <td>
+                        <input type="text"  name='bank_member' class="layui-input" /> 
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;"> 
+                        <input type="hidden" name='id' /> 
+                		<input type="hidden" name='member_id' /> 
+                        <button class="layui-btn" id='editsubmit'   type='button'>立即提交</button>
+                    </td>
+                </tr>  
+             </tbody>
+        </table>
+    </form>
+</div>
+
+{/block}
+{block name="body"}
+	<style type="text/css">
+    .address{
+        position: absolute;
+        width: 200px;
+        background: #fff;
+        border: 1px solid #666;
+        z-index: 100;
+    }
+    .provincecity{
+        position: relative;
+    }
+</style> 
+
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        <a><cite>会员列表</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <form  action="{:url('member/Membercontro/index')}" method="get">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+               <input type="text" name="mobile" autocomplete="off" class="layui-input" placeholder="请输入手机号或名字" value="{$Think.get.mobile}"/>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="5%">
+            <col width="12%">
+            <col width="10%">
+            <col width="10%">
+            <col width="15%">
+            <col width="38%">
+        </colgroup>
+        <thead>
+          <tr> 
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>注册类型</th>
+            <th>手机验证</th>
+            <th>注册时间</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+        	{volist name="members" id="vo"}
+	        <tr>
+	        	<td>{$vo.name}</td>
+	        	<td>{$vo.mobile}</td>
+	        	<td>{$vo.member_type}
+                </td>
+	        	<td>{if condition="$vo.check_mobile eq 1"}
+                       <span>已验证</span>
+                   {else/}
+                       <span>未验证</span>
+                   {/if}</td>
+
+	        	<td>{$vo.created_time}</td>
+	        	<td>
+	        		<div class="layui-btn-group">
+                        <span class="layui-btn layui-btn-small layui-btn-normal edit" data-id="{$vo.id}" data-name="{$vo.name}" data-mobile="{$vo.mobile}"><a href="javascript:void(0)" title="修改银行卡信息"><i class="layui-icon">修改银行卡信息</i></a>
+                        </span>
+                     </div> 
+                     <div class="layui-btn-group">
+                        <span class="layui-btn layui-btn-small layui-btn-danger resetpwd" data-id="{$vo.id}"><a href="javascript:void(0)" title="重置密码"><i class="layui-icon">重置密码</i></a>
+                        </span>
+                     </div> 
+                    <div class="layui-btn-group">
+                            {eq name="vo.status" value="1"}
+                                 <a href="javascript:void(0)" data-status="-1" data-id="{$vo.id}" title="删除" class="layui-btn layui-btn-small layui-btn-danger  del"><i class="layui-icon" >删除</i></a>
+                           {else/}
+                                <a href="javascript:void(0)"  data-id="{$vo.id}" title="启用" data-status="1" class="layui-btn layui-btn-small layui-btn-normal  enable"><i class="layui-icon">启用</i></a>
+                           {/eq}
+                     </div>
+
+	        	</td>
+	        </tr>
+	        {/volist}
+        </tbody>
+       </table>
+       {$pages}
+{/block}
+{block name="optJS"}
+<script>
+ layui.use(['jquery', 'form','laydate','laypage'],function(){
+    var $= layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    var laypage = layui.laypage;
+
+    //重置密码
+	$('.resetpwd').click(function(){
+	    var id = $(this).attr('data-id');
+	    $.ajax({
+	        url: "{:url('resetpwd')}",
+	        type: 'post',
+	        data: 'id='+id,
+	        success: function (d) {
+	            var result = eval("(" + d + ")");
+	            layer.alert(result.msg);
+	        }
+	    });
+	});
+
+	//禁用
+	$('.del').click(function () {
+	    var id = $(this).attr('data-id');
+	    var act = 'del';
+	    $.ajax({
+	        url: "{:url('delete')}",
+	        type: 'post',
+	        data: 'id=' + id + '&act=' + act,
+	        success: function (d) {
+	            var result = eval("(" + d + ")");
+	            if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                      })
+                } else {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                     })
+                }
+	        }
+	    });
+	});
+
+	//启用
+	$('.enable').click(function(){
+	    var id = $(this).attr('data-id');
+	    var act = 'enable';
+	    $.ajax({
+	        url: "{:url('delete')}",
+	        type: 'post',
+	        data: 'id='+id+'&act='+act,
+	        success: function (d) {
+	            var result = eval("(" + d + ")");
+	            if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                      })
+                } else {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                     })
+                }
+	        }
+	    });
+	});
+
+
+
+
+
+
+
+
+
+
+	//修改银行卡信息
+	$('.edit').click(function () {
+	    var mid = $(this).attr('data-id');
+	    var name = $(this).attr('data-name');
+	    var mobile = $(this).attr('data-mobile')
+	    $('.afterData').remove();//清空以前的数据
+	    $('#memberInfo').html('');
+
+	    var $wrapper=$('<div>id="edit"</div>')
+			var myLayer = layer.open({
+			    type: 1,
+			    area: ['1024px','768px'],
+			    content: $wrapper,
+			    maxmin: true
+			});
+	    $.ajax({
+	        url: "{:url('memberBankList')}",
+	        type: 'post',
+	        data:'member_id='+mid,
+	        success: function (msg) {
+	            var result = eval("(" + msg + ")");
+	            var data = result.data;
+	             if (result.flag == 1) {
+	                 var length = data.length;
+	                 var str = '';
+	                 for(var i=0; i<length; i++) {
+	                	 str += '<tr class="afterData"><td>'+data[i].bank_name+'</td><td>'+data[i].bank_member+'</td><td>'+data[i].bank_account+'</td><td><a data-bank_id='+data[i].id+' data-bank='+data[i].bank+' data-bank_member='+data[i].bank_member+' data-bank_account='+data[i].bank_account+' data-bank_type='+data[i].bank_type+' href="javascript:void(0)" class="bankEdit">编辑 </a>| <a data-bank_id='+data[i].id+' href="javascript:void(0)" class="bankDel">删除</a></td></tr>'
+	                 }
+	            } else {
+	            	str += '<tr class="afterData"><td colspan=5>暂无银行卡信息</td></tr>'
+	            }
+	             var personInfo = '姓名：'+name+',手机号：'+mobile;
+	             $('#memberInfo').html(personInfo);
+	             $('#editForm input[name="member_id"]').val(mid);
+	             $('.memberBank').after(str);
+	             layer.open({
+	                        closeBtn: 2,
+	                        type: 1,
+	                        area: '700px',
+	                        title: '银行信息',
+	                        content: $('#editForm'),
+	                    });	
+	              
+	             bankClick();
+	        }
+	    });
+	});
+	//提交修改银行卡信息的表单
+	$('#editsubmit').bind('click', function () {
+        var From = $('#editForm').serialize();
+	    $.ajax({
+	    	url: "{:url('editMemberBank')}",
+	        type: 'post',
+	        data: From,
+	        success: function (msg) {
+	        	 var result = eval("(" + msg + ")");
+	        	 if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+                      })
+                } else {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                     })
+                }
+	        }
+	    });
+	});
+
+
+			$(".bankDel").click(function() {
+			var id = $(this).attr('data-bank_id');
+			$.ajax({
+				url:"{:url('deleteMemberBank')}",
+				type:'post',
+				data:'id='+id,
+				success:function(msg){
+					var result = eval("(" + msg + ")");
+		            var data = result.data;
+		            if (result.flag == 1) {
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                          window.location.reload();//刷新当前页面.
+	                      })
+	                } else {
+	                    layer.msg(result.msg,{icon:1,time:2000},function(){
+	                     })
+	                }
+				}
+			});
+		});
+			
+		//银行卡信息修改绑定的方法
+		function bankClick(){
+			$('.bankEdit').click(function(){
+				var dataBankId = $(this).attr('data-bank_id');
+			    var dataBank = $(this).attr('data-bank');
+			    var dataBankMember = $(this).attr('data-bank_member');
+			    var dataBankAccount = $(this).attr('data-bank_account');
+			    var dataBankType = $(this).attr('data-bank_type');
+			    
+			    $('#editForm select[name="bank_type"]').val(dataBankType);
+		        $('#editForm select[name="bank"]').val(dataBank);
+		        $('#editForm input[name="bank_account"]').val(dataBankAccount);
+		        $('#editForm input[name="bank_member"]').val(dataBankMember);
+		        $('#editForm input[name="id"]').val(dataBankId);
+		        form.render();
+			});
+		};
+
+		
+
+	});
+
+</script>
+{/block}

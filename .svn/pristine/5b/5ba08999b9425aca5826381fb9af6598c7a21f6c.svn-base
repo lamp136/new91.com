@@ -1,0 +1,65 @@
+
+    //选择月跳转
+    $('.month_sel').change(function(){
+        var url = $(".month_sel option:selected").val();
+        window.location.href = url;
+    });
+    //加载更多
+    $('.history_more_btn').find('a').click(function(){
+        var athis = $(this);
+        var url = athis.attr('select-url');
+        var year = athis.attr('tag-year');
+        var month = athis.attr('month');
+        var day = athis.attr('day');
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {year:year,month:month,day:day},
+            dataType: 'json',
+            success: function(d) {
+                var data = d.data;
+                var keys = Object.keys(data).sort().reverse();
+                var titleLength = $('.title').length;
+                if(d.flag==1){
+                    athis.attr('tag-year',d.tagYear);
+                    var str = '';
+                    var n = 0;
+                    var clas1 = '';
+                    var clas2 = '';
+                    var clas3 = '';
+                    var li = ''; 
+                    var total = keys.length;
+                    for(var j=0; j<total; j++) {
+                        var index = keys[j];
+                        var item = data[index];
+                        
+                        var liCount = Object.keys(item).length-1;
+                        for (var i=1;i<liCount;i++) {
+                            li += "<li><a href='history/"+item[i]['id']+"'>"+item[i]['title']+"</a></li>";
+                        }
+                        if(((titleLength+n)%2)==0){
+                            clas1 = " class='history_box_main'";
+                            clas2 = " class='title'";
+                            clas3 = " class='history_main'";
+                        }else{
+                            clas1 = " class='history_box_main history_box_main_left'";
+                            clas2 = " class='title title2'";
+                            clas3 = " class='history_main history_main2'";
+                        }
+                        n++;
+                        str += "<li class='li'><div " +clas1 + ">"; 
+                        str += "<div"+clas2+">";
+                        str += "<h2>"+index+"</h2></div>";
+                        str += "<div"+clas3+">";
+                        str += "<h3><a href='history/"+item[0]['id']+"'>"+item[0]['title']+"</a></h3>";
+                        
+                        str += "<ul>"+li+"</ul><span class='bg'></span></div></div></li>";
+                    }
+
+                    $('#box').append(str);
+                }else{
+                    athis.remove();
+                }   
+            }
+        });
+    });

@@ -1,0 +1,50 @@
+<?php 
+namespace back\operate\controller;
+use think\Controller;
+use back\extra\controller\Base;
+use think\Request;
+use think\Db;
+use think\Paginator;
+
+/**
+ * 百度统计数据管理类
+ */
+class Baidudata extends Base
+{
+	//列表页
+	public function index(){
+        $getdata = input('get.');
+        $pageSize = Config('page_size');
+		$data =Db::name('BaiduVisitorNum')->order('created_time' ,'desc')->paginate($pageSize,false,['query' => $getdata]);
+        $page = $data->render();
+        $this->assign('data',$data);
+        $this->assign('page',$page);
+		return $this->fetch();
+	}
+
+	//添加功能
+	public function add(){
+		$getdata = input('post.');
+		$info['start_time'] = strtotime($getdata['start_time']);
+		$info['end_time'] = strtotime($getdata['end_time']);
+		$info['total_visitors'] = $getdata['total_visitors'];
+		$info['natural_visitors'] = $getdata['natural_visitors'];
+		$info['badding_visitors'] = $getdata['badding_visitors'];
+		$info['ontime_visitors'] = $getdata['ontime_visitors'];
+		$info['refact_visitors'] = $getdata['refact_visitors'];
+		$info['admin_id'] = session('admin_id');
+		$info['created_time'] = time();
+		$data = Db::name('BaiduVisitorNum')->insert($info);
+		if($data){
+			$result['flag'] =1;
+			$result['msg'] ='添加成功';
+		}else{
+			$result['flag'] =2;
+			$result['msg'] ='添加失败';
+		}
+		echo json_encode($result);
+	}
+
+
+
+}

@@ -1,0 +1,37 @@
+<?php
+namespace web\index\controller;
+use think\Controller;
+use web\extra\controller\Base;
+use think\Db;
+
+/**
+ * 首页控制器
+ * author heqingyu;
+ * date   17/7/11 13:30:00;
+ */
+class Index extends Base{  
+    /*
+     * 首页
+     * @param   void;
+     * @return  void;
+     */
+    public function index()
+    {
+        //生态葬
+        
+        $ecological  = Db::name('EcologicalBurial')->where()->select();
+        
+        //风水文化
+        $fengshui = $this->article(config('category_fengshui_culture'),6);
+        //常见问题(白事常识)
+        $sense = $this->article(config('category_sense'),6);
+        //最新咨询
+        $news = $this->article(config('news_category_id'),6);
+        
+        $this->assign('news',$news);
+        $this->assign('sense',$sense);
+        $this->assign('fengshui',$fengshui);
+        return $this->fetch();
+    }
+    
+}

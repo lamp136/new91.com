@@ -1,0 +1,149 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <textarea  class="layui-textarea lookfailreason" name="question"  readonly="readonly"></textarea>
+    </form>
+</div>
+
+{/block}
+{block name='body'}
+<div class="layui-form"  style="margin-top: 10px;margin-left: 10px;">
+    <form id="quickForm" method="get" class="form-horizontal" autocomplete="off" action='{:url("fail")}'>
+        <div class="layui-form-item">
+            
+            <div class="layui-input-inline">
+                <input type="text" name="member_contact" autocomplete="off" placeholder="手机号" value="{$Think.get.member_contact}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-table">
+        <colgroup>
+            <col width="60">
+            <col width="70">
+            <col width="90">
+            <col width="100">
+            <col width="70">
+            <col width="70">
+            <col width="70">
+            <col width="100">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>预约人|电话</th>
+                <th>商家名称</th>
+                <th>联系人|电话</th>
+                <th>商品名称</th>
+                <th>创建时间</th>
+                <th>跟踪人</th>
+                <th>失败原因</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+         {volist name="data" id="vo"}
+            <tr>
+               
+                <td>
+                    {$vo.reservation_person}|{$vo.reservation_phone}
+                </td>
+                
+                  <td>
+                    {$vo.store_name}
+                    {notempty name="vo.store_status"}
+                    {volist name="storeMember" id="member"}
+                            {eq name="vo.store_status" value="$key"}
+                            <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                            {/eq}
+                        {/volist}
+                    {/notempty}
+                </td>
+                <td>
+                 {$vo.findmember.contact_name}<br>{$vo.findmember.mobile}
+                </td>
+                <td>
+                    {$vo.combo_name}
+                </td>
+                <td>{notempty name="vo.created_time"}
+                {$vo.created_time|date='Y-m-d',###}
+                {/notempty}
+                </td>
+                <td>
+                    {volist name="order_flow" id="flowmans"}
+                        {if condition="$key eq $vo['order_flow_id'] "}{$flowmans}{/if}
+                    {/volist}
+                </td>
+                <td>
+                    <button class="layui-btn layui-btn-mini ordermsglist check_message" data-reason='{$vo.fail_reason}' data-id='{$vo.id}'>查看信息</button>
+                </td>
+                <td>
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-small layui-btn-warm backspace"  data-orderId="{$vo.id}"><a href="javascript:void(0)"  >删除回撤</a>
+                        </button>
+                     </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table> 
+
+  
+   
+</div>
+<div style="margin-left: 10px;">
+{$page}
+</div>
+{/block}
+
+
+{block name='optJS'}
+<script>
+
+layui.use(['jquery', 'layer','form'], function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form();
+    //查看跟踪信息
+    $('.check_message').click(function(){
+        var reason = $(this).attr('data-reason');
+        $('.lookfailreason').text(reason);
+         form.render();
+         layer.open({
+                closeBtn: 2,
+                type: 1,
+                area: '700px',
+                title: '查看失败原因',
+                content: $('#close_update_form'),
+        });
+    });
+
+     $(".backspace").bind('click', function(){
+         var id = $(this).attr('data-orderId');
+         layer.confirm('您确定要撤回删除该订单吗?', {icon: 3, title:'提示'}, function(index){
+         $.ajax({
+            url:"{:url('backspace')}",
+            data:'id='+id,
+            type:'post',
+            success:function(d){
+               var result = eval("("+d+")");
+                if(result.flag==1){
+                    layer.msg(result.msg);
+                    window.location.reload();
+                    
+                }
+            }
+         });
+         
+       });
+    });
+     
+});
+
+</script>
+{/block}
+

@@ -1,0 +1,175 @@
+<?php
+namespace web\extra\controller;
+use think\Controller;
+use think\Request;//请求类
+use think\Session;//session类
+use think\Cookie;//cookie类
+use think\Db;
+use common\iplocation\IpLocale;
+
+class Base extends Controller 
+{
+    public function _initialize(){
+        //根据域名查找地区
+        $domain_name = $_SERVER['SERVER_NAME'];
+        $domain_array = explode('.',$domain_name);
+        $abbreviate = strtoupper($domain_array['0']);
+        $domain_region = $this->getRegionData(array('abbreviate'=>$abbreviate),array('id','name'),'1',false);
+        if(empty($domain_region)){
+            //定位开始
+            $iplocation = config('ip_location');//IP定位是否开启
+            $ip = request()->ip();//获取IP
+            $cookie_regiod_id = cookie::get('ip_region_id');
+            if(!empty($cookie_regiod_id)){
+                $cookie_region = $this->getRegionData(array('id'=>$cookie_regiod_id),array('abbreviate'),'1',false);
+                $url = "http://".strtolower($cookie_region['abbreviate']).'.'.config('domain_name');
+                $this->redirect($url);
+            }
+            /**
+             * 如果开启IP定位，并且cookie中没有地区ID那么进行IP定位
+             * 如果没有开启IP定位，并且cookie中没有地区ID那么默认到北京
+             */
+            if($iplocation && empty($cookie_regiod_id)){
+                $locale = New IpLocale();
+                $areas = $locale->getProvinceCityId ($ip); // 根据ip获取登录地区
+                if(empty($areas)){
+                    $areas['provid'] = config('default_region_id');
+                    $areas['name'] = config('default_region_name');
+                }
+                Cookie::set('ip_region_id',$areas['provid'],['expire'=>config('home_lifetime')]);
+                Cookie::set('ip_region_name',$areas['name'],['expire'=>config('home_lifetime')]);
+            }else if(!$iplocation && empty($cookie_regiod_id)){
+                Cookie::set('ip_region_id',config('default_region_id'),['expire'=>config('home_lifetime')]);
+                Cookie::set('ip_region_name',config('default_region_name'),['expire'=>config('home_lifetime')]);
+            }
+            //定位结束
+        }else{
+            Cookie::set('ip_region_id',$domain_region['id'],['expire'=>config('home_lifetime')]);
+            Cookie::set('ip_region_name',$domain_region['name'],['expire'=>config('home_lifetime')]);
+        }
+        //获取当前路径
+        $path  =  Request::instance()->controller();
+        $this->assign('path',$path);
+        //查找省份 
+        $province = array();
+        $regions = $this->getRegionData(array('status'=>config('normal_status'),'pid'=>config('china_num')),array('id','name','flag','abbreviate'),'',false,'flag asc');
+        foreach($regions as $val){
+            $province[$val['flag']][$val['id']] = [
+                'name' => $val['name'],
+                'abbr' => strtolower($val['abbreviate'])
+            ];
+        }
+        $this->assign('province',$province);
+        //友情链接
+        $this->getfriendlink();
+    }
+
+    /**
+     *获取友情链接
+     *@input void;
+     *@return void;
+     */
+    protected function getfriendlink(){
+        $provinceId = cookie::get('ip_region_id');
+        $where['status'] = config('normal_status');
+        $link = Db::name('Friendlink')->field('name,url,province_id')->where($where)->order('sort DESC')->select(); 
+        $friendlinks = array();
+        foreach ($link as $value) {
+            $province_id = explode(',',$value['province_id']);
+            if(in_array($provinceId,$province_id)){
+                $friendlinks[] = $value;
+            }
+        }
+        $this->assign('friendlinks',$friendlinks);
+    }
+    /**
+     *获取百科数据
+     *@input $categoryId;//分类ID
+     *@input $num;//信息数量
+     *@param [string] $field  指定获取文章的字段
+     *@return array;
+     */
+    public function article($categoryId,$num=6,$field=''){
+        $data = array();
+        $num = (int)$num;
+        $cateWhere['is_show'] = config('normal_status');
+        $categorydata = Db::name('category')->field('id,pid')->where($cateWhere)->select();
+        $category = $this->getcategoryId($categorydata,$categoryId);
+        $category[] = $categoryId;
+        $where['category_id'] = array('in',$category);
+        $where['status'] = config('normal_status');
+        $data = Db::name('News')->where($where)->field($field)->order('recommend DESC,sort DESC,published_time DESC')->limit($num)->select();
+        return $data;
+    }
+    /**
+     *获取该分类下子所有分类ID
+     *@input $data;//分类数据
+     *@input $pid;//分类ID
+     *@return array;
+     */
+    private function getcategoryId($data,$pid){
+        static $result = array();
+        foreach($data as $val){
+            if($val['pid'] == $pid){
+                $result[] = $val['id'];
+                $this->getcategoryId($data,$val['id']);
+            }
+        }
+        return $result;
+    }
+    /**
+     * 获取省市数据
+     * @param  array   $where  条件
+     * @param  array   $fields 字段
+     * @param  int     $num    条数
+     * @param  boolean $bool   获取方式
+     * @param  string  $sort   排序
+     * @return array
+     */
+    public function getRegionData($where=array(), $fields=array(), $num=null, $bool=false,$sort=false){
+        $regionModel = Db::name('region');
+        if(!$bool){
+            if($num == 1){
+                $region = $regionModel->where($where)->field($fields)->find();
+            }
+            if(empty($num)){
+                if($sort){
+                    $region = $regionModel->where($where)->field($fields)->order($sort)->select();
+                }else{
+                    $region = $regionModel->where($where)->field($fields)->select();
+                }
+            }
+        }else{
+            $tmp = implode(',',$fields);
+            if($sort){
+                $region = $regionModel->where($where)->column($tmp);
+            }else{
+                $region = $regionModel->where($where)->order($sort)->column($tmp);
+            }
+        }
+        return $region;
+    }
+
+    /**
+     * 查找SEO数据
+     * @param    num    $type; 分类ID
+     * @return   array  $data;
+     */
+    public function getseo($type = '') {
+        $where['province_id'] = cookie::get('ip_region_id');
+        /*$types = config('seo_type');
+        if (empty($type) || !in_array($type, $types)) {
+            $type = config('seo_type.cemetery_home');
+        }*/
+        $where['type'] = $type;
+        $where['status'] = config('normal_status');
+        $data = Db::name('Seo')->field('seo_title,seo_keywords,seo_description')->where($where)->find();
+        //TODO 数据为空判断
+        if (empty($data)) {
+            $data['seo_title'] = "全国陵园墓地公墓，墓地价格，风水-91搜墓网";
+            $data['seo_keywords']= "全国陵园墓地，公墓，墓地价格，陵园风水-91搜墓网";
+            $data['seo_description'] = "91搜墓网是全国最大的陵园公墓网络搜索平台，提供公墓，陵园，周边墓地，周边公墓，墓地价格，墓地风水，为需要购买墓地的用户提供真实有效的陵园信息资源和便快捷的贴心服务。全国统一咨询热线：400-8010-344。";
+        }
+        return $data;
+    }
+}

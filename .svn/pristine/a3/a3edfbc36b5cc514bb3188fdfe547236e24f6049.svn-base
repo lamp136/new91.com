@@ -1,0 +1,303 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('etiquette')}">礼仪公司列表</a>
+        <a href="{:url('editetiquette')}">编辑礼仪公司</a>
+    </span>
+</div>
+<div class="site-text site-block" style="margin-top: 8px;">
+    <form class="layui-form" method="post" id="editEtiquetteForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择地区</label>
+            <div class="layui-input-inline">
+                <select name="info[province_id]" lay-filter="province_id" lay-verify="required">
+                    <option value="0">--选择省份--</option>
+                    {volist name="province" id="vo"}
+                        <option value="{$key}" {eq name="key" value="$data.province_id"} selected="selected" {/eq}>{$vo}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="info[city_id]" lay-filter="city_id" lay-verify="required">
+                    <option value="0">--选择市区--</option>
+                    {volist name="city" id="c"}
+                        <option value="{$key}" {eq name="key" value="$data.city_id"} selected="selected" {/eq}>{$c}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>    
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司名称</label>
+            <div class="layui-input-block" style="width: 390px;">
+                <input type="text" name="info[name]" required lay-verify="required" placeholder="商家名称" autocomplete="off" class="layui-input" value="{$data.name}"/>
+            </div>
+        </div>
+        {notempty name="data.image"}
+            {if is_file('.'.config('public_path').$data.image) || is_file('.'.config('public_path').$data.thumb_image)}
+                <div class="layui-form-item store_image">
+                    <label class="layui-form-label">公司图片</label>
+                    <div class="layui-input-inline">
+                        <img width="146px" height="80px" src="{notempty name="data.thumb_image"} {$Think.config.public_path}{$data.thumb_image} {else/} {$Think.config.public_path}{$data.image} {/notempty}" alt="{$data.name}">
+                    </div>
+                </div>
+            {/if}
+        {/notempty}
+        <div class="layui-form-item">
+            <label class="layui-form-label">更改图片</label>
+            <div class="layui-box layui-upload-button layui-input-inline">
+                <input type="file" name="image" lay-type="images" class="layui-upload-file"/>
+                <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+            </div>
+            <span class="layui-form-mid layui-word-aux">
+                <font color="red">图片尺寸：{$Think.config.etiquette_image_size.original}</font>
+            </span>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址</label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="info[address]" required lay-verify="required" class="layui-input" value="{$data.address}" placeholder="公司地址" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="info[status]" {eq name="data.status" value="$Think.config.normal_status"} checked {/eq} value="{$Think.config.normal_status}" title="开启"/>
+                <input type="radio" name="info[status]" {eq name="data.status" value="$Think.config.delete_status"} checked {/eq} value="{$Think.config.delete_status}" title="关闭"/>
+                <input type="radio" name="info[status]" {eq name="data.status" value="$Think.config.default_status"} checked {/eq} value="{$Think.config.default_status}" title="审核"/>
+            </div>
+        </div>
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label">距市区距离</label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="info[distance]" placeholder="公里" class="layui-input" value="{$data.distance}"/>
+            </div>
+        </div> -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">seo标题</label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="info[seo_title]" placeholder="seo标题" class="layui-input" value="{$data.seo_title}"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">seo关键字</label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 50%;" name="info[seo_keywords]" placeholder="seo关键字" class="layui-input" value="{$data.seo_keywords}"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">seo描述</label>
+            <div class="layui-input-block">
+                <textarea name="info[seo_description]" placeholder="seo描述" style="width: 900px;" class="layui-textarea">{$data.seo_description}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司简介</label>
+            <div class="layui-input-block">
+                <textarea name="info[content]" style="width: 900px;height: 300px;" id="editor">{$data.content}</textarea>
+            </div>
+        </div>
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label">标签属性</label>
+            <div class="layui-input-block">
+                <input type="text" name="info[label]" style="width: 900px;" placeholder="标签属性，规则：“标签1,标签2”，以“,”分隔" class="layui-input" value="{$data.label}"/>
+            </div>
+        </div> -->
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label">经纬度</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[longitude]" placeholder="经度" class="layui-input" value="{$data.longitude}"/>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="info[latitude]" placeholder="纬度" class="layui-input" value="{$data.latitude}"/>
+            </div>
+        </div> -->
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label">交通路线<span style="color:red;">*</span></label>
+            <div class="layui-input-block">
+                <textarea name="info[pick_up_address]" style="width: 900px;height: 300px;" id="pickUpAddress">
+                    {notempty name="data.pick_up_address"}
+                        {$data.pick_up_address}
+                    {else/}
+                        <p>地铁：</p>
+                        <p>自驾：</p>
+                        <p>班车：</p>
+                        <p>公交：</p>
+                    {/notempty}
+                </textarea>
+            </div>
+        </div> -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="text" name="info[sort]" placeholder="排序" value="{$data.sort}" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="info[remarks]" placeholder="商家备注" style="width: 900px" class="layui-textarea">{$data.remarks}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <span class="layui-btn" lay-submit lay-filter="editEtiquette">立即提交</span>
+                <input type="hidden" name="info[id]" value="{$data.id}"/>
+                <input type="hidden" name="category" value="{$data.category_id}"/>
+            </div>
+        </div>
+    </form>   
+</div>
+{/block}
+{block name="optJS"}
+    <script src="_BACKSTAGE_/ueditor/ueditor.config.js"></script>
+    <script src="_BACKSTAGE_/ueditor/ueditor.all.min.js"></script>
+    <script>
+        var $,
+            form,
+            provinceId,
+            cityId;
+
+        layui.use(['jquery', 'form','layedit'], function() {
+            $ = layui.jquery;
+            form = layui.form();
+            form.on('select(province_id)', function(data) {
+                provinceId = data['value'];
+                var data = {
+                    provinceId: provinceId
+                };
+                loadCity(provinceId);
+            })
+            var layedit = layui.layedit;
+            /**
+             * 获取市区列表
+             * @param  {string} id 省份id
+             */
+            function loadCity(id) {
+                $.ajax({
+                    url: "{:url('Basestore/getRegion')}",
+                    type: 'get',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        var t = '<option value="0">--选择市区--</option>';
+                        if (result) {
+                            if (result['code'] == 1) {
+                                var data = result['data'];
+                                $.each(data, function(key, val) {
+                                    t += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        $('select[name="info[city_id]"]').empty().append(t);
+                        form.render();
+                    }
+                });
+            }
+
+            $('input[name="info[name]"]').on({
+                blur:function(){
+                    var name = $(this).val(),
+                        id = {$data['id']},
+                        category = {$Think.config.category_etiquette_id};
+                    if(name.length > 0){
+                        var data = {
+                            id:id,
+                            name:name,
+                            category:category
+                        };
+                        checkName(data);
+                    }
+                },
+            });
+
+            /**
+             * 检测商家名称重复
+             * @param  {object} info ajax数据
+             * @return {json}
+             */
+            var checkName = function(info){
+                $.ajax({
+                    url:"{:url('isRepeatName')}",
+                    type:'get',
+                    data:info,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            if(result['code'] == 1){
+                                $('input[name="info[name]"]').val('');
+                                layer.msg('公司已存在');
+                            }
+                        }
+                    }
+                })
+            }
+
+            var toolBars = [
+                'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'music', 'insertvideo', 'attachment', 'pagebreak', '|', 'inserttable', '|', 'horizontal', 'date', 'time', 'spechars',
+            ];
+            // 文本编辑器
+            var editor = UE.getEditor('editor', {
+                toolbars: [
+                    toolBars
+                ],
+                autoHeightEnabled: true,
+                autoFloatEnabled: true
+            });
+
+            var tools = [
+                'strong' //加粗
+                ,'italic' //斜体
+                ,'underline' //下划线
+                ,'del' //删除线
+              
+                ,'|' //分割线
+              
+                ,'left' //左对齐
+                ,'center' //居中对齐
+                ,'right' //右对齐
+                ,'link' //超链接
+                ,'unlink' //清除链接
+                ,'face' //表情
+                ,'help' //帮助
+            ];
+            
+            var pickUpAddress = layedit.build('pickUpAddress',{
+                tool: tools
+            });
+
+            form.on('submit(editEtiquette)',function(){
+                var returnUrl = "{:url('store/Basestore/etiquette',['store_name' => $jump['store_name'],'page' => $jump['nowPage'],'province' => $jump['province'],'city' => $jump['city']])}",
+                    formData = new FormData($('#editEtiquetteForm')[0]);
+                $.ajax({
+                    url:"{:url('store/Basestore/editetiquette')}",
+                    type:'post',
+                    data:formData,
+                    dataType:'json',
+                    processData: false,
+                    contentType: false,
+                    success:function(result){
+                        if(result){
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if(result['code'] == 1){
+                                    window.location.href = returnUrl;
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{/block}

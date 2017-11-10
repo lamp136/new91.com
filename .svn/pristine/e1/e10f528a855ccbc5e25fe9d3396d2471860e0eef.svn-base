@@ -1,0 +1,549 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form action="{:url('guide/Guide/web')}">
+        <div class="layui-form-item">
+            {php}
+                if(showHandle('guide/Guide/addweb')){
+            {/php}
+                <div class="layui-inline">
+                    <a href="javascript:void(0);" class="layui-btn addWeb">增加</a>
+                </div>
+            {php}
+                }
+            {/php}
+            <div class="layui-inline">
+                <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="网址名称" value="{$Think.get.name}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <select name="category" lay-filter="aihao">
+                    <option value="0">--选择类型--</option>
+                    {notempty name="categoryList"}
+                        {volist name="categoryList" id="cate"}
+                            <option value="{$cate.id}" {eq name="Think.get.category" value="$cate.id"} selected="selected" {/eq}>{$cate.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$cate.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="layui-inline">
+        <span class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-small del_btn">删除</span>
+    </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="50">
+            <col width="200">
+            <col width="100">
+            <col width="100">
+            <col width="80">
+            <col width="100">
+            <col width="150">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" lay-filter="checkInfo" class="checkInfo" value="0" lay-skin="primary">
+                </th>
+                <th>名称</th>
+                <th>分类</th>
+                <th>图片</th>
+                <th>状态</th>
+                <th>联系方式</th>
+                <th>添加时间</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name="webGuideList" id="web"}
+                <tr>
+                    <td>
+                        <input type="checkbox" data-name="choice" lay-filter="checkInfo" class="checkInfo" value="{$web.id}" lay-skin="primary">
+                    </td>
+                    <td>{$web.name}</td>
+                    <td>
+                        {if array_key_exists($web.category_id,$category)}
+                            {$category[$web.category_id]['name']}
+                        {/if}
+                    </td>
+                    <td>
+                        <img height="50px" src="{$Think.config.public_path}{$web.logo_path}" alt="{$web.name}">
+                    </td>
+                    <!-- <td>{$web.url}</td> -->
+                    <td>
+                        {switch name="web.status"}
+                            {case value="$Think.config.normal_status"}
+                                已通过
+                            {/case}
+                            {case value="$Think.config.default_status"}
+                                待审核
+                            {/case}
+                            {case value="$Think.config.delete_status"}
+                                未通过
+                            {/case}
+                        {/switch}
+                    </td>
+                    <td>{$web.created_time}</td>
+                    <td>
+                        {if showHandle('guide/Guide/editweb')}
+                            <span class="layui-btn layui-btn-small editWeb" data-id="{$web.id}">编辑</span>
+                        {/if}
+                        {if showHandle('guide/Guide/checkweb')}
+                            {neq name=":config('normal_status')" value="$web.status"}
+                                <span class="layui-btn layui-btn-small checkWeb" data-id="{$web.id}" style="background-color: #4b5cc4;">审核</span>
+                            {/neq}
+                        {/if}
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+{block name='layer'}
+    <!-- 添加 -->
+    <div id="add" style="display: none;">
+        <form id="addForm" style="margin-left: 25px;margin-top: 10px;" class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型<font color="red">*</font></label>
+                <div class="layui-inline">
+                    <select name="category_id" lay-filter="category" lay-verify="required" required>
+                        <option value=" ">--选择类型--</option>
+                        {notempty name="categoryList"}
+                            {volist name="categoryList" id="cate"}
+                                <option value="{$cate.id}">{$cate.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$cate.name}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地区<font color="red">*</font></label>
+                <div class="layui-inline">
+                    <select name="province_id" lay-filter="addProvince" lay-verify="required" required>
+                        <option value=" ">选择省</option>
+                        {notempty name="province"}
+                            {volist name="province" id="name"}
+                                <option value="{$key}">{$name}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="city_id">
+                        <option value="0">选择市</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">网站名称<font color="red">*</font></label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" lay-verify="required" required style="width: 403px;" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">url</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" style="width: 403px;" class="layui-input" value="http://"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">logo</label>
+                <div class="layui-box layui-upload-button layui-input-inline">
+                    <input type="file" name="logo_path" lay-type="images" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="sort" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn" lay-submit lay-filter="submitAdd">立即提交</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 添加结束 -->
+    <!-- 编辑 -->
+    <div id="edit" style="display: none;">
+        <form id="editForm" style="margin-left: 25px;margin-top: 10px;" class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型<font color="red">*</font></label>
+                <div class="layui-inline">
+                    <select name="category_id" lay-filter="category" lay-verify="required" required>
+                        <option value=" ">--选择类型--</option>
+                        {notempty name="categoryList"}
+                            {volist name="categoryList" id="cate"}
+                                <option value="{$cate.id}">{$cate.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$cate.name}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地区<font color="red">*</font></label>
+                <div class="layui-inline">
+                    <select name="province_id" lay-filter="editProvince" lay-verify="required" required>
+                        <option value=" ">选择省</option>
+                        {notempty name="province"}
+                            {volist name="province" id="name"}
+                                <option value="{$key}">{$name}</option>
+                            {/volist}
+                        {/notempty}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="city_id">
+                        <option value="0">选择市</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">网站名称<font color="red">*</font></label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" lay-verify="required" required style="width: 403px;" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">url</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" style="width: 403px;" class="layui-input" value="http://"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">logo</label>
+                <div class="layui-box layui-upload-button layui-input-inline">
+                    <input type="file" name="logo_path" lay-type="images" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="sort" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn" lay-submit lay-filter="submitEdit">立即提交</span>
+                    <input type="hidden" name="id" value=""/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 编辑结束 -->
+    <div id="checkWeb" style="display: none;">
+        <form id="checkWebForm" style="margin-left: 25px;margin-top: 10px;" class="layui-form layui-form-pane">
+            <div class="layui-form-item" pane="" style="width: 310px">
+                <label class="layui-form-label">审核状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="status" value="{:config('normal_status')}" title="通过" checked>
+                    <input type="radio" name="status" value="{:config('delete_status')}" title="未通过">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn" lay-submit lay-filter="submitCheck">立即提交</span>
+                    <input type="hidden" name="id" value=""/>
+                </div>
+            </div>
+        </form>
+    </div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form'], function() {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                form = layui.form(),
+                addModal,
+                editModal,
+                checkModal;
+            form.on('checkbox(checkInfo)', function(item) {
+                var checkInfo = $('.checkInfo'),
+                    othis = this;
+                if ($(othis).is(':checked')) {
+                    $('.del_btn').removeClass('layui-btn-disabled');
+                } else {
+                    $('.del_btn').addClass('layui-btn-disabled');
+                }
+                if (item.value == 0) {
+                    checkInfo.each(function(i, el) {
+                        el.checked = item.elem.checked;
+                    });
+                }
+                form.render('checkbox');
+            });
+
+            $('.del_btn').on('click', function() {
+                var othis = $(this);
+                if (!othis.hasClass('layui-btn-disabled')) {
+                    layer.confirm('確定要删除？', {
+                        icon: 3,
+                        title: '提示'
+                    }, function(index) {
+                        var checks = $('input[data-name="choice"]:checked'),
+                            ids = '';
+                        checks.each(function(k, v) {
+                            ids += ($(v).val() + ',');
+                        });
+                        ids = ids.substring(0, ids.lastIndexOf(','));
+                        if (ids) {
+                            $.ajax({
+                                url: "{:url('guide/Guide/delweb')}",
+                                type: 'get',
+                                data: {
+                                    ids: ids
+                                },
+                                dataType: 'json',
+                                success: function(result) {
+                                    if (result) {
+                                        layer.msg(result['msg'], {
+                                            time: 1000
+                                        }, function() {
+                                            if (result['code'] == 1) {
+                                                layer.close(index);
+                                                window.location.reload();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            form.on('select(addProvince)',function(data){
+                var province = data.value;
+                if(province){
+                    _city(province,$('#addForm select[name="city_id"]'));
+                }
+            });
+            
+            form.on('select(editProvince)',function(data){
+                var province = data.value;
+                if(province){
+                    _city(province,$('#editForm select[name="city_id"]'));
+                }
+            });
+
+            var _city = function(pid, vessel) {
+                $.ajax({
+                    url: "{:url('guide/Guide/getcity')}",
+                    type: 'get',
+                    data: {
+                        provinceId: pid,
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        var c = '<option value="0">选择市</option>';
+                        if (result) {
+                            if (result['code'] == 1) {
+                                var city = result['data'];
+                                $.each(city, function(id, name) {
+                                    c += '<option value="' + id + '">' + name + '</option>';
+                                });
+                            }
+                        }
+                        vessel.empty().append(c);
+                        form.render();
+                    }
+                });
+            }
+
+            $('.addWeb').on('click', function() {
+                $('#addForm')[0].reset();
+                addModal = layer.open({
+                    type: 1,
+                    area: ['600px', '500px'],
+                    title: '添加网址',
+                    content: $('#add'),
+                });
+            });
+
+            form.on('submit(submitAdd)', function() {
+                var fd = new FormData($('#addForm')[0]);
+                $.ajax({
+                    url: "{:url('guide/Guide/addweb')}",
+                    type: 'post',
+                    data: fd,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    layer.close(addModal);
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            });
+
+            $('.editWeb').on('click', function() {
+                $('#editForm')[0].reset();
+                var id = $(this).data('id');
+                if (id) {
+                    $.ajax({
+                        url: "{:url('guide/Guide/editweb')}",
+                        type: 'get',
+                        data: {
+                            id: id
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                if (result['code'] == 1) {
+                                    var info = result['data'],
+                                        citys = info.citys,
+                                        ci = '<option value="0">选择市</option>';
+                                    $('#editForm input[name="id"]').val(info.id);
+                                    $('#editForm select[name="category_id"]').val(info.category_id);
+                                    $('#editForm select[name="province_id"]').val(info.province_id);
+                                    $.each(citys, function(key, val) {
+                                        var sel = '';
+                                        if (info.city_id == val.id) {
+                                            sel = 'selected="selecteds"';
+                                        }
+                                        ci += '<option ' + sel + ' value="' + val.id + '">' + val.name + '</option>';
+                                    });
+                                    $('#editForm select[name="city_id"]').empty().append(ci);
+                                    $('#editForm input[name="name"]').val(info.name);
+                                    $('#editForm input[name="url"]').val(info.url);
+                                    $('#editForm input[name="sort"]').val(info.sort);
+                                }
+                                editModal = layer.open({
+                                    type: 1,
+                                    area: ['600px', '500px'],
+                                    title: '编辑网址',
+                                    content: $('#edit'),
+                                });
+                                form.render();
+                            }
+                        }
+                    });
+                }
+            });
+
+            form.on('submit(submitEdit)', function() {
+                var fd = new FormData($('#editForm')[0]);
+                $.ajax({
+                    url: "{:url('guide/Guide/editweb')}",
+                    type: 'post',
+                    data: fd,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    layer.close(editModal);
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+
+            $('.checkWeb').on('click', function() {
+                var id = $(this).data('id');
+                if (id) {
+                    $('#checkWebForm input[name="id"]').val(id);
+                    checkModal = layer.open({
+                        type: 1,
+                        area: ['360px', '200px'],
+                        title: '审核',
+                        content: $('#checkWeb'),
+                    });
+                }
+            });
+
+            form.on('submit(submitCheck)', function(data) {
+                var fd = data.field;
+                $.ajax({
+                    url: "{:url('guide/Guide/checkweb')}",
+                    type: 'post',
+                    data: fd,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    layer.close(checkModal);
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+
+            $('#addForm input[name="name"]').blur(function(){
+                var othis = $(this),
+                    name = othis.val(),
+                    info = {
+                        name:name
+                    };
+                if(name != ''){
+                    _checkRepeat(info,othis);
+                }
+            });
+
+            $('#editForm input[name="name"]').blur(function(){
+                var othis = $(this),
+                    name = othis.val(),
+                    id = $('#editForm input[name="id"]').val(),
+                    info = {
+                        id:id,
+                        name:name
+                    };
+                if(name != '' && id != ''){
+                    _checkRepeat(info,othis);
+                }
+            });
+
+            var _checkRepeat = function(value,obj){
+                if(value != ''){
+                    $.ajax({
+                        url:"{:url('guide/Guide/checkrepeat')}",
+                        type:'get',
+                        data:value,
+                        dataType:'json',
+                        success:function(result){
+                            if(result){
+                                if(result['code'] == 1){
+                                    layer.msg(result['msg']);
+                                    obj.val('');
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+{/block}

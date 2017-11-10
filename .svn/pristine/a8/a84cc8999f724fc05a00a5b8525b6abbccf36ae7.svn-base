@@ -1,0 +1,12 @@
+{extend name='extra@main' /}
+
+{block name="body"}
+  <p>
+    I am learning Layer UI
+    Do you want to study it ?
+    You can read it fom www.layer.com
+  </p>
+
+  <lbs-nearby enable-geo="true" city="北京" num="10" query="美食" radius="5000" type="map" style="height:100%"></lbs-nearby
+  {$data.msg}
+  {/block}

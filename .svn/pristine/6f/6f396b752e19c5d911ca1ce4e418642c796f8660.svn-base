@@ -1,0 +1,95 @@
+{include file="extra@topup"/}
+<!-- header -->
+    <div class="header fe_header">
+        <div class="contain">
+
+            <!-- LOGO -->
+            <div class="logo clearfix">
+                <a href="{:url('index/Index/index')}"><img src="_WEB_/images/logo.png" alt="LOGO" /></a>
+                <h2>殡葬百科</h2>
+            </div>
+            
+            <!-- 选择城市+搜索 -->
+            <div class="city_search">
+
+                <!-- 搜索 -->
+                <div class="search">
+
+                    <!-- 选择搜索内容 -->
+                    <div class="search_sel_box">
+                        <span class="search_sel">陵园墓地<i class="iconfont icon-iconfontdownjiantou"></i></span>
+                        <div class="search_sel_list">
+                            <ul>
+                                <li><a href="#">陵园墓地</a></li>
+                                <li><a href="#">殡仪馆</a></li>
+                                <li><a href="#">殡仪公司</a></li>
+                                <li><a href="#">新闻</a></li>
+                            </ul>
+                        </div>
+                    </div><!-- search_sel_box 选择搜索内容 End -->
+                    
+                    <!-- 搜索框 -->
+                    <div class="search_input">
+                        <input id="gover_search_key" class="txt" type="text" value="" placeholder="我们帮您找陵园"/>
+                        <div class="search_suggest" id="gov_search_suggest">  
+                            <ul>
+                            </ul>
+                        </div>
+                    </div><!-- search_input 搜索框 End -->
+
+                </div><!-- search 搜索 End -->
+
+                <!-- 搜索按钮 -->
+                <div class="search_btn">
+                    <button class="ssbtn"></button>
+                </div><!-- search_btn 搜索按钮 End -->
+                
+                <div style="clear:both;"></div>
+                
+                <!-- 搜索展示内容 -->
+                <div class="search_text clearfix">
+                    <ul>
+                        <li><a href="#">天寿陵园</a></li>
+                        <li><a href="#">殡仪服务</a></li>
+                        <li><a href="#">树葬</a></li>
+                        <li><a href="#">海葬</a></li>
+                        <li><a href="#">风水</a></li>
+                    </ul>
+                </div><!-- search_text 搜索展示内容 End -->
+
+            </div><!-- city_search 选择城市+搜索 End -->
+            
+            <!-- 电话 -->
+            <div class="telephone">
+                <img src="_WEB_/images/telephone.png" alt="电话" />
+            </div><!-- telephone 电话 End -->
+
+        </div><!-- contain End -->
+    </div><!-- header End -->
+    
+    <!-- 导航 -->
+    <div class="fe_nav">
+        <div class="contain">
+            <ul>
+                <li {empty name='top_cid'} class='fe_nav_led'{/empty} >
+                    <a href="{:url('article/Article/index')}">首页</a>
+                </li>
+                {volist name="articletree" id="vo"}
+                    <li>
+                        <a href="{:url('article/Article/listbox',['cid'=>$vo.id])}"   
+                            {eq name='$vo.id' value='$top_cid'} class="fe_nav_led" {/eq} >{$vo.name}
+                            {notempty name="vo.child"} <i></i>{/notempty}
+                        </a>
+                        {notempty name="vo.child"}
+                            <ul class="fe_subnav">
+                            {foreach name="vo.child" item="v"}
+                            <li><a href="{:url('article/Article/listbox',['cid'=>$v.id])}">{$v.name}</a></li>
+                            {/foreach}
+                            </ul>
+                        {/notempty}
+                    </li>
+                {/volist}
+                <div class="clear"></div>
+            </ul>
+        </div><!-- contain End -->
+    </div><!-- nav 导航 End -->

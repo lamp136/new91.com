@@ -1,0 +1,376 @@
+{extend name='extra@main' /}
+{block name="layer"}
+
+<div id="addmotai" style="display: none;padding: 20px;">
+    <form id="addForm" method="post" class="layui-form" autocomplete="off">
+            <table class="layui-table">
+                <tbody>
+                <tr>
+                    <td>网站名称：</td>
+                    <td>
+                        <input class="layui-input" name="web_name" type="text" data-rule="required"  placeholder="网站名称">
+                    </td>
+                </tr>
+                <tr>
+                    <td>URL:</td>
+                    <td>
+                        <input class="layui-input" name="url" type="text" data-rule="required" value="http://" placeholder="http://">
+                    </td>
+                </tr>
+                <tr>
+                    <td>账号：</td>
+                    <td>
+                        <input class="layui-input" name="account" type="text" data-rule="required"  placeholder="账号">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>密码：</td>
+                    <td><input class="layui-input" name="password" type="text" data-rule="required"  placeholder="密码">
+                    </td>
+                </tr>
+                <tr>
+                    <td>预留手机号：</td>
+                    <td><input class="layui-input" name="mobile" type="text" data-rule="required"  placeholder="预留手机号">
+                    </td>
+                </tr>
+                <tr>
+                    <td>预留邮箱：</td>
+                    <td><input class="layui-input" name="email" type="text" data-rule="required"  placeholder="预留邮箱：">
+                    </td>
+                </tr>
+                 <tr>
+                    <td>备注</td>
+                    <td><input class="layui-input" name="remark" type="text"  placeholder="备注">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">
+                        <button class="layui-btn submitadd"  type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<div id="editmotai" style="display: none;padding: 20px;">
+    <form id="editForm" method="post" class="layui-form" autocomplete="off">
+           <table class="layui-table">
+                <tbody>
+                <tr>
+                    <td>网站名称：</td>
+                    <td>
+                        <input class="layui-input" name="web_name" type="text" data-rule="required"  placeholder="网站名称">
+                    </td>
+                </tr>
+                <tr>
+                    <td>URL:</td>
+                    <td>
+                        <input class="layui-input" name="url" type="text" data-rule="required"  placeholder="http://">
+                    </td>
+                </tr>
+                <tr>
+                    <td>账号：</td>
+                    <td>
+                        <input class="layui-input" name="account" type="text" data-rule="required"  placeholder="账号">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>密码：</td>
+                    <td><input class="layui-input" name="password" type="text" data-rule="required"  placeholder="密码">
+                    </td>
+                </tr>
+                <tr>
+                    <td>预留手机号：</td>
+                    <td><input class="layui-input" name="mobile" type="text" data-rule="required"  placeholder="预留手机号">
+                    </td>
+                </tr>
+                <tr>
+                    <td>预留邮箱：</td>
+                    <td><input class="layui-input" name="email" type="text" data-rule="required"  placeholder="预留邮箱：">
+                    </td>
+                </tr>
+                 <tr>
+                    <td>备注</td>
+                    <td><input class="layui-input" name="remark" type="text"  placeholder="备注">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">
+                        <input type="hidden" name='id' /> 
+                        <button class="layui-btn submitedit"  type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+
+<div id="password" style="display: none;padding: 20px;">
+    <form id="passwordForm" method="post" class="layui-form" autocomplete="off">
+            <table class="layui-table">
+                <tbody>
+                <tr>
+                    <td>原密码：</td>
+                    <td>
+                        <input class="layui-input" name="password" type="text" data-rule="required"  >
+                    </td>
+                </tr>
+                <tr>
+                    <td>密码:</td>
+                    <td>
+                        <input class="layui-input" name="newpassword" type="text" data-rule="required" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>确认新密码：</td>
+                    <td>
+                        <input class="layui-input" name="renewpassword" type="text" data-rule="required"  >
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style="text-align: center;">
+                         <input type="hidden" name='id' /> 
+                        <button class="layui-btn submitchange"  type='button'>立即提交</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{/block}
+{block name="body"}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">运营</a>
+        <a><cite>运营推广网站</cite></a>
+    </span>
+</div>
+<div class="layui-form"  style="margin-top: 10px;margin-left: 30px;">
+    <!--筛选 start-->
+    <form  method="get"  autocomplete="off" action='{:url("webAccountList")}'>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                   <input type='text' class="layui-input"  name='name' value='{$Think.get.name}' placeholder="网站名称">
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit="" >查询</button>
+        </div>
+    </form>
+    <a href="javascript:void(0);" style="float:right;margin-top: -60px;margin-bottom:10px;  margin-right: 30px;" class="layui-btn layui-btn-normal add" >添加网站</a>
+</div>
+    <table class="layui-table" style="margin-top:-10px;">
+            <colgroup>
+                <col width="3%">
+                <col width="15%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="15%">
+                <col width="17%">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>网站名称</th>
+                    <th>URL</th>
+                    <th>
+                       账号
+                    </th>
+                    <th>预留手机号</th>
+                    <th>预留邮箱</th>
+                    <th>备注</th>
+                    <th>
+                       操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {volist name="list" id="vo"}
+                <tr class="odd gradeX">
+                    <td>{$vo.id}</td>
+                    <td>{$vo.web_name}</td>
+                    <td><a href='{$vo.url}' target='_blank'>{$vo.url}</a></td>
+                    <td>{$vo.account}</td>
+                    <td>{$vo.mobile}</td>
+                    <td>{$vo.email}</td>
+                    <td>{$vo.remark}</td>
+                    <td>
+                        <a class="layui-btn layui-btn-small edit"  href="javascript:void(0)" data-id="{$vo.id}"><i class="icon-pencil icon-white"> </i>编辑</a>
+
+                        <a class="layui-btn layui-btn-small password"  href="javascript:void(0)" data-id="{$vo.id}"><i class="icon-pencil icon-white"> </i>修改密码</a>
+                    </td>
+                </tr>
+            {/volist}
+            </tbody>
+        </table>
+        {$page}
+
+{/block}
+{block name="optJS"}
+    <script>
+     layui.use(['jquery', 'form','laydate','laypage'],function(){
+        var $= layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+        var laypage = layui.laypage;
+        
+        //添加运营推广账号
+        $('.add').click(function () {
+              layer.open({
+                closeBtn: 2,
+                type: 1,
+                area: '500px',
+                title: '添加运营推广网站',
+                content: $('#addmotai')
+            })
+        });
+
+        //提交运营推广账号表单
+        $('.submitadd').click(function () {
+            var From = $('#addForm').serialize();
+            $.ajax({
+                url: "{:url('webAccountAdd')}",
+                type: 'post',
+                data: From,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                      if(result.flag==1){
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }else{
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }
+                }
+            });
+        });
+
+        //编辑运营推广账号信息
+        $('.edit').click(function () {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: "{:url('webAccountEdit')}",
+                type: 'get',
+                data: {'id':id},
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    var data = result.data;
+                    if (result.flag == 1) {
+                        $('#editForm input[name="web_name"]').val(data.web_name);
+                        $('#editForm input[name="url"]').val(data.url);
+                        $('#editForm input[name="account"]').val(data.account);
+                        $('#editForm input[name="password"]').val(data.password);
+                        $('#editForm input[name="mobile"]').val(data.mobile);
+                        $('#editForm input[name="email"]').val(data.email);
+                        $('#editForm textarea[name="remark"]').html(data.remark);
+                        $('#editForm input[name="id"]').val(data.id);
+                        form.render();
+                         layer.open({
+                            closeBtn: 2,
+                            type: 1,
+                            area: '500px',
+                            title: '编辑运营推广网站',
+                            content: $('#editmotai')
+                        })
+                    } else {
+                        layer.alert(result.msg);
+                    }
+                }
+            });
+        });
+        
+        //提交编辑运营推广账号的表单
+        $('.submitedit').click(function () {
+            var From = $('#editForm').serialize();
+            $.ajax({
+                url: "{:url('webAccountEdit')}",
+                type: 'post',
+                data: From,
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if(result.flag==1){
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }else{
+                        layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                        });
+                    }
+                }
+            });
+        });
+
+
+        //修改运营推广账号密码
+        $('.password').click(function () {
+            var id = $(this).attr('data-id');
+            $('#passwordForm input[name="id"]').val(id)
+            layer.open({
+                closeBtn: 2,
+                type: 1,
+                area: '500px',
+                title: '修改密码',
+                content: $('#password')
+
+            });
+        });
+        $('#passwordForm input[name="password"]').blur(function(){
+            var password = $(this).val();
+            var id = $('#passwordForm input[name="id"]').val();
+            $.ajax({
+                url: "{:url('webAccountPassword')}",
+                data:{'id':id},
+                type:'get',
+                success: function (d) {
+                    var result = eval("(" + d + ")");
+                    if (result.password != password) {
+                        layer.alert('原密码错误！');
+                    }else{
+                        $('#passwordForm input[name="password"]').attr('data-pass','true');
+                    } 
+                }
+            });
+         });
+        //提交密码表单
+        $('.submitchange').bind('click', function () {
+            if($('#passwordForm input[name="password"]').attr('data-pass')){
+                var newpassword = $('#passwordForm input[name="newpassword"]').val();
+                var renewpassword = $('#passwordForm input[name="renewpassword"]').val();
+                var From = $('#passwordForm').serialize()
+                if(newpassword == renewpassword){
+                    $.ajax({
+                        url: "{:url('webAccountPassword')}",
+                        type: 'post',
+                        data: From,
+                        success: function (d) {
+                            var result = eval("(" + d + ")");
+                            if(result.flag==1){
+                                layer.msg(result.msg,{icon:1,time:2000},function(){
+                                    window.location.reload();//刷新当前页面.
+                                });
+                            }else{
+                                layer.msg(result.msg,{icon:1,time:2000},function(){
+                                    window.location.reload();//刷新当前页面.
+                                });
+                            }
+                        }
+                    });
+                }else{
+                    layer.alert('密码不一致！');
+                }
+            }else{
+                layer.alert('请输入正确的原密码！');
+            }
+        });
+        
+
+     });     
+    </script>
+{/block}

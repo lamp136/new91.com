@@ -1,0 +1,254 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form action="{:url('plugin/Tel/index')}">
+        <div class="layui-form-item">
+            {php}
+                if(showHandle('plugin/Tel/loadfile')){
+            {/php}
+                <div class="layui-inline">
+                    <a href="javascript:void(0);" class="layui-btn importFile">导入</a>
+                </div>
+            {php}
+                }
+            {/php}
+            <!-- <div class="layui-inline">
+                <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="网址名称" value="{$Think.get.name}" class="layui-input">
+            </div> -->
+            <div class="layui-inline">
+                <select name="admin_id" lay-filter="aihao">
+                    <option value="0">--客服--</option>
+                    {notempty name="business"}
+                        {volist name="business" id="name"}
+                            <option value="{$key}" {eq name="Think.get.admin_id" value="$key"} selected="selected" {/eq}>{$name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+    {if showHandle('plugin/Tel/delrecord')}
+        <div class="layui-inline">
+            <span class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-small batch_del">删除</span>
+        </div>
+    {/if}
+    <table class="layui-table">
+        <colgroup>
+            {if showHandle('plugin/Tel/delrecord')}
+                <col width="50">
+            {/if}
+            <col width="170">
+            <col width="120">
+            <col width="110">
+            <col width="110">
+            <col width="100">
+            <col width="120">
+            <col width="80">
+            <col width="100">
+            <col width="100">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                {if showHandle('plugin/Tel/delrecord')}
+                    <th>
+                        <input type="checkbox" lay-filter="checkInfo" class="checkInfo" value="0" lay-skin="primary">
+                    </th>
+                {/if}
+                <th>客户</th>
+                <th>地区</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>通话时长|扣除时长</th>
+                <th>呼入导航</th>
+                <th>客服</th>
+                <th>被叫号码</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name="record" id="v"}
+                <tr>
+                    {if showHandle('plugin/Tel/delrecord')}
+                        <td>
+                            <input type="checkbox" data-name="choice" lay-filter="checkInfo" class="checkInfo" value="{$v.id}" lay-skin="primary">
+                        </td>
+                    {/if}
+                    <td>
+                        {notempty name="v.customer"}
+                            姓名：{$v.customer}<br/>
+                        {/notempty}
+                        电话：{$v.customer_phone}
+                    </td>
+                    <td>{$v.province.name} / {$v.city.name}</td>
+                    <td>
+                        {notempty name="v.start_time"}
+                            {$v.start_time|date="Y-m-d H:i:s",###}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {notempty name="v.end_time"}
+                            {$v.end_time|date="Y-m-d H:i:s",###}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {$v.duration_time} | {$v.deduct_time}
+                    </td>
+                    <td>{$v.inbound_navigation}</td>
+                    <td>
+                        {notempty name="v.service_name"}
+                            {$v.service_name}
+                        {/notempty}
+                    </td>
+                    <td>{$v.called_phone}</td>
+                    <td>
+                        {if showHandle('plugin/Tel/delrecord')}
+                            <span class="layui-btn layui-btn-danger layui-btn-small single_del" data-id="{$v.id}">删除</span>
+                        {/if}
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+{block name='layer'}
+    <!-- 添加 -->
+    <div id="import" style="display: none;">
+        <form id="importForm" style="margin-left: 25px;margin-top: 10px;" class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">记录文件</label>
+                <div class="layui-box layui-upload-button layui-input-inline">
+                    <input type="file" name="csv_file" lay-type="file" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传文件</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn" lay-submit lay-filter="submitImport">立即提交</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 添加结束 -->
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form'], function() {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                form = layui.form(),
+                importModal,
+                confirm;
+            form.on('checkbox(checkInfo)', function(item) {
+                var checkInfo = $('.checkInfo'),
+                    othis = this;
+                if ($(othis).is(':checked')) {
+                    $('.batch_del').removeClass('layui-btn-disabled');
+                } else {
+                    $('.batch_del').addClass('layui-btn-disabled');
+                }
+                if (item.value == 0) {
+                    checkInfo.each(function(i, el) {
+                        el.checked = item.elem.checked;
+                    });
+                }
+                form.render('checkbox');
+            });
+
+            $('.batch_del').on('click', function() {
+                var othis = $(this);
+                if (!othis.hasClass('layui-btn-disabled')) {
+                    var checks = $('input[data-name="choice"]:checked'),
+                        ids = '';
+                    checks.each(function(k, v) {
+                        ids += ($(v).val() + ',');
+                    });
+                    ids = ids.substring(0, ids.lastIndexOf(','));
+                    if (ids) {
+                        var fd = {
+                            id: ids
+                        };
+                        _del(fd);
+                    }
+                }
+            });
+
+            $('.single_del').on('click', function() {
+                var id = $(this).data('id');
+                if (id) {
+                    var fd = {
+                        id: id
+                    };
+                    _del(fd);
+                }
+            });
+
+            var _del = function(ajaxData) {
+                layer.confirm('確定要删除？', {
+                    icon: 3,
+                    title: '提示'
+                }, function(index) {
+                    $.ajax({
+                        url: "{:url('plugin/Tel/delrecord')}",
+                        type: 'get',
+                        data: ajaxData,
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                layer.msg(result['msg'], {
+                                    time: 1000
+                                }, function() {
+                                    if (result['code'] == 1) {
+                                        layer.close(index);
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            $('.importFile').on('click', function() {
+                $('#importForm')[0].reset();
+                importModal = layer.open({
+                    type: 1,
+                    area: ['350px', '200px'],
+                    title: '选择文件',
+                    content: $('#import'),
+                });
+            });
+
+            form.on('submit(submitImport)', function() {
+                var fd = new FormData($('#importForm')[0]);
+                $.ajax({
+                    url: "{:url('plugin/Tel/loadfile')}",
+                    type: 'post',
+                    data: fd,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        if (result) {
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    layer.close(importModal);
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+{/block}

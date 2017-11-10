@@ -1,0 +1,284 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/" title="首页">首页</a></li>
+                <li class="jt">></li>
+                <li>陵园墓地</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain ">
+
+            <!-- 筛选条件 -->
+            <div class="sifting">
+
+                <!-- 筛选条件结果显示 -->
+                <div class="criteria">
+                    <ul>
+                        <li class="sif">所有分类</li>
+                        <li>></li>
+                        {notempty name="input.city"}
+                            <li class="if">{$city[$input.city]}
+                                <a href="{:url('cemetery/Cemetery/index',['price' => $selectPrice,'dist' => $selectDist])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        {notempty name="input.price"}
+                            <li class="if">{$input.price}
+                                <a href="{:url('cemetery/Cemetery/index',['city' => $selectCity,'dist' => $selectDist])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        {notempty name="input.dist"}
+                            <li class="if">{$input.dist}
+                                <a href="{:url('cemetery/Cemetery/index',['city' => $selectCity,'price' => $selectPrice])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        <li class="number">共<span> {$dataCount} </span>结果</li>
+                    </ul>
+                </div>
+
+                <!--所在区域 -->
+                <div class="sifting_main clearfix">
+                    <span>所在区域：</span>
+                    <ul>
+                        <li {empty name="selectCity"} class="led" {/empty}>
+                            <a href="{:url('cemetery/Cemetery/index')}" title="不限">不限</a>
+                        </li>
+                        {volist name="city" id="c"}
+                            <li {eq name="selectCity" value="$key"} class="led" {/eq}>
+                                <a href="{:url('cemetery/Cemetery/index',['city' => $key])}" title="{$c}">{$c}</a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div>
+
+                <!-- 价格区间 -->
+                <div class="sifting_main clearfix">
+                    <span>价格区间：</span>
+                    <ul>
+                        <li {empty name="selectPrice"} class="led" {/empty}><a href="{:url('cemetery/Cemetery/index',['city' => $selectCity])}">不限</a></li>
+                        {volist name="Think.config.price_range" id="range"}
+                            <li {eq name="selectPrice" value="$range"} class="led" {/eq}><a href="{:url('cemetery/Cemetery/index',['city' => $selectCity,'price' => $range])}" title="{$range}">{$range}{if $key == 0}万及以下{elseif $countRange == $key + 1/}万及以上{else/}万{/if}</a></li>
+                        {/volist}
+                    </ul>                   
+                </div>
+
+                <!-- 距离市区 -->
+                <div class="sifting_main clearfix">
+                    <span>距离市区：</span>
+                    <ul>
+                        <li {empty name="selectDist"} class="led" {/empty}><a href="{:url('cemetery/Cemetery/index',['city' => $selectCity,'price' => $selectPrice])}">不限</a></li>
+                        {volist name="Think.config.store_length" id="len"}
+                            <li {eq name="selectDist" value="$len"} class="led" {/eq}>
+                                <a href="{:url('cemetery/Cemetery/index',['city' => $selectCity,'price' => $selectPrice,'dist' => $len])}" title="{$len}">{$len}{if $key == 0}公里及以下{elseif $countDist == $key/}公里及以上{else/}公里{/if}</a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div>
+                
+            </div><!-- sifting筛选条件结束 -->
+            {notempty name="list"}
+                <!-- 陵园列表 -->
+                <div class="cemetery_list">
+                    {volist name="list" id="v"}
+                        <!-- 陵园内容1 -->
+                        <div class="cemetery_list_box">
+                            <div class="cemetery_list_main {if $i%10 == 0} last {/if} clearfix">
+                                <!-- 图片 -->
+                                <div class="cemetery_list_main_img">
+                                    <a title="{$v.name}" href="{:url('cemetery/Cemetery/details',['id' => $v.id])}" target="_blank"><img src="{notempty name="v.image"}{$v.image}{else/}{$v.thumb_image}{/notempty}" alt="{$v.name}"/></a>
+                                    {eq name="v.status" value="0"}
+                                        <span class="ygwicon"></span>
+                                    {/eq}
+                                </div>
+                                <!-- 信息 -->
+                                <div class="cemetery_list_main_info">
+                                    <h2 class="clearfix">
+                                        <a title="{$v.name}" href="{:url('cemetery/Cemetery/details',['id' => $v.id])}" target="_blank">{$v.name}</a>
+                                        <span>
+                                            {notempty name="v.hits"}
+                                                <i></i>{$v.actual_hits + $v.hits}
+                                            {/notempty}
+                                        </span>
+                                    </h2>
+                                    <div class="address clearfix">
+                                        <p><font>陵园地址：</font>{$v.address}</p>
+                                        <p class="lookmap"><a href="{:url('cemetery/Cemetery/details',['id' => $v.id])}?map=true" title="地址"><i></i>查看地图</a></p>
+                                    </div>
+                                    <ul class="clearfix">
+                                        {notempty name="v.label"}
+                                            {php}
+                                                $label = explode(',',$v['label']);
+                                                foreach($label as $val){
+                                                    echo '<li>'.$val.'</li>';
+                                                }
+                                            {/php}
+                                        {/notempty}
+                                    </ul>
+                                </div>
+                                <!-- 咨询 -->
+                                <div class="cemetery_list_main_consult">
+                                    <a target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439"><img src="_WEB_/images/cemetery_list_main_consult.jpg" alt="91搜墓网客服" title="您好，91搜墓网客服为您服务，有什么可以帮到您。"/></a>
+                                </div>
+                                <!-- 价格 -->
+                                <div class="cemetery_list_main_price">
+                                    <span class="ckj">参考价</span>
+                                    <p><i>￥</i><span>{eq name="v.min_price" value="0.00"}--{else /}{$v.min_price}{/eq}</span>万起</p>
+                                    <a target="_blank" {eq name="v.status" value="0"} class="buttonhui" href="javascript:void(0);" {else/} class="buttonlv" href="{:url('cemetery/Cemetery/subscribe',['id' => $v.id])}" {/eq}>预约看墓</a>
+                                </div>
+                            </div><!-- cemetery_list_main End -->
+                        </div><!-- cemetery_list_box 陵园内容 End -->
+                    {/volist}
+                    {empty name="list"}
+                        <div class="findnothing">
+                            <p><img src="_WEB_/images/findnothing.png" alt="抱歉！没有找到与相关的陵园"/>抱歉！没有找到与“<a href="{:url('cemetery/Cemetery/index')}" title="陵园">你猜这里是什么</a>”相关的陵园。</p>
+                        </div>
+                    {/empty}
+                    
+                    <!-- 分页 -->
+                    <div class="paging">
+                        {$page}
+                    </div><!-- paging 分页 End -->
+
+                </div><!-- cemetery_list 陵园列表 End -->
+            {else/}
+                <div class="findnothing">
+                    <p><img src="_WEB_/images/findnothing.png"/>没有数据</p>
+                </div>
+            {/notempty}
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            
+            <!-- 预约看墓 -->
+            <div class="subscribetomb cem_margin_bottom">
+                <h2>预约看墓</h2>
+                <input class="tet name" type="text" value="" placeholder="您的姓名" />
+                <input class="tet mobile" type="text" value="" placeholder="您的电话" />
+                <span style="position: absolute;margin-left: 20px;" class="pers_validate"></span>
+                <a class="yubtn" href="javascript:void(0);">立即预约</a>
+                <p>免费拨打<span>400-618-9191</span></p>
+            </div>
+            
+            {notempty name="rankList"}
+                <!-- 陵园排行榜 -->
+                <div class="ranking_list cem_margin_bottom">
+                    <h3>陵园排行榜</h3>
+                    <div class="ranking_list_main">
+                        <h4>排名<span>名称</span></h4>
+                        <ul>
+                            {volist name="rankList" id="rank"}
+                                <li class="{eq name="key" value="0"} first {/eq} clearfix">
+                                    <a href="{:url('cemetery/Cemetery/details',['id' => $rank.id])}" title="{$rank.name}" target="_blank">
+                                        {eq name="key" value="0"}
+                                            <img src="_WEB_/images/ranking_list_img.png" alt="{$rank.name}"/>
+                                            <div class="txt">
+                                                <h5>{$rank.name}</h5>
+                                                <p>￥{$rank.min_price}<font>万起</font></p>
+                                            </div>
+                                        {else/}
+                                            <span>{$i}</span>
+                                            <h5>{$rank.name}</h5>
+                                        {/eq}
+                                    </a>
+                                </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                    <!-- <p class="wp">本排行榜根据陵园综合情况不定期更新</p> -->
+                </div><!-- ranking_list 陵园排行榜 End -->
+            {/notempty}
+            
+            <!--广告位-->
+            <div class="advertising cem_margin_bottom">
+                <a title="商家入驻" href="{:url('help/Help/joinus')}"><img src="_WEB_/images/advertising_img.jpg" alt="商家入驻"/></a>
+            </div> <!-- advertising 广告位 End-->
+
+            {notempty name="hmzc"}
+                <!--惠民政策-->
+                <div class="policies">
+                    <h2>风水文化</h2>
+                    <ul>
+                        {volist name="hmzc" id="v"}
+                            <li><a target="_blank" title="{$v.title}" href="{:url('article/Article/detail',['id' => $v.id])}">{$v.title|msubstr=0,15}</a></li>
+                        {/volist}
+                    </ul>
+                </div><!-- policies 惠民政策 End-->
+            {/notempty}
+
+        </div><!-- leftcontain End -->
+        <div class="clear"></div>
+    </div><!-- contain End -->
+{/block}
+{block name="js"}
+    <script type="text/javascript">
+        document.onkeydown = function(e) {
+            if (!e)
+                e = window.event; //火狐中是 window.event
+            if ((e.keyCode || e.which) == 13) {
+                $('.subscribetomb .yubtn').click();
+            }
+        }
+        $('.subscribetomb .yubtn').click(function() {
+            var that = $(this),
+                name = trimStr($('.subscribetomb .name').val()),
+                mobile = trimStr($('.subscribetomb .mobile').val()),
+                regName = /^[\u4e00-\u9fa5]{0,}$/,
+                regMobile = /^1((3\d)|(47)|(5[0-35-9])|(7[01789])|(8\d))\d{8}$/;
+
+            if (!(regName.test(name) && name)) {
+                $('.subscribetomb .name').css({
+                    'border': '1px solid red'
+                });
+            } else if (!regMobile.test(mobile)) {
+                $('.subscribetomb .mobile').css({
+                    'border': '1px solid red'
+                });
+                $('.subscribetomb .mobile').next('span').text('请输入正确的手机号');
+            } else {
+                $.ajax({
+                    url: "{:url('cemetery/Cemetery/appoint')}",
+                    type: 'post',
+                    data: {
+                        name: name,
+                        mobile: mobile
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result) {
+                            $('.subscribetomb .mobile').next('span').text(result['msg']);
+                            if (result['code'] == 1) {
+                                $('.subscribetomb .name,.subscribetomb .mobile').val('');
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        $('.subscribetomb .name,.subscribetomb .mobile').focus(function() {
+            $(this).css({
+                'border': ''
+            });
+            $('.subscribetomb .mobile').next('span').text('');
+        });
+
+        $('.subscribetomb .mobile').keyup(function() {
+            if (this.value.length == 1) {
+                this.value = this.value.replace(/[^1-9]/g, '')
+            } else {
+                this.value = this.value.replace(/\D/g, '')
+            }
+        });
+
+        //去除字符串两边的空格函数
+        function trimStr(str) {
+            return str.replace(/(^\s*)|(\s*$)/g, "");
+        }
+    </script>
+{/block}

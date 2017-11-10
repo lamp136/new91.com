@@ -1,0 +1,111 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id='form-update' style="display:none">
+<form id='data-update' class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody> 
+        <tr>
+            <td>
+                上传文件<br/>
+                <div class="layui-form-mid layui-word-aux">格式: .xml</div>
+            </td>
+            <td>
+                <div class="layui-box layui-upload-button">
+                    <input type="file" name="images" lay-type="images" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传文件</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' style="text-align: center;">  
+                <button class="layui-btn" id='submit' type='button'>立即提交</button>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</form>
+</div>
+{/block}
+{block name='body'} 
+<div style='margin:20px 0px 0px 20px'>
+    <span class="layui-btn add">
+        <i class="layui-icon" >&#xe608;</i>点击创建Xml文件
+    </span>
+</div>
+<div style='margin:20px 0px 0px 20px'>
+    <span class="layui-btn" id='file'>
+        <i class="layui-icon" >&#xe608;</i>点击上传Xml文件
+    </span>
+</div>
+{/block}
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'form'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+
+    //添加Xml文件
+    $('.add').click(function(){
+        //加载层
+        layer.open({
+            type:3,
+            success: function(layero, index){
+                $.ajax({
+                    url:"{:url('createXml')}",
+                    type:'post',
+                    dataType:'json',
+                    success : function(e){
+                        layer.close(index);
+                        if(e.flag ==1){
+                            layer.msg(e.msg,{icon:1});
+                        }else{
+                            layer.msg(e.msg);
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    //摸态框
+    $('#file').click(function() {
+        layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '500px',
+            title: '上传文件',
+            content: $('#form-update'),
+        });
+    });
+
+    //点击上传
+    $('#submit').bind('click', function() {
+        //加载层
+        layer.open({
+            type:3,
+            success: function(layero, index){    
+                var dataForm = new FormData(document.getElementById("data-update"));
+                $.ajax({
+                    url: "{:url('uploadFile')}",
+                    type: 'POST',
+                    data: dataForm,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(d) {
+                        layer.close(index);
+                        if (d.flag == 1) {
+                            layer.msg(d.msg, {icon: 1,time:1000},function(){
+                                window.location.reload();
+                            });
+                        } else {
+                            layer.msg(d.msg);
+                        }
+                    }
+                });
+            }
+        });     
+    });
+});
+</script>
+{/block}

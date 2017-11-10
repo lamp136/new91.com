@@ -1,0 +1,119 @@
+{extend name='extra@main' /}
+{block name='body'}
+    
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="{:url('index/Index/index')}" title="首页">首页</a></li>
+                <li class="jt">></li>
+                <li><a href="{:url('funeral/Funeral/funeral')}" title="殡仪馆">殡仪馆</a></li>
+                <li class="jt">></li>
+                <li>殡仪馆详情</li>
+            </ul>
+        </div><!-- breadcrumb End -->
+
+        <!-- 殡仪馆详情介绍 -->
+        <div class="funeralparlour_detail_main clearfix">
+
+            <!-- 图片 -->
+            <div class="funeralparlour_detail_main_img">
+                <img src="{notempty name='$data.thumb_image'} {$data.thumb_image} {else/} {$data.image}{/notempty}"  alt="{$data.name}"/>
+            </div>
+            <!-- 详情 -->
+            <div class="funeralparlour_detail_main_text">
+                <h2>{$data.name}</h2>
+                <div class="txt">
+                    <p>{$data.summary}</p>
+                </div>
+                <ul>
+                    {notempty name="data.level"}
+                        <li><p>等级：<span>{$Think.config.funeral_level[$data.level]}</span></p></li>
+                    {/notempty}
+                    <li><p>浏览量：{$data.hits + $data.actual_hits}</p></li>
+                    {notempty name="data.funcontact.tel"}
+                        <li><p>咨询热线：<span class="phone">{$data.funcontact.tel}</span></p></li>
+                    {/notempty}
+                    <li><p>地址：{$data.address}</p></li>
+                </ul>
+            </div>
+
+        </div><!-- funeralparlour_detail_main 殡仪馆详情介绍 End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain ">
+            
+            <div class="funeralparlour_detail">
+                <h2><i class="funeralparlour_introduce_icon"></i>殡仪馆介绍</h2>
+                <div class="funeralparlour_detail_text kindedit_td kindedit_strong">
+                    {$data.content}
+                </div>
+                {notempty name='$data.longitude'}
+                <h2><i class="funeralparlour_traffic_icon"></i>交通信息</h2>
+                <div class="funeralparlour_detail_map" id="Bmap"></div>
+                {/notempty}
+            </div>
+
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            {notempty name="cemetery"}
+                <!-- 附近陵园推荐 -->
+                <div class="recommend cem_margin_bottom">
+                    <h2>附近陵园推荐</h2>
+                    <ul>
+                        {volist name="cemetery" id="vo"}
+                            <li>
+                                <a href="{:url('cemetery/Cemetery/details',['id' => $vo.id])}" title="{$vo.name}" target="_blank">
+                                    <img src="{notempty name='$vo.thumb_image'} {$vo.thumb_image} {else/} {$vo.image}{/notempty}" alt="{$vo.name}" />
+                                    <p>{$vo.name}</p>
+                                </a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div><!-- recommend 附近陵园推荐 End -->
+            {/notempty}
+            <!-- 附近殡仪服务公司推荐 -->
+            <div class="recommend cem_margin_bottom">
+                <h2>附近殡仪服务公司推荐</h2>
+                <ul>
+                    {volist name="etiquette" id="vo"}
+                        <li>
+                            <a href="{:url('cemetery/Cemetery/details',['id'=>$vo.id])}" title='{$vo.name}' target="_blank">
+                                <img src="{notempty name='$vo.thumb_image'} {$vo.thumb_image} {else/} {$vo.image}{/notempty}" alt="{$vo.name}" />
+                                <p>{$vo.name}</p>
+                            </a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- recommend 附近殡仪服务公司推荐 End -->
+            
+             <!--白事常识-->
+            <div class="policies">
+                <h2>白事常识</h2>
+                <ul>
+                    {volist name="sense" id="vo"}
+                        <li><a href="{:url('article/Article/detail',['id'=>$vo.id],$Think.config.assign_suffix,$Think.config.assign_domain)}" title='{$vo.title}' target="_blank">{$vo.title}</a></li>
+                    {/volist}
+                </ul>
+            </div><!-- policies 白事常识 End-->
+
+        </div><!-- leftcontain End -->
+
+        <div class="clear"></div>
+
+    </div><!-- contain End -->
+    
+{/block}
+{block name="js"}
+    <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170705114645"></script>
+    <!--私有JS -->
+    <script type="text/javascript">
+        var jsonData = <?php echo !empty($location) ? $location : '' ?>;
+    </script>
+    <script type="text/javascript" src="_WEB_/js/funeraldetails.js"></script>
+{/block}
+    

@@ -1,0 +1,233 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<div id="close_update_form" style="display: none;padding: 20px;">
+    <form class="layui-form layui-form-pane" id="update_bbs_info_form">
+        <tr>
+            <td>录入规则:<span style="color:red;">*</span></td>
+            <td>
+                    <input type="radio" name="type" value="3" class="deposit" title="月" >
+                    <input type="radio" name="type" value="2" class="dingjin" title="周" >
+                    <input type="radio" name="type" value="1" class="dingjin" title="日" checked >
+            </td>
+        </tr>
+        <br>
+        <tr>
+            <td>时间:<span style="color:red;">*</span></td>
+            <td>
+                    <input name="start_time" value="" lay-verify="date" placeholder="开始时间"  autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+            </td>
+         </tr>
+         <tr>
+            <td>
+                <input name="end_time" value="" lay-verify="date" placeholder="结束时间" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})" type="text" >
+            </td>
+        </tr>
+        <tr>
+            <div class="layui-inline">
+                <label class="layui-form-label">访客总量<span style="color:red;">*</span></label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="layui-input-inline" style="width:170px;">
+                    <input type="text" name="total_visitors" placeholder="访客总量" autocomplete="off" class="layui-input" value="">
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="layui-input-inline" style="width:170px;">
+                    <input type="text"  name="baidu_total_visitors" placeholder="百度访客总量" autocomplete="off" class="layui-input" value="">
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="layui-input-inline" style="width:170px;">
+                    <input type="text" name="sougou_total_visitors" placeholder="搜狗访客总量" autocomplete="off" class="layui-input" value="">
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="layui-input-inline" style="width:170px;">
+                    <input type="text"  name="360_total_visitors" placeholder="360访客总量" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+        </tr>
+        <tr>
+            <div class="layui-inline">
+            <label class="layui-form-label">自然访客量<span style="color:red;">*</span></label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="layui-input-inline" style="width:170px;">  
+                <input type="text" name="natural_visitors" placeholder="自然访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="layui-input-inline" style="width:170px;">  
+                <input type="text" name="baidu_natural_visitors" placeholder="百度自然访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="layui-input-inline" style="width:170px;">  
+                <input type="text" name="sougou_natural_visitors" placeholder="搜狗自然访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="layui-input-inline" style="width:170px;">  
+                <input type="text" name="360_natural_visitors" placeholder="360自然访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+            </div>
+        </tr>
+        <tr>
+            <div class="layui-inline">
+            <label class="layui-form-label">竞价访客量<span style="color:red;">*</span></label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+
+            <div class="layui-input-inline" style="width:170px;">    
+                <input type="text" name="badding_visitors" placeholder="竞价访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+
+            <div class="layui-input-inline" style="width:170px;">    
+                <input type="text" name="baidu_badding_visitors" placeholder="百度竞价访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+
+            <div class="layui-input-inline" style="width:170px;">    
+                <input type="text" name="sougou_badding_visitors" placeholder="搜狗竞价访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+
+            <div class="layui-input-inline" style="width:170px;">    
+                <input type="text" name="360_badding_visitors" placeholder="360竞价访客量" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        </tr>
+        <br/>
+        <tr>
+            <td>期间订单总量<span style="color:red;">*</span></td>
+            <td>  
+                <input type="text" name="ontime_visitors" placeholder="期间订单总量" autocomplete="off" class="layui-input" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>实际完成总量<span style="color:red;">*</span></td>
+            <td>  
+                <input type="text" name="refact_visitors" placeholder="实际订单总量" autocomplete="off" class="layui-input" value="">
+            </td>
+        </tr>
+        <br>
+        <div class="layui-form-item" style="text-align: right;">
+            <div class="layui-btn" id="bbs_update_button">提交</div>
+        </div>
+       
+
+    </form>
+</div>
+{/block}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="">插件</a>
+        <a><cite>百度访客量统计列表</cite></a>
+    </span>
+</div>
+
+<div  style="margin-top: 10px;margin-left: 10px;margin-bottom: 10px;">
+        <button class="layui-btn  addData" style="margin-bottom:5px;"><span>添加UV数据</span>
+</div>
+    <table class="layui-table" style="margin-top:-10px;">
+        <colgroup>
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="200">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>访客总量</th>
+                <th>自然访客量</th>
+                <th>竞价访客量</th>
+                <th>期间订单总量</th>
+                <th>期间完成订单量</th>
+                <th>录入区间</th>
+            </tr> 
+        </thead>
+        {volist name="data" id="vo"}
+        <tbody>
+                <tr>
+                    <td>{$vo.total_visitors}<br/>
+                    <span class="layui-btn layui-btn-mini total_visitors" data-total-baidu="{$vo.baidu_total_visitors}" data-total-sougou="{$vo.sougou_total_visitors}" data-total-360="{$vo.360_total_visitors}">查看</span></td>
+                    <td>{$vo.natural_visitors}<br/>
+                    <span class="layui-btn layui-btn-mini natural_visitors" data-natural-baidu="{$vo.baidu_natural_visitors}" data-natural-sougou="{$vo.sougou_natural_visitors}" data-natural-360="{$vo.360_natural_visitors}">查看</span></td>
+                    <td>{$vo.badding_visitors}<br/>
+                    <span class="layui-btn layui-btn-mini badding_visitors" data-badding-baidu="{$vo.baidu_badding_visitors}" data-badding-sougou="{$vo.sougou_badding_visitors}" data-badding-360="{$vo.360_badding_visitors}">查看</span></td>
+                    <td>{$vo.ontime_visitors}</td>
+                    <td>{$vo.refact_visitors}</td>
+                    <td>{$vo.start_time|date='Y-m-d',###}---{$vo.end_time|date='Y-m-d',###}</td>
+                </tr>
+        </tbody>
+        {/volist}
+    </table>
+<div style="margin-left: 10px;">
+{$page}
+</div>
+{/block}
+{block name='optJS'}
+<script>
+    layui.use(['jquery', 'layer','form','laydate'], function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form();
+        $('.addData').click(function(){
+            layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: '1000px',
+            title: '添加UV数据',
+            content: $('#close_update_form')
+         })
+        });
+
+            $('.total_visitors').hover(function() {
+                var baidu = $(this).attr('data-total-baidu');
+                var sougou = $(this).attr('data-total-sougou');
+                var san = $(this).attr('data-total-360');
+                addressTips = layer.tips('百度:'+baidu+'<br>搜狗:'+sougou+'<br>360:'+san+'', this);
+            }, function() {
+                layer.close(addressTips);
+            })
+            $('.natural_visitors').hover(function() {
+                var baidu = $(this).attr('data-natural-baidu');
+                var sougou = $(this).attr('data-natural-sougou');
+                var san = $(this).attr('data-natural-360');
+                natural = layer.tips('百度:'+baidu+'<br>搜狗:'+sougou+'<br>360:'+san+'', this);
+            }, function() {
+                layer.close(natural);
+            })
+
+
+            $('.badding_visitors').hover(function() {
+                var baidu = $(this).attr('data-badding-baidu');
+                var sougou = $(this).attr('data-badding-sougou');
+                var san = $(this).attr('data-badding-360');
+                badding = layer.tips('百度:'+baidu+'<br>搜狗:'+sougou+'<br>360:'+san+'', this);
+            }, function() {
+                layer.close(badding);
+            })
+
+    $('#bbs_update_button').click(function(){
+        var From = $('#update_bbs_info_form').serialize();
+        $.ajax({
+            url: "{:url('add')}",
+            data: From,
+            type: 'post',
+            success: function(result) {
+                var result  =  eval("("+result+")");
+                if(result.flag==1){
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                    });
+                }else{
+                    layer.msg(result.msg,{icon:1,time:2000},function(){
+                            window.location.reload();//刷新当前页面.
+                    });
+                }
+            }
+        });
+
+    });   
+
+
+
+    });
+</script>
+{/block}

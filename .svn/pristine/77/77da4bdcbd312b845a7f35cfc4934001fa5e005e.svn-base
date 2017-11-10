@@ -1,0 +1,21 @@
+<?php
+namespace web\index\controller;
+use think\Controller;
+use web\extra\controller\Base;
+
+/**
+ * 首页控制器
+ * author heqingyu;
+ * date   17/7/11 13:30:00;
+ */
+class Index extends Base{  
+    /*
+     * 首页
+     * @param   void;
+     * @return  void;
+     */
+    public function index()
+    {
+        return $this->fetch();
+    }
+}

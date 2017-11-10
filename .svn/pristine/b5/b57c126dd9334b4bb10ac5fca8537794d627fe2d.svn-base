@@ -1,0 +1,450 @@
+{extend name='extra@main' /}
+{block name='layer'}
+<form id='data-form' style="display:none" class="layui-form" method="post" enctype="multipart/form-data">
+    <table class="layui-table">
+    <tbody>
+        <tr>
+            <td>佣金比例</td>
+            <td>  
+                <input type="text" name="brokerage_percent" placeholder="佣金比例" disabled="disabled" autocomplete="off" value="" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>佣金金额</td>
+            <td>  
+                <input type="text" name="brokerage_money" placeholder="佣金金额"  disabled="disabled" value="" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>实际金额</td>
+            <td>  
+                <input type="text" name="paid_in_amount" placeholder="实际金额" disabled="disabled" value="" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>客户返现金额</td>
+            <td>  
+                <input type="text" name="return_fact_money" placeholder="客户返现金额" disabled="disabled" value=""  autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>开户行</td>
+            <td>
+               <select name="bank">
+                    <option value="0">--请选择-- </option>
+                    {volist name="Think.config.pay_type"  id="banks"}
+                        <option value="{$banks}">{$banks}</option>
+                    {/volist}
+                </select>    
+            </td>
+        </tr>
+        <tr>
+            <td>开户人</td>
+            <td>  
+                <input type="text" name="bank_member_name" placeholder="开户人" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td>账号</td>
+            <td>  
+                <input type="text" name="bank_id" placeholder="账号" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+       <tr>
+            <td><span style="color:red">*</span>退还陵园金额</td>
+            <td>  
+                <input type="text" name="back_money" placeholder="退还陵园金额" autocomplete="off" value="" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td><span style="color:red">*</span>退单原因</td>
+            <td>  
+              <textarea name="back_reason" placeholder="退单原因" class="layui-textarea"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' style="text-align: center;">  
+                <span class="layui-btn backsubmit" type='button'>立即提交</span>
+                <input type='hidden' name='id' />
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</form>
+
+<div id="appoint" style="display: none">
+    <form id="appointForm" class="layui-form" style="margin-top: 20px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">墓位的实际价格</label>
+            <div class="layui-input-block" style="width: 513px;">
+                <input type="text" name="tomb_price" disabled="disabled" class="layui-input" value="" placeholder="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">佣金比率</label>
+            <div class="layui-input-block" style="width: 513px;">
+                <input type="text" name="brokerage_percent" disabled="disabled" class="layui-input" value="" placeholder="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">返现比率</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="return_pesent_percent" autocomplete="off" class="layui-input" required lay-verify="required" placeholder="返现比率">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">返现金额</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="return_money" required lay-verify="required" readonly="readonly" autocomplete="off" class="layui-input" placeholder="返现金额">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">票据</label>
+                <div class="layui-box layui-upload-button layui-input-inline">
+                    <input type="file" name="image[]" lay-type="images" required lay-verify="required" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+                </div>
+                <div class="layui-box layui-upload-button layui-input-inline">
+                    <input type="file" name="image[]" lay-type="images" required lay-verify="required" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+                </div>
+                <div class="layui-box layui-upload-button layui-input-inline">
+                    <input type="file" name="image[]" lay-type="images" required lay-verify="required" class="layui-upload-file"/>
+                    <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">支付类型</label>
+            <div class="layui-input-inline">
+                <select name="bank_info">
+                    <option value="0">--请选择--</option>
+                    {volist name="Think.config.PAY_TYPE" id="pay"}
+                        <option value="{$key}-{$pay}">{$pay}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">开户人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="bank_member" autocomplete="off" class="layui-input" placeholder="开户人">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-block" style="width: 513px;">
+                    <input type="text" name="bank_account" autocomplete="off" class="layui-input" placeholder="账号">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block" style="width: 513px;">
+                <textarea class="layui-textarea" name="reason" placeholder="备注信息"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <div class="layui-input-block">
+                <span class="layui-btn saveAppoint" lay-submit lay-filter="saveAppoint">保存</span>
+                <input type="hidden" name="id"/>
+                <input type="hidden" name="member"/>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name='body'}
+<div class="layui-form-item" style="margin-top: 10px;margin-left: 10px;">
+    <form action="{:url('orders/Tomb/compelete')}" method="get">
+       <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="storename" autocomplete="off" placeholder="商家名称" value="{$Think.get.storename}" class="layui-input">
+            </div> 
+            <div class="layui-input-inline">
+                <input type="text" name="phone" autocomplete="off" placeholder="手机号" value="{$Think.get.phone}" class="layui-input">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn">搜索</button>
+            </div>
+        </div>
+    </form>
+    <table class="layui-table">
+        <colgroup>
+            <col width="120">
+            <col width="220">
+            <col width="220">
+            <col width="150">
+            <col width="160">
+            <col width="120">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>购买人|电话</th>
+                <th>商家名称</th>
+                <th>墓价|比例|应收|实收</th>
+                <th>比例|应返|实返</th>
+                <th>跟踪人|跟踪信息</th>
+                <th>下单时间<br />完成时间</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {notempty name="data"}
+                {volist name="data" id="vo"}
+                <tr>
+                    <td>
+                        {empty name="vo['buyer']"}
+                            {$vo.reservation_person}<br>{$vo.reservation_phone}
+                        {else /}
+                            {$vo.buyer}<br>{$vo.mobile}
+                        {/empty}
+                    </td>
+                    <td>
+                       {notempty name='vo.store_fact_name'}
+                            {$vo.store_fact_name} 
+                        {else/}
+                            {$vo.store_name} 
+                        {/notempty}
+                        {notempty name="vo.store_status"}
+                            {volist name="storeMember" id="member"}
+                                {eq name="vo.store_status" value="$key"}
+                                <img width="28px" src="_BACKSTAGE_/img/vip_{$key}.png" title="{$member}" alt="{$member}">
+                                {/eq}
+                            {/volist}
+                        {/notempty}
+                    </td>
+                    <td>{$vo.tomb_price}|{$vo.brokerage_percent}|{$vo.brokerage_money}|{$vo.paid_in_amount}</td>
+                    <td>{$vo.return_percent}|{$vo.return_money}|{$vo.return_fact_money}</td>
+                    <td>
+                        {volist name="order_flow" id="flowmans"}
+                            {if $key == $vo['order_flow_id']}
+                                {$flowmans}
+                            {/if}
+                        {/volist}
+                        |
+                        {if showHandle('orders/Tomb/detail')}
+                            <a class="layui-btn layui-btn-small" href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'reVisit'))}">更新</a>
+                        {/if}
+                    </td>
+                    <td>
+                        {notempty name="vo.created_time"}
+                            {$vo.created_time|date='Y-m-d',###}
+                        {/notempty}
+                        <br />
+                        {notempty name="vo.payfor_us_time"}
+                            {$vo.payfor_us_time|date='Y-m-d',###}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {php}
+                            if(showHandle('orders/Tomb/detail')){
+                        {/php}
+                            <a class="layui-btn layui-btn-small" href="{:url('orders/Tomb/detail',array('orderId'=>$vo['id'],'items'=>'orderDetail'))}" style="margin-left:10px" title='详细信息'><i class="layui-icon">&#xe615;</i></a>
+                        {php}
+                            }
+                            if(showHandle('orders/Tomb/getbankinfo')){
+                        {/php}
+                            {if condition="$vo['apply_return_status'] eq config('apply_return_status.default_status') and $vo['status'] eq config('order_status.success') and $vo['send_finance_status'] eq  config('send_finance_status.send_finance')" }
+                                <span class="layui-btn layui-btn-small layui-btn-warm appoint" href="javascript:void(0)"  data-id="{$vo.id}" data-member="{$vo.member_id}" data-brokerage_percent="{$vo.brokerage_percent}" data-tomb_price="{$vo.tomb_price}"><i class="icon-play icon-white"></i>申返</span>
+                            {/if}
+                        {php}
+                            }
+                            if(showHandle('orders/Tomb/getbackinfo')){
+                        {/php}
+                            {neq name='vo["brokerage_money"]' value='0'}
+                                <span class="layui-btn layui-btn-small layui-btn-danger backorder" data-id={$vo.id} data-memberid={$vo.member_id}><i class="layui-icon"></i>退单</span>
+                            {/neq}
+                        {php}
+                            }
+                        {/php}
+                    </td>
+                </tr>
+                {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+//页面层
+layui.use(['jquery', 'layer', 'form'], function() {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        form = layui.form();
+    $(".backorder").bind('click', function() {
+        $('#data-form')[0].reset();
+        var id = $(this).attr('data-id');
+        $.ajax({
+            url: "{:url('getbackinfo')}",
+            data: {
+                'id': id
+            },
+            type: 'get',
+            dataType: 'json',
+            success: function(result) {
+                if (result.flag == 1) {
+                    var order = result['order'];
+                    var bankId = '';
+                    if(order['bank_id'] != 0){
+                        bankId = order['bank_id'];
+                    }
+                    $("#data-form input[name='brokerage_percent']").val(order['brokerage_percent']);
+                    $("#data-form input[name='brokerage_money']").val(order['brokerage_money']);
+                    $("#data-form input[name='paid_in_amount']").val(order['paid_in_amount']);
+                    $("#data-form input[name='return_fact_money']").val(order['return_fact_money']);
+                    $("#data-form input[name='bank_member_name']").val(order['bank_member_name']);
+                    $("#data-form input[name='bank_id']").val(bankId);
+                    $("#data-form select[name='bank_name']").val(order['bank_name']);
+                    $("#data-form input[name='id").val(order['id']);
+                    form.render();
+                }
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-demo', //样式类名
+                    area: ['500px', '500px'], //宽高
+                    closeBtn: 2, //不显示关闭按钮
+                    anim: 2,
+                    title: '退单信息审核',
+                    content: $('#data-form')
+                });
+            }
+        });
+
+    });
+    $('.backsubmit').click(function() {
+        var money = $("input[name='back_money']").val();
+        var reason = $("input[name='back_reason']").val();
+        var real_money = $("input[name='paid_in_amount']").val();
+        var back_reason = $("input[name='back_reason']").val();
+        if (money == '') {
+            layer.msg('退款金额不能为空');
+            return false;
+        }
+        if (money > real_money) {
+            layer.msg('请检查退款金额');
+            return false;
+        }
+         if(back_reason ==''){
+            layer.msg('请填写退单原因!');
+            return false;
+        }
+        var Form = $('#data-form').serialize();
+        $.ajax({
+            url: '{:url("getbackinfo")}',
+            data: Form,
+            type: 'post',
+            dataType:'json',
+            success: function(result) {
+                if (result.flag == 1) {
+                    layer.msg(result.msg);
+                    window.location.reload(); //刷新当前页面.
+                } else {
+                    layer.alert('退单审核失败');
+                }
+            }
+        });
+    });
+
+    //后台审核票据时的返现比率
+    $('#appointForm input[name="return_pesent_percent"]').blur(function() {
+        $('#back_return_pesent').html('');
+        var tomb_price = $('#appointForm input[name="tomb_price"]').val();
+        var brokerage_percent = $('#appointForm input[name="brokerage_percent"]').val();
+        if (tomb_price == '' || brokerage_percent == '') {
+            layer.msg('信息有误，请联系技术人员');
+            return false;
+        }
+        if ($(this).val() == '') {
+            layer.msg('返现比率不能为空');
+            return false;
+        }
+        if (parseFloat($(this).val()) >= parseFloat(brokerage_percent)) {
+            layer.msg('返现比率不能大于等于佣金比率');
+            return false;
+        }
+        if (parseFloat($(this).val()) >= 100) {
+            layer.msg('返现比率不能大于等于100');
+            return false;
+        }
+        if ($(this).val() !== '') {
+            var return_pesent = parseFloat(tomb_price) * parseFloat($(this).val()) / 100;
+            $('#appointForm input[name="return_money"]').val(return_pesent);
+        }
+    });
+
+    $('.appoint').on('click', function() {
+        $('#appointForm')[0].reset();
+        var orderId = $(this).data('id'),
+            memberId = $(this).data('member'),
+            tomb_price = $(this).data('tomb_price'),
+            brokerage_percent = $(this).data('brokerage_percent');
+
+        $.ajax({
+            url: "{:url('getbankinfo')}",
+            type: 'post',
+            data: {
+                member: memberId,
+            },
+            dataType: 'json',
+            success: function(result) {
+                if (result) {
+                    $('#appointForm input[name="tomb_price"]').val(tomb_price);
+                    $('#appointForm input[name="brokerage_percent"]').val(brokerage_percent);
+                    $('#appointForm input[name="id"]').val(orderId);
+                    $('#appointForm input[name="member"]').val(memberId);
+                    if (result['code'] == 1) {
+                        var data = result['data'];
+                        if(data.bank_type && data.bank){
+                            var bankInfo = data.bank_type +'-'+ data.bank;
+                            $('#appointForm select[name="bank_info"]').val(bankInfo);
+                        }
+                        $('#appointForm input[name="bank_member"]').val(data.bank_member);
+                        $('#appointForm input[name="bank_account"]').val(data.bank_account);
+                    }
+                    form.render();
+                    layer.open({
+                        type: 1,
+                        area: '730px',
+                        title: '申请返现',
+                        content: $('#appoint'),
+                    });
+                }
+            }
+        });
+    });
+
+    form.on('submit(saveAppoint)', function() {
+        var data = new FormData(document.getElementById('appointForm'));
+        $.ajax({
+            url: "{:url('appointreturn')}",
+            type: 'post',
+            data: data,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(result) {
+                if (result) {
+                    layer.msg(result['msg']);
+                    if (result['code'] == 1) {
+                        window.location.reload();
+                    }
+                }
+            }
+        });
+    });
+});
+</script>
+{/block}
+

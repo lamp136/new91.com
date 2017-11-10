@@ -1,0 +1,256 @@
+{extend name='extra@main' /}
+
+{block name='body'}
+<div style="width:100%;height:40px;border-bottom:1px solid #E2E2E2;line-height:40px;padding-left:20px;margin-bottom:10px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">首页</a>
+        {eq name='secondCategory' value=''}
+            <a href="{:url('Article/'.lcfirst($name))}">{$firstCategory}</a>
+        {else /}
+            <a><cite>{$firstCategory}</cite></a>
+            <a href="{:url('Article/'.lcfirst($name))}">{$secondCategory}</a>
+        {/eq}
+        <a><cite>编辑新闻</cite></a>
+    </span>
+</div>
+
+<form class="layui-form" action="{:url('article/Article/update')}" method="post" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属地区</label>
+        <div class="layui-input-inline">
+            <select name="info[province_id]" lay-filter="province_id">
+                <option value="">请选择省</option>
+                {volist name="province" id="vo"}
+                    <option value="{$key}" {eq name='key' value="$news['province_id']"}selected{/eq}>{$vo}</option>
+                {/volist}
+            </select>
+        </div>
+        <label class="layui-form-label">所属陵园</label>
+        <div class="layui-input-inline">
+            <select name="info[store_id]" lay-filter="store_id">
+                <option value="">请选陵园</option>
+                {notempty name='storeName'}
+                    {volist name="storeName" id="n"}
+                        <option value="{$key}" {eq name='key' value="$news['store_id']"} selected {/eq}>{$n}</option>      
+                    {/volist}
+                {/notempty}
+            </select>
+        </div>
+        <label class="layui-form-label">所属分类</label>
+        <div class="layui-input-inline">
+            <select name="info[category_id]" lay-filter="category_id" lay-verify="required" required>
+                {volist name="cate" id="vo"}
+                    {if condition="$vo['last'] neq 1"}
+                        {if condition="$vo['id'] eq $cateId"}
+                            <option value="{$vo.id}" selected="selected">{neq name='vo.level' value='0'}{$vo.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$vo.name}{else /}{$vo.name}{/neq}</option>
+                        {else/}
+                            <option value="{$vo.id}">{neq name='vo.level' value='0'}{$vo.level|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}├{$vo.name}{else /}{$vo.name}{/neq}</option>
+                        {/if}
+                    {else/}      
+                        <optgroup label="{$vo.name}"></optgroup>
+                    {/if}
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>标题</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[title]" autocomplete="off" class="layui-input" placeholder="标题" lay-verify="required" required value='{$news.title}'>
+        </div>
+    </div>
+    <div class="layui-form-item" style="float:left">
+        <div class="layui-inline">
+            <label class="layui-form-label">状态</label>
+            <input type="radio" name="info[status]" value="{$Think.config.normal_status}" title="发布" {if condition="$news['status'] eq $Think.config.normal_status"}checked{/if} >
+            <input type="radio" name="info[status]" value="{$Think.config.default_status}" title="审核"  {if condition="$news['status'] eq $Think.config.default_status"}checked{/if}>
+            <input type="radio" name="info[status]" value="{$Think.config.delete_status}" title="删除"  {if condition="$news['status'] eq $Think.config.delete_status"}checked{/if} >
+        </div>
+        <label class="layui-form-label">发布时间</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="info[published_time]" placeholder="自定义日期格式" onclick="layui.laydate({elem: this, istime: true, istoday: true,format: 'YYYY-MM-DD hh:mm:ss'})" value="{$news.published_time|date='Y-m-d H:i:s',###}">
+        </div>
+        <div class="layui-box layui-upload-button">
+            <input type="file" name="image" lay-type="images"  class="layui-upload-file" cat='type_one'/>
+            <span class="layui-upload-icon"><i class="layui-icon"></i>上传图片</span>
+        </div>
+        <img width="23px" title="查看图片" src="/public/static/backstage/img/zoomIn.png" class="zoomIn"   data-image="{$news.thumb_url}">
+    </div>
+    <div class="layui-form-mid layui-word-aux" style="margin-left:20px">图片尺寸 622*388px</div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">SEO标题</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[seo_title]" autocomplete="off" class="layui-input" placeholder="SEO标题" value="{$news.seo_title}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>SEO关键字</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[seo_keywords]" autocomplete="off" class="layui-input" placeholder="SEO关键字" lay-verify="required" required value="{$news.seo_keywords}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>SEO描述</label>
+        <div class="layui-input-block" style="width:58%">
+            <textarea placeholder="SEO描述" name="info[seo_description]" class="layui-textarea">{$news.seo_description}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>摘要</label>
+        <div class="layui-input-block" style="width:58%">
+            <textarea placeholder="摘要" name="info[summary]" class="layui-textarea">{$news.summary}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">*</span>内容</label>
+        <div class="layui-input-block" style="width:58%">
+           <textarea id="follow" name='info[content]'>{$news.content}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签</label>
+        <div class="layui-input-block" style="width:58%">
+            <textarea placeholder="标签" name="info[tag]" class="layui-textarea">{$news.tag}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章来源</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[source]" autocomplete="off" class="layui-input" placeholder="文章来源" value="{$news.source}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">来源地址</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[source_url]" autocomplete="off" class="layui-input" placeholder="来源地址" value="{$news.source_url}">
+        </div>
+    </div>
+     <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">是否推荐</label>
+            <input type="radio" name="info[recommend]" value="{$Think.config.normal_status}" title="是" {eq name="$news['recommend']" value="$Think.config.normal_status"}checked{/eq}>
+            <input type="radio" name="info[recommend]" value="{$Think.config.default_status}" title="否" {eq name="$news['recommend']" value="$Think.config.default_status"}checked{/eq} >
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">热门新闻</label>
+            <input type="radio" name="info[is_hot]" value="{$Think.config.normal_status}" title="是" {eq name="$news['is_hot']" value="$Think.config.normal_status"}checked{/eq} >
+            <input type="radio" name="info[is_hot]" value="{$Think.config.default_status}" title="否" {eq name="$news['is_hot']" value="$Think.config.default_status"}checked{/eq} >
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">是否置顶</label>
+            <input type="radio" name="info[top]" value="{$Think.config.normal_status}" title="是" {eq name="$news['top']" value="$Think.config.normal_status"}checked{/eq} >
+            <input type="radio" name="info[top]" value="{$Think.config.default_status}" title="否" {eq name="$news['top']" value="$Think.config.default_status"}checked{/eq} >
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">热点聚焦</label>
+            <input type="radio" name="info[hot_focus]" value="{$Think.config.normal_status}" title="是" {eq name="$news['hot_focus']" value="$Think.config.normal_status"}checked{/eq} >
+            <input type="radio" name="info[hot_focus]" value="{$Think.config.default_status}" title="否" {eq name="$news['hot_focus']" value="$Think.config.default_status"}checked{/eq} >
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block" style="width:58%">
+            <input type="text" name="info[sort]" autocomplete="off" class="layui-input" placeholder="排序" value="{$news.sort}">
+        </div>
+    </div>
+    <div class="layui-form-item"  style="text-align: center;">
+        <input type='hidden' name='name' value="{$name}">
+        <input type="hidden" name="news_id" value="{$news.id}"/>
+        <input type="hidden" name="nowPage" value="{$nowPage}"/>
+        <button class="layui-btn" id='submit' lay-submit="" lay-filter="submit">提交</button>
+    </div>
+</form>
+{/block}
+{block name='layer'}
+    <img src="{$news.thumb_url}" alt="" style="display:none" id='image' width='100%' height="100%">
+{/block}
+{block name='optJS'}
+<script type="text/javascript">
+ layui.use(['jquery', 'form','layedit','laydate'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+    var layedit = layui.layedit;
+    var laydate = layui.laydate;
+    
+    var start = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday:true
+        ,choose: function(datas){
+          end.min = datas; //开始日选好后，重置结束日的最小日期
+          end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+  
+  var end = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday: true
+        ,choose: function(datas){
+          start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+
+    //建立编辑器
+    layedit.build('follow');
+
+    form.on('select(province_id)', function(data) {
+        var provinceId = data['value'];
+        var obj = $('select[name="info[store_id]"]');
+        getcemetery(provinceId,obj);
+        
+    });
+    
+    //获取陵园列表
+    function getcemetery(provinceId,obj){
+        $.ajax({
+            url: "{:url('Article/getcemetery')}",
+            type: 'post',
+            data: {provinceId: provinceId},
+            dataType: 'json',
+            success: function(result) {
+                var t ="<option value=''>--陵园列表--</option>" ;
+                if (result) {
+                    if (result['flag'] == 1) {
+                        var data = result['data'];
+                        $.each(data, function(key, val) {
+                            t += "<option value='" + key + "'>"+val+"</option>";
+                        })
+                    }
+                }
+                $(obj).empty().append(t);
+                form.render(); 
+            }
+        });
+    }
+
+    //放大图片
+    $('.zoomIn').click(function(){
+        layer.open({
+            closeBtn: 2,
+            type: 1, 
+            area: ['400px','400px'],
+            title:'查看图片',
+            content: $('#image'),
+        });
+    });
+
+    //上传图片前的预览
+    $(function() {
+        $(".layui-upload-file").change(function() {
+            var $file = $(this);
+            var fileObj = $file[0];
+
+            var windowURL = window.URL || window.webkitURL;
+            var dataURL;
+            var $img = $('#image');
+            
+            if(fileObj && fileObj.files && fileObj.files[0]){
+                dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                $img.attr('src',dataURL);
+            }
+        });
+    });
+});
+</script>
+{/block}

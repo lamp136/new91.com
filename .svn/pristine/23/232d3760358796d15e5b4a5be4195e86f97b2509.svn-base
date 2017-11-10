@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$seo.seo_title}</title>
+    <meta name="keywords" content="{$seo.seo_keywords}" />
+    <meta name="description" content="{$seo.seo_description}" />
+    <link href="_WEB_/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=cNxA6ctoGgP8i4MD72izWN3aTDGoGWnh&services=&t=20170717103214"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+    <script type="text/javascript" src="_WEB_/js/jquery-1.9.1.min.js"></script>
+    <style>
+        .tombmaps_box .tombmaps_right .tombmaps_right_contain .tombmaps_map img {
+            width: auto;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <div class="tombmaps_nav">
+        <div class="contain">
+            <!-- 选择城市 -->
+            <div class="city">
+                <span class="sele">
+                    <i class="city_icon"></i>
+                    {$Think.cookie.ip_region_name}
+                    <i class="iconfont icon-iconfontdownjiantou"></i>
+                </span>
+
+                <!-- 城市列表 -->
+                <div class="city_list">
+                    {volist name="province" id="p"}
+                        <ul class="clearfix">
+                            <li>{$key}</li>
+                            {foreach name="p" item="v" key="k"}
+                                <li><a title="{$v.name}" href="http://{$v.abbr}.{$Think.config.domain_name}/map.html">{$v.name}</a></li>
+                            {/foreach}
+                        </ul>
+                    {/volist}
+                </div>
+               
+            </div><!-- city 选择城市 End -->
+            <!-- nav -->
+            <ul class="tombmaps_nav_main">
+                <li {eq name="path" value="Index"} class="lineheight" {/eq}><a href="{:url('index/Index/index')}" title='首页'>首页</a></li>
+                <li {eq name="path" value="Cemetery"} class="lineheight" {/eq}><a href="{:url('cemetery/Cemetery/index')}" title='陵园墓地'>陵园墓地</a></li>
+                <li {eq name="path" value="Map"} class="lineheight" {/eq}><a href="{:url('cemetery/Map/index')}" title='地图看墓'>地图看墓</a></li>
+                <li {eq name="path" value="Funeral"} class="lineheight" {/eq}><a href="{:url('funeral/Funeral/funeral')}" title='殡仪馆'>殡仪馆</a></li>
+                <li {eq name="path" value="Rite"} class="lineheight" {/eq}><a href="{:url('rite/Rite/lists')}" title='殡葬礼仪'>殡葬礼仪</a></li>
+                <li {eq name="path" value="Ecological"} class="lineheight" {/eq}><a href="{:url('cemetery/Ecological/index')}" title='生态葬'>生态葬</a></li>
+                <li {eq name="path" value="Article"} class="lineheight" {/eq}><a href="{:url('article/Article/index')}" title='殡葬百科'>殡葬百科</a></li>
+                <li {eq name="path" value=""} class="lineheight" {/eq}><a href="#" title='91乐融'>91乐融</a></li>
+            </ul>
+            <div class="clear"></div>
+
+        </div><!-- contain End -->
+    </div><!-- tombmaps_nav 导航 End -->
+    
+    <!-- 地图看墓 -->
+    <div class="tombmaps_box">
+
+        <!-- 地图看墓左侧 -->
+        <div class="tombmaps_left">
+
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="javascript:void(0);">
+                    <img src="_WEB_/images/logo.png" alt="LOGO" /><span>地图看墓</span>
+                </a>
+            </div><!-- LOGO End -->
+            
+            <!-- 所在区域 -->
+            <div class="area">
+                <h2>所在区域：</h2>
+                <ul class="clearfix">
+                    <li {notempty name="province"} class="led" {/notempty}>
+                        <a title="全部" href="javascript:void(0);" class="area_city" data-city="">全部</a>
+                    </li>
+                    {volist name="city" id="name"}
+                        <li>
+                            <a title="{$name}" href="javascript:void(0);" class="area_city" data-city="{$key}">{$name}</a>
+                        </li>
+                    {/volist}
+                </ul>
+            </div><!-- area 所在区域 End -->
+            
+            <!-- 陵园列表 -->
+            <div class="tombmaps_list">
+                
+
+            </div><!-- tombmaps_list 陵园列表 End -->
+
+        </div><!-- tombmaps_left 地图看墓左侧 End -->
+        
+        <!-- 地图看墓右侧 -->
+        <div class="tombmaps_right">
+            <div class="tombmaps_right_contain">
+                <h2><i></i>400-618-9191 <span>全国咨询服务热线</span></h2>
+                <!-- 地图 -->
+                <div class="tombmaps_map">
+                    <div class="tombmaps_map_main" id="Bmap" style="height: 540px;"></div>
+                </div>
+                
+            </div><!-- tombmaps_right_contain End -->
+        </div><!-- tombmaps_right 地图看墓右侧 End -->
+
+    </div><!-- tombmaps_box 地图看墓 End -->
+    
+    {include file="extra@toolsbar" /}
+    {include file="extra@publicjs"/}
+    <script type="text/javascript">
+        var map,
+            searchInfoWindow = null; //创建检索信息窗口对象
+        _mapInit();
+
+        function layout() {
+            $(".tombmaps_list").css("max-height", $(window).height() - $(".area").outerHeight(true) - 146);
+            $(".tombmaps_map_main").css("max-height", $(window).height() - 152);
+        }
+        layout();
+        $(window).resize(function() {
+            layout()
+        });
+
+        function _mapInit() {
+            map = new BMap.Map("Bmap"); // 创建地图实例
+            map.addControl(new BMap.NavigationControl({
+                type: BMAP_NAVIGATION_CONTROL_LARGE
+            }));
+
+            map.enableScrollWheelZoom(); //启用地图滚轮放大缩小
+            var jsonData = <?php echo !empty($stores) ? json_encode($stores) : '' ?>;
+            _loadData(jsonData);
+        }
+
+        function _addLabel(pos, stores) {
+            var options = {
+                position: pos, // 指定文本标注所在的地理位置
+                offset: new BMap.Size(-60, -40) //设置文本偏移量
+            };
+            var label = new BMap.Label('<span id="' + stores.id + '" class="cemname" style="position:unset;" data-name="' + stores['name'] + '">' + stores['name'] + '</span>', options); // 创建文本标注对象
+            label.setStyle({
+                // position: 'absolute',
+                top: '30px',
+                left: '100px',
+                padding: '0 16px',
+                background: '#2b916b',
+                color: '#fff',
+                lineHeight: '28px',
+                border: "1px solid white",
+                cursor: 'pointer',
+            });
+
+            // label.addEventListener('hover',function(){
+
+            // });
+
+
+            var marker = new BMap.Marker(pos); //创建marker对象
+            var siw = _infoWindow(stores);
+
+            label.addEventListener('click', function() {
+                siw.open(marker);
+            });
+
+            setTimeout(function() {
+                map.panTo(stores.longitude, stores.latitude);
+            }, 500);
+            map.addOverlay(label);
+        }
+
+        function _infoWindow(wd) {
+            var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
+                '<img src="' + wd.image + '" alt="' + wd.name + '" style="float:right;zoom:1;overflow:hidden;width:150px;height:100px;margin-left:3px;"/>' +
+                '地址：' + wd.address + '<br/><a title="' + wd.name + '" href="{:url("/cemetery/detail/' + wd.id + '")}">查看详情>></a>'
+            '</div>';
+
+            searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+                title: wd.name, //标题
+                width: 290, //宽度
+                height: 105, //高度
+                panel: "panel", //检索结果面板
+                enableAutoPan: true, //自动平移
+                searchTypes: [
+                    BMAPLIB_TAB_TO_HERE, //到这里去
+                    BMAPLIB_TAB_FROM_HERE //从这里出发
+                ]
+            });
+
+            return searchInfoWindow;
+        }
+
+        $('.area_city').on('click', function() {
+            var province = <?php echo !empty($provinceId) ? $provinceId : 3 ?>,
+                that = $(this),
+                city = that.data('city');
+            $('.area').find('li').removeClass('led');
+            that.parent('li').addClass('led');
+            var data = {
+                province: province,
+                city: city
+            };
+            _loadMerchant(data);
+        });
+
+        function _loadMerchant(info) {
+            $('.tombmaps_list').empty();
+            map.clearOverlays();
+            var data = [];
+            $.ajax({
+                url: "{:url('merchant')}",
+                type: 'get',
+                data: info,
+                dataType: 'json',
+                success: function(result) {
+                    if (result) {
+                        if (result['code'] == 1) {
+                            data = result['data'];
+                            _loadData(data);
+                        }
+                    }
+                }
+            });
+        }
+
+        function _loadData(datas) {
+            var pointArr = [],
+                s = '';
+            $.each(datas, function(index, val) {
+                var province = city = '';
+                if (val['province'] != null) {
+                    province = val['province']['name'];
+                }
+                if (val['city'] != null) {
+                    city = val['city']['name'];
+                }
+                s += '<div class="tombmaps_list_main"><h2><a class="title" data-id="' + val['id'] + '" href="javascript:void(0);">' + val['name'] + '<span>' + province + '' + city + '</span></a></h2><div class="price clearfix"><p>参考价<span><font>￥</font><strong>' + val['min_price'] + '</strong>万起</span></p><a title="' + val['name'] + '" target="_blank" href="{:url("/cemetery/detail/' + val['id'] + '")}">查看详情</a></div></div>';
+                point = new BMap.Point(val['longitude'], val['latitude']);
+                pointArr.push(point);
+                _addLabel(point, val);
+            });
+
+            $('.tombmaps_list').empty().append(s);
+            var view = map.getViewport(pointArr),
+                level = view.zoom, // 缩放级别
+                zoomCenter = view.center; // 中心位置
+            map.centerAndZoom(zoomCenter, level);
+        }
+
+        $(document).on('click', '.tombmaps_list_main .title', function() {
+            var id = $(this).data('id');
+            var labels = $('#Bmap').find('span');
+            $.each(labels, function(key, val) {
+                if ($(val).attr('id') == id) {
+                    $(val).trigger('click');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+    

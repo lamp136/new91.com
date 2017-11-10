@@ -1,0 +1,688 @@
+{extend name='extra@main' /}
+{block name="body"}
+<div class="layui-form" style="margin-top: 10px;margin-left: 10px;">
+    <form action="{:url('store/Datatrace/index')}">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="search_company" lay-verify="title" autocomplete="off" placeholder="请输入商家名称" value="{:input('get.search_company')}" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <select name="search_province" lay-filter="province">
+                    <option value="0">--省份--</option>
+                    {notempty name="province"}
+                        {volist name="province" id="p"}
+                            <option value="{$p.id}" {eq name=":input('get.search_province')" value="$p.id"} selected="selected" {/eq}>{$p.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="search_city" lay-filter="city">
+                    <option value="0">--市区--</option>
+                    {notempty name="city"}
+                        {volist name="city" id="c"}
+                            <option value="{$c.id}" {eq name=":input('get.search_city')" value="$c.id"} selected="selected" {/eq}>{$c.name}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="search_category_id" lay-filter="category_id">
+                    <option value="0">--商家类型--</option>
+                    {volist name=":config('business_type')" id="name"}
+                        <option value="{$key}" {eq name=":input('get.search_category_id')" value="$key"} selected="selected" {/eq}>{$name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="search_intention" lay-filter="search_intention">
+                    <option value="0">--意向类型--</option>
+                    {volist name=":config('intention_type')" id="type"}
+                        <option value="{$key}" {eq name=":input('get.search_intention')" value="$key"} selected="selected" {/eq}>{$type}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <select name="search_is_system" lay-filter="search_is_system">
+                    <option value="0">--系统情况--</option>
+                    {volist name=":config('is_system')" id="sys"}
+                        <option value="{$key}" {eq name=":input('get.search_is_system')" value="$key"} selected="selected" {/eq}>{$sys}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="search_flow_man" lay-filter="search_flow_man">
+                    <option value="0">--跟踪人--</option>
+                    {notempty name="business"}
+                        {volist name="business" id="men"}
+                            <option value="{$key}" {eq name=":input('get.search_flow_man')" value="$key"} selected="selected" {/eq}>{$men}</option>
+                        {/volist}
+                    {/notempty}
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-inline">
+        {if showHandle('store/Datatrace/changeFlowMan')}
+            <span class="layui-btn layui-btn-danger layui-btn-disabled changeFlowMan">跟踪人</span>
+        {/if}
+        {if showHandle('store/Datatrace/add')}
+            <a href="{:url('store/Datatrace/add',['page' => $params.page,'search_company' => $params.search_company,'search_province' => $params.search_province,'search_city' => $params.search_city,'search_category_id' => $params.search_category_id,'search_intention' => $params.search_intention,'search_is_system' => $params.search_is_system,'search_flow_man' => $params.search_flow_man])}" class="layui-btn">添加</a>
+        {/if}
+        {if showHandle('store/Datatrace/import')}
+            <span class="layui-btn layui-btn-normal import">导入</span>
+        {/if}
+        {if showHandle('store/Datatrace/export')}
+            <span class="layui-btn layui-btn-warm export">导出</span>
+        {/if}
+    </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="50">
+            <col width="200">
+            <col width="90">
+            <col width="120">
+            <col width="80">
+            <col width="80">
+            <col width="120">
+            <col width="100">
+            <col width="250">
+            <col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" lay-filter="choose" class="batch" value="0" lay-skin="primary"/>
+                </th>
+                <th>商家名称</th>
+                <th>系统情况</th>
+                <th>所在地区</th>
+                <th>类型</th>
+                <th>意向</th>
+                <th>录入时间</th>
+                <th>跟踪人</th>
+                <th>操作</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {volist name="traceList" id="info"}
+                <tr>
+                    <td>
+                        <input type="checkbox" lay-filter="choose" class="single" value="{$info.id}" lay-skin="primary">
+                    </td>
+                    <td>
+                        {$info.company}
+                        {if showHandle('store/Datatrace/preview')}
+                            <span data-id="{$info.id}" class="layui-btn layui-btn-normal layui-btn-mini preview">预览</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if array_key_exists($info.is_system,config('is_system'))}
+                            {:config('is_system')[$info.is_system]}
+                        {/if}
+                    </td>
+                    <td>
+                        {$info.province.name} / {$info.city.name}
+                    </td>
+                    <td>
+                        {if array_key_exists($info.category_id,config('business_type'))}
+                            {:config('business_type')[$info.category_id]}
+                        {/if}
+                    </td>
+                    <td>
+                        {if array_key_exists($info.intention,config('intention_type'))}
+                            {:config('intention_type')[$info.intention]}
+                        {/if}
+                    </td> 
+                    <td>
+                        {notempty name="info.input_time"}
+                            {:date('Y-m-d',$info.input_time)}
+                        {/notempty}
+                    </td>
+                    <td>
+                        {if array_key_exists($info.flow_man,$allbusiness)}
+                            {$allbusiness[$info.flow_man]}
+                        {/if}
+                        {if showHandle('store/Datatrace/trackMsg')}
+                            {notempty name="info.flow_man"}
+                                <span data-id="{$info.id}" data-flow="{$info.flow_man}" class="layui-btn layui-btn-mini layui-btn-normal trackMsg">查看</span>
+                            {/notempty}
+                        {/if}
+                    </td>
+                    <td>
+                        {if showHandle('store/Datatrace/edit')}
+                            <a class="layui-btn layui-btn-small" href="{:url('store/Datatrace/edit',['id' => $info.id,'page' => $params.page,'search_company' => $params.search_company,'search_province' => $params.search_province,'search_city' => $params.search_city,'search_category_id' => $params.search_category_id,'search_intention' => $params.search_intention,'search_is_system' => $params.search_is_system,'search_flow_man' => $params.search_flow_man])}">修改</a>
+                        {/if}
+                        {if showHandle('store/Datatrace/delete')}
+                            {if $info.status == config('normal_status')}
+                                <span class="layui-btn layui-btn-small layui-btn-danger del_btn" data-id="{$info.id}" data-status="{:config('delete_status')}">禁用</span>
+                            {else/}
+                                <span class="layui-btn layui-btn-small enb_btn" data-id="{$info.id}" data-status="{:config('normal_status')}" style="background-color: #00e079;">启用</span>
+                            {/if}
+                        {/if}
+                        {if showHandle('store/Datatrace/addMsg')}
+                            <span data-id="{$info.id}" class="layui-btn layui-btn-small layui-btn-normal addMsg"><i class="layui-icon">&#xe654;</i>跟踪信息</span>
+                        {/if}
+                    </td>
+                </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {notempty name="page"}
+        {$page}
+    {/notempty}
+</div>
+{/block}
+{block name='layer'}
+    <!-- 预览 -->
+    <div id="previewBox" style="display: none;">
+        <div class="layui-form">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 查看跟踪信息 -->
+    <div id="trackMsg" style="display: none;">
+        <div class="layui-form">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="200">
+                    <col width="100">
+                    <col width="200">
+                    <col width="80">
+                    <col width="80">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>意向类型</th>
+                        <th>信息</th>
+                        <th>跟踪人</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 添加跟踪信息 -->
+    <div id="addMsg" style="display: none;">
+        <form class="layui-form">
+            <table class="layui-table">
+                <tbody>
+                    <tr>
+                        <th>信息<font color="red">*</font></th>
+                        <th>
+                            <textarea required lay-verify="required" name="message" style="width:406px;height:144px;" class="layui-textarea"></textarea>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>意向类型</th>
+                        <th>
+                            {volist name=":config('intention_type')" id="type"}
+                                <input type="radio" name="intention" value="{$key}" title="{$type}" class="layui-input" {if $key == 1} checked {/if}/>
+                            {/volist}
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="track_id" value=""/>
+                    <span class="layui-btn" lay-submit lay-filter="subMsgAdd">立即提交</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- 更改跟踪人 -->
+    <div id="changeFlowMan" style="display: none;">
+        <form class="layui-form layui-form-pane" style="margin-left: 25px;margin-top: 20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><font color="red">*</font>选择跟踪人</label>
+                <div class="layui-input-inline">
+                    <select name="flow_man" required lay-verify="required">
+                        <option value="">--选择跟踪人--</option>
+                        {volist name="business" id="men"}
+                            <option value="{$key}">{$men}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <span class="layui-btn" lay-submit lay-filter="subChange">立即提交</span>
+                    <input type="hidden" name="id"/>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 导入excel -->
+    <div id="import" style="display: none;">
+        <form class="layui-form layui-form-pane" style="margin-left: 25px;margin-top: 20px;">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <div class="layui-box layui-upload-button layui-input-inline">
+                        <input type="file" name="trace_excel" lay-type="files" class="layui-upload-file" required lay-verify="required"/>
+                        <span class="layui-upload-icon"><i class="layui-icon"></i>上传文件</span>
+                    </div>
+                </div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <span class="layui-btn" lay-submit lay-filter="importExcel">立即提交</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 导出excel -->
+    <div id="export" style="display: none;">
+        <form class="layui-form layui-form-pane" style="margin-left: 25px;margin-top: 20px;">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <input type="radio" name="ext" title="xls" value="xls"/>
+                    <input type="radio" name="ext" title="xlsx" value="xlsx" checked=""/>
+                </div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <span class="layui-btn" lay-submit lay-filter="exportExcel">立即提交</span>
+                </div>
+            </div>
+        </form>
+    </div>
+{/block}
+{block name="optJS"}
+    <script>
+        layui.use(['jquery', 'layer', 'form', 'element'], function() {
+            var previewModal,
+                addMsgModal,
+                changeFlowManModal,
+                importModal,
+                exportModal,
+                $ = layui.jquery,
+                layer = layui.layer,
+                form = layui.form(),
+                element = layui.element(),
+                intentionType = {:json_encode(config('intention_type'))},
+                isSystem = {:json_encode(config('is_system'))};
+
+            form.on('select(province)', function(data) {
+                var provinceId = data['value'];
+                $.ajax({
+                    url: "{:url('store/Basestore/getRegion')}",
+                    type: 'get',
+                    data: {
+                        id: provinceId
+                    },
+                    dataType: 'json',
+                    success: function(jsonData) {
+                        var c = '<option value="">请选择市</option>';
+                        if (jsonData) {
+                            if (jsonData['code'] == 1) {
+                                var data = jsonData['data'];
+                                $.each(data, function(key, val) {
+                                    c += '<option value="' + key + '">' + val + '</option>';
+                                })
+                            }
+                        }
+                        $('select[name="search_city"]').empty().append(c);
+                        form.render();
+                    }
+                })
+            });
+
+            $('.import').on('click', function() {
+                $('#import form')[0].reset();
+                importModal = layer.open({
+                    type: 1,
+                    area: ['345px', '150px'],
+                    title: '导入excel',
+                    content: $('#import'),
+                });
+            });
+
+            form.on('submit(importExcel)', function(data) {
+                var othis = $(this),
+                    formData = new FormData($('#import form')[0]);
+                if (!othis.hasClass('layui-btn-disabled')) {
+                    $.ajax({
+                        url: "{:url('store/Datatrace/import')}",
+                        type: 'post',
+                        data: formData,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function() {
+                            othis.addClass('layui-btn-disabled');
+                        },
+                        success: function(result) {
+                            if (result) {
+                                layer.msg(result['msg'], {
+                                    time: 1000
+                                }, function() {
+                                    if (result['code'] == 1) {
+                                        othis.removeClass('layui-btn-disabled');
+                                        layer.close(importModal);
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            $('.export').on('click',function(){
+                exportModal = layer.open({
+                    type: 1,
+                    area: ['345px','150px'],
+                    title: '选择导出格式',
+                    content: $('#export'),
+                });
+            });
+
+            form.on('submit(exportExcel)',function(data){
+                layer.close(exportModal);
+                var fields = data.field,
+                    oUrl = '/store/Datatrace/export.html?ext='+fields['ext'];
+                document.location.href = oUrl;
+            });
+
+            //全选
+            form.on('checkbox(choose)', function(data) {
+                var child = $('.single');
+                if(data.value == 0){
+                    child.each(function(index, item) {
+                        item.checked = data.elem.checked;
+                    });
+                    form.render('checkbox');
+                }
+                if (child.is(':checked')) {
+                    $('.changeFlowMan').removeClass('layui-btn-disabled');
+                } else {
+                    $('.changeFlowMan').addClass('layui-btn-disabled');
+                }
+            });
+
+            $('.addMsg').on('click',function(){
+                $('#addMsg form')[0].reset();
+                var id = $(this).data('id');
+                $('#addMsg input[name="track_id"]').val(id);
+                addMsgModal = layer.open({
+                    type: 1,
+                    area: ['600px','380px'],
+                    title: '添加信息',
+                    content: $('#addMsg'),
+                });
+            });
+
+            $('.changeFlowMan').on('click',function(){
+                $('#changeFlowMan form')[0].reset();
+                var othis = $(this),
+                    ids = '';
+                $('.single:checked').each(function(){
+                    ids += $(this).val() + ',';
+                });
+                ids = ids.substring(0,ids.lastIndexOf(','));
+                if(ids){
+                    $('#changeFlowMan input[name="id"]').val(ids);
+                    if(!othis.hasClass('layui-btn-disabled')){
+                        changeFlowManModal = layer.open({
+                            type:1,
+                            area:['400px','350px'],
+                            title:'选择跟踪人',
+                            content:$('#changeFlowMan')
+                        });
+                    }
+                }
+            });
+
+            form.on('submit(subChange)',function(data){
+                var formFields = data.field;
+                $.ajax({
+                    url:"{:url('store/Datatrace/changeFlowMan')}",
+                    type:'post',
+                    data:formFields,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    layer.close(changeFlowManModal);
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+
+            form.on('submit(subMsgAdd)',function(data){
+                var fields = data.field;
+                $.ajax({
+                    url:"{:url('store/Datatrace/addMsg')}",
+                    type:'post',
+                    data:fields,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            layer.msg(result['msg']);
+                            if(result['code'] == 1){
+                                layer.close(addMsgModal);
+                            }
+                        }
+                    }
+                })
+            });
+
+            $('.del_btn').on('click',function(){
+                var id = $(this).data('id'),
+                    status = $(this).data('status');
+                    layer.confirm('确定要删除？', {
+                        icon: 3,
+                        title: '提示'
+                    }, function(index) {
+                        if(id){
+                            var data = {
+                                id:id,
+                                status:status
+                            };
+                            _del(data);
+                        }
+                        layer.close(index);
+                    });
+            });
+
+            $('.enb_btn').on('click',function(){
+                var id = $(this).data('id'),
+                    status = $(this).data('status');
+                if(id){
+                    var data = {
+                        id:id,
+                        status:status
+                    };
+                    _del(data);
+                }
+            });
+
+            function _del(sendData){
+                $.ajax({
+                    url:"{:url('store/Datatrace/delete')}",
+                    type:'get',
+                    data:sendData,
+                    dataType:'json',
+                    success:function(result){
+                        if(result){
+                            layer.msg(result['msg'], {
+                                time: 1000
+                            }, function() {
+                                if (result['code'] == 1) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            $('.preview').on('click',function(){
+                var id = $(this).data('id');
+                if(id){
+                    $.ajax({
+                        url:"{:url('store/Datatrace/preview')}",
+                        type:'get',
+                        data:{
+                            id:id
+                        },
+                        dataType:'json',
+                        success:function(result){
+                            if(result){
+                                if(result.code == 1){
+                                    var data = result.data,
+                                        str,
+                                        region = '',
+                                        intention = '',
+                                        system = '',
+                                        category = '',
+                                        flowMan = '',
+                                        business = result['business'],
+                                        decision = '',
+                                        affect = '';
+                                    if(data.intention != 0){
+                                        intention = intentionType[data['intention']];
+                                    }
+                                    if(data.is_system != 0){
+                                        system = isSystem[data['is_system']];
+                                    }
+                                    if(data.province_id != 0 && data.city_id != 0){
+                                        region = data['province']['name'] + '/' + data['city']['name'];
+                                    }
+                                    if(data.category_id != 0){
+                                        if(data.category_id == {:config('category_cemetery_id')}){
+                                            category = '陵园';
+                                        }else if(data.category_id == {:config('category_funeral_id')}){
+                                            category = '殡仪馆';
+                                        }
+                                    }
+                                    if(data.flow_man != 0){
+                                        if($.inArray(data.flow_man,business)){
+                                            flowMan = business[data['flow_man']];
+                                        }
+                                    }
+                                    if(data.decision_maker != '' || data.decision_position != '' || data.decision_phone != 0){
+                                        decision = '姓名：'+data.decision_maker+' | 职务：'+data.decision_position+' | 电话：'+data.decision_phone;
+                                    }
+                                    if(data.affect_maker != '' || data.affect_position != '' || data.affect_phone != 0){
+                                        affect = '姓名：'+data.affect_maker+' | 职务：'+data.affect_position+' | 电话：'+data.affect_phone;
+                                    }
+                                    str = '<tr><td>商家名称：</td><td>'+data.company+'</td><td>地区：</td><td>'+region+'</td></tr><tr><td>现状：</td><td>'+data.amount+'</td><td>系统情况：</td><td>'+system+'</td></tr><tr><td>类型：</td><td>'+category+'</td><td>意向类型：</td><td>'+intention+'</td></tr><tr><td>决策人：</td><td colspan="3">'+decision+'</td></tr><tr><td>决策影响人：</td><td colspan="3">'+affect+'</td></tr><tr><td>其他联系人：</td><td colspan="3">'+data.other_contacts+'</td></tr><tr><td>跟踪人：</td><td colspan="3">'+flowMan+'</td></tr>';
+                                    $('#previewBox tbody').empty().append(str);
+                                }
+                                previewModal = layer.open({
+                                    type: 1,
+                                    area: ['800px','380px'],
+                                    title: '预览',
+                                    content: $('#previewBox'),
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            $('.trackMsg').on('click', function() {
+                var id = $(this).data('id'),
+                    flowId = $(this).data('flow');
+                if(id){
+                    $.ajax({
+                        url: "{:url('store/Datatrace/trackMsg')}",
+                        type: 'get',
+                        data: {
+                            track_id: id,
+                            flow_man: flowId
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result) {
+                                if (result['code'] == 1) {
+                                    var data = result['data'],
+                                        t = '',
+                                        pri = "{:showHandle('store/Datatrace/delTrackMsg')}";// 删除按钮权限
+                                    $.each(data, function(key, val) {
+                                        var flowMan = val['admin']['name'],
+                                            intention = '',
+                                            createdTime = '',
+                                            delBtn = '';
+                                        if(val['intention'] != 0){
+                                            intention = intentionType[val['intention']];
+                                        }
+                                        if (val['created_time'] != 0) {
+                                            createdTime = new Date(parseInt(val.created_time) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+                                        }
+                                        if(pri){
+                                            delBtn = '<a class="del" rel="'+val['id']+'" href="javascript:void(0);">删除</a>';
+                                        }
+                                        t += '<tr class="'+val['id']+'"><td>' + createdTime + '</td><td>' + intention + '</td><td>' + val['message'] + '</td><td>' + flowMan + '</td><td>'+delBtn+'</td></tr>';
+                                    });
+                                }else{
+                                    t += '<tr><td colspan="5">没有数据</td></tr>';
+                                }
+                                $('#trackMsg tbody').empty().append(t);
+
+                                layer.open({
+                                    type: 1,
+                                    area: ['600px', '380px'],
+                                    title: '跟踪信息',
+                                    content: $('#trackMsg'),
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            $(document).on('click','#trackMsg tbody .del',function(){
+                var id = $(this).attr('rel');
+                if(id){
+                    $.ajax({
+                        url:"{:url('store/Datatrace/delTrackMsg')}",
+                        type:'get',
+                        data:{
+                            id:id
+                        },
+                        dataType:'json',
+                        success:function(result){
+                            if(result){
+                                layer.msg(result['msg']);
+                                if(result['code'] == 1){
+                                    $('#trackMsg tbody tr[class="'+id+'"]').remove();
+                                }
+                            }
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+{/block}

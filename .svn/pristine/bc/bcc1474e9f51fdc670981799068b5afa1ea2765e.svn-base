@@ -1,0 +1,83 @@
+<?php
+namespace back\store\controller;
+use back\extra\controller\Base;
+use back\extra\model\DataTrack;
+use think\Controller;
+use think\Db;
+
+class DataTrace extends Base
+{
+    /**
+     * 列表
+     * @return void
+     */
+    public function index(){
+        $input = input('get.');
+        $traceList = DataTrack::with(['province','city'])->order('created_time desc')->paginate(config('page_size'),false,['query' => $input]);
+        $page = $traceList->render();
+        $this->assign([
+            'business' => $this->getBusinessMen(false),
+            'page' => $page,
+            'traceList' => $traceList
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 预览
+     * @return [type] [description]
+     */
+    public function preview(){
+        $id = input('get.id');
+        $result = ['code' => 0,'data' => ''];
+        if($id){
+            $fields = 'id,company,is_system,province_id,city_id,intention,category_id,input_time,flow_man,decision_maker,decision_position,decision_phone,affect_maker,affect_position,affect_phone,other_contacts,amount';
+            $preview = DataTrack::with(['province','city'])->field($fields)->where('id',$id)->find();
+            $business = $this->getBusinessMen(false);
+            if($preview){
+                $result = ['code' => 1,'data' => $preview,'business' => $business];
+            }
+        }
+        echo json_encode($result);
+    }
+
+    public function add(){
+
+    }
+
+    public function edit(){
+
+    }
+
+    public function checkRepeat(){
+
+    }
+
+    public function changeFlowMan(){
+
+    }
+
+    public function getCityList(){
+
+    }
+
+    public function delete(){
+
+    }
+
+    public function trackMsg(){
+
+    }
+
+    public function addMsg(){
+
+    }
+
+    public function import(){
+
+    }
+
+    public function export(){
+
+    }
+}
