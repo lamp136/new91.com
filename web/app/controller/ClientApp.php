@@ -343,16 +343,21 @@ class ClientApp extends Controller
      */
     public function upServerStatus(){
         $orderId = input('orderId');
+        $status = input('status');
         $result = array('flag'=>0,'msg'=>'失败');
         if($orderId){
-            $res = Db::name('order_view_tomb')->where('order_id',$orderId)->update(['service_status'=>1]);
+            $data['service_status'] = $status;
+            if($status == 2){
+                $data['km_start_image'] = $this->uploadFile('km_start_image');
+            }
+            $res = Db::name('order_view_tomb')->where('order_id',$orderId)->update($data);
 
             if($res){
                 $result = array('flag'=>1,'msg'=>'成功');
             }
         }
-
         echo json_encode($result);
 
     }
+
 }
