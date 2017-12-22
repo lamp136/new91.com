@@ -1,0 +1,137 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px">
+    <span class="layui-breadcrumb" style="font-size:20px">
+        <a href="/">首页</a>
+        <a href="{:url('plugin/History/index')}">列表页</a>
+        <a href="javascript:void(0);">编辑</a>
+    </span>
+</div>
+<div class="site-text site-block" style="margin-top: 8px;">
+    <form class="layui-form" action="{:url('plugin/History/edit')}" method="post" enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color:red;">*</span>标题</label>
+            <div class="layui-input-block" style="width:30%">
+                <input type="text" name="info[title]" autocomplete="off" class="layui-input" placeholder="标题" lay-verify="required" required value='{$news.title}'>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">来源</label>
+            <div class="layui-input-block" style="width:30%">
+                <input type="text" name="info[source]" autocomplete="off" class="layui-input" placeholder="来源"  value="{$news.source}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"><span style="color:red;">*</span>年份</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="info[year]" autocomplete="off" class="layui-input" placeholder="年份" lay-verify="number|required" required value='{$news.year}'>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"><span style="color:red;">*</span>月份</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="info[month]" autocomplete="off" class="layui-input" placeholder="月份" lay-verify="number|required" required value='{$news.month}'>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"><span style="color:red;">*</span>日</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="info[day]" autocomplete="off" class="layui-input" placeholder="日" lay-verify="required" required value="{$news.day}">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color:red;">*</span>内容</label>
+            <div class="layui-input-block" style="width:30%">
+               <textarea id="follow" name='info[content]' style="width: 840px;height: 500px;" lay-verify="required" required>{$news.content}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color:red;">*</span>关键字</label>
+            <div class="layui-input-block">
+                <textarea class="layui-textarea" style="height:200px;width:840px;" name="info[keywords]" type="text" required lay-verify="required" >{$news.keywords}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" name="info[id]" value="{$news.id}"/>
+                <span class="layui-btn" lay-submit lay-filter="editHistory">提交</span>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+
+{block name='optJS'}
+<script src="_BACKSTAGE_/ueditor/ueditor.config.js"></script>
+<script src="_BACKSTAGE_/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+ layui.use(['jquery', 'form','layedit','laydate'], function() {
+    var $ = layui.jquery;
+    var form = layui.form();
+    var layedit = layui.layedit;
+    var laydate = layui.laydate;
+    
+    var start = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday:true
+        ,choose: function(datas){
+          end.min = datas; //开始日选好后，重置结束日的最小日期
+          end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+  
+  var end = {
+    min: laydate.now()
+        ,max: '2099-06-16 23:59:59'
+        ,istoday: true
+        ,choose: function(datas){
+          start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+
+    var toolBars = [
+        'source', '|', 'undo', 'redo', '|',
+        'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+        'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'fontfamily', 'fontsize', '|',
+        'directionalityltr', 'directionalityrtl', 'indent', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+        'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+        'simpleupload', 'insertimage', 'music', 'insertvideo', 'attachment', 'pagebreak', '|', 'inserttable', '|', 'horizontal', 'date', 'time', 'spechars',
+    ];
+    // 文本编辑器
+    var editor = UE.getEditor('follow', {
+        toolbars: [
+            toolBars
+        ],
+        autoHeightEnabled: true,
+        autoFloatEnabled: true
+    });
+
+    form.on('submit(editHistory)',function(data){
+        var returnUrl = "{:url('plugin/History/index',['year' => $params.year,'month' => $params.month,'page' => $params.page])}",
+            fmData = data.field;
+        $.ajax({
+            url:"{:url('plugin/History/edit')}",
+            type:'post',
+            data:fmData,
+            dataType:'json',
+            success:function(result){
+                if(result){
+                    layer.msg(result.msg, {
+                        icon: 1,
+                        time: 2000
+                    }, function() {
+                        if (result.code == 1) {
+                            window.location.href = returnUrl;
+                        }
+                    })
+                }
+            }
+        })
+    })
+});
+</script>
+{/block}

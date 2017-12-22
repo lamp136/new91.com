@@ -1,0 +1,286 @@
+<?php 
+namespace web\app\controller;
+use think\Controller;
+use think\Db;
+use think\Request;
+use web\extra\model\MsgCode;
+use web\extra\model\CarDriver;
+/**
+ * 91客户端app
+ */
+class ClientApp extends Controller
+{
+	/**
+     * 获取验证码
+     * @return json
+     */
+    public function verifyCode(){
+        $input = input('post.');
+        $type = $input['type'];
+        $classify = $input['classify'];
+        $result = ['code' => 0,'msg' => ''];
+        $mobile = $input['mobile'];
+        $msgCode = new MsgCode;
+        $maxNum = $msgCode->isMaxSendNum($mobile);
+        if($maxNum){
+            $result = ['code' => 0,'msg' => '请不要恶意点击'];
+        }else{
+            $randCode = rand(100000,999999);
+            $message = "动态验证码 " . $randCode . " 工作人员不会向你索要，请勿向任何人泄露。" . date("Y-m-d H:i:s", time()) . "【91搜墓网】";
+            $msgObj = new \common\sendmsg\SendMsg;
+            // $send = true;
+            $send = $msgObj->sendMsg($mobile,$message);
+            $result = ['code' => 0,'msg' => '验证码发送失败'];
+            if($send){
+                $codeData = [
+                    'mobile'       => $mobile,
+                    'code'         => $randCode,
+                    'type'         => $type,
+                    'created_time' => time()
+                ];
+                $addCodeMsg = Db::name('MsgCode')->data($codeData)->insert();
+                if($addCodeMsg){
+                    $msgLogData = [
+                        'classify'     => $classify,
+                        'mobile'       => $mobile,
+                        'msg'          => $message,
+                        'status'       => config('msg_send_status'),
+                        'created_time' => time(),
+                        'send_time'    => time()
+                    ];
+                    $msgLog = Db::name('MsgLog')->data($msgLogData)->insert();
+                    if($msgLog){
+                        $result = ['code' => 1,'msg' => $randCode];
+                    }
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+
+    //检测验证码
+    public function checkCode(){
+    	$input = input('post.');
+    	$type = config('msgcode_type.register');
+    	if($input){
+    		$msgCodeObj = new MsgCode;
+    		$res = $msgCodeObj->checkMessageCode($type,$input['mobile'],$input['code']);
+    		echo json_encode($res);
+    	}
+    }
+
+    /*
+     * 用户名唯一验证
+     * @param   void;
+     * @return  string(json);
+     */
+    public function checkUser(){
+        $result = array('flag'=>0,'msg'=>'该账户已存在');
+        $mobile = input('mobile');
+        if(!empty($mobile)){
+            $finddata = Db::name('car_driver')->where('mobile',$mobile)->find();
+            if(empty($finddata)){
+                $result= array('flag'=>1,'msg'=>'ok');;
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 省市联动数据
+     * @return [json] [string]
+     */
+    public function getProvince(){        
+        $region = Db::name('region')->where('pid != 0')->field('id,pid,name')->select();
+        $result = [];
+        foreach ($region as $key => $val) {
+            if($val['pid'] == 2){
+                $result[$val['id']] = [
+                    'value' => $val['id'],
+                    'text' => $val['name']
+                ];
+            }else{
+                $result[$val['pid']]['children'][] = [
+                    'value' => $val['id'],
+                    'text' => $val['name']
+                ];
+            }
+        } 
+        $res = [];
+        foreach ($result as $key => $value) {
+            $res[] = $value;
+        }
+        // var_dump($re[0]);die;       
+        echo json_encode($res);
+    }
+
+    /**
+     * 注册方法
+     * @return [type] json string
+     */
+    public function register(){
+        $result = array('flag'=>0,'msg'=>'添加失败!');
+        if($_POST['car_data'] && $_POST['user_data']){
+            // 启动事务
+            Db::startTrans();    
+            $carObj = json_decode($_POST['car_data']);
+            $usrObj = json_decode($_POST['user_data']);           
+            $cityArr = explode('-',$usrObj->city);
+
+            $region = Db::name('region')->where('status',config('normal_status'))->column('id,name');
+            $usrData['id_card'] = $this->uploadFile('id_card_img');
+            $usrData['driving_licence'] = $this->uploadFile('driving_img');
+            $usrData['name'] = $usrObj->name;
+            $usrData['mobile'] = $usrObj->mobile;
+            $usrData['password'] = encryptHome($usrObj->pass);
+            $usrData['id_number'] = $usrObj->id_number;
+            $usrData['province_id'] = $cityArr[0];
+            $usrData['city_id'] = $cityArr[1];
+            $usrData['province_name'] = $region[$cityArr[0]];
+            $usrData['city_name'] = $region[$cityArr[1]];
+            $usrData['status'] = config('default_status');
+            $usrData['created_time'] = time();
+            $usrData['updated_time'] = time();
+            $driver_id = Db::name('car_driver')->insertGetId($usrData);
+            if($driver_id){
+                $carData['vehicle_travel_license'] = $this->uploadFile('vtl_img');
+                $carData['models_image'] = $this->uploadFile('car_img');
+                $carData['driver_id'] = $driver_id;
+                $carData['plate_number'] = $carObj->plate_number;
+                $carData['vin'] = $carObj->vin;
+                $carData['engine_number'] = $carObj->engine;
+                $carData['status'] = config('default_status');
+                $carData['created_time'] = time();
+                $carData['updated_time'] = time();
+
+                $carRes = Db::name('car_info')->insert($carData);
+
+                if($carRes){
+                    $result = array('flag'=>1,'msg'=>'添加成功!');
+                    Db::commit();
+                }else{
+                    Db::rollback();
+                }
+
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 图片上传
+     * @param  [type] $image 图片名称
+     * @return [type]        string
+     */
+    public function uploadFile($image){
+        $file = false;
+        if($_FILES[$image]['error'] == 0 && !empty($_FILES[$image]['tmp_name'])){            
+            $result = uploadOne($image,config('clientapp_image'),false,false);
+            if($result['ok'] == 1){
+                $file = $result['images'][0];               
+            }
+        }
+        return $file;
+    }
+
+    /**
+     * 登录
+     */
+    public function login(){
+        $password = input('pass');
+        $phone = input('account');       
+        $result = array('flag'=>0,'msg'=>'用户名或密码错误!');
+        if($password && $phone){
+            $where['mobile'] = $phone;
+            $where['password'] = encryptHome($password);
+            $info = Db::name('car_driver')->field('id,name,mobile')->where($where)->find();
+            if($info){
+                $result = array('flag'=>1,'msg'=>'','info'=>$info);
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 个人中心查找用户信息
+     * @return [json] 
+     */
+    public function findUserMessage(){
+        $id = input('id');
+        $result = array('flag'=>0,'msg'=>'查询信息失败');
+        if($id){
+            $userData = Db::name('car_driver')->where('id',$id)->field('name,id_card,driving_licence,id_number,province_name,city_name')->find();
+            $carData = Db::name('car_info')->where('driver_id',$id)->field('vehicle_travel_license,models_image,plate_number,vin,engine_number')->find();
+            $result = array('flag'=>1,'userData'=>$userData,'carData'=>$carData);
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 修改密码
+     * @return [type] [description]
+     */
+    public function updateMessage(){
+        $oldpass = input('oldpass');
+        $id = input('id');
+        $pass = input('pass');
+        if($id){
+            $final = array('flag'=>0,'msg'=>'修改失败');
+            $passwhere['id'] = $id;
+            $passwhere['password'] = encryptHome($oldpass);
+            $res = Db::name('car_driver')->where($passwhere)->find();
+            if($res){  
+                $data['password'] = encryptHome($pass);          
+                $result = Db::name('car_driver')->where('id',$id)->update($data);
+                if($result){
+                    $final = array('flag'=>1,'msg'=>'修改成功');
+                }
+            }else{
+                $final = array('flag'=>2,'msg'=>'原密码错误');
+            }
+
+            echo json_encode($final);
+        }
+    }
+
+    
+    /**
+     * 手机号修改
+     */
+    public function updatePhone(){
+        $input = input('post.');
+        $type = config('msgcode_type.register');
+        $final = array('flag'=>0,'msg'=>'修改失败');
+        if($input){
+            $msgCodeObj = new MsgCode;
+            $res = $msgCodeObj->checkMessageCode($type,$input['mobile'],$input['code']);
+            if($res){
+                $result = Db::name('car_driver')->where('id',$input['id'])->update(['mobile'=>$input['mobile']]);
+                if($result){
+                    $final = array('flag'=>1,'msg'=>'修改成功');
+                }
+            }else{
+                $final = array('flag'=>2,'msg'=>'验证码错误');
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 订单列表
+     * @return json
+     */
+    public function orderlist(){
+        $input = input('get.');
+        $result = ['code' => 0];
+        $mobile = $input['mobile'];
+        if($mobile){
+            $driver = CarDriver::with('orders')->where('mobile',$mobile)->field('id')->find();
+            if($driver){
+                $result = ['code' => 1,'data' => $driver];
+            }
+        }
+        echo json_encode($result);
+    }
+}

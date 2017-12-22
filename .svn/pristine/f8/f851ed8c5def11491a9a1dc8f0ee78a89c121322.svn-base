@@ -1,0 +1,387 @@
+{extend name='extra@main' /}
+{block name='body'}
+<div style="width:100%;height:50px;border-bottom:1px solid #E2E2E2;line-height:50px;padding-left:30px;margin-top:0px">
+    <span class="layui-breadcrumb" style="font-size:10px">
+        <a href="">订单</a>
+        <a href='{$bread.url}'>{$bread.string}</a>
+        <a><cite>{$endstr}</cite></a>
+    </span>
+</div>
+
+<div class="layui-tab" lay-filter="items">
+    <ul class="layui-tab-title" id='ul_table'>
+        <li lay-id="orderDetail" data-url='{:url("orders/Tomb/newdetail",array("orderId"=>$orderId,"items"=>"orderDetail","returnurl"=>$bread.url))}'>订单信息</li>
+        <li lay-id="reVisit" data-url='{:url("orders/Tomb/newdetail",array("orderId"=>$orderId,"items"=>"reVisit","returnurl"=>$bread.url))}' >回访跟踪</li>
+        <li lay-id="viewTomb" data-url='{:url("orders/Tomb/newdetail",array("orderId"=>$orderId,"items"=>"viewTomb","returnurl"=>$bread.url))}'>看墓记录</li>
+        <li lay-id="messages" data-url='{:url("orders/Tomb/newdetail",array("orderId"=>$orderId,"items"=>"messages","returnurl"=>$bread.url))}'>短信</li>
+    </ul>
+    <!--订单信息-->
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">  
+        {notempty name="$data"}
+            {volist name="data" id="vo"}
+            <table class="layui-table">
+
+                <tr>
+                    <th style="width:9%; text-align:center;" colspan="2">预约人信息</th>
+                    <th style="width:9%;text-align:center;" colspan="2">购买人信息</th>
+                    <th style="width:9%;text-align:center;" colspan="2">墓位使用人信息</th>
+                    <th style="width:9%;text-align:center;" colspan="2">成交信息</th>
+                </tr>
+                <tr>
+                    <th style="width:4%;">预约人姓名</th><td style="width:5%">{$vo.reservation_person}</td>
+                    <th style="width:4%;">购买人手机</th><td style="width:5%">{neq name="vo['mobile']" value="0"}{$vo.mobile}{/neq}</td>
+                    <th style="width:4%;">墓位使用人名</th><td style="width:5%">{$vo.tomb_user}</td>
+                    <th style="width:4%;">是否成交</th><td style="width:5%;">
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width:4%;">预约人手机</th><td style="width:5%">{$vo.reservation_phone}</td>
+                    <th style="width:4%;">购买人性别</th><td style="width:5%">
+                    {notempty name="vo['reservation_sex']"}
+                        {$sex[$vo.reservation_sex]}
+                    {/notempty}
+                    </td>
+                     <th style="width:4%;">墓位使用人性别</th><td style="width:5%">
+                    {notempty name="vo['tomb_user_sex']"}
+                     {$sex[$vo.tomb_user_sex]}
+                    {/notempty}
+                    </td>
+                    <th>墓价</th><td>{$vo.total_price}</td>
+                </tr>
+                <tr>
+                    <th style="width:4%;">订单类型</th><td style="width:5%">
+                    <span class="label label-info">
+                    {notempty name="vo['call_type']"}
+                    {$call_arr[$vo.call_type]}
+                    {/notempty}
+                    </span>&nbsp;
+                    </td>
+                    <th style="width:4%;">购买人年龄</th><td style="width:5%">{neq name="vo['reservation_age']" value="0"}{$vo.reservation_age}{/neq}</td>
+                    <th style="width:4%;">墓位使用人年龄</th><td style="width:5%">
+                     {neq name="vo['tomb_user_age']" value="0"}
+                    {$vo.tomb_user_age}
+                    {/neq}</td>
+                    <th>成交价</th><td>{$vo.tomb_price}</td>
+                </tr>
+                <tr>
+                    <th style="width:4%;">预约人座机</th><td style="width:5%"> 
+                    {neq name="vo['reservation_landline']" value="0"}
+                      {$vo.reservation_landline}
+                    {/neq}</td>
+                    <th style="width:4%;">购买人座机</th><td style="width:5%">
+                        {$vo.buyer_landline}
+                    </td>
+                    <th style="width:4%;">墓位使用人状态</th><td style="width:5%">
+                    {notempty name="vo['is_live']"}
+
+                    {$tomb_user_status[$vo.is_live]}
+                    {/notempty}
+                    </td>
+                    <th>园区折扣</th><td>{$vo.store_discount}</td>
+                </tr>
+                <tr>
+                    <th style="width:4%;">预约人微信</th><td style="width:5%">{$vo.reservation_wechat}</td>
+                    <th style="width:4%;">购买人微信</th><td style="width:5%">{$vo.buyer_wechat}</td>
+                    <th></th><td></td>
+                    <th>91折扣</th><td>{$vo.91_discount}</td>
+
+                </tr>
+                <tr>
+                    <th style="width:4%;">预约人QQ</th><td style="width:5%">{$vo.reservation_qq}</td>
+                    <th style="width:4%;">购买人QQ</th><td style="width:5%">{$vo.buyer_qq}</td>
+                    <th></th><td></td>
+                    <th>佣金比例</th><td>{$vo.brokerage_percent}</td>
+
+                </tr>
+                <tr>
+                    <th style="width:4%;">预约陵园</th><td style="width:5%">{$vo.store_name}</td>
+                     <th style="width:4%;">实际购买园区</th><td style="width:5%;">
+                       {$vo.store_fact_name}
+                    </td>
+                    <th></th><td></td>
+                    <th>应收</th><td>{$vo.brokerage_money}</td>
+
+
+                </tr>
+    
+                <tr>
+                    <th style="width:4%;">客户来源</th><td style="width:5%">{$order_type[$vo.order_type]}</td>
+                    <th></th><td></td>
+                    <th></th><td></td>
+                    <th>实收</th><td>{$vo.paid_in_amount}</td>
+                    
+                    
+                </tr>
+                <tr>
+                    <th style="width:4%;">心里价位</th><td style="width:5%">{$vo.budgeted_price}</td>
+                    <th></th><td></td>
+                    <th></th><td></td>
+                    <th>返现比例</th><td>{$vo.return_percent}</td>
+
+                    
+                </tr>
+                <tr>
+                    <th style="width:4%;">看墓时间</th><td style="width:5%"> 
+                    {neq name="vo['appoint_time']" value=""}
+                    {$vo.appoint_time|date="Y-m-d",###}
+                    {/neq}</td>
+                    <th></th><td></td>
+                    <th></th><td></td>
+                    <th>应返</th><td>{$vo.return_money}</td>
+                    
+                </tr>
+                <tr>
+                    <th style="width:4%;">心里价位</th><td style="width:5%;">{$vo.budgeted_price}</td>
+                    <th></th><td></td>
+                    <th></th><td></td>
+                    <th>实返</th><td>{$vo.return_fact_money}</td>
+
+                </tr>
+               <tr>
+                    <th>墓穴位置</th><td colspan="2">{$vo.tomb_address}</td>
+                    <th>备注</th><td colspan="2">{$vo.remark}</td>
+                    <th></th><td></td>
+
+                </tr>
+            </table> 
+            {/volist}
+            {/notempty}
+        </div>
+        <!--订单回访信息-->
+        <div class="layui-tab-item" >
+            {notempty name='$orderSn'}
+                {notempty name="need"}
+                    {volist name="need" id="v"}
+                        {notempty name="v.revisit"}
+                            <div class="layui-collapse">
+                                <div class="layui-colla-item">
+                                    <h2 class="layui-colla-title">回访记录</h2>
+                                    <div class="layui-colla-content">
+                                        {volist name="v.revisit" id="vr"}
+                                            <blockquote class="layui-elem-quote">
+                                                <font color="#FF5722">第{:count($v.revisit) - $key}次</font>回访 {:date('Y-m-d H:i:s',$vr.created_time)} {$vr.admin_name} : {$vr.content}
+                                            </blockquote>
+                                        {/volist}
+                                    </div>
+                                </div>
+                            </div>
+                        {/notempty}
+                        <blockquote class="layui-elem-quote layui-quote-nm">
+                            需求添加人:
+                            {volist name="order_flow" id="flowmans"}
+                            {if condition="$key eq $v['admin_id'] "}{$flowmans}{/if}
+                            {/volist};
+                             &nbsp;&nbsp;&nbsp;&nbsp;
+                            添加时间:{$v.created_time};
+                            <br>
+                                {$v.content}
+                        </blockquote>
+                    {/volist}
+                {/notempty}
+            {/notempty}
+        </div>
+
+        <!--看墓信息开始-->
+        <div class="layui-tab-item">
+            {notempty name="viewDatas"}
+                <div class="layui-collapse">
+                    {volist name="appointCarData" id="vo"}
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title"><font color="#FF5722">第{$viewNum-$key}趟</font>看墓信息</h2>
+                            <div class="layui-colla-content layui-show">
+                                <table class="layui-table">
+                                    <tr>
+                                        <th>交通工具</th><td>
+                                            {$Think.config.view_tomb_vehicle[$vo.vehicle]}
+                                        </td>
+                                        <th>乘车地址</th><td>{$vo.riding_address}</td>
+                                        <th>预约时间</th><td>
+                                            {notempty name="vo.arrive_time"}
+                                                {$vo.arrive_time|date='Y-m-d H:i:s',###}
+                                            {/notempty}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>联系人</th><td>{$vo.appointer}</td>
+                                        <th>电话</th><td>{$vo.rider_phone}</td>
+                                        <th>乘车人数</th><td> {$vo.rider_number}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>购墓顾问</th><td>{$vo.company_counselor}</td>
+                                        <th>司机</th><td>{$vo['driverinfo']['driver']} {$vo['driverinfo']['driver_phone']}</td>
+                                        <th>车辆信息</th><td>{$vo['driverinfo']['plate_number']}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>接单时间</th><td>
+                                            {notempty name="vo['order_time']"}
+                                                {$vo['order_time']|date='Y-m-d H:i:s',###}
+                                            {/notempty}
+                                        </td>
+                                        <th>墓地</th><td colspan="3">{$vo.store_names}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>详情</th>
+                                        <td colspan="5">
+                                            {volist name="viewDatas"  id="voo"}
+                                                {eq name="voo['appoint_car_id']" value="$vo.id"}
+                                                    <table>
+                                                        <tr>
+                                                            <th>陵园</th><td>{$voo.store_names}</td>
+                                                            <th>到家属地</th>
+                                                            <td>
+                                                                {neq name="voo['incar_time']" value="0000-00-00 00:00:00"}
+                                                                    {$voo.incar_time}
+                                                                {/neq}
+                                                            </td>
+                                                            <th>抵达时间</th>
+                                                            <td>
+                                                                {neq name="voo['arrive_time']" value="0000-00-00 00:00:00"}
+                                                                    {$voo.arrive_time}
+                                                                {/neq}
+                                                            </td>
+                                                            <th>离开时间</th>
+                                                            <td>
+                                                                {neq name="voo['leave_time']" value="0000-00-00 00:00:00"}
+                                                                    {$voo.leave_time}
+                                                                {/neq}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>园区接待</th><td>{$voo.store_reception}</td>
+                                                            <th>购买人</th><td>{$voo.buyer}</td>
+                                                            <th>意向</th><td>
+                                                                {$Think.config.view_tomb_intention[$voo.purpose]}
+                                                            </td>
+                                                            <th>结果</th><td>{$Think.config.view_tomb_result[$voo.result]}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>原因</th><td colspan="3">{$voo.reason}</td>
+                                                            <th>墓穴位置</th><td colspan="3">{$voo.location}</td>
+                                                        </tr>
+                                                       
+                                                        <tr>
+                                                            <th>成交价</th><td>
+                                                                {neq name="voo.total_price" value="0.00"}{$voo['total_price']}元{/neq}
+                                                            </td>
+                                                            <th>墓价</th><td>
+                                                                {neq name="voo.tomb_price" value="0"}{$voo['tomb_price']}元{/neq}
+                                                            </td>
+                                                            <th>91折扣</th><td>
+                                                                {neq name="voo.91_discount" value="0"}{$voo['91_discount']}元{/neq}
+                                                            </td>
+                                                            <th>园区折扣</th><td>
+                                                                {neq name="voo.store_discount" value="0"}{$voo['store_discount']}元{/neq}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>赠品</th><td>无</td>
+                                                            <th>票据照片</th>
+                                                            <td>
+                                                                {notempty name="voo['bill_image']"}
+                                                                    <span class="layui-btn layui-btn-small viewTombZoomIn" data-image="{$voo['bill_image']}">查看</span>
+                                                                {/notempty}
+                                                            </td>
+                                                            <th>备注</th><td colspan="3">{$voo.remark}</td>
+                                                        </tr>
+                                                    </table>
+                                                    <hr style="border-top:2px dotted #185598;"/>
+                                                {/eq}
+                                            {/volist}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    {/volist}
+                </div>
+            {/notempty}
+        </div>
+        <!--看墓信息结束-->
+        
+        <!--短信信息-->
+        <div class="layui-tab-item">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="80">
+                    <col width="80">
+                    <col width="100">
+                    <col width="300">
+                    <col width="60">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>对象</th>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>短信内容</th>
+                        <th>状态</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {notempty name="$msg"}
+                     {volist name="msg" id="vo"}
+                    <tr>
+                        <td>{switch name="vo.classify"}
+                                {case value="1"}客户{/case}
+                                {case value="2"}商家{/case}
+                                {default /}客户
+                            {/switch}</td>
+                        <td>{$vo.name} </td>
+                        <td>{$vo.mobile}</td>
+                        <td>{$vo.msg}</td>
+                        <td>{switch name="vo.status"}
+                                {case value="0"}未发送{/case}
+                                {case value="1"}已发送{/case}
+                                {case value="-1"}已删除{/case}
+                                {default /}客户
+                            {/switch}
+                        </td>
+                    </tr>
+                    {/volist}
+                   {/notempty}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name='optJS'}
+<script>
+layui.use(['element', 'form', 'layedit', 'jquery', 'laydate', 'layer'], function() {
+    var $ = layui.jquery,
+        element = layui.element(),
+        layedit = layui.layedit,
+        laydate = layui.laydate,
+        layer = layui.layer,
+        form = layui.form();
+
+    //创建一个编辑器
+    var demo_index = layedit.build('demo_edit');
+    //接收锚点
+    var layid = "{$items}";
+    //跳转目的地
+    element.tabChange('items', layid);
+    //tab切换方法
+    element.on('tab(items)', function(elem) {
+        var items = $(this).attr('lay-id');
+        var URL = $(this).attr('data-url');
+        window.location.href = URL;
+    });
+
+    //看墓记录放大图片
+    $('.viewTombZoomIn').click(function() {
+        var src = $(this).attr('data-image');
+        layer.open({
+            closeBtn: 2,
+            type: 1,
+            area: ['500px', '500px'],
+            title: '查看图片',
+            content: '<img src="' + src + '" width="100%" height="100%"/>'
+        });
+    });
+});
+</script>
+{/block}

@@ -402,7 +402,7 @@ return [
 
     'page_size'            => 10,  //分页数
 	
-	'admin_name'           =>'admin',//超级管理员的账号
+	'admin_name'           =>'xds',//超级管理员的账号
 
     'h_prefix'          => 's91m',   //前端密码前缀
     'h_suffix'          => 'hgysm',  //前端密码后缀
@@ -859,8 +859,15 @@ return [
         38 => '殡仪馆',
     ],
 
-    'business_depart'    => 16, //商务部ID
-    'bj_software_depart' => 30,// 北京软件部
+    'business_depart'    => 9, //商务部ID
+    'bj_software_depart' => 25,// 北京软件部
+
+    //搜索范围
+    'search_zone'=>[
+        '1'=>'列表内搜索',
+        '-1'=>'全局搜索',
+    ],
 
     'track_excel' => 'BTrack',//商务数据导入跟踪
+
 ];

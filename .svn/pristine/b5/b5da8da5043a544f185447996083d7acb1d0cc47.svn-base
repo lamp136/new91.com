@@ -1,0 +1,254 @@
+body,html{
+	height: 100%;
+	background: #fffedf;
+}
+body,p{font-family: "微软雅黑";}
+/*banner*/
+.winter_banner img{
+	width:100%;
+	height: 578px;
+}
+.content{
+	width:1200px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+/*寒衣节的起源*/
+.origin{height: 287px;margin-top: 20px;}
+.origin_left{
+	width: 661px;
+	height: 262px;
+	float: left;
+	padding: 10px 20px 10px 0px;
+	background: url(../images/winter-lia.png)no-repeat right;
+	background-size:80px 262px;
+}
+.origin_left ul li{margin-top: 10px;}
+.origin_left ul li h5{
+	color:#0a0a0a;
+	font-size: 12px;
+	font-weight: 600;
+}
+.origin_left ul li p{
+	font-size: 12px;
+	line-height: 22px;
+	color:#0a0a0a;
+	text-indent: 25px;
+}
+.origin_left ul li a{
+	color:#a70000;
+	font-size: 12px;
+	float: right;
+	 margin-top: 15px;
+}
+.origin_right{
+	width:486px;
+	height: 287px;
+	float: right;
+}
+.origin_right img{
+	width:486px;
+	height: 287px;
+}
+
+/*寒衣节知识*/
+.cold_con{width: 100%;}
+.origin_chiai{
+	width:100%;
+	height: 183px;
+}
+.origin_chiai img{
+	width: 100%;
+	height: 183px;
+}
+.cold{
+	margin-top: 27px;
+}
+.cold ul li{
+	width:543px;
+	float: left;
+	margin-bottom: 40px;
+}
+.cold .ulli{
+	float: right;
+}
+.cold_weig{
+	font-weight: 600;
+}
+.cold .cold_oneimg{
+	width: 551px;
+	height: 36px;
+	margin-bottom: 12px;
+}
+.cold .cold_oneimg img{
+	width:551px;
+	height: 36px;
+}
+.cold p{
+	color:#0a0a0a;
+	font-size: 12px;
+	line-height: 22px;
+}
+.cold p a{
+	color:#a70000;
+	font-size: 12px;
+	float: right;
+}
+.cold_twoimg{
+	margin-top: 13px;
+	width:543px;
+	height: 374px;
+}
+.cold_twoimg img{
+	width:543px;
+	height: 374px;
+}
+/*寒衣节禁忌*/
+.taboo_title{
+	width:1200px;
+	height: 86px;
+}
+.taboo_title img{
+	width:1200px;
+	height: 86px;
+}
+.taboo_con{
+	padding: 0px 35px 0px 35px;
+}
+.taboo_con ul li .taboo_left{
+	width:473px;
+	height: 342px;
+	float: left;
+	text-align: center;
+}
+.taboo_con ul li .taboo_left img{
+	width:342px;
+	height: 342px;
+}
+.taboo_con ul li .taboo_right{
+	width:644px;
+	float: left;
+	height: 342px;
+}
+.taboo_con ul li .taboo_right h4{
+	margin-top: 70px;
+	padding-bottom: 16px;
+	color:#37861b;font-size:36px;
+	font-weight: bolder;
+	text-align: center;
+	background: url(../images/winter-long.png)no-repeat bottom;
+	background-size:600px 3px;
+}
+.taboo_con ul li .taboo_right p{
+	margin-top: 13px;
+	color:#131313;font-size: 12px;
+	line-height: 22px;
+}
+.taboo_con ul li .taboo_right p a{color:#a70000;}
+/*寒衣节来源*/
+.history_con{
+	width: 1200px;
+	height: 960px;
+	margin-top: 90px;
+	background: url(../images/winter-laiyuanban.png)no-repeat;
+	background-size:1200px 960px;
+}
+.history_main{
+	width:536px;
+	float: right;
+	margin-right: 12px;
+	color:#141414;
+}
+.history_main h5{
+	font-size: 16px;font-weight: bold;
+	margin-bottom: 36px;
+}
+.history_main h6{
+	font-size: 14px;font-weight: bold;
+	text-indent: 26px;
+	margin: 6px 0px;
+}
+.history_main p{
+	line-height: 25px;text-indent: 26px;
+	font-size: 14px;
+}
+.history_main p a{color:#a70000;}
+/*陵园推荐*/
+.recomm{
+	width:100%;
+	height: 560px;
+	background: #f2f0c0;
+	margin-top: 62px;
+	padding-top: 50px;
+}
+.recomm_main{
+	margin-top: 42px;
+}
+.recomm_main ul li{
+	float: left;
+	width: 369px;
+	height: 320px;
+	padding: 10px;
+	background: #fff;
+}
+.recomm_main ul li .recomm_img{
+	width:367px;
+	height: 242px;
+}
+.recomm_main ul li .recomm_img img{
+	width:367px;
+	height: 242px;
+}
+.recomm_main ul li .recomm_fon{
+	/*padding: 10px;*/
+	width: 367px;
+	height: 79px;
+	background: url(../images/winter-tuijian.jpg)no-repeat;
+	background-size:367px 79px;
+}
+.recomm_main ul li .recomm_fon p{
+	color:#0a0a0a;
+	font-size: 12px;
+	line-height: 20px;
+	padding: 10px;
+}
+.recomm_main ul li .recomm_fon p a{color:#a70000;}
+/*版权*/
+.copyright {
+  width: 100%;
+  height: 214px;
+  background: url(../images/winter-footer.jpg)no-repeat;
+  background-size:100% 214px;
+  text-align: center;
+  padding:0px;
+}
+.copyright ul {
+  display: inline-block;
+  margin-bottom: 18px;
+  margin-top: 50px;
+}
+.copyright ul li {
+  display: inline-block;
+  padding: 0 10px;
+  color: #333333;
+  font-family: "微软雅黑";
+  font-size: 18px;
+  text-shadow: 4px 5px 4px rgba(12, 4, 7, 0.1);
+}
+.copyright ul li a {
+  color: #333333;
+  font-family: "微软雅黑";
+  font-size: 18px;
+}
+.copyright ul li span {
+  font-weight: 700;
+}
+.copyright p {
+  color: #636860;
+  font-family: Arial, "Microsoft YaHei";
+  font-size: 12px;
+  line-height: 20px;
+}
+.copyright p a {
+  color: #636860;
+}

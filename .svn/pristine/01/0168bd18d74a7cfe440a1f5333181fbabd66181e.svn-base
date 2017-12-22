@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>寒衣节_鬼节_习俗_禁忌_91搜墓网</title>
+    	<meta name="keywords" content="寒衣节，鬼节，寒衣节简介，寒衣节习俗，寒衣节禁忌" />
+    	<meta name="description" content="寒衣节专题，讲述寒衣节（鬼节）的来历，寒衣节在民间有很多的禁忌，寒衣节的相关习俗等。" />
+		<link href="_WEB_/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" href="_WEB_/specialtopics/winter/css/topic.css" />
+		<link rel="stylesheet" type="text/css" href="_WEB_/specialtopics/winter/css/winter.css"/>
+		<script type="text/javascript" src="_WEB_/js/jquery-1.8.2.min.js"></script>
+	</head>
+	<body>
+		{include file="extra@topup"/}
+		{include file="extra@topics_topdown"/}
+		<!-- 导航 -->
+		<div class="topics_nav" id="topics_nav">
+			<div class="nav-con">	
+				<div class="contain">
+					<ul>
+						<li class="currter"><a href="#">寒衣节</a></li>
+						<li><a href="#2F">寒衣节起源 </a></li>
+						<li><a href="#3F">寒衣节知识</a></li>
+						<li><a href="#4F">寒衣节禁忌</a></li>
+						<li><a href="#5F">寒衣节传说</a></li>
+						<li><a href="#6F">陵园推荐</a></li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+			</div>	
+		</div><!-- nav导航结束 -->
+		<!--banner-->
+		<div class="winter_banner"><img src="_WEB_/specialtopics/winter/images/winter-banner.png" alt="" /></div><!--banner end-->
+		<div class="content">
+			<!--寒衣节的起源-->
+			<div class="origin" id="2F">
+				<div class="origin_left">
+					<ul>
+						<li>
+							<h5>1、寒衣节源起于古代新收时祭祀祖宗的习俗。</h5>
+							<p>古代，秋天新收后，为缅怀先人，祈求来年丰收，民间有祭祀祖宗的习俗，这一习俗与秋天的很多民俗节日均有联系。古人在十月初一，用黍等农作物祭祀祖先，后演变为家祭、墓祭等多种形式。现今江南部分地区，犹存十月初一祭新坟的习俗;十月初一烧送寒衣，祭祀亲人的风俗，现多见于北方民间。</p>
+						</li>
+						<li>
+							<h5>2、寒衣节为传统节日——“下元水官节”的前移。</h5>
+							<p>“三元”是“三官”的别称，《五杂俎》载：“道经以正月十五为上元，七月十五为中元，十月十五日为下元。”《太上三官经》云：“天官赐福，地官赦罪，水官解厄”，“三元节”为道教的传统节日：上元节称“上元天官节”，系上元赐福天官紫微大帝诞辰;中元节称“中元地官节”，系中元赦罪地官清虚大帝诞辰;下元节称“下元水官节”，系下元解厄水官洞阴大帝诞辰。水官生日，作为节庆，是为了求取水官保佑，能够解脱无法预料的厄运。</p>
+							<p>始于汉代的“下元水官节”，在民间流传了一千多年。清代，此节被前移到十月初一，成为寒衣节的一个重要组成部分。</p>
+							<a target="_blank" href="{:url('article/Article/detail',['id' => 4060])}">【查看更多】</a>
+						</li>
+					</ul>
+				</div>
+				<div class="origin_right"><img src="_WEB_/specialtopics/winter/images/winter-img1.png" alt="" /></div>
+			</div><!--寒衣节的起源  end-->
+		</div>
+		
+		<!--寒衣节知识-->
+		<div class="cold_con" id="3F">
+			<div class="origin_chiai"><img src="_WEB_/specialtopics/winter/images/winter-qiyuan.png" alt="" /></div>
+			<div class="content" >
+				<div class="cold" >
+					<ul>
+						<li>
+							<div class="cold_oneimg"><img src="_WEB_/specialtopics/winter/images/winter-w1.jpg" alt="" /></div>
+							<p>一年一度的“寒衣节”又到了，为什么“寒衣节”要送寒衣？应该有什么特别要求？有何现实意义？作</p>
+							<p>为一种信仰习俗文化，值得探讨。</p>
+							<p class="cold_weig">什么叫“送寒衣”？</p>
+							<p>“寒衣节”送寒衣，是比较普遍的一种民间重大祭祀习俗活动。随着天气渐渐 <a target="_blank" href="{:url('article/Article/detail',['id' => 4061])}">【查看更多】</a></p>
+							<div class="cold_twoimg"><img src="_WEB_/specialtopics/winter/images/winter-hua.jpg" alt="" /></div>
+						</li>
+						<li class="ulli">
+							<div class="cold_oneimg"><img src="_WEB_/specialtopics/winter/images/winter-w2.jpg" alt="" /></div>
+							<p>农历十月初一是中国传统的寒衣节，又称秋祭、鬼头日、十月朝、祭祖节、烧衣节、授衣节等，因为在</p>
+							<p>鬼节这天祭祀祖先的虔诚标志之一是哭，所以又叫“哭节”，与三月三，清明节、中元节并称中国四大</p>
+							<p>鬼节。这一天，人们会通过各种方式祭奠先人，表达哀思。</p>
+							<p class="cold_weig">寒衣节如何烧寒衣？ <a target="_blank" href="{:url('article/Article/detail',['id' => 4065])}">【查看更多】</a></p>
+							<div class="cold_twoimg"><img src="_WEB_/specialtopics/winter/images/winter-m.jpg" alt="" /></div>
+						</li>
+						<li>
+							<div class="cold_oneimg"><img src="_WEB_/specialtopics/winter/images/winter-w3.jpg" alt="" /></div>
+							<p>寒衣节自古有之。据考证，早在周朝时，农历十月初一是腊祭日，这天要举行隆重的祭祀活动。据《礼</p>
+							<p>记·月令》，农历十月是立冬的月份。这一天，天子率三公九卿到北郊举行迎冬礼，礼毕返回，要奖</p>
+							<p>赏为国捐躯者，并抚恤他们的妻子儿女。已经死去的人怎么受赏呢?为他们“送寒衣”。上行下效，遂</p>
+							<p>相沿成习。在《礼记·月令》中，同时还描述了周代  <a target="_blank" href="{:url('article/Article/detail',['id' => 4066])}">【查看更多】</a></p>
+							<div class="cold_twoimg"><img src="_WEB_/specialtopics/winter/images/winter-01.png" alt="" /></div>
+						</li>
+						<li class="ulli">
+							<div class="cold_oneimg"><img src="_WEB_/specialtopics/winter/images/winter-w4.jpg" alt="" /></div>
+							<p>中国人讲究“慎终追远”，其中农历十月初一的寒衣节，与三月三、清明节、七月中元并称民间四大悼</p>
+							<p>亡节日（四大鬼节），民间叫做“过十月一”。在儒家“孝亲”传统与“灵魂不灭”的原始宗教信仰的</p>
+							<p>支配下，古人由生者推及死者，由阳世推及阴间，认为远在黄泉之下的亡亲，需要在十月添衣过冬，作</p>
+							<p>为亡者亲属， 有义务为其置备御寒物品以示悼念之情 <a target="_blank" href="{:url('article/Article/detail',['id' => 4064])}">【查看更多】</a></p>
+							<div class="cold_twoimg"><img src="_WEB_/specialtopics/winter/images/winter-02.png" alt="" /></div>
+						</li>
+						<li>
+							<div class="cold_oneimg"><img src="_WEB_/specialtopics/winter/images/winter-w5.jpg" alt="" /></div>
+							<p>每年农历十月初一,谓之“十月朝”,又称“祭祖节”，亦称冥阴节，这一天，特别注重祭奠先亡之人，</p>
+							<p>为其送寒衣。它与春季的清明节、秋季的中元节，并称为一年之中的三大“鬼节”。</p>
+							<p>这一天,人们会通过各种方式祭奠先人,表达哀思。同时,这一天也标志着严冬的到来，所以也是父母、</p>
+							<p>爱人等为所关心的人送御寒衣物的日子。    <a target="_blank" href="{:url('article/Article/detail',['id' => 4069])}">【查看更多】</a></p>
+							<div class="cold_twoimg"><img src="_WEB_/specialtopics/winter/images/winter-03.png" alt="" /></div>
+						</li>
+						<li class="ulli">
+							<div class="cold_oneimg"><img src="_WEB_/specialtopics/winter/images/winter-w6.jpg" alt="" /></div>
+							<p>农历十月初一是寒衣节，又叫送寒衣。与春季的三月三，清明节，秋季的中元节（农历七月十五），并</p>
+							<p>称为一年之中的四大“鬼节”。</p>
+							<p class="cold_weig">节日说明</p>
+							<p> 与清明节、中元节不同的是，十月初一除以烧的形式为死去的亡灵送纸钱外要 <a target="_blank" href="{:url('article/Article/detail',['id' => 4067])}">【查看更多】</a></p>
+							<div class="cold_twoimg"><img src="_WEB_/specialtopics/winter/images/winter-04.png" alt="" /></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--寒衣节知识end-->
+		<!--寒衣节禁忌-->
+		<div class="content" style="clear: both;">
+			<div class="taboo_title" id="4F"><img src="_WEB_/specialtopics/winter/images/winter-jisi.png" alt="" /></div>
+			<div class="taboo_con">
+				<ul>
+					<li>
+						<div class="taboo_left"><img src="_WEB_/specialtopics/winter/images/winter-img9.png" alt="" /></div>
+						<div class="taboo_right">
+							<h4>01.准备贡品</h4>
+							<p>一般在上午进行。供品张罗好后，家人打发小孩到街上买一些五色纸及冥币、香箔备用。五色纸乃红、黄、蓝、白、黑五种颜色，薄薄的，有的中间还夹有棉花。晌午吃过饭，主妇把锅台收拾干净，叫齐一家人，这就可以上坟烧寒衣了。</p>
+						</div>
+					</li>
+					<li>
+						<div class="taboo_right">
+							<h4>02.进行祭拜</h4>
+							<p>到了坟前，焚香点蜡，把饺子等供品摆放齐整，一家人轮番下跪磕头;然后在坟头划一个圆圈，将五色纸、冥币置于圈内，点火焚烧。有的人家不但烧冥币，还烧用五色纸糊成的豪宅、汽车等“奢侈品”，一边烧，一边念叨：“某某呀，你活着时辛苦操劳，死了就好好享福吧，住豪宅，开宝马，风风光光，气死阎王!”生怕亲人在阴曹地府过不上好日子。</p>
+							<p>还有的人家，在坟头划圆圈时，不忘在旁边另加个圆圈。其用意乃在救济那些无人祭奠的孤魂野鬼，以免他们穷极生恶，抢走自家祖先的衣物。</p>
+						</div>
+						<div class="taboo_left"><img src="_WEB_/specialtopics/winter/images/winter-img8.png" alt="" /></div>
+					</li>
+					<li>
+						<div class="taboo_left"><img src="_WEB_/specialtopics/winter/images/winter-img7.png" alt="" /></div>
+						<div class="taboo_right">
+							<h4>03.寒衣节注意事项</h4>
+							<p>凡属送给死者的衣物、冥钞诸物，都必须烧焚，只有烧的干干净净，这些阳世的纸张，才能转化为阴曹地府的绸缎布匹、房舍衣衾及金银铜钱。只要有一点没有烧尽，就前功尽弃、亡人不能使用。所以十月一日烧寒衣，要特别认真细致。这种行动虽然看来好笑，却也反映了生者对亡人的哀思与崇敬，属于一种精神上的寄托。</p>
+							<p>民间送寒衣时，还讲究在十字路口焚烧一些五色纸，象征布帛类。用意是救济那些无人祭祖的绝户孤魂，以免给亲人送去的过冬用物被他们抢去。<a target="_blank" href="{:url('article/Article/detail',['id' => 4129])}"> 【查看更多】</a></p>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!--寒衣节禁忌 end-->
+		<div style="height: 130px;clear: both;"></div>
+		<!--寒衣节来源与历史传说-->
+		<div class="content">
+			<div class="taboo_title history_tit" id="5F"><img src="_WEB_/specialtopics/winter/images/winter-laiyu.png" alt="" /></div>
+			<div class="history_con">
+				<div class="history_main">
+					<h5>关于寒衣节的来历，主要有以下传说。</h5>
+					<h6>1、因先秦的迎冬礼仪脱胎而成</h6>
+					<p>据《礼记·月令》记，农历十月是立冬的月份。这一天，天子率三公九卿到北郊举行迎冬礼，礼毕返回，要奖赏为国捐躯者，并抚恤他们的妻子儿女。已经死去的人怎么受赏呢?为他们“送寒衣”当是题中应有之义，上行下效，遂相沿成习。</p>
+					<h6>2、朱元璋“授衣”传说</h6>
+					<p>农历十月在古代是一个重要的月份，此时正是稻谷收获进仓之际，“是月也，天子始裘”(《礼记·月令》)，天子以穿冬衣的仪式，昭告庶民：冬天已经来临。相传明初朱元璋在南京称帝，为了显示顺应天时，在十月初一这天早朝，行“授衣”之礼，并把刚收获的赤豆、糯米做成热羹赐给群臣尝新。南京民谚说：“十月朝、穿棉袄，吃豆羹、御寒冷。”“寒衣节”由此而来。</p>
+					<h6>3、孟姜女千里送寒衣</h6>
+					<p>相传，秦时江南松江府孟、姜两家，种葫芦而得女...<a target="_blank" href="{:url('article/Article/detail',['id' => 4063])}">【查看更多】</a></p>
+				</div>
+			</div>
+		</div><!--寒衣节来源与历史传说 end-->
+		<!--陵园推荐-->
+		<div class="recomm">
+			<div class="content">
+				<div class="taboo_title" id="6F"><img src="_WEB_/specialtopics/winter/images/winter-ling.png" alt="" /></div>
+				<div class="recomm_main">
+					<ul>
+						<li>
+							<div class="recomm_img"><img src="_WEB_/specialtopics/winter/images/winter-li01.jpg" alt="" /></div>
+							<div class="recomm_fon">
+								<p>北京天寿陵园坐落在北京上风上水的昌平区南口镇西，是1997年经北京市民政局批准兴建的合法经营性公墓。天寿陵园背靠与明十三陵一脉相承气势磅礴的天寿山...<a title="北京天寿陵园" target="_blank" href="http://bj.91soumu.com/cemetery/details/102.html">【查看详情】</a></p>
+							</div>
+						</li>
+						<li style="margin: 0px 15px;">
+							<div class="recomm_img"><img src="_WEB_/specialtopics/winter/images/winter-li02.jpg" alt="" /></div>
+							<div class="recomm_fon">
+								<p>河北三河灵山宝塔陵园是经民政部门批准的合法经营性公墓。由三河福成投资有限公司投资兴建，总面积760余亩。建成后将集地葬、塔葬、生态葬等葬式于一体...<a title="河北灵山宝塔陵园" target="_blank" href="http://hb.91soumu.com/cemetery/details/100.html">【查看详情】</a></p>
+							</div>
+						</li>
+						<li>
+							<div class="recomm_img"><img src="_WEB_/specialtopics/winter/images/winter-li03.jpg" alt="" /></div>
+							<div class="recomm_fon">
+								<p>名流陵园是经中华人民共和国民政部批准建立的中外合作高档涉外陵园，始建于1994年。1999年经中华人民共和国民政部验收合格准予营业。陵园各项手续合法规范齐全...<a title="苏州名流陵园" target="_blank" href="http://js.91soumu.com/cemetery/details/101.html">【查看详情】</a></p>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--陵园推荐 end-->
+		<!-- 版权 -->
+        {include file="extra@footdown"/}
+        <script src="_WEB_/js/backtop.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				//导航
+				var mt = 0;
+				window.onload = function() {
+					var mydiv = document.getElementById("topics_nav");
+					var mt = mydiv.offsetTop; //当前对象到距离上方或上层控件的位置
+					var tt = document.documentElement.scrollTop || document.body.scrollTop;
+					if (tt > mt) {
+						mydiv.style.position = "fixed";
+						mydiv.style.margin = "0";
+						mydiv.style.top = "0";
+					}
+					window.onscroll = function() {
+						var t = document.documentElement.scrollTop || document.body.scrollTop;
+						if (t > mt) {
+							mydiv.style.position = "fixed";
+							mydiv.style.margin = "0";
+							mydiv.style.top = "0";
+						} else {
+							mydiv.style.position = "static";
+						}
+					}
+				}
+				$(".topics_nav ul li").click(function() {
+					$(".topics_nav ul li").removeClass();
+					$(this).addClass("currter");
+				});
+			});
+		</script>
+	</body>
+</html>

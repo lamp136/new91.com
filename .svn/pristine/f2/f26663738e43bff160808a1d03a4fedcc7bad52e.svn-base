@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>中秋节</title>
+	<link rel="stylesheet" href="_WEB_/topics/css/moon/topic.css" />
+	<link rel="stylesheet" href="_WEB_/topics/css/moon/cutumo.css" />
+	<link href="_WEB_/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="_WEB_/js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+{include file="extra@topup"/}
+{include file="extra@topics_topdown"/}
+<!-- 导航 -->
+<div class="topics_nav" id="topics_nav">
+	<div class="nav-con">	
+		<div class="contain">
+			<ul>
+				<li class="currter"><a href="#">中秋节</a></li>
+				<li><a href="#2F">中秋节起源 </a></li>
+				<li><a href="#3F">中秋与祭祀</a></li>
+				<li><a href="#4F">中秋节故事</a></li>
+				<li><a href="#5F">中秋节祝福</a></li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+	</div>	
+</div><!-- nav导航结束 -->
+<!--banner-->
+<div class="banner"><img src="_WEB_/topics/images/moon/autumo-banner.jpg" alt="" title="中秋节"/></div><!--banner end-->
+<!--副导航-->
+<div class="nav-deali">
+	<a href="#2F"><img src="_WEB_/topics/images/moon/nutumo-nav-1.jpg" alt="" title="传统知识起源"/></a>
+	<a href="#3F"><img src="_WEB_/topics/images/moon/nutumo-nav-2.jpg" alt="" title="中秋与祭祀"/></a>
+	<a href="#4F"><img src="_WEB_/topics/images/moon/nutumo-nav-3.jpg" alt="" title="叙说中秋故事"/></a>
+	<a href="#5F"><img src="_WEB_/topics/images/moon/nutumo-nav-4.jpg" alt="" title="91搜墓网中秋祝福"/></a>
+</div>
+<!--副导航结束-->	
+<!--content-->
+<div class="content">
+	<!--内容一-->
+		<div class="autumo-first" id="2F">
+			<div class="autumo-con">
+				<div class="autumo-img"><img src="_WEB_/topics/images/moon/autumo-img-1.jpg" alt="" /></div>
+				<p class="autumo-fon">
+					关于中秋节的起源，有神话、历史以及农耕多种说法。农业生产起源的说法简单朴实，却饱含了人生和生活的真谛。按照农业生产起源说，秋天是收获的季节，大部分农产品和果蔬相继成熟，人们开始采摘果实。曾经的汗水都化作了丰收的喜悦，围在收获成果旁边享受幸福的聚会，感恩身边的人和果实。人生也一样，要付出认真的汗水才能收获成功，要付出真心的关怀才能收获爱情、友情、亲情的真心和回馈。
+				</p>
+			</div>
+			
+			<p class="autumo-fon-first">中秋节是中国传统节日中最盛大的节日之一。这一天，全国各地的家庭都会团聚在一起。月饼是这个节日的标配，此外，葡萄、柚子也是这场盛宴里的尤物。祭祀月神的环节，有些家庭都已经略去了，不过，只要这一天不是阴雨天气，赏月是每个家庭、每个人都会做的事。桂花酒、赏花灯、猜字谜、猜字谜等，不同地区会有不同的玩法。</p>
+			<p class="autumo-fon-second">总之，中秋节是团圆的节日，是丰收和欢庆的盛宴。<a target="_blank" href="http://www.91soumu.com/article/detail/3367.html">详细内容</a></p>
+		</div>
+		
+	<!--内容一结束-->
+	<!--内容二-->
+		<div class="autumo-second" id="3F">
+			<p class="autumo-fon-third">中秋节源自古代对月神的祭祀，它是汉民族祭月习俗的遗存和衍生。 祭月，作为中国古代重要祭礼之一。早在周朝，帝王就有春分祭日、夏至祭地、秋分祭月、冬至祭天的习俗。下面小编来给大家讲讲中秋祭月的习俗吧。</p>
+			<p class="autumo-fon-third">所谓“日者，阳之主”，“月者，阴之宗也”。在先人的观念中，日月代表着阴阳两极，两者和谐是万物正常生长的保证,所以先人十分重视祭祀日月。</p>
+			<p class="autumo-fon-third">秦汉时期祭月在皇室礼仪中继续传承。秦时，各地均建有日月祠，山东有日主祠、月主祠。秦始皇祭日于成山，祭月于莱山。汉武帝时，则“夕夕月则揖”，行朝日夕月之礼。北魏、隋唐直至明清历代沿用秋分祭月礼仪。明世宗时，还在北京修建夕月坛，专供天子于秋分设坛在夜晚祭祀月神，这就是现在的北京月坛公园。《明嘉靖祭祀》记载：“秋分祀夜明于夕月坛。”又曰：“夕月坛每三岁一祭。祭以丑、辰、未、戌年行事。朝日则遣文臣，夕月则遣武臣。”即每三年一大祭，遇丑、辰、未、戌年皇帝亲自在月坛祭月。其他年份则派文臣代祭日，遣武臣代祭月。</p>
+			<div class="autumo-fon-third">
+				<p>随着时间的推移，原先为朝廷及上层贵族所奉行的祭月礼仪，也逐渐流传到汉族民间。礼仪</p>
+				<p>式的皇家祭神行为变成了大众化的功利性民俗活动，并逐渐形成了一种风</p>
+				<p>俗沿续下来。同时，祭月的日子，也由秋分日移到了离秋分最近的</p>
+				<p>满月日----中秋。</p>
+			</div>
+			<div class="autumo-fon-third">
+				<p>祭月活动在民国期间仍然风行，只是四九年后才因形势的变化而逐</p>
+				<p>渐消失，所以现代人中秋节只知吃月饼而不知祭月。然而，近几年</p>
+				<p>来又重新开始出现由官方或汉族民间组织的祭月活动。</p>
+			</div>
+			<div class="autumo-fon-third">
+				<p>现代中秋祭月，应以传承华夏千年传统文化为主。以礼仪引导心智</p>
+				<p>对传统文化的认知和融合。心智到处，却可不拘礼仪的细节。承古却不拘</p>
+				<p>于古，这是现代人祭月应有的境界。</p> 
+			</div>
+		</div>
+	<!--内容二结束-->
+	<!--内容三-->
+		<div class="autumo-third" id="4F">
+			<ul>
+				<li>
+					<div class="autumo-third-left"><img src="_WEB_/topics/images/moon/autumo-img-2.jpg" alt="" /></div>
+					<div class="autumo-third-right">
+						<h4>1)爱情篇</h4>
+						<p>①　中秋之嫦娥奔月：小时候听到最多的神话故事就是嫦娥奔月，尤其在中秋这样一个传统大节日，是阖家团圆，更是花好月圆。然而关于这个美好至极的节日，却有嫦娥奔月这么伤感的离别，浪漫到伤感不就是爱情吗？这也是提醒我们珍惜眼前人。<a target="_blank" href="http://www.91soumu.com/article/detail/5162.html">详情内容</a></p>
+						<p>②　中秋之霓裳羽衣曲：霓裳羽衣曲听起来就是浪漫和心碎。一篇舞曲串起了多少篇章宏大的儿女情长，唐玄宗李隆基痴恋儿媳杨玉环；李煜周娥皇万卷丛中寻觅霓裳羽衣曲的踪迹……古人封建，今人开放，可现在还有多少人有爱得勇气，更有多少人能有爱得真心？越来越繁荣的经济社会外衣之下，日渐空乏的心灵和肉体被掏空，你还敢爱吗？<a target="_blank" href="http://www.91soumu.com/article/detail/5172.html">详细内容</a></p>
+					</div>
+				</li>
+				<li>
+					<div class="autumo-third-left"><img src="_WEB_/topics/images/moon/autumo-img-3.jpg" alt="" /></div>
+					<div class="autumo-third-right">
+						<h4>2)友情篇</h4>
+						<p>③　中秋之琵琶行：现在我们都有闺蜜团、男人帮，红颜和蓝颜都可以一起喝酒撸串赚外快。很多人都是吃不到一块咱喝酒，喝不到一块各自走。我们在快节奏的工作生活，容不得你拖泥带水。古人们结交的故事却不太一样，文人墨客结交朋友都有一个“雅”字。深情厚谊只要一首曲子，司马青衫湿。<a target="_blank" href="http://www.91soumu.com/article/detail/5181.html">详情内容</a></p>
+						<p>④　中秋之她是我朋友：有一种说法，是不是真朋友。还是觉得用钱来衡量友情——太土豪，有本事你用命啊！这篇战争里的故事很撼动人心，让你知道什么是生死之交。我用眼泪告诉你我爱惜生命，但是来吧，用尽我的血来换你的命。<a target="_blank" href="http://www.91soumu.com/article/detail/5183.html">详细内容</a></p>
+					</div>
+				</li>
+				<li>
+					<div class="autumo-third-left"><img src="_WEB_/topics/images/moon/autumo-img-4.jpg" alt="" /></div>
+					<div class="autumo-third-right">
+						<h4>1)亲情篇</h4>
+						<p>⑤　中秋之黄庭坚涤溺（黄庭坚坚持为母亲洗马桶）：看一个人是不是用心，并不是看他能不能为你开天辟地。看他能不能为你做小事，看他能不能坚持。尤其像洗马桶这样卑微的小事，尤其是日复一日，年复一年，这不是考验，这是孝。<a target="_blank" href="http://www.91soumu.com/article/detail/5187.html">详情内容</a></p>
+						<p>⑥　中秋之黄香事父（黄香为父亲暖穿驱蚊）：一位网络作者分享妹妹日常：一日在公园里被蚊子咬得直喊痒，妹妹就把自己的袖管、裤中秋管都挽起来，就让蚊子来咬我吧。嗯，继承了先人的优良传统。古代也有一人做过同样的事，他就是黄香。<a target="_blank" href="http://www.91soumu.com/article/detail/5188.html">详细内容</a></p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	<!--内容三结束-->
+	<!--内容四-->
+	<div class="autumo-fourth" id="5F">
+		<ul>
+			<li>
+				<p>我家乡的小孩中秋节都系绒，毛绒绒的红绳子系在手腕上漂漂亮亮、大吉大利；</p>
+				<p>梦想：今天在北京，明天再国外，玩个痛快！</p>
+			</li>
+			<li>
+				<p>吃！吃月饼、吃葡萄！</p>
+				<p>梦想：来一车巧克力，然后，飞上宇宙~</p>
+			</li>
+			<li>
+				<p>好吃哒，月饼、葡萄、石榴，啦啦啦</p>
+				<p>梦想：好吃哒，Er~</p>
+			</li>
+			<li>
+				<p>好吃哒，月饼、柚子~柚子哦</p>
+				<p>梦想：环游世界~</p>
+			</li>
+			<li>
+				<p>欢聚一堂，闲话地产风云，共论楼市人生</p>
+			</li>
+			<li>
+				<p>月饼的5种食味心语包含“愉悦、惦念、怡然、美满、清心</p>
+			</li>
+		</ul>
+		<p class="autumo-fourth-bot">说起吃哒都很实在，说起梦想来~Er~能不能实在点！！！</p>
+	</div>
+	<!--内容四结束-->
+</div>
+<!--content end-->
+<div class="copyright"><p>京IPC备12005803号-4&nbsp;&nbsp;&nbsp;&nbsp;京公安备11000002000088 号&nbsp;&nbsp;&nbsp;&nbsp;<a href="/" title="91搜墓网">91搜墓网</a>版权所有</p><p>CopyRight (C)2015- {php}echo date("Y");{/php}Huigeyuan Technology Allrights</p></div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		//导航
+	        var mt = 0;
+	        window.onload = function () {
+	            var mydiv = document.getElementById("topics_nav");
+	            var mt = mydiv.offsetTop; //当前对象到距离上方或上层控件的位置
+	            var tt = document.documentElement.scrollTop || document.body.scrollTop;
+	            if (tt > mt) {
+	                mydiv.style.position = "fixed";
+	                mydiv.style.margin = "0";
+	                mydiv.style.top = "0";
+	            }
+	            window.onscroll = function () {
+	                var t = document.documentElement.scrollTop || document.body.scrollTop;
+	                if (t > mt) {
+	                    mydiv.style.position = "fixed";
+	                    mydiv.style.margin = "0";
+	                    mydiv.style.top = "0";
+	                }
+	                else {
+	                    mydiv.style.position = "static";
+	                }
+	            }
+	        }
+			$(".topics_nav ul li").click(function(){
+				$(".topics_nav ul li").removeClass();
+				$(this).addClass("currter");
+			});
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+{extend name='extra@main' /}
+{block name='body'}
+    <!-- contain -->
+    <div class="contain contain_pdsize">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="/" title="首页">首页</a></li>
+                <li class="jt">></li>
+                <li>
+                    {notempty name="category"}
+                        {if $category == config('category_cemetery_id')}
+                            陵园墓地
+                        {else if $category == config('category_funeral_id')/}
+                            殡仪馆
+                        {/if}
+                    {/notempty}
+                </li>
+            </ul>
+        </div><!-- breadcrumb End -->
+        
+        <!-- 左侧内容 -->
+        <div class="leftcontain ">
+
+            <!-- 筛选条件 -->
+            <div class="sifting">
+
+                <!-- 筛选条件结果显示 -->
+                <div class="criteria">
+                    <ul>
+                        <li class="sif">所有分类</li>
+                        <li>></li>
+                        {notempty name="input.province"}
+                            <li class="if">{$provincelist[$input.province]}
+                                <a href="{:url('search/Search/search',['name' => $selectName,'cat' => $category])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        {notempty name="input.city"}
+                            <li class="if">{$citylist[$input.city]}
+                                <a href="{:url('search/Search/search',['name' => $selectName,'cat' => $category,'province' => $selectProvince,'price' => $selectPrice,'dist' => $selectDist])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        {notempty name="input.price"}
+                            <li class="if">{$input.price}万
+                                <a href="{:url('search/Search/search',['name' => $selectName,'cat' => $category,'province' => $selectProvince,'city' => $selectCity,'dist' => $selectDist])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        {notempty name="input.dist"}
+                            <li class="if">{$input.dist}公里
+                                <a href="{:url('search/Search/search',['name' => $selectName,'cat' => $category,'province' => $selectProvince,'city' => $selectCity,'price' => $selectPrice])}"><span></span></a>
+                            </li>
+                        {/notempty}
+                        <li class="number">共<span> {$dataCount + count($currlist)} </span>结果</li>
+                    </ul>
+                </div>
+
+                <!--所在省份 -->
+                <div class="sifting_main clearfix">
+                    <span>所在省份：</span>
+                    <ul>
+                        <li {empty name="selectProvince"} class="led" {/empty}>
+                            <a href="{:url('search/Search/search',['name' => $selectName,'cat' => $category])}" title="不限">不限</a>
+                        </li>
+                        {notempty name="provincelist"}
+                            {volist name="provincelist" id="p"}
+                                <li {eq name="selectProvince" value="$key"} class="led" {/eq}>
+                                    <a href="{:url('search/Search/search',['name' => $selectName,'province' => $key,'dist' => $selectDist,'price' => $selectPrice,'cat' => $category])}" title="{$p}">{$p}</a>
+                                </li>
+                            {/volist}
+                        {/notempty}
+                    </ul>
+                </div>
+                
+                {notempty name="citylist"}
+                    <!--所在市区 -->
+                    <div class="sifting_main clearfix">
+                        <span>所在市区：</span>
+                        <ul>
+                            <li {empty name="selectCity"} class="led" {/empty}>
+                                <a href="{:url('search/Search/search',['name' => $selectName,'province' => $selectProvince,'cat' => $category])}" title="不限">不限</a>
+                            </li>
+                            {volist name="citylist" id="c"}
+                                <li {eq name="selectCity" value="$key"} class="led" {/eq}>
+                                    <a href="{:url('search/Search/search',['name' => $selectName,'province' => $selectProvince,'city' => $key,'cat' => $category])}" title="{$c}">{$c}</a>
+                                </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                {/notempty}
+                {if $category == config('category_cemetery_id')}
+                    <!-- 价格区间 -->
+                    <div class="sifting_main clearfix">
+                        <span>价格区间：</span>
+                        <ul>
+                            <li {empty name="selectPrice"} class="led" {/empty}><a href="{:url('search/Search/search',['name' => $selectName,'province' => $selectProvince,'cat' => $category,'city' => $selectCity,'dist' => $selectDist])}">不限</a></li>
+                            {volist name=":config('price_range')" id="range"}
+                                <li {eq name="selectPrice" value="$range"} class="led" {/eq}><a href="{:url('search/Search/search',['name' => $selectName,'province' => $selectProvince,'cat' => $category,'city' => $selectCity,'price' => $range,'dist' => $selectDist])}" title="{$range}">{$range}{if $key == 0}万以内{elseif $countRange == $key + 1/}万及以上{else/}万{/if}</a></li>
+                            {/volist}
+                        </ul>                   
+                    </div>
+                {/if}
+
+                <!-- 距离市区 -->
+                <div class="sifting_main clearfix">
+                    <span>距离市区：</span>
+                    <ul>
+                        <li {empty name="selectDist"} class="led" {/empty}><a href="{:url('search/Search/search',['name' => $selectName,'cat' => $category,'province' => $selectProvince,'city' => $selectCity,'price' => $selectPrice])}">不限</a></li>
+                        {volist name=":config('store_length')" id="len"}
+                            <li {eq name="selectDist" value="$len"} class="led" {/eq}>
+                                <a href="{:url('search/Search/search',['name' => $selectName,'cat' => $category,'province' => $selectProvince,'city' => $selectCity,'price' => $selectPrice,'dist' => $len])}" title="{$len}">{$len}{if $key == 0}公里以内{elseif $countDist == $key/}公里及以上{else/}公里{/if}</a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div>
+                
+            </div><!-- sifting筛选条件结束 -->
+            <!-- 陵园列表 -->
+            <div class="cemetery_list funeralparlour_list">
+                {notempty name="currlist"}
+                    {if $currPage <= config('normal_status')}
+                        {volist name="currlist" id="curr"}
+                            <!-- 陵园内容1 -->
+                            <div class="cemetery_list_box">
+                                <div class="cemetery_list_main {if $i % 10 == 0} last {/if} clearfix">
+                                    <!-- 图片 -->
+                                    <div class="cemetery_list_main_img">
+                                        <a title="{$curr.name}" href="{:url('cemetery/Cemetery/details',['id' => $curr.id],config('assign_suffix'),$abbr[$curr.province_id].'.'.config('domain_name'))}" target="_blank">
+                                            <img 
+                                                {notempty name="curr.thumb_image"}
+                                                    src="{$curr.thumb_image}"
+                                                {else /}
+                                                    {empty name="curr.image"}
+                                                        src="_WEB_/images/cemetery_tmp_image.jpg"
+                                                    {else/}
+                                                        src="{$curr.image}"
+                                                    {/empty}
+                                                {/notempty}
+                                                 alt="{$curr.name}"/>
+                                        </a>
+                                        {eq name="curr.status" value="0"}
+                                            <span class="ygwicon"></span>
+                                        {/eq}
+                                    </div>
+                                    <!-- 信息 -->
+                                    {if $category == config('category_cemetery_id')}
+                                        <div class="cemetery_list_main_info">
+                                            <h2 class="clearfix">
+                                                <a title="{$curr.name}" href="{:url('cemetery/Cemetery/details',['id' => $curr.id],config('assign_suffix'),$abbr[$curr.province_id].'.'.config('domain_name'))}" target="_blank">{$curr.name}</a>
+                                                <span>
+                                                    {notempty name="curr.hits"}
+                                                        <i></i>{$curr.actual_hits + $curr.hits}
+                                                    {/notempty}
+                                                </span>
+                                            </h2>
+                                            <div class="address clearfix">
+                                                <p><font>陵园地址：</font><sapn title="{$curr.address}">{:msubstr($curr.address,0,11)}</span></p>
+                                                <p class="lookmap"><a href="{:url('cemetery/Cemetery/details',['id' => $curr.id],config('assign_suffix'),$abbr[$curr.province_id].'.'.config('domain_name'))}?map=true" title="地址"><i></i>查看地图</a></p>
+                                            </div>
+                                            <ul class="clearfix">
+                                                {notempty name="curr.label"}
+                                                    {php}
+                                                        $label = explode(',',$curr['label']);
+                                                        foreach($label as $val){
+                                                            echo '<li>'.$val.'</li>';
+                                                        }
+                                                    {/php}
+                                                {/notempty}
+                                            </ul>
+                                        </div>
+                                        <!-- 咨询 -->
+                                        <div class="cemetery_list_main_consult">
+                                            <a target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439"><img src="_WEB_/images/cemetery_list_main_consult.jpg" alt="91搜墓网客服" title="您好，91搜墓网客服为您服务，有什么可以帮到您。"/></a>
+                                        </div>
+                                        <!-- 价格 -->
+                                        <div class="cemetery_list_main_price">
+                                            <span class="ckj">参考价</span>
+                                            {eq name="curr.min_price" value="0.00"}<p><i></i><span>--</span></p>{else /}<p><i>￥</i><span>{$curr.min_price}</span>万起</p>{/eq}
+                                            <a target="_blank" {eq name="curr.status" value="0"} class="buttonhui" href="javascript:void(0);" {else/} class="buttonlv" href="{:url('cemetery/Cemetery/subscribe',['id' => $curr.id])}" {/eq}>预约看墓</a>
+                                        </div>
+                                    {else/}
+                                        <div class="funeralparlour_list_main_info">
+                                            <h2 class="clearfix"><a href="{:url('funeral/Funeral/details',['id' => $curr.id],config('assign_suffix'),$abbr[$curr.province_id].'.'.config('domain_name'))}"  title='{$curr.name}' target="_blank">{$curr.name}</a></h2>
+                                            <p><span>殡仪馆地址：</span>{$curr.address}</p>
+                                            {notempty name="curr.funcontact.tel"}
+                                                <p><span>服务热线：</span><span class="phone">{$curr.funcontact.tel}</span></p>
+                                            {/notempty}
+                                            <p><span>浏览量：</span><span class="num">{$curr.hits + $curr.actual_hits}</span></p>
+                                        </div>
+                                        <div class="cemetery_list_main_price funeralparlour_list_main_price">
+                                            <a class="buttonlv" href="{:url('funeral/Funeral/details',['id' => $curr.id],config('assign_suffix'),$abbr[$curr.province_id].'.'.config('domain_name'))}" title="{$curr.name}" target="_blank">查看详情</a>
+                                        </div>
+                                    {/if}
+                                </div><!-- cemetery_list_main End -->
+                            </div><!-- cemetery_list_box 陵园内容 End -->
+                        {/volist}
+                    {/if}
+                {/notempty}
+                {notempty name="list"}
+                    {volist name="list" id="v"}
+                        <!-- 陵园内容1 -->
+                        <div class="cemetery_list_box">
+                            <div class="cemetery_list_main {if $i%10 == 0} last {/if} clearfix">
+                                <!-- 图片 -->
+                                <div class="cemetery_list_main_img">
+                                    <a title="{$v.name}" href="{:url('cemetery/Cemetery/details',['id' => $v.id],config('assign_suffix'),$abbr[$v.province_id].'.'.config('domain_name'))}" target="_blank">
+                                        <img 
+                                            {notempty name="v.thumb_image"}
+                                                src="{$v.thumb_image}"
+                                            {else /}
+                                                {empty name="v.image"}
+                                                    src="_WEB_/images/cemetery_tmp_image.jpg"
+                                                {else/}
+                                                    src="{$v.image}"
+                                                {/empty}
+                                            {/notempty}
+                                             alt="{$v.name}"/>
+                                    </a>
+                                    {eq name="v.status" value="0"}
+                                        <span class="ygwicon"></span>
+                                    {/eq}
+                                </div>
+                                <!-- 信息 -->
+                                {if $category == config('category_cemetery_id')}
+                                    <div class="cemetery_list_main_info">
+                                        <h2 class="clearfix">
+                                            <a title="{$v.name}" href="{:url('cemetery/Cemetery/details',['id' => $v.id],config('assign_suffix'),$abbr[$v.province_id].'.'.config('domain_name'))}" target="_blank">{$v.name}</a>
+                                            <span>
+                                                {notempty name="v.hits"}
+                                                    <i></i>{$v.actual_hits + $v.hits}
+                                                {/notempty}
+                                            </span>
+                                        </h2>
+                                        <div class="address clearfix">
+                                            <p><font>陵园地址：</font><sapn title="{$v.address}">{$v.address|msubstr=0,11}</span></p>
+                                            <p class="lookmap"><a href="{:url('cemetery/Cemetery/details',['id' => $v.id],config('assign_suffix'),$abbr[$v.province_id].'.'.config('domain_name'))}?map=true" title="地址"><i></i>查看地图</a></p>
+                                        </div>
+                                        <ul class="clearfix">
+                                            {notempty name="v.label"}
+                                                {php}
+                                                    $label = explode(',',$v['label']);
+                                                    foreach($label as $val){
+                                                        echo '<li>'.$val.'</li>';
+                                                    }
+                                                {/php}
+                                            {/notempty}
+                                        </ul>
+                                    </div>
+                                    <!-- 咨询 -->
+                                    <div class="cemetery_list_main_consult">
+                                        <a target="_blank" href="http://p.qiao.baidu.com/im/index?siteid=8935186&amp;ucid=20177439"><img src="_WEB_/images/cemetery_list_main_consult.jpg" alt="91搜墓网客服" title="您好，91搜墓网客服为您服务，有什么可以帮到您。"/></a>
+                                    </div>
+                                    <!-- 价格 -->
+                                    <div class="cemetery_list_main_price">
+                                        <span class="ckj">参考价</span>
+                                        {eq name="v.min_price" value="0.00"}<p><i></i><span>--</span></p>{else /}<p><i>￥</i><span>{$v.min_price}</span>万起</p>{/eq}
+                                        <a target="_blank" {eq name="v.status" value="0"} class="buttonhui" href="javascript:void(0);" {else/} class="buttonlv" href="{:url('cemetery/Cemetery/subscribe',['id' => $v.id])}" {/eq}>预约看墓</a>
+                                    </div>
+                                {else/}
+                                    <div class="funeralparlour_list_main_info">
+                                        <h2 class="clearfix"><a href="{:url('funeral/Funeral/details',['id' => $v.id],config('assign_suffix'),$abbr[$v.province_id].'.'.config('domain_name'))}"  title='{$v.name}' target="_blank">{$v.name}</a></h2>
+                                        <p><span>殡仪馆地址：</span>{$v.address}</p>
+                                        {notempty name="v.funcontact.tel"}
+                                            <p><span>服务热线：</span><span class="phone">{$v.funcontact.tel}</span></p>
+                                        {/notempty}
+                                        <p><span>浏览量：</span><span class="num">{$v.hits+$v.actual_hits}</span></p>
+                                    </div>
+                                    <div class="cemetery_list_main_price funeralparlour_list_main_price">
+                                        <a class="buttonlv" href="{:url('funeral/Funeral/details',['id' => $v.id],config('assign_suffix'),$abbr[$v.province_id].'.'.config('domain_name'))}" title="{$v.name}" target="_blank">查看详情</a>
+                                    </div>
+                                {/if}
+                            </div><!-- cemetery_list_main End -->
+                        </div><!-- cemetery_list_box 陵园内容 End -->
+                    {/volist}
+                    <!-- 分页 -->
+                    <div class="paging">
+                        {$page}
+                    </div><!-- paging 分页 End -->
+                {else/}
+                    {empty name="currlist"}
+                        <div class="findnothing">
+                            <p><img src="_WEB_/images/findnothing.png"/>没有数据</p>
+                        </div>
+                    {/empty}
+                {/notempty}
+            </div><!-- cemetery_list 陵园列表 End -->
+        </div><!-- leftcontain End -->
+        
+        <!-- 右侧内容 -->
+        <div class="rightcontain">
+            {if $category == config('category_cemetery_id')}
+                {notempty name="rankList"}
+                    <!-- 陵园排行榜 -->
+                    <div class="ranking_list cem_margin_bottom">
+                        <h3>陵园排行榜</h3>
+                        <div class="ranking_list_main">
+                            <h4>排名<span>名称</span></h4>
+                            <ul>
+                                {volist name="rankList" id="rank"}
+                                    <li class="{eq name="key" value="0"} first {/eq} clearfix">
+                                        <a href="{:url('cemetery/Cemetery/details',['id' => $rank.id])}" title="{$rank.name}" target="_blank">
+                                            {eq name="key" value="0"}
+                                                <img src="_WEB_/images/ranking_list_img.png" alt="{$rank.name}"/>
+                                                <div class="txt">
+                                                    <h5>{$rank.name}</h5>
+                                                    {neq name="rank.min_price" value="0.00"}
+                                                        <p>￥{$rank.min_price}<font>万起</font></p>
+                                                    {/neq}
+                                                </div>
+                                            {else/}
+                                                <span>{$i}</span>
+                                                <h5>{$rank.name}</h5>
+                                            {/eq}
+                                        </a>
+                                    </li>
+                                {/volist}
+                            </ul>
+                        </div>
+                        <!-- <p class="wp">本排行榜根据陵园综合情况不定期更新</p> -->
+                    </div><!-- ranking_list 陵园排行榜 End -->
+                {/notempty}
+                <!--广告位-->
+                <div class="advertising cem_margin_bottom">
+                    <a title="商家入驻" href="{:url('/help/joinus','',config('assign_suffix'),config('assign_domain'))}"><img src="_WEB_/images/advertising_img.jpg" alt="商家入驻"/></a>
+                </div> <!-- advertising 广告位 End-->
+            {/if}
+
+            {notempty name="hmzc"}
+                <!--惠民政策-->
+                <div class="policies cem_margin_bottom">
+                    <h2>风水文化</h2>
+                    <ul>
+                        {volist name="hmzc" id="v"}
+                            <li><a target="_blank" title="{$v.title}" href="{:url('article/Article/detail',['id' => $v.id],$Think.config.assign_suffix,$Think.config.assign_domain)}">{$v.title|msubstr=0,15}</a></li>
+                        {/volist}
+                    </ul>
+                </div><!-- policies 惠民政策 End-->
+            {/notempty}
+            
+            {notempty name="sense"}    
+                <!--白事常识-->
+                <div class="policies">
+                    <h2>白事常识</h2>
+                    <ul>
+                        {volist name="sense" id="vo"}
+                            <li><a href="{:url('article/Article/detail',['id'=>$vo.id],$Think.config.assign_suffix,$Think.config.assign_domain)}" title="{$vo.title}" target="_blank">{$vo.title}</a></li>
+                        {/volist}
+                    </ul>
+                </div><!-- policies 白事常识 End-->
+            {/notempty}
+        </div><!-- leftcontain End -->
+        <div class="clear"></div>
+    </div><!-- contain End -->
+{/block}
+{block name="js"}
+    <!--私有JS -->
+    <script type="text/javascript" src="_WEB_/js/cemetery.js"></script>
+{/block}

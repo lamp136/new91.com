@@ -25,13 +25,16 @@ class PushMesage extends Controller
 
         //赋值
         $this -> host = 'http://sdk.open.api.igexin.com/apiex.htm';
-        $this -> appKey = 'PAX8cvVl4a5EEHQr5X4fk3';
-        $this -> appId = 'wl3swnArkgArkKabkC0L59';
-        $this -> masterSecret = 'WXdDb4jWle5V06ggaCe6j';
-        $this -> cid = '1e7b957c52fbf5771d13399c7b539f88';
+        // $this -> appKey = 'PAX8cvVl4a5EEHQr5X4fk3';
+        // $this -> appId = 'wl3swnArkgArkKabkC0L59';
+        // $this -> masterSecret = 'WXdDb4jWle5V06ggaCe6j';
+        $this -> appKey ='1lOtwDwHIP7IYEgo0Zceh6';
+        $this -> appId ='CCxHvEuxWp5YZj3FxMWI2A';
+        $this -> masterSecret ='UXQmyYgI5o9UdNN2U9bez3';
+        $this -> cid = '';
         $this -> deviceToken = '';
         $this -> igt = new \IGeTui($this -> host , $this -> appKey , $this -> masterSecret);
-        // var_dump($this);
+        
     }
 
     /**
@@ -179,7 +182,7 @@ class PushMesage extends Controller
      *   3.NotificationTemplate：通知透传功能模板
      *   4.NotyPopLoadTemplate：通知弹框下载功能模板
      * */
-    function getAndroidMsg($data , $isList = false , $type = 1 ){
+    function getAndroidMsg($data , $isList = false , $type = 1){
         switch($type){
             case 1 :
                 $template = $this -> IGtTransmissionTemplateDemo($data);

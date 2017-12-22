@@ -4,8 +4,8 @@ use think\Controller;
 use think\Db;
 use think\Request;
 use web\extra\model\MsgCode;
+use web\app\model\OrderGrave;
 use web\extra\controller\PushMesage;
-
 /**
  * 91客户端app
  */
@@ -111,7 +111,7 @@ class ClientApp extends Controller
         foreach ($result as $key => $value) {
             $res[] = $value;
         }
-        // var_dump($re[0]);die;       
+        // var_dump($res[0]);die;       
         echo json_encode($res);
     }
 
@@ -143,6 +143,8 @@ class ClientApp extends Controller
           
             $usrData['id_card'] = $this->uploadFile('id_card_img');
             $usrData['driving_licence'] = $this->uploadFile('driving_img');
+            $carData['vehicle_travel_image'] = $this->uploadFile('vtl_img');
+            $carData['models_image'] = $this->uploadFile('car_img');
             $usrData['name'] = $usrObj->name;
             $usrData['sex'] = $usrObj->sex;
             $usrData['mobile'] = $usrObj->mobile;
@@ -156,8 +158,7 @@ class ClientApp extends Controller
             $usrData['updated_time'] = time();
             $driver_id = Db::name('employee')->insertGetId($usrData);
             if($driver_id){
-                $carData['vehicle_travel_image'] = $this->uploadFile('vtl_img');
-                $carData['models_image'] = $this->uploadFile('car_img');
+                
                 $carData['driver_id'] = $driver_id;
                 $carData['plate_number'] = $carObj->plate_number;
                 $carData['vin'] = $carObj->vin;
@@ -288,6 +289,7 @@ class ClientApp extends Controller
         echo json_encode($result);
     }
 
+
     /**
      * 上下线改变
      * @return [type] [description]
@@ -302,7 +304,6 @@ class ClientApp extends Controller
                 $arr = array('flag'=>1);
             }
         }
-
         echo json_encode($arr);
     }
 
@@ -312,10 +313,9 @@ class ClientApp extends Controller
      * @param  string $orderId  [订单id]
      * @return [type]           
      */
-    public function pushMsg($driverId='3',$orderId='1'){
+    public function pushMsg($driverId='3',$orderId='20'){
         $obj = new PushMesage;
         $driver = Db::name('employee')->where('id',$driverId)->field('id,client_id,is_online')->find();
-
         if($driver && $driver['is_online'] == 1){ 
 
             $orderData = Db::name('order_view_tomb')->where('order_id',$orderId)->field('order_id,appointer,rider_number,rider_phone,riding_address,arrive_time,store_name')->find();
@@ -345,19 +345,266 @@ class ClientApp extends Controller
         $orderId = input('orderId');
         $status = input('status');
         $result = array('flag'=>0,'msg'=>'失败');
-        if($orderId){
-            $data['service_status'] = $status;
-            if($status == 2){
-                $data['km_start_image'] = $this->uploadFile('km_start_image');
+        if($orderId){  
+            if($status){
+                $data['service_status'] = $status;         
             }
+            if($status == 2){              
+                $data['km_start_image'] = $this->uploadFile('km_start_image');
+            } 
+            if($status == 1){
+                $data['incar_time'] = date('Y-m-d H:i:s',time());               
+            }
+            if($status ==3){
+                $data['arrive_start_time'] = date('Y-m-d H:i:s',time());
+            }
+            if($status ==10){
+                $data['km_end_image'] = $this->uploadFile('km_start_image');
+                $data['over_time'] = date('Y-m-d H:i:s',time());
+            }
+            $data['updated_time'] = time();
             $res = Db::name('order_view_tomb')->where('order_id',$orderId)->update($data);
-
+           
             if($res){
-                $result = array('flag'=>1,'msg'=>'成功');
+                $orderData = '';
+                if($status == '1'){
+                    $orderData = Db::name('order_view_tomb')->where('order_id',$orderId)->find();
+                    $orderData['arrive_time'] = date('m-d H:i',$orderData['arrive_time']);
+                }
+                $result = array('flag'=>1,'msg'=>'成功','data'=>$orderData);
             }
         }
         echo json_encode($result);
 
+    }
+
+    /**
+     * 查询订单数据
+     */
+    public function getOrderMsg(){
+        $order_id = input('orderId');
+        $result = array('flag'=>0);
+        if($order_id){    
+            $where['order_id'] = $order_id;
+            $where['service_status'] = array('in','0,1,2,3');       
+            $res = Db::name('order_view_tomb')->where($where)->find();
+            if($res){
+                $res['arrive_time'] = date('m-d H:i',$res['arrive_time']);
+                $result = array('flag'=>1,'data'=>$res);
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 订单列表
+     * @return json
+     */
+    public function orderlist(){
+        $input = input('get.');
+        $page = $input['page'];
+        $uid = $input['uid'];
+        $pageNum = config('page_size');
+        $start = ($page - 1) * $pageNum;
+        $result = ['code' => 0];
+        
+        if($uid){           
+            $carOrder = Db::name('order_view_tomb')->where('driver_id',$uid)->field('order_id,store_name,over_time,riding_address,service_status,total_km,created_time')->limit($start,$pageNum)->select();
+
+            foreach ($carOrder as $key => $value) {
+                $carOrder[$key]['service_type'] = config('service_status')[$value['service_status']];
+                $time = strtotime($value['over_time']);
+                $carOrder[$key]['created_time'] = date('m-d',$value['created_time']);
+                $carOrder[$key]['over_time'] = date('m-d',$time);
+            }
+            $pages = ceil(count($carOrder) / $pageNum);
+            $result = ['code' => 1,'data' => $carOrder,'pages' => $pages];
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * 订单详情
+     */
+    public function orderDetail(){
+        $orderId = input('orderId');
+        // $orderId = 20;
+        $array = array('flag'=>0);
+        if($orderId){
+            $data = OrderGrave::with(['tomb'])->where('id',$orderId)->field('id,reservation_sex,budgeted_price,tomb_user_sex,store_fact_name,store_fact_id')->find()->toArray();
+
+            $need = Db::name('order_grave_need')->where('order_id',$orderId)->field('wirter_type,order_id,content,created_time')->select();
+            if($need){
+                foreach ($need as $key => $value) {
+                    $need[$key]['wirter_type'] = config('wirter_type')[$value['wirter_type']];
+                    $time = explode(' ',$value['created_time']);
+                    $need[$key]['created_time'] = $time[0];
+                }
+            }
+
+            //支付凭证图片
+            $photo = Db::name('order_grave_photo')->where('order_id',$orderId)->field('bill_image')->select();
+            $data['photo'] = '';
+            if($photo){
+                $data['photo'] = $photo;
+            }
+
+            if($data){
+                $data['reservation_sex'] = config('reservation_sex')[$data['reservation_sex']];
+                $data['tomb_user_sex'] = config('tomb_user_sex')[$data['tomb_user_sex']];
+                $data['tomb']['arrive_time'] = date('Y-m-d',$data['tomb']['arrive_time']);
+                $data['tomb']['service_type'] = config('service_status')[$data['tomb']['service_status']];
+                if($data['tomb']['buyer_intention'] !== NULL){
+                    $data['tomb']['buyer_intention_name'] = config('buyer_intention')[$data['tomb']['buyer_intention']];
+                }
+                if($data['tomb']['result'] !== NULL){
+                    $data['tomb']['result_name'] = config('result')[$data['tomb']['result']];
+                }
+                if($data['tomb']['pay_type'] !== NULL){
+                    $data['tomb']['pay_type_name'] = config('success_type')[$data['tomb']['pay_type']];
+                }
+                if($data['tomb']['is_repeat'] !== NULL){
+                    $data['tomb']['is_repeat_name'] = config('is_repeat')[$data['tomb']['is_repeat']];
+                }
+                $data['tomb']['discount_91'] = $data['tomb']['91_discount'];
+                $array = array('flag'=>1,'data'=>$data,'need'=>$need);
+            }
+        }
+        // var_dump($data);die;
+        echo json_encode($array);
+    }   
+
+    /**
+     * 返回/结束行程的公共方法
+     * @return [string] [result]
+     */
+    public function finishRoute(){
+        $result = array('flag'=>0);
+        if($_POST['data']){
+             // 启动事务
+            Db::startTrans();
+            $dataObj = json_decode($_POST['data']);              
+            // $tomb['company_counselor_name'] = $dataObj->company_name; //陪同人员暂时去掉
+            if($dataObj->buyer_intention != ''){
+                $tomb['buyer_intention'] = $dataObj->buyer_intention;
+            }
+            if($dataObj->result != ''){
+                $tomb['result'] = $dataObj->result;
+            }
+            if($dataObj->service_status == 10){
+                $tomb['over_time'] = date('Y-m-d H:i:s',time());
+            }
+            $tomb['accompany_info'] = $dataObj->accompany_info;           
+            $tomb['service_status'] = $dataObj->service_status;
+            $tomb['visit_store'] = $dataObj->store_name;
+            $tomb['updated_time'] = time();
+            if($dataObj->result == 1){  //已成交               
+                if($dataObj->success_status != ''){
+                    $tomb['pay_type'] = $dataObj->success_status;
+                    $grave['pay_type'] = $dataObj->success_status;
+                }
+                $tomb['total_price'] = $dataObj->total_price;
+                $tomb['deposit'] = $dataObj->deposit;
+                $tomb['store_discount'] = $dataObj->store_discount;
+                $tomb['91_discount'] = $dataObj->discount_91;
+                $tomb['tomb_location'] = $dataObj->tomb_location;
+                $tomb['tomb_price'] = $dataObj->tomb_price;
+                $tomb['remark'] = $dataObj->remark;
+                //反写订单主表
+                $grave['store_fact_name'] = $dataObj->store_fact_name;
+                ;
+                $grave['store_fact_id'] = $dataObj->store_fact_id;
+                ;
+                $grave['status'] = config('order_status.ok');
+                $grave['contract_time'] = time();
+                $grave['updated_time'] = time();
+                $graveResult = Db::name('order_grave')->where('id',$dataObj->order_id)->update($grave);
+
+                //支付凭证
+                if($dataObj->photo_flag){                   
+                    $photo['order_id'] = $photo1['order_id'] = $dataObj->order_id;
+                    $photo['type'] = $photo1['type'] = 2;
+                    $photo['bill_status'] = $photo1['bill_status'] = config('normal_status');
+                    $photo['created_time'] = $photo1['created_time'] =time();
+                    $photo['updated_time'] = $photo1['updated_time'] = time();
+                    $photo['bill_image'] =  $this->uploadFile('bill_image');
+                    $photo1['bill_image'] =  $this->uploadFile('bill_image2');
+                    $photoData = [$photo,$photo1];
+                    if($photo1 && $photo){
+                        $res = Db::name('order_grave_photo')->insertAll($photoData);
+                    }
+                }
+
+            }else{
+                //是否再次预约
+                $tomb['is_repeat'] = $dataObj->is_repeat;
+                $tomb['repeat_apoint_remark'] = $dataObj->repeat_apoint_remark;
+            }
+            $tombResult = Db::name('order_view_tomb')->where('order_id',$dataObj->order_id)->update($tomb);
+
+            if($tombResult){
+                $result = array('flag'=>1);
+                Db::commit();
+            }else{
+                Db::rollback();
+            }
+
+        }
+
+        echo json_encode($result);
+    } 
+
+    //查找商家信息
+    function findStores(){
+        $result = array('flag'=>0);
+        $post = input('post.');
+        $requireData = $post['requireData'];
+        $flag = $post['flag'];
+        // $requireData = '福建莆田壶山陵园';
+        // $flag = 'name';
+        if($flag =='name'){
+            $data = Db::name('store')->where('name','like','%'.$requireData.'%')->field('id,name')->select();
+        }else if($flag == 'province'){
+            $where['province_id'] = $requireData[0];
+            $where['city_id'] = $requireData[1];
+            $data = Db::name('store')->where($where)->field('id,name')->select();
+        }
+        if($data){
+            $result = array('flag'=>1,'data'=>$data);
+        }
+        
+        echo json_encode($result);
+    }
+
+    /**
+     * 记录轨迹
+     */
+    public function insertPolyLine(){
+        // $post = input('post.');
+        $data = input('data');
+        $orderId = input('orderId');
+        $result = array('flag'=>0);
+        $tomb_polyine = Db::name('order_view_tomb')->where('order_id',$orderId)->field('polyline')->find();
+        $polylineData = $tomb_polyine['polyline'].';'.$data;
+        if($data){          
+            $res = Db::name('order_view_tomb')->where('order_id',$orderId)->update(['polyline'=>$polylineData]);
+            if($res){
+                $result = array('flag'=>1);
+            }
+        }  
+        echo json_encode($result);
+    }
+
+
+
+    function test(){
+        $obj = new PushMesage;
+        $msg = ['title'=>'标准格式','content'=>'测试','payload'=>40];
+        $to = ['cid'=>'bdea16ae1e8d4997ab6bc281d8e96ddc','device_token'=>'','system'=>2];
+        $obj->pushIGtMsg(json_encode($msg),$to);
+
+        // $c = $obj->getCidStatus('bdea16ae1e8d4997ab6bc281d8e96ddc');
+        // var_dump($c);
     }
 
 }
